@@ -11,65 +11,74 @@ mkdir -p "$NK_DIR/apps" "$NK_DIR/bin"
 # 2. Oh My Zsh
 ZSH_DIR="$NK_DIR/apps/ohmyzsh"
 if [ ! -d "$ZSH_DIR" ]; then
-    echo "🚀 Installation de Oh My Zsh..."
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
-    # On le déplace car le script OMZ est têtu
-    mv ~/.oh-my-zsh "$ZSH_DIR" 2>/dev/null || true
+echo "🚀 Installation de Oh My Zsh..."
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
+# On le déplace car le script OMZ est têtu
+mv ~/.oh-my-zsh "$ZSH_DIR" 2>/dev/null || true
 fi
 
 # 3. Plugins
 ZSH_CUSTOM="$ZSH_DIR/custom"
 declare -A plugins=(
-    ["zsh-syntax-highlighting"]="https://github.com/zsh-users/zsh-syntax-highlighting.git"
-    ["zsh-autosuggestions"]="https://github.com/zsh-users/zsh-autosuggestions"
-    ["auto-notify"]="https://github.com/MichaelAquilina/zsh-auto-notify.git"
-    ["you-should-use"]="https://github.com/MichaelAquilina/zsh-you-should-use.git"
-    ["zsh-history-substring-search"]="https://github.com/zsh-users/zsh-history-substring-search"
-)
+		["zsh-syntax-highlighting"]="https://github.com/zsh-users/zsh-syntax-highlighting.git"
+		["zsh-autosuggestions"]="https://github.com/zsh-users/zsh-autosuggestions"
+		["auto-notify"]="https://github.com/MichaelAquilina/zsh-auto-notify.git"
+		["you-should-use"]="https://github.com/MichaelAquilina/zsh-you-should-use.git"
+		["zsh-history-substring-search"]="https://github.com/zsh-users/zsh-history-substring-search"
+		)
 
 for name in "${!plugins[@]}"; do
-    if [ ! -d "$ZSH_CUSTOM/plugins/$name" ]; then
-        echo "🔌 Installation du plugin $name..."
-        git clone "${plugins[$name]}" "$ZSH_CUSTOM/plugins/$name"
-    fi
+if [ ! -d "$ZSH_CUSTOM/plugins/$name" ]; then
+echo "🔌 Installation du plugin $name..."
+git clone "${plugins[$name]}" "$ZSH_CUSTOM/plugins/$name"
+fi
 done
 
 # 4. Shell par défaut
 if [[ "$SHELL" != */zsh ]]; then
-    echo "🐚 Changement du shell vers ZSH..."
-    chsh -s $(which zsh)
-fi
+	echo "🐚 Changement du shell vers ZSH..."
+chsh -s $(which zsh)
+	fi
 
 # --- Installation de NEOVIM NIGHTLY (Tarball) ---
-echo "🌙 Vérification de Neovim Nightly..."
+	echo "🌙 Vérification de Neovim Nightly..."
 
 # On télécharge et on extrait (on le fait à chaque fois ou selon une condition)
 # Ici on vérifie si le dossier existe, sinon on installe
+
+{{- if .chezmoi.config.data.has_sudo }}
+if groups | grep -q '\bsudo\b'; then
+    echo "🔐 Droits sudo détectés, préparation de Neovim Nightly..."
+# --- Installation de NEOVIM NIGHTLY ---
+# (votre code d'installation actuel ici)
+echo "📦 Installation de Neovim Nightly..."
+# ...
 if [ ! -d "$NVIM_DIR" ]; then
-    echo "📦 Téléchargement de Neovim Nightly via curl..."
-    mkdir -p "$NVIM_DIR"
-    
-    # Téléchargement du tarball linux-x86_64
-    curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz -o /tmp/nvim.tar.gz
-    
-    # Extraction propre dans le dossier apps
-    # --strip-components=1 permet d'éviter d'avoir un sous-dossier nvim-linux-x86_64/
-    tar -xzf /tmp/nvim.tar.gz -C "$NVIM_DIR" --strip-components=1
-    rm /tmp/nvim.tar.gz
-    
-    # Création du lien symbolique vers votre dossier bin
-    # -f pour forcer la création si un ancien lien existe
-    ln -sf "$NVIM_DIR/bin/nvim" "$BIN_DIR/nvim"
-    echo "✅ Neovim Nightly installé dans $NVIM_DIR"
+echo "📦 Téléchargement de Neovim Nightly via curl..."
+mkdir -p "$NVIM_DIR"
+
+# Téléchargement du tarball linux-x86_64
+curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz -o /tmp/nvim.tar.gz
+
+# Extraction propre dans le dossier apps
+# --strip-components=1 permet d'éviter d'avoir un sous-dossier nvim-linux-x86_64/
+tar -xzf /tmp/nvim.tar.gz -C "$NVIM_DIR" --strip-components=1
+rm /tmp/nvim.tar.gz
+
+# Création du lien symbolique vers votre dossier bin
+# -f pour forcer la création si un ancien lien existe
+ln -sf "$NVIM_DIR/bin/nvim" "$BIN_DIR/nvim"
+echo "✅ Neovim Nightly installé dans $NVIM_DIR"
 fi
+{{- end }}
 
 # --- Installation de VS CODE (Tarball portable) ---
 if [ ! -d "$APPS_DIR/vscode" ]; then
-    echo "📦 Installation de VS Code dans $APPS_DIR..."
-    curl -L "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" -o vscode.tar.gz
-    mkdir -p "$APPS_DIR/vscode"
-    tar -xzf vscode.tar.gz -C "$APPS_DIR/vscode" --strip-components=1
-    rm vscode.tar.gz
-    # Création du lien symbolique vers le binaire
-    ln -s "$APPS_DIR/vscode/bin/code" "$BIN_DIR/code"
+echo "📦 Installation de VS Code dans $APPS_DIR..."
+curl -L "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" -o vscode.tar.gz
+mkdir -p "$APPS_DIR/vscode"
+tar -xzf vscode.tar.gz -C "$APPS_DIR/vscode" --strip-components=1
+rm vscode.tar.gz
+# Création du lien symbolique vers le binaire
+ln -s "$APPS_DIR/vscode/bin/code" "$BIN_DIR/code"
 fi
