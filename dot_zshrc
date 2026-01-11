@@ -1,0 +1,109 @@
+# ~/.zshrc - NKERMANI - Hybrid Config 2026
+###############################################################################
+
+# 1. DÉTECTION OS (Rapide)
+UNAME_S=$(uname -s)
+if [[ "$UNAME_S" == "Darwin" ]]; then
+    OS_TYPE="macos"
+elif grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then
+    OS_TYPE="wsl2"
+else
+    OS_TYPE="linux"
+fi
+
+export NK_DIR="$HOME/.nkermani"
+export NK_APPS="$NK_DIR/apps"
+export NK_BIN="$NK_DIR/bin"
+
+# 2. PATH & ENV
+export EDITOR="nvim"
+export VISUAL="nvim"
+export ZSH="$NK_APPS/ohmyzsh"
+export NVM_DIR="$HOME/.nvm"
+
+typeset -U path
+path=($NK_BIN $HOME/.local/bin $HOME/.opencode/bin $HOME/.cargo/bin /usr/local/bin $path)
+
+# 3. OH-MY-ZSH (Chargement silencieux)
+ZSH_THEME="robbyrussell"
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions auto-notify you-should-use zsh-history-substring-search)
+[ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
+
+# 4. LOGIQUE VS CODE (Strictement WSL2)
+if [[ "$OS_TYPE" == "wsl2" ]]; then
+    unalias code c 2>/dev/null
+    # On définit le binaire une fois
+    readonly VSCODE_EXE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
+
+    code() {
+        "$VSCODE_EXE" --remote wsl+Ubuntu-22.04 "${@:-.}"
+    }
+    alias c='code'
+else
+    # Linux natif ou MacOS utilise le binaire standard
+    alias c='code'
+fi
+
+# 5. SMART-EDITOR (On ne vérifie qu'une fois pour la vitesse)
+if [[ ! -f "$NK_BIN/smart-editor" ]]; then
+    mkdir -p "$NK_BIN"
+    cat << 'EOF' > "$NK_BIN/smart-editor"
+#!/usr/bin/env bash
+V_EXE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
+if [[ -f "$V_EXE" && "$(grep -qiE 'microsoft|wsl' /proc/version && echo 'wsl')" == "wsl" ]]; then
+    exec "$V_EXE" --remote wsl+Ubuntu-22.04 "$@"
+elif command -v code >/dev/null; then
+    exec code "$@"
+elif command -v nvim >/dev/null; then
+    exec nvim "$@"
+else
+    exec vi "$@"
+fi
+EOF
+    chmod +x "$NK_BIN/smart-editor"
+fi
+
+# Alias éditeurs
+alias n='smart-editor'
+alias vim='smart-editor'
+alias edit='smart-editor'
+alias clear='clear -x'
+
+# 6. FONCTIONS PERSO & AI
+ai() {
+  local dir=$(fd --type d --hidden --exclude .git . ~ | fzf --prompt="󰚝 Launch OpenCode in: ")
+  [[ -n "$dir" ]] && cd "$dir" && opencode
+}
+alias aichat='opencode chat'
+alias aip='opencode project'
+alias aie='opencode explain'
+
+# 7. INITIALISATIONS OPTIMISÉES (Lazy-loading)
+# FZF & Zoxide
+[ -n "$commands[fzf]" ] && source <(fzf --zsh 2>/dev/null || fzf --bash 2>/dev/null)
+[ -n "$commands[zoxide]" ] && eval "$(zoxide init zsh)"
+
+# NVM Lazy-load : Ne charge NVM que quand tu tapes 'nvm', 'node' ou 'npm'
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+    nvm() {
+        unfunction nvm node npm
+        source "$NVM_DIR/nvm.sh"
+        nvm "$@"
+    }
+    node() {
+        unfunction nvm node npm
+        source "$NVM_DIR/nvm.sh"
+        node "$@"
+    }
+    npm() {
+        unfunction nvm node npm
+        source "$NVM_DIR/nvm.sh"
+        npm "$@"
+    }
+fi
+
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+# 8. ESTHÉTIQUE
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#808080'
+bindkey '^?' backward-delete-char
