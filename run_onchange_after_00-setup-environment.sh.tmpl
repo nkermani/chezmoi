@@ -88,6 +88,12 @@ if [ ! -d "$NVIM_DIR" ]; then
     rm /tmp/nvim.tar.gz
     ln -sf "$NVIM_DIR/bin/nvim" "$BIN_DIR/nvim"
     echo "✅ Neovim Nightly installé."
+
+	# 2. Installation de Rust (uniquement si absent et utile pour Neovim/Mason)
+    if ! command -v cargo &> /dev/null; then
+        echo "🦀 Rust non trouvé, installation pour les besoins de Neovim..."
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+    fi
 fi
 {{- else -}}
 echo "⚠️ Sudo non autorisé dans chezmoi.toml : Neovim ne sera pas installé/mis à jour."
