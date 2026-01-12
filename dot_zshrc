@@ -27,17 +27,20 @@ ZSH_THEME="robbyrussell"
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions auto-notify you-should-use zsh-history-substring-search)
 [ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
 
+# 4. LOGIQUE VS CODE (WSL2)
 if [[ "$OS_TYPE" == "wsl2" ]]; then
     unalias code c 2>/dev/null
-
-    # On utilise export au lieu de readonly pour permettre le re-sourcing
     export VSCODE_EXE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
 
     code() {
-        "$VSCODE_EXE" --remote wsl+Ubuntu-22.04 "${@:-.}"
+        # 1. &> /dev/null : envoie tous les messages (logs/erreurs) à la poubelle
+        # 2. & : lance en arrière-plan pour te rendre la main sur le terminal immédiatement
+        "$VSCODE_EXE" --remote wsl+Ubuntu-22.04 "${@:-.}" &> /dev/null &
+
+        # 3. disown : détache le processus du terminal pour qu'il ne soit pas tué
+        # quand tu fermes ton onglet zsh
+        disown
     }
-    alias c='code'
-else
     alias c='code'
 fi
 
@@ -59,7 +62,8 @@ W_CODE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
 if [[ "$(grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null && echo 'wsl')" == "wsl" ]]; then
     if [[ -f "$W_CODE" ]]; then
         # On passe les arguments exactement tels quels avec "$@"
-        exec "$W_CODE" --remote wsl+Ubuntu-22.04 "$@"
+        "$W_CODE" --remote wsl+Ubuntu-22.04 "$@" &> /dev/null &
+        disown
         exit 0
     fi
 fi
