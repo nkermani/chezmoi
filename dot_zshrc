@@ -48,23 +48,23 @@ mkdir -p "$NK_BIN"
 cat << 'EOF' > "$NK_BIN/smart-editor"
 #!/usr/bin/env bash
 
-# Si aucun argument, on utilise le point (dossier actuel)
+# 1. Gestion de l'argument par défaut
 if [ $# -eq 0 ]; then
     set -- "."
 fi
 
 W_CODE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
 
-# Priorité WSL2
-if [[ "$(grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null && echo 'wsl')" == "wsl" ]]; then
-        if [[ -f "\$W_CODE" ]]; then
-                ( "\$W_CODE" --remote wsl+Ubuntu-22.04 "\$@" &> /dev/null & )
-                exit 0
-        fi
+# 2. Priorité WSL2
+# On simplifie la détection : si grep trouve 'wsl', on entre dans le bloc
+if grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then
+    if [[ -f "$W_CODE" ]]; then
+        "$W_CODE" --remote wsl+Ubuntu-22.04 "$@" &> /dev/null &
+        exit 0
     fi
 fi
 
-# Fallbacks
+# 3. Fallbacks (42, Linux Natif, macOS)
 if command -v code >/dev/null 2>&1; then
     exec code "$@"
 elif command -v nvim >/dev/null 2>&1; then
