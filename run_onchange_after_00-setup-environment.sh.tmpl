@@ -1,172 +1,135 @@
 #!/bin/bash
 
+# --- CONFIGURATION CHEZMOI ---
+# .is_42 : {{ .is_42 }}
+# .has_sudo : {{ .has_sudo }}
+
 # 1. Dossiers de base
 NK_DIR="$HOME/.nkermani"
 APPS_DIR="$NK_DIR/apps"
 BIN_DIR="$NK_DIR/bin"
-NVIM_DIR="$APPS_DIR/nvim-nightly"
+mkdir -p "$APPS_DIR" "$BIN_DIR"
 
-mkdir -p "$NK_DIR/apps" "$NK_DIR/bin"
+# Détection immédiate de l'OS et environnement (Important pour la suite)
+OS_TYPE=$(uname -s)
+IS_WSL=$(grep -i "microsoft" /proc/version 2>/dev/null)
 
-# 2. Oh My Zsh
-ZSH_DIR="$NK_DIR/apps/ohmyzsh"
+# 2. Oh My Zsh & Plugins (Tous tes plugins sont ici)
+ZSH_DIR="$APPS_DIR/ohmyzsh"
 if [ ! -d "$ZSH_DIR" ]; then
-echo "🚀 Installation de Oh My Zsh..."
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
-# On le déplace car le script OMZ est têtu
-mv ~/.oh-my-zsh "$ZSH_DIR" 2>/dev/null || true
+    echo "🚀 Installation de Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
+    mv ~/.oh-my-zsh "$ZSH_DIR" 2>/dev/null || true
 fi
 
-# 3. Plugins
 ZSH_CUSTOM="$ZSH_DIR/custom"
 declare -A plugins=(
-		["zsh-syntax-highlighting"]="https://github.com/zsh-users/zsh-syntax-highlighting.git"
-		["zsh-autosuggestions"]="https://github.com/zsh-users/zsh-autosuggestions"
-		["auto-notify"]="https://github.com/MichaelAquilina/zsh-auto-notify.git"
-		["you-should-use"]="https://github.com/MichaelAquilina/zsh-you-should-use.git"
-		["zsh-history-substring-search"]="https://github.com/zsh-users/zsh-history-substring-search"
-		)
+    ["zsh-syntax-highlighting"]="https://github.com/zsh-users/zsh-syntax-highlighting.git"
+    ["zsh-autosuggestions"]="https://github.com/zsh-users/zsh-autosuggestions"
+    ["auto-notify"]="https://github.com/MichaelAquilina/zsh-auto-notify.git"
+    ["you-should-use"]="https://github.com/MichaelAquilina/zsh-you-should-use.git"
+    ["zsh-history-substring-search"]="https://github.com/zsh-users/zsh-history-substring-search"
+)
 
 for name in "${!plugins[@]}"; do
-if [ ! -d "$ZSH_CUSTOM/plugins/$name" ]; then
-echo "🔌 Installation du plugin $name..."
-git clone "${plugins[$name]}" "$ZSH_CUSTOM/plugins/$name"
-fi
+    if [ ! -d "$ZSH_CUSTOM/plugins/$name" ]; then
+        echo "🔌 Installation du plugin $name..."
+        git clone "${plugins[$name]}" "$ZSH_CUSTOM/plugins/$name"
+    fi
 done
 
-# 4. Shell par défaut
-if [[ "$SHELL" != */zsh ]]; then
-	echo "🐚 Changement du shell vers ZSH..."
-chsh -s $(which zsh)
-	fi
+# 3. OUTILS CLI (Sudo-less - Ripgrep, FZF, FD, Bat)
+echo "🛠️ Installation des outils CLI..."
 
-# --- 5. OUTILS CLI (ripgrep, fzf, fd) - SUDOLESS ---
-echo "🛠️ Vérification des outils CLI..."
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+    if command -v brew &>/dev/null; then
+        brew install fzf ripgrep fd bat
+    fi
+else
+    # FZF
+    [ ! -f "$BIN_DIR/fzf" ] && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --bin && cp ~/.fzf/bin/fzf "$BIN_DIR/"
 
-# FZF
-if [ ! -f "$BIN_DIR/fzf" ]; then
-    echo "🔍 Installation de fzf..."
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install --bin
-    cp ~/.fzf/bin/fzf "$BIN_DIR/"
-fi
-
-# Ripgrep (rg)
-if ! command -v rg &> /dev/null; then
-    echo "📂 Installation de ripgrep..."
-    RG_VERSION=$(curl -sI https://github.com/BurntSushi/ripgrep/releases/latest | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
-    curl -LSs "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/rg.tar.gz
-    tar -xzf /tmp/rg.tar.gz -C /tmp
-    cp /tmp/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl/rg "$BIN_DIR/"
-fi
-
-# FD
-if ! command -v fd &> /dev/null; then
-    echo "⚡ Installation de fd..."
-    FD_VERSION=$(curl -sI https://github.com/sharkdp/fd/releases/latest | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
-    curl -LSs "https://github.com/sharkdp/fd/releases/download/${FD_VERSION}/fd-${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/fd.tar.gz
-    tar -xzf /tmp/fd.tar.gz -C /tmp
-    cp /tmp/fd-${FD_VERSION}-x86_64-unknown-linux-musl/fd "$BIN_DIR/"
-fi
-
-# Bat (cat with wings)
-if ! command -v bat &> /dev/null; then
-    echo "🦇 Installation de bat..."
-    # Récupération de la dernière version via l'API GitHub
-    BAT_VERSION=$(curl -sI https://github.com/sharkdp/bat/releases/latest | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
-
-    # Téléchargement de l'archive pour Linux (architecture x86_64 avec musl pour la portabilité à 42)
-    curl -LSs "https://github.com/sharkdp/bat/releases/download/${BAT_VERSION}/bat-${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/bat.tar.gz
-
-    # Extraction et déplacement du binaire
-    tar -xzf /tmp/bat.tar.gz -C /tmp
-    cp /tmp/bat-${BAT_VERSION}-x86_64-unknown-linux-musl/bat "$BIN_DIR/"
-
-    # Note : À 42, certains alias peuvent entrer en conflit.
-    # Si 'bat' n'affiche rien, vérifie ton PATH ou utilise 'batcat' si tu préfères l'alias Debian.
-    echo "✅ bat installé dans $BIN_DIR"
-fi
-
-
-# --- DETECTION DE L'ENVIRONNEMENT (BASH) ---
-	IS_WSL=$(grep -i "microsoft" /proc/version 2>/dev/null)
-OS_TYPE=$(uname -s)
-
-# --- LOGIQUE VS CODE ---
-	if [[ "$OS_TYPE" == "Linux" ]]; then
-	if [[ -z "$IS_WSL" ]]; then
-# On est sur un Linux NATIF
-	if [ ! -d "$APPS_DIR/vscode" ]; then
-	echo "📦 Installation de VS Code (Linux x64)..."
-	curl -L "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" -o vscode.tar.gz
-	mkdir -p "$APPS_DIR/vscode"
-	tar -xzf vscode.tar.gz -C "$APPS_DIR/vscode" --strip-components=1
-	rm vscode.tar.gz
-	ln -sf "$APPS_DIR/vscode/bin/code" "$BIN_DIR/code"
-	fi
-	else
-	echo "❄️ WSL2 détecté : Utilisation de VS Code Windows (Remote WSL)."
-	fi
-	elif [[ "$OS_TYPE" == "Darwin" ]]; then
-# On est sur macOS
-	if ! command -v code &> /dev/null; then
-	echo "📦 Installation de VS Code via Brew..."
-	brew install --cask visual-studio-code
-	fi
-	fi
-
-
-# --- LOGIQUE KITTY (42 & Linux Natif) ---
-if [[ "$OS_TYPE" == "Linux" && -z "$IS_WSL" ]]; then
-    if [ ! -d "$APPS_DIR/kitty.app" ]; then
-        echo "🐱 Installation de Kitty Terminal (Linux x64)..."
-
-        # 1. Téléchargement et installation via le script officiel
-        # On définit 'dest' mais on retire 'launch_prefix' qui pose problème
-        curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin \
-            dest="$APPS_DIR"
-
-        # 2. Création manuelle du lien symbolique dans ton BIN_DIR
-        ln -sf "$APPS_DIR/kitty.app/bin/kitty" "$BIN_DIR/kitty"
-
-        # 3. Intégration Desktop (si le dossier existe)
-        if [ -d "$APPS_DIR/kitty.app/share/applications" ]; then
-            mkdir -p ~/.local/share/applications
-            cp "$APPS_DIR/kitty.app/share/applications/kitty.desktop" ~/.local/share/applications/
-
-            # Correction des chemins dans le fichier .desktop
-            sed -i "s|Icon=kitty|Icon=$APPS_DIR/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty.desktop
-            # On utilise le chemin complet vers l'exécutable
-            sed -i "s|Exec=kitty|Exec=$APPS_DIR/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty.desktop
-
-            echo "✅ Kitty installé et raccourci bureau créé."
+    # Binaires Musl (Optimisé avec une boucle pour Ripgrep, FD, Bat)
+    for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat"; do
+        IFS=":" read -r name bin repo <<< "$tool"
+        if ! command -v "$bin" &>/dev/null; then
+            echo "📦 Installation de $name..."
+            VER=$(curl -sI "https://github.com/$repo/releases/latest" | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
+            curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}-${VER}-x86_64-unknown-linux-musl.tar.gz" | tar -xzC /tmp
+            cp /tmp/${name}-${VER}-x86_64-unknown-linux-musl/"$bin" "$BIN_DIR/"
         fi
+    done
+fi
+
+# --- 4. POLICES (JetBrains Mono Nerd Font) ---
+if [[ "$OS_TYPE" == "Linux" ]]; then
+    FONT_DIR="$HOME/.local/share/fonts"
+    # On vérifie si le dossier existe déjà OU si la font est déjà installée dans le système
+    if [ ! -d "$FONT_DIR/JetBrainsMono" ] && ! fc-list | grep -qi "JetBrainsMono"; then
+        echo "💾 JetBrainsMono Nerd Font non trouvée. Installation..."
+        mkdir -p "$FONT_DIR/JetBrainsMono"
+
+        # Téléchargement dans /tmp pour économiser le quota disque
+        curl -L -o /tmp/jb.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+
+        # -o pour overwrite sans demander, -d pour la destination
+        unzip -o /tmp/jb.zip -d "$FONT_DIR/JetBrainsMono"
+
+        # Nettoyage immédiat du zip
+        rm /tmp/jb.zip
+
+        # Mise à jour du cache des polices (le -f force la relecture)
+        echo "Updating font cache..."
+        fc-cache -f
+        echo "✅ Police installée avec succès."
+    else
+        echo "✅ JetBrainsMono Nerd Font est déjà présente."
     fi
 fi
 
-# --- LOGIQUE NEOVIM (Utilise le booléen de chezmoi.toml) ---
+# 5. LOGIQUE SPECIFIQUE (42 vs PERSO)
+{{ if .is_42 -}}
+echo "🏫 Mode 42 activé..."
+if [[ "$OS_TYPE" == "Linux" && -z "$IS_WSL" ]]; then
+    # VS Code
+    if [ ! -d "$APPS_DIR/vscode" ]; then
+        echo "📦 Installation VS Code..."
+        curl -L "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" | tar -xzC "$APPS_DIR"
+        mv "$APPS_DIR/VSCode-linux-x64" "$APPS_DIR/vscode" 2>/dev/null
+        ln -sf "$APPS_DIR/vscode/bin/code" "$BIN_DIR/code"
+    fi
+    # Kitty + Icônes Desktop
+    if [ ! -d "$APPS_DIR/kitty.app" ]; then
+        echo "🐱 Installation Kitty..."
+        curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest="$APPS_DIR"
+        ln -sf "$APPS_DIR/kitty.app/bin/kitty" "$BIN_DIR/kitty"
+        mkdir -p ~/.local/share/applications
+        cp "$APPS_DIR/kitty.app/share/applications/kitty.desktop" ~/.local/share/applications/
+        sed -i "s|Icon=kitty|Icon=$APPS_DIR/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty.desktop
+        sed -i "s|Exec=kitty|Exec=$APPS_DIR/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty.desktop
+    fi
+fi
+{{- end }}
+
+# 6. NEOVIM (Basé sur Sudo)
 {{ if .has_sudo -}}
-echo "🔐 Droits sudo confirmés dans chezmoi.toml"
-NVIM_DIR="$HOME/.nkermani/apps/nvim-nightly"
-BIN_DIR="$HOME/.nkermani/bin"
-
-if [ ! -d "$NVIM_DIR" ]; then
-    echo "🌙 Installation de Neovim Nightly..."
+if ! command -v nvim &>/dev/null; then
+    echo "🌙 Installation Neovim Nightly..."
+    NVIM_DIR="$APPS_DIR/nvim-nightly"
     mkdir -p "$NVIM_DIR"
-    curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz -o /tmp/nvim.tar.gz
-    tar -xzf /tmp/nvim.tar.gz -C "$NVIM_DIR" --strip-components=1
-    rm /tmp/nvim.tar.gz
+    curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz | tar -xzC "$NVIM_DIR" --strip-components=1
     ln -sf "$NVIM_DIR/bin/nvim" "$BIN_DIR/nvim"
-    echo "✅ Neovim Nightly installé."
 
-	# 2. Installation de Rust (uniquement si absent et utile pour Neovim/Mason)
-    if ! command -v cargo &> /dev/null; then
-        echo "🦀 Rust non trouvé, installation pour les besoins de Neovim..."
+    if ! command -v cargo &>/dev/null; then
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
     fi
 fi
-{{- else -}}
-echo "⚠️ Sudo non autorisé dans chezmoi.toml : Neovim ne sera pas installé/mis à jour."
 {{- end }}
 
-# Force update Sun Jan 11 11:10:41 AM CET 2026
+# 7. Shell par défaut
+if [[ "$SHELL" != */zsh ]]; then
+    echo "🐚 Changement du shell vers ZSH..."
+    chsh -s $(which zsh)
+fi
+
+echo "✨ Terminé ! Relance ton terminal ou 'source ~/.zshrc'."

@@ -105,6 +105,35 @@ _get_viewer() {
   echo "cat"
 }
 
+
+# Navigation rapide dans le dossier courant
+f() {
+    local dir
+    if [[ "$1" == "-a" ]]; then
+        # Affiche TOUT (y compris les .files et .directories)
+        dir=$(fd --type d --hidden --exclude .git | fzf --prompt="📂 Go to (All): ")
+    else
+        # Cache les dossiers commençant par un point (ex: .config, .local)
+        dir=$(fd --type d --hidden --exclude .git --exclude '.*' | fzf --prompt="📂 Go to: ")
+    fi
+
+    [[ -n "$dir" ]] && cd "$dir"
+}
+
+# Navigation rapide dans le HOME
+fr() {
+    local dir
+    if [[ "$1" == "-a" ]]; then
+        # Affiche TOUT dans le HOME
+        dir=$(fd --type d --hidden --exclude .git . ~ | fzf --prompt="🏠 Go to Home (All): ")
+    else
+        # Cache les .files du HOME
+        dir=$(fd --type d --hidden --exclude .git --exclude '.*' . ~ | fzf --prompt="🏠 Go to Home: ")
+    fi
+
+    [[ -n "$dir" ]] && cd "$dir"
+}
+
 # FE : Find & Edit (Current Path)
 fe() {
     local v=$(_get_viewer)
@@ -141,6 +170,24 @@ fre() {
     [[ -n "$file" ]] && smart-editor "$file"
 }
 
+# --- Ouverture avec Code (smart-editor) ---
+fo() {
+    local dir
+    local cmd="fd --type d --hidden --exclude .git"
+    [[ "$1" != "-a" ]] && cmd+=" --exclude '.*'"
+    dir=$(eval "$cmd" | fzf --prompt="💻 Open with Code: ")
+    # Utilise smart-editor pour gérer WSL/42/Linux
+    [[ -n "$dir" ]] && smart-editor "$dir"
+}
+
+fro() {
+    local dir
+    local cmd="fd --type d --hidden --exclude .git . ~"
+    [[ "$1" != "-a" ]] && cmd+=" --exclude '.*'"
+    dir=$(eval "$cmd" | fzf --prompt="💻 Open Home folder with Code: ")
+    [[ -n "$dir" ]] && smart-editor "$dir"
+}
+
 _get_viewer() {
     if command -v bat >/dev/null 2>&1; then
         echo "bat --color=always --style=numbers --line-range :500"
@@ -155,12 +202,7 @@ _get_viewer() {
 fcat() { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git | fzf --preview "$v {}"); [[ -n "$f" ]] && cat "$f"; }
 vf()   { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git | fzf --preview "$v {}"); [[ -n "$f" ]] && smart-editor "$f"; }
 vfg()  { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git . ~ | fzf --preview "$v {}"); [[ -n "$f" ]] && smart-editor "$f"; }
-# Nettoyage préventif
-unalias f fr 2>/dev/null
 
-# Définition des alias de navigation
-alias f='cd $(fd --type d --hidden --exclude .git | fzf --prompt="📂 Go to: ")'
-alias fr='cd $(fd --type d --hidden --exclude .git . ~ | fzf --prompt="🏠 Go to (Home): ")'
 
 # 7. INITIALISATIONS OPTIMISÉES (Lazy-loading)
 # FZF & Zoxide
