@@ -29,107 +29,117 @@ declare -A plugins=(
     ["auto-notify"]="https://github.com/MichaelAquilina/zsh-auto-notify.git"
     ["you-should-use"]="https://github.com/MichaelAquilina/zsh-you-should-use.git"
     ["zsh-history-substring-search"]="https://github.com/zsh-users/zsh-history-substring-search"
-)
+    )
 
 for name in "${!plugins[@]}"; do
-    if [ ! -d "$ZSH_CUSTOM/plugins/$name" ]; then
-        echo "🔌 Installation du plugin $name..."
-        git clone "${plugins[$name]}" "$ZSH_CUSTOM/plugins/$name"
-    fi
+if [ ! -d "$ZSH_CUSTOM/plugins/$name" ]; then
+echo "🔌 Installation du plugin $name..."
+git clone "${plugins[$name]}" "$ZSH_CUSTOM/plugins/$name"
+fi
 done
 
-# 3. OUTILS CLI (Sudo-less - Ripgrep, FZF, FD, Bat)
-echo "🛠️ Installation des outils CLI..."
+# --- 3. OUTILS CLI (Installation forcée dans NK_BIN) ---
+echo "🛠️ Installation des outils CLI dans $BIN_DIR..."
 
 if [[ "$OS_TYPE" == "Darwin" ]]; then
-    if command -v brew &>/dev/null; then
-        brew install fzf ripgrep fd bat
-    fi
+    command -v brew &>/dev/null && brew install fzf ripgrep fd bat
 else
-    # FZF
-    [ ! -f "$BIN_DIR/fzf" ] && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --bin && cp ~/.fzf/bin/fzf "$BIN_DIR/"
+    # FZF : On force l'installation si le binaire n'est pas dans NOTRE dossier bin
+    if [ ! -f "$BIN_DIR/fzf" ]; then
+        echo "📦 Installation de FZF..."
+        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+        ~/.fzf/install --bin
+        cp ~/.fzf/bin/fzf "$BIN_DIR/"
+        rm -rf ~/.fzf
+    fi
 
-    # Binaires Musl (Optimisé avec une boucle pour Ripgrep, FD, Bat)
+    # Ripgrep, FD, Bat : On vérifie la présence du fichier dans BIN_DIR
     for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat"; do
         IFS=":" read -r name bin repo <<< "$tool"
-        if ! command -v "$bin" &>/dev/null; then
-            echo "📦 Installation de $name..."
+
+        if [ ! -f "$BIN_DIR/$bin" ]; then
+            echo "📦 Installation de $name dans $BIN_DIR..."
             VER=$(curl -sI "https://github.com/$repo/releases/latest" | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
+
+            # Téléchargement et extraction
             curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}-${VER}-x86_64-unknown-linux-musl.tar.gz" | tar -xzC /tmp
-            cp /tmp/${name}-${VER}-x86_64-unknown-linux-musl/"$bin" "$BIN_DIR/"
+
+            # On trouve le binaire dans l'archive extraite et on le place dans BIN_DIR
+            find /tmp/${name}-${VER}-x86_64-unknown-linux-musl -name "$bin" -type f -exec cp {} "$BIN_DIR/" \;
         fi
     done
 fi
 
 # --- 4. POLICES (JetBrains Mono Nerd Font) ---
 if [[ "$OS_TYPE" == "Linux" ]]; then
-    FONT_DIR="$HOME/.local/share/fonts"
-    # On vérifie si le dossier existe déjà OU si la font est déjà installée dans le système
-    if [ ! -d "$FONT_DIR/JetBrainsMono" ] && ! fc-list | grep -qi "JetBrainsMono"; then
-        echo "💾 JetBrainsMono Nerd Font non trouvée. Installation..."
-        mkdir -p "$FONT_DIR/JetBrainsMono"
+FONT_DIR="$HOME/.local/share/fonts"
+# On vérifie si le dossier existe déjà OU si la font est déjà installée dans le système
+if [ ! -d "$FONT_DIR/JetBrainsMono" ] && ! fc-list | grep -qi "JetBrainsMono"; then
+echo "💾 JetBrainsMono Nerd Font non trouvée. Installation..."
+mkdir -p "$FONT_DIR/JetBrainsMono"
 
-        # Téléchargement dans /tmp pour économiser le quota disque
-        curl -L -o /tmp/jb.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+# Téléchargement dans /tmp pour économiser le quota disque
+curl -L -o /tmp/jb.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
 
-        # -o pour overwrite sans demander, -d pour la destination
-        unzip -o /tmp/jb.zip -d "$FONT_DIR/JetBrainsMono"
+# -o pour overwrite sans demander, -d pour la destination
+unzip -o /tmp/jb.zip -d "$FONT_DIR/JetBrainsMono"
 
-        # Nettoyage immédiat du zip
-        rm /tmp/jb.zip
+# Nettoyage immédiat du zip
+rm /tmp/jb.zip
 
-        # Mise à jour du cache des polices (le -f force la relecture)
-        echo "Updating font cache..."
-        fc-cache -f
-        echo "✅ Police installée avec succès."
-    else
-        echo "✅ JetBrainsMono Nerd Font est déjà présente."
-    fi
+# Mise à jour du cache des polices (le -f force la relecture)
+echo "Updating font cache..."
+fc-cache -f
+echo "✅ Police installée avec succès."
+else
+echo "✅ JetBrainsMono Nerd Font est déjà présente."
+fi
 fi
 
 # 5. LOGIQUE SPECIFIQUE (42 vs PERSO)
 {{ if .is_42 -}}
 echo "🏫 Mode 42 activé..."
 if [[ "$OS_TYPE" == "Linux" && -z "$IS_WSL" ]]; then
-    # VS Code
-    if [ ! -d "$APPS_DIR/vscode" ]; then
-        echo "📦 Installation VS Code..."
-        curl -L "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" | tar -xzC "$APPS_DIR"
-        mv "$APPS_DIR/VSCode-linux-x64" "$APPS_DIR/vscode" 2>/dev/null
-        ln -sf "$APPS_DIR/vscode/bin/code" "$BIN_DIR/code"
-    fi
-    # Kitty + Icônes Desktop
-    if [ ! -d "$APPS_DIR/kitty.app" ]; then
-        echo "🐱 Installation Kitty..."
-        curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest="$APPS_DIR"
-        ln -sf "$APPS_DIR/kitty.app/bin/kitty" "$BIN_DIR/kitty"
-        mkdir -p ~/.local/share/applications
-        cp "$APPS_DIR/kitty.app/share/applications/kitty.desktop" ~/.local/share/applications/
-        sed -i "s|Icon=kitty|Icon=$APPS_DIR/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty.desktop
-        sed -i "s|Exec=kitty|Exec=$APPS_DIR/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty.desktop
-    fi
+# VS Code
+if [ ! -d "$APPS_DIR/vscode" ]; then
+echo "📦 Installation VS Code..."
+curl -L "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" | tar -xzC "$APPS_DIR"
+mv "$APPS_DIR/VSCode-linux-x64" "$APPS_DIR/vscode" 2>/dev/null
+ln -sf "$APPS_DIR/vscode/bin/code" "$BIN_DIR/code"
+fi
+# Kitty + Icônes Desktop
+if [ ! -d "$APPS_DIR/kitty.app" ]; then
+echo "🐱 Installation Kitty..."
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest="$APPS_DIR"
+ln -sf "$APPS_DIR/kitty.app/bin/kitty" "$BIN_DIR/kitty"
+mkdir -p ~/.local/share/applications
+cp "$APPS_DIR/kitty.app/share/applications/kitty.desktop" ~/.local/share/applications/
+sed -i "s|Icon=kitty|Icon=$APPS_DIR/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty.desktop
+sed -i "s|Exec=kitty|Exec=$APPS_DIR/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty.desktop
+fi
 fi
 {{- end }}
 
 # 6. NEOVIM (Basé sur Sudo)
 {{ if .has_sudo -}}
 if ! command -v nvim &>/dev/null; then
-    echo "🌙 Installation Neovim Nightly..."
-    NVIM_DIR="$APPS_DIR/nvim-nightly"
-    mkdir -p "$NVIM_DIR"
-    curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz | tar -xzC "$NVIM_DIR" --strip-components=1
-    ln -sf "$NVIM_DIR/bin/nvim" "$BIN_DIR/nvim"
+echo "🌙 Installation Neovim Nightly..."
+NVIM_DIR="$APPS_DIR/nvim-nightly"
+mkdir -p "$NVIM_DIR"
+curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz | tar -xzC "$NVIM_DIR" --strip-components=1
+ln -sf "$NVIM_DIR/bin/nvim" "$BIN_DIR/nvim"
 
-    if ! command -v cargo &>/dev/null; then
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
-    fi
+if ! command -v cargo &>/dev/null; then
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+fi
 fi
 {{- end }}
 
 # 7. Shell par défaut
 if [[ "$SHELL" != */zsh ]]; then
     echo "🐚 Changement du shell vers ZSH..."
-    chsh -s $(which zsh)
-fi
+chsh -s $(which zsh)
+    fi
 
-echo "✨ Terminé ! Relance ton terminal ou 'source ~/.zshrc'."
+    echo "✨ Terminé ! Relance ton terminal ou 'source ~/.zshrc'."
+
