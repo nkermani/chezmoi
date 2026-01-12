@@ -33,13 +33,10 @@ if [[ "$OS_TYPE" == "wsl2" ]]; then
     export VSCODE_EXE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
 
     code() {
-        # 1. &> /dev/null : envoie tous les messages (logs/erreurs) à la poubelle
-        # 2. & : lance en arrière-plan pour te rendre la main sur le terminal immédiatement
-        "$VSCODE_EXE" --remote wsl+Ubuntu-22.04 "${@:-.}" &> /dev/null &
-
-        # 3. disown : détache le processus du terminal pour qu'il ne soit pas tué
-        # quand tu fermes ton onglet zsh
-        disown
+        # On encapsule tout dans un subshell ( ) pour cacher le job ID
+        # On redirige tout vers /dev/null
+        # Le & à la fin du subshell détache naturellement le processus
+        ( "$VSCODE_EXE" --remote wsl+Ubuntu-22.04 "${@:-.}" &> /dev/null & )
     }
     alias c='code'
 fi
@@ -60,11 +57,10 @@ W_CODE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
 
 # Priorité WSL2
 if [[ "$(grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null && echo 'wsl')" == "wsl" ]]; then
-    if [[ -f "$W_CODE" ]]; then
-        # On passe les arguments exactement tels quels avec "$@"
-        "$W_CODE" --remote wsl+Ubuntu-22.04 "$@" &> /dev/null &
-        disown
-        exit 0
+        if [[ -f "\$W_CODE" ]]; then
+                ( "\$W_CODE" --remote wsl+Ubuntu-22.04 "\$@" &> /dev/null & )
+                exit 0
+        fi
     fi
 fi
 
