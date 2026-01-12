@@ -40,7 +40,34 @@ if [[ "$SHELL" != */zsh ]]; then
 chsh -s $(which zsh)
 	fi
 
+# --- 5. OUTILS CLI (ripgrep, fzf, fd) - SUDOLESS ---
+echo "🛠️ Vérification des outils CLI..."
 
+# FZF
+if [ ! -f "$BIN_DIR/fzf" ]; then
+    echo "🔍 Installation de fzf..."
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install --bin
+    cp ~/.fzf/bin/fzf "$BIN_DIR/"
+fi
+
+# Ripgrep (rg)
+if ! command -v rg &> /dev/null; then
+    echo "📂 Installation de ripgrep..."
+    RG_VERSION=$(curl -sI https://github.com/BurntSushi/ripgrep/releases/latest | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
+    curl -LSs "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/rg.tar.gz
+    tar -xzf /tmp/rg.tar.gz -C /tmp
+    cp /tmp/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl/rg "$BIN_DIR/"
+fi
+
+# FD
+if ! command -v fd &> /dev/null; then
+    echo "⚡ Installation de fd..."
+    FD_VERSION=$(curl -sI https://github.com/sharkdp/fd/releases/latest | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
+    curl -LSs "https://github.com/sharkdp/fd/releases/download/${FD_VERSION}/fd-${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/fd.tar.gz
+    tar -xzf /tmp/fd.tar.gz -C /tmp
+    cp /tmp/fd-${FD_VERSION}-x86_64-unknown-linux-musl/fd "$BIN_DIR/"
+fi
 
 
 # --- DETECTION DE L'ENVIRONNEMENT (BASH) ---
@@ -70,11 +97,36 @@ OS_TYPE=$(uname -s)
 	fi
 	fi
 
+
+# --- LOGIQUE KITTY (42 & Linux Natif) ---
+if [[ "$OS_TYPE" == "Linux" && -z "$IS_WSL" ]]; then
+    if [ ! -d "$APPS_DIR/kitty.app" ]; then
+        echo "🐱 Installation de Kitty Terminal (Linux x64)..."
+
+        # 1. Téléchargement et installation via le script officiel
+        # On définit 'dest' mais on retire 'launch_prefix' qui pose problème
+        curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin \
+            dest="$APPS_DIR"
+
+        # 2. Création manuelle du lien symbolique dans ton BIN_DIR
+        ln -sf "$APPS_DIR/kitty.app/bin/kitty" "$BIN_DIR/kitty"
+
+        # 3. Intégration Desktop (si le dossier existe)
+        if [ -d "$APPS_DIR/kitty.app/share/applications" ]; then
+            mkdir -p ~/.local/share/applications
+            cp "$APPS_DIR/kitty.app/share/applications/kitty.desktop" ~/.local/share/applications/
+
+            # Correction des chemins dans le fichier .desktop
+            sed -i "s|Icon=kitty|Icon=$APPS_DIR/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty.desktop
+            # On utilise le chemin complet vers l'exécutable
+            sed -i "s|Exec=kitty|Exec=$APPS_DIR/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty.desktop
+
+            echo "✅ Kitty installé et raccourci bureau créé."
+        fi
+    fi
+fi
+
 # --- LOGIQUE NEOVIM (Utilise le booléen de chezmoi.toml) ---
-
-
-
-# --- LOGIQUE NEOVIM ---
 {{ if .has_sudo -}}
 echo "🔐 Droits sudo confirmés dans chezmoi.toml"
 NVIM_DIR="$HOME/.nkermani/apps/nvim-nightly"
