@@ -79,7 +79,9 @@ export EDITOR="smart-editor"
 export VISUAL="smart-editor"
 # Alias éditeurs
 alias n='nvim'
-alias vim='vim'
+alias v='vim'
+alias e='smart-editor'
+alias c='smart-editor'
 alias edit='smart-editor'
 alias clear='clear -x'
 
