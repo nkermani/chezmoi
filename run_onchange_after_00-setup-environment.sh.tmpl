@@ -143,3 +143,17 @@ chsh -s $(which zsh)
 
     echo "✨ Terminé ! Relance ton terminal ou 'source ~/.zshrc'."
 
+# --- 8. NOTES (Isolées dans leur propre sous-dossier) ---
+NOTES_DIR="$NK_DIR/notes"
+NOTES_REPO="git@github.com:nkermani/notes.git"
+
+if [ ! -d "$NOTES_DIR/.git" ]; then
+    echo "📓 Installation de la bibliothèque de notes dans $NOTES_DIR..."
+    mkdir -p "$NK_DIR"
+    # On clone dans 'notes' pour ne pas interférer avec 'bin' et 'apps'
+    git clone "$NOTES_REPO" "$NOTES_DIR" || echo "⚠️ Attention: Le clone des notes a échoué (vérifiez SSH/Repo vide)."
+fi
+
+echo "✨ Configuration terminée avec succès !"
+
+echo "✨ Terminé ! Relance ton terminal ou 'source ~/.zshrc'."

@@ -239,3 +239,14 @@ fi
 # 8. ESTHÉTIQUE
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#808080'
 bindkey '^?' backward-delete-char
+
+# --- Section Notes ---
+export NOTES_DIR="$NK_DIR/notes"
+
+# On ne tente un pull que si c'est vraiment un repo git
+if [ -d "$NOTES_DIR/.git" ]; then
+    ( builtin cd "$NOTES_DIR" && git pull --quiet &> /dev/null & )
+fi
+
+alias brain="smart-editor $NOTES_DIR"
+alias cdn="cd $NOTES_DIR"
