@@ -211,6 +211,9 @@ vfg()  { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git .
 [ -n "$commands[fzf]" ] && source <(fzf --zsh 2>/dev/null || fzf --bash 2>/dev/null)
 [ -n "$commands[zoxide]" ] && eval "$(zoxide init zsh)"
 
+export FZF_DEFAULT_COMMAND='fd --type f --absolute-path'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
 # NVM Lazy-load : Ne charge NVM que quand tu tapes 'nvm', 'node' ou 'npm'
 if [ -s "$NVM_DIR/nvm.sh" ]; then
     nvm() {
@@ -229,6 +232,7 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
         npm "$@"
     }
 fi
+
 
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
