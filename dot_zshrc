@@ -41,32 +41,35 @@ if [[ "$OS_TYPE" == "wsl2" ]]; then
     alias c='code'
 fi
 
-# 5. SMART-EDITOR (Génération ultra-robuste)
-W_CODE_EXE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
-
+# 5. SMART-EDITOR
 mkdir -p "$NK_BIN"
 cat << 'EOF' > "$NK_BIN/smart-editor"
 #!/usr/bin/env bash
 
-# 1. Gestion de l'argument par défaut
-if [ $# -eq 0 ]; then
-    set -- "."
-fi
+# 1. Arguments par défaut
+[ $# -eq 0 ] && set -- "."
 
+# Chemins spécifiques
 W_CODE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
+# Zed sur macOS ou Linux natif est souvent dans le PATH,
+# mais on check les chemins standards.
 
-# 2. Priorité WSL2
-# On simplifie la détection : si grep trouve 'wsl', on entre dans le bloc
+# 2. Logique WSL2 (Priorité Windows si installé)
 if grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then
+    # Note: Zed n'a pas encore de mode --remote WSL officiel comme VS Code,
+    # on utilise donc VS Code pour le moment sur WSL pour garder l'intégration Linux.
     if [[ -f "$W_CODE" ]]; then
         "$W_CODE" --remote wsl+Ubuntu-22.04 "$@" &> /dev/null &
         exit 0
     fi
 fi
 
-# 3. Fallbacks (42, Linux Natif, macOS)
 if command -v code >/dev/null 2>&1; then
     exec code "$@"
+elif command -v zed >/dev/null 2>&1; then
+    exec zed "$@"
+elif command -v zed-editor >/dev/null 2>&1; then
+    exec zed-editor "$@"
 elif command -v nvim >/dev/null 2>&1; then
     exec nvim "$@"
 else
@@ -77,12 +80,15 @@ chmod +x "$NK_BIN/smart-editor"
 
 export EDITOR="smart-editor"
 export VISUAL="smart-editor"
+
 # Alias éditeurs
-alias n='nvim'
-alias v='vim'
+alias z='smart-editor'
+alias edit='smart-editor'
 alias e='smart-editor'
 alias c='smart-editor'
-alias edit='smart-editor'
+alias v='vim'
+alias n='nvim'
+
 alias clear='clear -x'
 
 # 6. FONCTIONS PERSO & AI
@@ -213,6 +219,14 @@ vfg()  { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git .
 
 export FZF_DEFAULT_COMMAND='fd --type f --absolute-path'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Dans ton .zshrc
+if [ -d "/goinfre/$USER/.nvm" ]; then
+    export NVM_DIR="/goinfre/$USER/.nvm"
+else
+    export NVM_DIR="$HOME/.nkermani/apps/nvm"
+fi
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # NVM Lazy-load : Ne charge NVM que quand tu tapes 'nvm', 'node' ou 'npm'
 if [ -s "$NVM_DIR/nvm.sh" ]; then

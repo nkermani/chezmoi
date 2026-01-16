@@ -120,30 +120,85 @@ fi
 fi
 {{- end }}
 
-# 6. NEOVIM (Basé sur Sudo)
-{{ if .has_sudo -}}
-if ! command -v nvim &>/dev/null; then
-echo "🌙 Installation Neovim Nightly..."
-NVIM_DIR="$APPS_DIR/nvim-nightly"
-mkdir -p "$NVIM_DIR"
-curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz | tar -xzC "$NVIM_DIR" --strip-components=1
-ln -sf "$NVIM_DIR/bin/nvim" "$BIN_DIR/nvim"
+# --- 5.5 NODE.JS via NVM (Optimisé 42 Goinfre) ---
+if [[ "$is_42" == "true" ]]; then
+    # Définition du chemin dans le goinfre spécifique à l'utilisateur
+    GOINFRE_USER="/goinfre/$USER"
+    mkdir -p "$GOINFRE_USER"
+    export NVM_DIR="$GOINFRE_USER/.nvm"
+else
+    export NVM_DIR="$APPS_DIR/nvm"
+fi
 
+if [ ! -d "$NVM_DIR" ]; then
+    echo "📦 Installation de NVM dans $NVM_DIR..."
+    mkdir -p "$NVM_DIR"
+    # Installation forcée dans le dossier choisi
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | NVM_DIR="$NVM_DIR" bash
+fi
+
+# Charger NVM immédiatement
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Installation de Node 22
+if ! command -v node &>/dev/null || [[ $(node -v | cut -d'v' -f2 | cut -d'.' -f1) -lt 22 ]]; then
+    echo "🟢 Installation de Node.js 22..."
+    nvm install 22
+    nvm use 22
+    nvm alias default 22
+
+    # Liens symboliques dans ton BIN_DIR personnel pour que 'node' soit dans le PATH
+    ln -sf "$(which node)" "$BIN_DIR/node"
+    ln -sf "$(which npm)" "$BIN_DIR/npm"
+fi
+
+# --- 6. NEOVIM NIGHTLY (Sudoless & Portable) ---
+if [ ! -f "$BIN_DIR/nvim" ]; then
+    echo "🌙 Installation Neovim Nightly dans $APPS_DIR..."
+    NVIM_INSTALL_DIR="$APPS_DIR/nvim-nightly"
+    mkdir -p "$NVIM_INSTALL_DIR"
+
+    # Téléchargement de l'archive Linux x86_64
+    curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
+
+    # Création du lien symbolique vers ton dossier bin personnel
+    ln -sf "$NVIM_INSTALL_DIR/bin/nvim" "$BIN_DIR/nvim"
+    echo "✅ Neovim Nightly installé avec succès."
+fi
+
+# --- 7. RUST / CARGO ---
 if ! command -v cargo &>/dev/null; then
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+    echo "🦀 Installation de Rust..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+    # Source cargo pour l'utiliser immédiatement
+    source "$HOME/.cargo/env"
 fi
-fi
-{{- end }}
 
-# 7. Shell par défaut
-if [[ "$SHELL" != */zsh ]]; then
-    echo "🐚 Changement du shell vers ZSH..."
-chsh -s $(which zsh)
+# --- 8. ZED EDITOR ---
+echo "⚡ Installation de Zed Editor..."
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+    # macOS
+    command -v brew &>/dev/null && brew install --cask zed
+elif [[ -n "$IS_WSL" ]]; then
+    # Sur WSL2, Zed tourne mieux côté Windows (UI).
+    # On affiche un message car l'installateur Linux n'a pas de serveur X/Wayland par défaut.
+    echo "💡 Note: Sur WSL2, installez Zed sur Windows pour une meilleure expérience."
+else
+    # LINUX (Natif ou 42 sans sudo)
+    if ! command -v zed &>/dev/null; then
+        echo "📦 Téléchargement de Zed (Linux portable)..."
+        ZED_INSTALL_DIR="$APPS_DIR/zed-editor"
+        mkdir -p "$ZED_INSTALL_DIR"
+
+        # Récupération de la dernière version stable
+        curl -fL https://zed.dev/install.sh | ZED_RELEASE_CHANNEL=stable PREFIX="$ZED_INSTALL_DIR" sh
+
+        # Link vers ton BIN_DIR personnel
+        ln -sf "$ZED_INSTALL_DIR/bin/zed" "$BIN_DIR/zed"
     fi
+fi
 
-    echo "✨ Terminé ! Relance ton terminal ou 'source ~/.zshrc'."
-
-# --- 8. NOTES (Isolées dans leur propre sous-dossier) ---
+# --- 9. NOTES (Isolées dans leur propre sous-dossier) ---
 NOTES_DIR="$NK_DIR/notes"
 NOTES_REPO="git@github.com:nkermani/notes.git"
 
@@ -154,6 +209,27 @@ if [ ! -d "$NOTES_DIR/.git" ]; then
     git clone "$NOTES_REPO" "$NOTES_DIR" || echo "⚠️ Attention: Le clone des notes a échoué (vérifiez SSH/Repo vide)."
 fi
 
-echo "✨ Configuration terminée avec succès !"
+# 10. ---  Shell par défaut ---
+if [[ "$SHELL" != */zsh ]]; then
+    echo "🐚 Changement du shell vers ZSH..."
+chsh -s $(which zsh)
+    fi
 
+
+# --- 11. DÉCLENCHEMENT DE L'INSTALLATION DES PLUGINS ---
+# On utilise le script que tu as déjà dans ton dossier de config
+INSTALL_PLUGINS_SCRIPT="$HOME/.config/nvim/scripts/install-nvim-plugins.sh"
+
+if [ -f "$INSTALL_PLUGINS_SCRIPT" ]; then
+    echo "📦 Exécution du script d'installation des plugins Neovim..."
+    # On s'assure qu'il est exécutable
+    chmod +x "$INSTALL_PLUGINS_SCRIPT"
+    # On l'exécute
+    bash "$INSTALL_PLUGINS_SCRIPT"
+else
+    echo "⚠️ Script de plugins non trouvé à l'emplacement : $INSTALL_PLUGINS_SCRIPT"
+    echo "Avez-vous bien cloné vos dotfiles avant ?"
+fi
+
+echo "✨ Configuration terminée avec succès !"
 echo "✨ Terminé ! Relance ton terminal ou 'source ~/.zshrc'."
