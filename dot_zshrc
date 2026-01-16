@@ -64,14 +64,14 @@ if grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then
     fi
 fi
 
-if command -v code >/dev/null 2>&1; then
+if command -v nvim >/dev/null 2>&1; then
+    exec nvim "$@"
+elif command -v code >/dev/null 2>&1; then
     exec code "$@"
 elif command -v zed >/dev/null 2>&1; then
     exec zed "$@"
 elif command -v zed-editor >/dev/null 2>&1; then
     exec zed-editor "$@"
-elif command -v nvim >/dev/null 2>&1; then
-    exec nvim "$@"
 else
     exec vi "$@"
 fi
@@ -82,10 +82,10 @@ export EDITOR="smart-editor"
 export VISUAL="smart-editor"
 
 # Alias éditeurs
-alias z='smart-editor'
+alias z='zed'
 alias edit='smart-editor'
 alias e='smart-editor'
-alias c='smart-editor'
+alias c='code'
 alias v='vim'
 alias n='nvim'
 
@@ -93,9 +93,31 @@ alias clear='clear -x'
 
 # 6. FONCTIONS PERSO & AI
 ai() {
-  local dir=$(fd --type d --hidden --exclude .git . ~ | fzf --prompt="󰚝 Launch OpenCode in: ")
-  [[ -n "$dir" ]] && cd "$dir" && opencode
+  # Si un argument est passé (ex: ai . ou ai mon_fichier.c)
+  if [[ -n "$1" ]]; then
+    opencode "$1"
+    return
+  fi
+
+  # Sinon, on lance la recherche interactive (Smart Launch)
+  # On cherche les dossiers (d) ET les fichiers (f) en ignorant le .git
+  local target=$(fd --hidden --exclude .git . ~ | fzf \
+    --prompt="󰚝 Launch OpenCode in: " \
+    --header="Select a folder or file to open")
+
+  if [[ -n "$target" ]]; then
+    # On se déplace dans le dossier parent si c'est un fichier,
+    # ou dans le dossier lui-même si c'est un dossier
+    if [[ -d "$target" ]]; then
+        cd "$target" && opencode .
+    else
+        cd "$(dirname "$target")" && opencode "$target"
+    fi
+  fi
 }
+
+# Alias pour l'option -a (ouvre tout, même les fichiers cachés)
+alias ai-all='ai'
 alias aichat='opencode chat'
 alias aip='opencode project'
 alias aie='opencode explain'
