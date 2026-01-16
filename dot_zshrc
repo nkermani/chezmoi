@@ -93,27 +93,44 @@ alias clear='clear -x'
 
 # 6. FONCTIONS PERSO & AI
 ai() {
-  # Si un argument est passé (ex: ai . ou ai mon_fichier.c)
-  if [[ -n "$1" ]]; then
+  local search_cmd
+  local hidden_flag=""
+
+  # Gestion des arguments
+  if [[ "$1" == "-a" ]]; then
+    # On autorise les dossiers cachés (sauf .git)
+    search_cmd="fd --type d --hidden --exclude .git ."
+  elif [[ -n "$1" ]]; then
+    # Si un argument direct est passé (ex: ai mon_dossier)
     opencode "$1"
     return
+  else
+    # Par défaut : dossiers visibles uniquement
+    search_cmd="fd --type d ."
   fi
 
-  # Sinon, on lance la recherche interactive (Smart Launch)
-  # On cherche les dossiers (d) ET les fichiers (f) en ignorant le .git
-  local target=$(fd --hidden --exclude .git . ~ | fzf \
-    --prompt="󰚝 Launch OpenCode in: " \
-    --header="Select a folder or file to open")
+  local target=$(eval "$search_cmd" | fzf \
+    --prompt="󰚝 OpenCode (Local): " \
+    --header="Select a folder to start agent")
 
-  if [[ -n "$target" ]]; then
-    # On se déplace dans le dossier parent si c'est un fichier,
-    # ou dans le dossier lui-même si c'est un dossier
-    if [[ -d "$target" ]]; then
-        cd "$target" && opencode .
-    else
-        cd "$(dirname "$target")" && opencode "$target"
-    fi
+  [[ -n "$target" ]] && cd "$target" && opencode .
+}
+
+# air : Recherche globale depuis le HOME (~/)
+# air -a : Recherche globale incluant les dossiers cachés
+air() {
+  local search_cmd
+  if [[ "$1" == "-a" ]]; then
+    search_cmd="fd --type d --hidden --exclude .git . ~"
+  else
+    search_cmd="fd --type d . ~"
   fi
+
+  local target=$(eval "$search_cmd" | fzf \
+    --prompt="󰚝 OpenCode (Global ~/): " \
+    --header="Search folders from home")
+
+  [[ -n "$target" ]] && cd "$target" && opencode .
 }
 
 # Alias pour l'option -a (ouvre tout, même les fichiers cachés)
@@ -134,7 +151,6 @@ _get_viewer() {
   command -v batcat >/dev/null 2>&1 && echo "batcat --color=always --style=numbers" || \
   echo "cat"
 }
-
 
 # Navigation rapide dans le dossier courant
 f() {
@@ -233,7 +249,6 @@ fcat() { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git |
 vf()   { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git | fzf --preview "$v {}"); [[ -n "$f" ]] && smart-editor "$f"; }
 vfg()  { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git . ~ | fzf --preview "$v {}"); [[ -n "$f" ]] && smart-editor "$f"; }
 
-
 # 7. INITIALISATIONS OPTIMISÉES (Lazy-loading)
 # FZF & Zoxide
 [ -n "$commands[fzf]" ] && source <(fzf --zsh 2>/dev/null || fzf --bash 2>/dev/null)
@@ -269,7 +284,6 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
     }
 fi
 
-
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 # 8. ESTHÉTIQUE
@@ -286,3 +300,4 @@ fi
 
 alias brain="smart-editor $NOTES_DIR"
 alias cdn="cd $NOTES_DIR"
+
