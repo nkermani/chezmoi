@@ -215,7 +215,6 @@ if [[ "$SHELL" != */zsh ]]; then
 chsh -s $(which zsh)
     fi
 
-
 # --- 11. DÉCLENCHEMENT DE L'INSTALLATION DES PLUGINS ---
 # On utilise le script que tu as déjà dans ton dossier de config
 INSTALL_PLUGINS_SCRIPT="$HOME/.config/nvim/scripts/install-nvim-plugins.sh"
@@ -231,5 +230,25 @@ else
     echo "Avez-vous bien cloné vos dotfiles avant ?"
 fi
 
+# --- 12. OPENCODE.AI (Installation via script officiel) ---
+if [ ! -d "$APPS_DIR/opencode" ]; then
+    echo "🤖 Installation de OpenCode.ai via le script officiel..."
+
+    # On définit le PREFIX pour forcer l'installation dans ton dossier perso
+    # Le script opencode respecte généralement la variable PREFIX ou s'installe dans le dossier courant
+    mkdir -p "$APPS_DIR/opencode"
+
+    # On se déplace dans apps pour que l'installation reste locale
+    (cd "$APPS_DIR" && curl -fsSL https://opencode.ai/install | bash)
+
+    # On crée le lien symbolique vers ton BIN_DIR personnel
+    # (Vérifie le nom exact du binaire après l'install, souvent 'opencode')
+    ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/opencode"
+    ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/code"
+
+    echo "✅ OpenCode.ai est prêt."
+fi
+
 echo "✨ Configuration terminée avec succès !"
 echo "✨ Terminé ! Relance ton terminal ou 'source ~/.zshrc'."
+
