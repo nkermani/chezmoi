@@ -125,6 +125,16 @@ fi
 fi
 {{- end }}
 
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+    if ! command -v kitty &>/dev/null; then
+        echo "🐱 Installation de Kitty sur macOS via Brew..."
+        # Brew détecte automatiquement l'architecture (ARM vs Intel)
+        brew install --cask kitty
+        # Création du lien vers ton BIN_DIR perso pour tes scripts
+        ln -sf "/Applications/kitty.app/Contents/MacOS/kitty" "$BIN_DIR/kitty"
+    fi
+fi
+
 # --- 5.5 NODE.JS via NVM (Optimisé 42 Goinfre) ---
 if [[ "$is_42" == "true" ]]; then
     # Définition du chemin dans le goinfre spécifique à l'utilisateur
@@ -158,7 +168,6 @@ if ! command -v node &>/dev/null || [[ $(node -v | cut -d'v' -f2 | cut -d'.' -f1
 fi
 
 # --- 6. NEOVIM NIGHTLY (Sudoless & Portable) ---
-# --- 6. NEOVIM NIGHTLY (Correction macOS) ---
 if [ ! -f "$BIN_DIR/nvim" ]; then
     echo "🌙 Installation Neovim Nightly..."
     NVIM_INSTALL_DIR="$APPS_DIR/nvim-nightly"
