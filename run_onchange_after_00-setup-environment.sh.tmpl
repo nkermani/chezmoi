@@ -1,29 +1,38 @@
 #!/bin/bash
 
-# --- CONFIGURATION CHEZMOI ---
+# ==============================================================================
+# CHEZMOI DEPLOYMENT SCRIPT - NKERMANI HYBRID CONFIG (2026)
+# Targets: macOS (ARM/Intel), Linux (Native), and 42 School (Goinfre)
+# ==============================================================================
+
+# --- 0. DATA INITIALIZATION (Template Variables) ---
 # .is_42 : {{ .is_42 }}
 # .has_sudo : {{ .has_sudo }}
 
-# 1. Dossiers de base
+# --- 1. CORE ENVIRONMENT SETUP ---
+echo "🌐 Initializing base environment..."
 NK_DIR="$HOME/.nkermani"
 APPS_DIR="$NK_DIR/apps"
 BIN_DIR="$NK_DIR/bin"
 mkdir -p "$APPS_DIR" "$BIN_DIR"
 
-# Détection immédiate de l'OS et environnement (Important pour la suite)
+# OS Detection
 OS_TYPE=$(uname -s)
+ARCH_TYPE=$(uname -m)
 IS_WSL=$(grep -i "microsoft" /proc/version 2>/dev/null)
 
-# 2. Oh My Zsh & Plugins (Tous tes plugins sont ici)
+# --- 2. SHELL SETUP (Oh My Zsh & Plugins) ---
+echo "🐚 Configuring Zsh environment..."
 ZSH_DIR="$APPS_DIR/ohmyzsh"
+ZSH_CUSTOM="$ZSH_DIR/custom"
+
 if [ ! -d "$ZSH_DIR" ]; then
-    echo "🚀 Installation de Oh My Zsh..."
+    echo "  🚀 Installing Oh My Zsh..."
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
     mv ~/.oh-my-zsh "$ZSH_DIR" 2>/dev/null || true
 fi
 
-ZSH_CUSTOM="$ZSH_DIR/custom"
-# Liste simple compatible tout OS : "nom|url"
+mkdir -p "$ZSH_CUSTOM/plugins"
 plugin_list=(
     "zsh-syntax-highlighting|https://github.com/zsh-users/zsh-syntax-highlighting.git"
     "zsh-autosuggestions|https://github.com/zsh-users/zsh-autosuggestions"
@@ -32,239 +41,164 @@ plugin_list=(
     "zsh-history-substring-search|https://github.com/zsh-users/zsh-history-substring-search"
 )
 
-echo "🔌 Vérification des plugins..."
 for item in "${plugin_list[@]}"; do
     name="${item%%|*}"
     url="${item#*|}"
-
     if [ ! -d "$ZSH_CUSTOM/plugins/$name" ]; then
-        echo "📥 Installation du plugin $name..."
+        echo "  📥 Cloning plugin: $name..."
         git clone --depth 1 "$url" "$ZSH_CUSTOM/plugins/$name"
     fi
 done
 
-# --- 3. OUTILS CLI (Installation forcée dans NK_BIN) ---
-echo "🛠️ Installation des outils CLI dans $BIN_DIR..."
-
+# --- 3. SYSTEM TOOLS (FZF, Ripgrep, FD, Bat) ---
+echo "🛠️  Installing CLI utilities..."
 if [[ "$OS_TYPE" == "Darwin" ]]; then
-    command -v brew &>/dev/null && brew install fzf ripgrep fd bat
-else
-    # FZF : On force l'installation si le binaire n'est pas dans NOTRE dossier bin
-    if [ ! -f "$BIN_DIR/fzf" ]; then
-        echo "📦 Installation de FZF..."
-        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-        ~/.fzf/install --bin
-        cp ~/.fzf/bin/fzf "$BIN_DIR/"
-        rm -rf ~/.fzf
+    # Homebrew handles architecture automatically on macOS
+    if command -v brew &>/dev/null; then
+        brew install fzf ripgrep fd bat
     fi
+else
+    # Manual installation for Linux/42 (Portable Binaries)
+    [ ! -f "$BIN_DIR/fzf" ] && {
+        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --bin && cp ~/.fzf/bin/fzf "$BIN_DIR/" && rm -rf ~/.fzf
+    }
 
-    # Ripgrep, FD, Bat : On vérifie la présence du fichier dans BIN_DIR
     for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat"; do
         IFS=":" read -r name bin repo <<< "$tool"
-
         if [ ! -f "$BIN_DIR/$bin" ]; then
-            echo "📦 Installation de $name dans $BIN_DIR..."
+            echo "  📦 Fetching $name..."
             VER=$(curl -sI "https://github.com/$repo/releases/latest" | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
-
-            # Téléchargement et extraction
             curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}-${VER}-x86_64-unknown-linux-musl.tar.gz" | tar -xzC /tmp
-
-            # On trouve le binaire dans l'archive extraite et on le place dans BIN_DIR
             find /tmp/${name}-${VER}-x86_64-unknown-linux-musl -name "$bin" -type f -exec cp {} "$BIN_DIR/" \;
         fi
     done
 fi
 
-# --- 4. POLICES (JetBrains Mono Nerd Font) ---
+# --- 4. FONTS (Typography) ---
 if [[ "$OS_TYPE" == "Linux" ]]; then
-FONT_DIR="$HOME/.local/share/fonts"
-# On vérifie si le dossier existe déjà OU si la font est déjà installée dans le système
-if [ ! -d "$FONT_DIR/JetBrainsMono" ] && ! fc-list | grep -qi "JetBrainsMono"; then
-echo "💾 JetBrainsMono Nerd Font non trouvée. Installation..."
-mkdir -p "$FONT_DIR/JetBrainsMono"
-
-# Téléchargement dans /tmp pour économiser le quota disque
-curl -L -o /tmp/jb.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
-
-# -o pour overwrite sans demander, -d pour la destination
-unzip -o /tmp/jb.zip -d "$FONT_DIR/JetBrainsMono"
-
-# Nettoyage immédiat du zip
-rm /tmp/jb.zip
-
-# Mise à jour du cache des polices (le -f force la relecture)
-echo "Updating font cache..."
-fc-cache -f
-echo "✅ Police installée avec succès."
-else
-echo "✅ JetBrainsMono Nerd Font est déjà présente."
-fi
-fi
-
-# 5. LOGIQUE SPECIFIQUE (42 vs PERSO)
-{{ if .is_42 -}}
-echo "🏫 Mode 42 activé..."
-if [[ "$OS_TYPE" == "Linux" && -z "$IS_WSL" ]]; then
-# VS Code
-if [ ! -d "$APPS_DIR/vscode" ]; then
-echo "📦 Installation VS Code..."
-curl -L "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" | tar -xzC "$APPS_DIR"
-mv "$APPS_DIR/VSCode-linux-x64" "$APPS_DIR/vscode" 2>/dev/null
-ln -sf "$APPS_DIR/vscode/bin/code" "$BIN_DIR/code"
-fi
-# Kitty + Icônes Desktop
-if [ ! -d "$APPS_DIR/kitty.app" ]; then
-echo "🐱 Installation Kitty..."
-curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest="$APPS_DIR"
-ln -sf "$APPS_DIR/kitty.app/bin/kitty" "$BIN_DIR/kitty"
-mkdir -p ~/.local/share/applications
-cp "$APPS_DIR/kitty.app/share/applications/kitty.desktop" ~/.local/share/applications/
-sed -i "s|Icon=kitty|Icon=$APPS_DIR/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty.desktop
-sed -i "s|Exec=kitty|Exec=$APPS_DIR/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty.desktop
-fi
-fi
-{{- end }}
-
-if [[ "$OS_TYPE" == "Darwin" ]]; then
-    if ! command -v kitty &>/dev/null; then
-        echo "🐱 Installation de Kitty sur macOS via Brew..."
-        # Brew détecte automatiquement l'architecture (ARM vs Intel)
-        brew install --cask kitty
-        # Création du lien vers ton BIN_DIR perso pour tes scripts
-        ln -sf "/Applications/kitty.app/Contents/MacOS/kitty" "$BIN_DIR/kitty"
+    echo "🔡 Checking Fonts..."
+    FONT_DIR="$HOME/.local/share/fonts"
+    if [ ! -d "$FONT_DIR/JetBrainsMono" ] && ! fc-list | grep -qi "JetBrainsMono"; then
+        mkdir -p "$FONT_DIR/JetBrainsMono"
+        curl -L -o /tmp/jb.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+        unzip -o /tmp/jb.zip -d "$FONT_DIR/JetBrainsMono" && rm /tmp/jb.zip
+        fc-cache -f
     fi
 fi
 
-# --- 5.5 NODE.JS via NVM (Optimisé 42 Goinfre) ---
-if [[ "$is_42" == "true" ]]; then
-    # Définition du chemin dans le goinfre spécifique à l'utilisateur
-    GOINFRE_USER="/goinfre/$USER"
-    mkdir -p "$GOINFRE_USER"
-    export NVM_DIR="$GOINFRE_USER/.nvm"
+# --- 5. TERMINAL (Kitty) ---
+echo "🐱 Configuring Kitty Terminal..."
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+    if ! command -v kitty &>/dev/null; then
+        brew install --cask kitty
+        ln -sf "/Applications/kitty.app/Contents/MacOS/kitty" "$BIN_DIR/kitty"
+    fi
+elif [[ "{{ .is_42 }}" == "true" && -z "$IS_WSL" ]]; then
+    if [ ! -d "$APPS_DIR/kitty.app" ]; then
+        curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest="$APPS_DIR"
+        ln -sf "$APPS_DIR/kitty.app/bin/kitty" "$BIN_DIR/kitty"
+    fi
+fi
+
+# --- 6. DEVELOPMENT RUNTIMES (Node/NVM & Rust) ---
+echo "⚙️  Setting up runtimes..."
+# Node via NVM
+if [[ "{{ .is_42 }}" == "true" ]]; then
+    export NVM_DIR="/goinfre/$USER/.nvm"
 else
     export NVM_DIR="$APPS_DIR/nvm"
 fi
+mkdir -p "$NVM_DIR"
 
-if [ ! -d "$NVM_DIR" ]; then
-    echo "📦 Installation de NVM dans $NVM_DIR..."
-    mkdir -p "$NVM_DIR"
-    # Installation forcée dans le dossier choisi
+if [ ! -d "$NVM_DIR/versions" ]; then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | NVM_DIR="$NVM_DIR" bash
 fi
-
-# Charger NVM immédiatement
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# Installation de Node 22
-if ! command -v node &>/dev/null || [[ $(node -v | cut -d'v' -f2 | cut -d'.' -f1) -lt 22 ]]; then
-    echo "🟢 Installation de Node.js 22..."
-    nvm install 22
-    nvm use 22
-    nvm alias default 22
-
-    # Liens symboliques dans ton BIN_DIR personnel pour que 'node' soit dans le PATH
+if ! command -v node &>/dev/null; then
+    nvm install 22 && nvm use 22 && nvm alias default 22
     ln -sf "$(which node)" "$BIN_DIR/node"
     ln -sf "$(which npm)" "$BIN_DIR/npm"
 fi
 
-# --- 6. NEOVIM NIGHTLY (Sudoless & Portable) ---
+# Rust
+if ! command -v cargo &>/dev/null; then
+    echo "  🦀 Installing Rust..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+fi
+
+# --- 7. TEXT EDITORS (Neovim Nightly) ---
+echo "🌙 Configuring Neovim..."
 if [ ! -f "$BIN_DIR/nvim" ]; then
-    echo "🌙 Installation Neovim Nightly..."
     NVIM_INSTALL_DIR="$APPS_DIR/nvim-nightly"
     mkdir -p "$NVIM_INSTALL_DIR"
-
     if [[ "$OS_TYPE" == "Darwin" ]]; then
-        # Téléchargement pour macOS
+        # Native Apple Silicon support
         curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-arm64.tar.gz | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
     else
-        # Téléchargement pour Linux
         curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
     fi
     ln -sf "$NVIM_INSTALL_DIR/bin/nvim" "$BIN_DIR/nvim"
 fi
 
-# --- 7. RUST / CARGO ---
-if ! command -v cargo &>/dev/null; then
-    echo "🦀 Installation de Rust..."
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
-    # Source cargo pour l'utiliser immédiatement
-    source "$HOME/.cargo/env"
-fi
-
-# --- 8. ZED EDITOR ---
-echo "⚡ Installation de Zed Editor..."
-if [[ "$OS_TYPE" == "Darwin" ]]; then
-    # macOS
-    command -v brew &>/dev/null && brew install --cask zed
-elif [[ -n "$IS_WSL" ]]; then
-    # Sur WSL2, Zed tourne mieux côté Windows (UI).
-    # On affiche un message car l'installateur Linux n'a pas de serveur X/Wayland par défaut.
-    echo "💡 Note: Sur WSL2, installez Zed sur Windows pour une meilleure expérience."
-else
-    # LINUX (Natif ou 42 sans sudo)
-    if ! command -v zed &>/dev/null; then
-        echo "📦 Téléchargement de Zed (Linux portable)..."
-        ZED_INSTALL_DIR="$APPS_DIR/zed-editor"
-        mkdir -p "$ZED_INSTALL_DIR"
-
-        # Récupération de la dernière version stable
-        curl -fL https://zed.dev/install.sh | ZED_RELEASE_CHANNEL=stable PREFIX="$ZED_INSTALL_DIR" sh
-
-        # Link vers ton BIN_DIR personnel
-        ln -sf "$ZED_INSTALL_DIR/bin/zed" "$BIN_DIR/zed"
-    fi
-fi
-
-# --- 9. NOTES (Isolées dans leur propre sous-dossier) ---
-NOTES_DIR="$NK_DIR/notes"
-NOTES_REPO="git@github.com:nkermani/notes.git"
-
-if [ ! -d "$NOTES_DIR/.git" ]; then
-    echo "📓 Installation de la bibliothèque de notes dans $NOTES_DIR..."
-    mkdir -p "$NK_DIR"
-    # On clone dans 'notes' pour ne pas interférer avec 'bin' et 'apps'
-    git clone "$NOTES_REPO" "$NOTES_DIR" || echo "⚠️ Attention: Le clone des notes a échoué (vérifiez SSH/Repo vide)."
-fi
-
-# 10. ---  Shell par défaut ---
-if [[ "$SHELL" != */zsh ]]; then
-    echo "🐚 Changement du shell vers ZSH..."
-chsh -s $(which zsh)
-    fi
-
-# --- 11. DÉCLENCHEMENT DE L'INSTALLATION DES PLUGINS ---
-# On utilise le script que tu as déjà dans ton dossier de config
+# Plugin installation
 INSTALL_PLUGINS_SCRIPT="$HOME/.config/nvim/scripts/install-nvim-plugins.sh"
-
 if [ -f "$INSTALL_PLUGINS_SCRIPT" ]; then
-    echo "📦 Exécution du script d'installation des plugins Neovim..."
-    # On s'assure qu'il est exécutable
-    chmod +x "$INSTALL_PLUGINS_SCRIPT"
-    # On l'exécute
-    bash "$INSTALL_PLUGINS_SCRIPT"
-else
-    echo "⚠️ Script de plugins non trouvé à l'emplacement : $INSTALL_PLUGINS_SCRIPT"
-    echo "Avez-vous bien cloné vos dotfiles avant ?"
+    chmod +x "$INSTALL_PLUGINS_SCRIPT" && bash "$INSTALL_PLUGINS_SCRIPT"
 fi
 
-# --- 12. OPENCODE.AI (Installation via script officiel) ---
-if [ ! -d "$APPS_DIR/opencode" ]; then
-    echo "🤖 Installation de OpenCode.ai via le script officiel..."
-
-    # On définit le PREFIX pour forcer l'installation dans ton dossier perso
-    # Le script opencode respecte généralement la variable PREFIX ou s'installe dans le dossier courant
-    mkdir -p "$APPS_DIR/opencode"
-
-    # On se déplace dans apps pour que l'installation reste locale
-    (cd "$APPS_DIR" && curl -fsSL https://opencode.ai/install | bash)
-
-    # On crée le lien symbolique vers ton BIN_DIR personnel
-    # (Vérifie le nom exact du binaire après l'install, souvent 'opencode')
-    ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/opencode"
-    ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/code"
-
-    echo "✅ OpenCode.ai est prêt."
+# --- 8. PERSONAL DATA (Notes) ---
+echo "📓 Syncing knowledge base..."
+NOTES_DIR="$NK_DIR/notes"
+if [ ! -d "$NOTES_DIR/.git" ]; then
+    git clone "git@github.com:nkermani/notes.git" "$NOTES_DIR" || echo "  ⚠️  Notes clone failed. Check SSH keys."
 fi
 
-echo "✨ Configuration terminée avec succès !"
-echo "✨ Terminé ! Relance ton terminal ou 'source ~/.zshrc'."
+# --- 9. OPTIONAL TOOLS (Zed & OpenCode AI) ---
+# echo "⚡ Checking optional editors and AI tools..."
+
+# # 9.1 ZED EDITOR
+# if ! command -v zed &>/dev/null && ! command -v zed-editor &>/dev/null; then
+#     echo "  📦 Installing Zed Editor..."
+#     if [[ "$OS_TYPE" == "Darwin" ]]; then
+#         # macOS: Install via Homebrew Cask
+#         brew install --cask zed
+#         ln -sf "/Applications/Zed.app/Contents/MacOS/zed" "$BIN_DIR/zed"
+#     elif [[ -n "$IS_WSL" ]]; then
+#         echo "  💡 Note: On WSL2, install Zed on Windows for the best experience."
+#     else
+#         # Linux: Portable installation (Native or 42 without sudo)
+#         ZED_INSTALL_DIR="$APPS_DIR/zed-editor"
+#         mkdir -p "$ZED_INSTALL_DIR"
+#         curl -fL https://zed.dev/install.sh | ZED_RELEASE_CHANNEL=stable PREFIX="$ZED_INSTALL_DIR" sh
+#         ln -sf "$ZED_INSTALL_DIR/bin/zed" "$BIN_DIR/zed"
+#     fi
+# fi
+
+# # 9.2 OPENCODE.AI
+# if [ ! -d "$APPS_DIR/opencode" ]; then
+#     echo "  🤖 Installing OpenCode.ai (Local installation)..."
+#     mkdir -p "$APPS_DIR/opencode"
+
+#     # Run the official installer within the apps directory to keep it portable
+#     (cd "$APPS_DIR" && curl -fsSL https://opencode.ai/install | bash)
+
+#     # Create symlinks in your personal bin directory
+#     # 'code' is linked to opencode here to use it as your primary AI-powered editor
+#     ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/opencode"
+#     ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/code"
+#     echo "  ✅ OpenCode.ai installed and aliased to 'code'."
+# fi
+
+# --- 10. FINALIZATION ---
+if [[ "$SHELL" != */zsh ]]; then
+    echo "🐚 Setting default shell to Zsh..."
+    chsh -s $(which zsh)
+fi
+
+echo "-------------------------------------------------------"
+echo "✅ Deployment Successful!"
+echo "✨ Restart your terminal or run 'source ~/.zshrc'"
+echo "-------------------------------------------------------"
+
+# End of Script
