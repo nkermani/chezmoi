@@ -31,8 +31,6 @@ path=($NK_BIN $HOME/.local/bin $HOME/.opencode/bin $HOME/.cargo/bin /usr/local/b
 # 2. Vos dossiers perso (en fin de liste pour ne pas masquer les binaires système essentiels)
 export PATH="$NK_BIN:$PATH"
 
-
-
 # 3. OH-MY-ZSH (Chargement silencieux)
 ZSH_THEME="robbyrussell"
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions auto-notify you-should-use zsh-history-substring-search)
@@ -64,15 +62,13 @@ cat << 'EOF' > "$NK_BIN/smart-editor"
 # 1. Arguments par défaut
 [ $# -eq 0 ] && set -- "."
 
-# Chemins spécifiques
 W_CODE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
-# Zed sur macOS ou Linux natif est souvent dans le PATH,
-# mais on check les chemins standards.
 
-# 2. Logique WSL2 (Priorité Windows si installé)
+if command -v nvim >/dev/null 2>&1; then
+    exec nvim "$@"
+fi
+
 if grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then
-    # Note: Zed n'a pas encore de mode --remote WSL officiel comme VS Code,
-    # on utilise donc VS Code pour le moment sur WSL pour garder l'intégration Linux.
     if [[ -f "$W_CODE" ]]; then
         "$W_CODE" --remote wsl+Ubuntu-22.04 "$@" &> /dev/null &
         exit 0
@@ -81,17 +77,13 @@ fi
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
     if command -v code >/dev/null 2>&1; then
-        # Use 'open' to ensure files open in the same App instance/Dock icon
         open -a "Visual Studio Code" "$@"
         exit 0
     fi
 fi
 
-# Fallback for Linux/WSL
 if command -v code >/dev/null 2>&1; then
     exec code "$@"
-elif command -v nvim >/dev/null 2>&1; then
-    exec nvim "$@"
 elif command -v zed >/dev/null 2>&1; then
     exec zed "$@"
 elif command -v zed-editor >/dev/null 2>&1; then
@@ -324,3 +316,4 @@ fi
 
 alias brain="smart-editor $NOTES_DIR"
 alias cdn="cd $NOTES_DIR"
+
