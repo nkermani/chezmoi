@@ -21,6 +21,7 @@ PLUGINS=(
     "nvim-lualine/lualine.nvim"
     "nvim-telescope/telescope.nvim"
     "folke/trouble.nvim"
+    "akinsho/bufferline.nvim"
     "neovim/nvim-lspconfig"
     "hrsh7th/nvim-cmp"
     "hrsh7th/cmp-nvim-lsp"
@@ -52,3 +53,4 @@ done
 # Mise à jour de Treesitter une fois terminé
 echo "🌲 Mise à jour de Treesitter..."
 nvim --headless -c "TSUpdate" -c "quit" || true
+
