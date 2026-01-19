@@ -423,3 +423,20 @@ end, { desc = "Open Config Files" })
 
 -- Fin du fichier keymaps.lua
 
+
+-- ===================================================================
+-- BUFFERLINE (TABS) NAVIGATION
+-- ===================================================================
+-- Cycle through buffers (tabs)
+keymap("n", "<S-h>", ":BufferLineCyclePrev<CR>", { desc = "Previous Buffer" })
+keymap("n", "<S-l>", ":BufferLineCycleNext<CR>", { desc = "Next Buffer" })
+keymap("n", "<C-PageUp>", ":BufferLineCyclePrev<CR>", { desc = "Previous Buffer" })
+keymap("n", "<C-PageDown>", ":BufferLineCycleNext<CR>", { desc = "Next Buffer" })
+
+-- Move buffers
+keymap("n", "<leader>b<Left>", ":BufferLineMovePrev<CR>", { desc = "Move Buffer Left" })
+keymap("n", "<leader>b<Right>", ":BufferLineMoveNext<CR>", { desc = "Move Buffer Right" })
+
+-- Close buffer (keeps window open)
+keymap("n", "<leader>x", ":bdelete<CR>", { desc = "Close Buffer" })
+keymap("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick Buffer" })

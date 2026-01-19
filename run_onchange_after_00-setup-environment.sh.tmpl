@@ -190,6 +190,28 @@ fi
 #     echo "  ✅ OpenCode.ai installed and aliased to 'code'."
 # fi
 
+# 9.3 Yazi File Manager
+echo "📂 Checking Yazi..."
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+    if command -v brew &>/dev/null && ! command -v yazi &>/dev/null; then
+        brew install yazi
+    fi
+else
+    # Manual installation for Linux/42
+    if [ ! -f "$BIN_DIR/yazi" ]; then
+        echo "  📦 Installing Yazi..."
+        YAZI_VER=$(curl -sI "https://github.com/sxyazi/yazi/releases/latest" | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
+        curl -L -o /tmp/yazi.zip "https://github.com/sxyazi/yazi/releases/download/${YAZI_VER}/yazi-x86_64-unknown-linux-musl.zip"
+        unzip -q -o /tmp/yazi.zip -d /tmp
+        YAZI_DIR=$(find /tmp -maxdepth 1 -type d -name "yazi-*-linux-musl" | head -n 1)
+        if [ -d "$YAZI_DIR" ]; then
+            mv "$YAZI_DIR/yazi" "$BIN_DIR/"
+            [ -f "$YAZI_DIR/ya" ] && mv "$YAZI_DIR/ya" "$BIN_DIR/"
+            rm -rf "$YAZI_DIR" /tmp/yazi.zip
+        fi
+    fi
+fi
+
 # --- 10. FINALIZATION ---
 if [[ "$SHELL" != */zsh ]]; then
     echo "🐚 Setting default shell to Zsh..."
@@ -202,3 +224,4 @@ echo "✨ Restart your terminal or run 'source ~/.zshrc'"
 echo "-------------------------------------------------------"
 
 # End of Script
+
