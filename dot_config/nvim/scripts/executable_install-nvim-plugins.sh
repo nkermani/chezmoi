@@ -6,7 +6,7 @@ mkdir -p "$PLUGIN_DIR"
 
 echo "📥 Installation des plugins Neovim natifs..."
 
-# Liste de tes plugins (extraite de ton Dockerfile)
+# Liste de tes plugins
 PLUGINS=(
     "nvim-neo-tree/neo-tree.nvim"
     "nvim-lua/plenary.nvim"
@@ -38,6 +38,7 @@ PLUGINS=(
     "nvim-pack/nvim-spectre"
     "ahmedkhalf/project.nvim"
     "numToStr/Comment.nvim"
+    "inhesrom/remote-ssh.nvim"
 )
 
 for plugin in "${PLUGINS[@]}"; do

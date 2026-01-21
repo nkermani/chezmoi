@@ -16,6 +16,23 @@ transparent.setup({
         'NeoTreeDirectoryName',
         'NeoTreeFileName',
 
+        'BufferLineFill',              -- L'arrière-plan vide derrière les onglets
+        'BufferLineBackground',        -- Les onglets inactifs
+        'BufferLineSeparator',         -- Les séparateurs entre onglets
+        'BufferLineSeparatorVisible',
+        'BufferLineSeparatorSelected',
+        'BufferLineTab',               -- Les onglets de type "Tab"
+        'BufferLineTabSelected',
+        'BufferLineTabSeparator',
+        'BufferLineTabSeparatorSelected',
+        'BufferLineIndicatorSelected', -- Le petit indicateur de sélection
+        'BufferLineOffsetSeparator',
+        'BufferLineTabClose',
+        'BufferLineCloseButton',
+        'BufferLineCloseButtonSelected',
+        'BufferLineFill',
+        'BufferLineIndicatorSelected',
+
         'StatusLine',
         'StatusLineNC',
         'LazyNormal',
@@ -79,4 +96,6 @@ transparent.setup({
 })
 
 transparent.clear_prefix('lualine')
+transparent.clear_prefix('Bufferline')
 transparent.toggle(true)
+

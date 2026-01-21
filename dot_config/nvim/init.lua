@@ -27,4 +27,5 @@ require("config.bufferline")
 require("config.snacks")
 require("config.multicursor")
 require("config.render-markdown")
+require("config.remote-ssh")
 

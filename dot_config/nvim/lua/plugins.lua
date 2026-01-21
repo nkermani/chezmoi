@@ -49,5 +49,6 @@ pack.add({
     { src = 'https://github.com/nvim-pack/nvim-spectre' },
     { src = 'https://github.com/ahmedkhalf/project.nvim' },
     { src = 'https://github.com/numToStr/Comment.nvim' },
+    { src = 'https://github.com/inhesrom/remote-ssh.nvim'}
 })
 
