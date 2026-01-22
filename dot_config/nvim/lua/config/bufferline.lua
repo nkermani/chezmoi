@@ -1,6 +1,7 @@
+-- lua/config/bufferline.lua
 local status_ok, bufferline = pcall(require, "bufferline")
 if not status_ok then
-	return
+    return
 end
 
 bufferline.setup({
@@ -16,14 +17,14 @@ bufferline.setup({
             local icon = level:match("error") and " " or " "
             return " " .. icon .. count
         end,
-        offsets = {
-            {
-                filetype = "neo-tree",
-                text = "Explorer",
-                highlight = "Directory",
-                text_align = "left",
-            },
-        },
+        -- offsets = {
+        --     {
+        --         filetype = "neo-tree",
+        --         text = "File Explorer",
+        --         highlight = "NeoTreeNormal",
+        --         separator = false,
+        --     },
+        -- },
     },
 })
 
@@ -38,4 +39,6 @@ if trans_ok then
         end, vim.tbl_values(require('bufferline.config').highlights))
     )
 end
+
+vim.api.nvim_set_hl(0, "TabLineFill", { bg = "none" })
 

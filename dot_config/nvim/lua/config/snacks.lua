@@ -1,3 +1,5 @@
+-- lua/config/snacks.lua
+
 local ok, snacks = pcall(require, "snacks")
 if not ok then return end
 
@@ -35,3 +37,4 @@ keymap("n", "<leader>nh", function() snacks.notifier.show_history() end, { desc 
 
 -- Renommer un fichier physiquement et mettre à jour les imports
 keymap("n", "<leader>rn", function() snacks.rename.rename_file() end, { desc = "Rename File" })
+

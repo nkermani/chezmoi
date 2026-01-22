@@ -3,8 +3,8 @@
 -- lua/config/copilot.lua
 require('copilot').setup({
   suggestion = {
-    -- enabled = true,
-    -- auto_trigger = true,
+    enabled = false,  -- TRUE TO WORK
+    auto_trigger = false, -- TRUE TO WORK
     keymap = {
       -- On met à false ici pour gérer le Tab manuellement ci-dessous
       accept = false,

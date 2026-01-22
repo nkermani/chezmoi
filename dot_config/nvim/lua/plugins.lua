@@ -1,4 +1,4 @@
--- lua/plugins.lua
+l-- lua/plugins.lua
 local pack = vim.pack
 
 -- lua/plugins.lua
@@ -13,6 +13,7 @@ pack.add({
 
     -- 테마 및 미학 / Themes & Aesthetics / Thèmes et Esthétique
     { src = 'https://github.com/rebelot/kanagawa.nvim' },
+    { src = 'https://github.com/cpea2506/one_monokai.nvim' },
     { src = 'https://github.com/sainnhe/sonokai' },
     { src = 'https://github.com/xiyaowong/transparent.nvim' },
     { src = 'https://github.com/goolord/alpha-nvim' },
@@ -26,6 +27,8 @@ pack.add({
     { src = 'https://github.com/akinsho/bufferline.nvim' },
 
     -- LSP 및 지능형 기능 / LSP & Intelligence / LSP et Intelligence
+    { src = 'https://github.com/williamboman/mason.nvim' },
+    { src = 'https://github.com/williamboman/mason-lspconfig.nvim' },
     { src = 'https://github.com/neovim/nvim-lspconfig' },
     { src = 'https://github.com/hrsh7th/nvim-cmp' },
     { src = 'https://github.com/hrsh7th/cmp-nvim-lsp' },

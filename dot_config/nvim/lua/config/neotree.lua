@@ -1,3 +1,4 @@
+-- lua/config/neotree.lua
 local ok, neotree = pcall(require, "neo-tree")
 if not ok then return end
 
@@ -21,3 +22,7 @@ neotree.setup({
 
 -- Raccourci pour ouvrir/fermer l'explorateur
 vim.keymap.set('n', '<leader>e', ':Neotree toggle<CR>', { desc = "Toggle Neo-tree" })
+vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "none", ctermbg = "none" })
+vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "none", ctermbg = "none" })
+vim.api.nvim_set_hl(0, "NeoTreeWinSeparator", { bg = "none", fg = "#3b4252" })
+

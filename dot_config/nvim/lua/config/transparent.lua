@@ -96,6 +96,6 @@ transparent.setup({
 })
 
 transparent.clear_prefix('lualine')
-transparent.clear_prefix('Bufferline')
+transparent.clear_prefix('BufferLine')
 transparent.toggle(true)
 

@@ -1,3 +1,5 @@
+-- lua/config/remote-ssh.lua
+
 local status_ok, remote_ssh = pcall(require, "remote-ssh")
 if not status_ok then return end
 

@@ -1,3 +1,5 @@
+-- lua/config/spectre.lua
+
 local ok, spectre = pcall(require, "spectre")
 if not ok then return end
 
@@ -17,3 +19,4 @@ local keymap = vim.keymap.set
 keymap('n', '<leader>R', '<cmd>lua require("spectre").toggle()<CR>', { desc = "Replace in project (Spectre)" })
 -- Chercher le mot sous le curseur dans tout le projet
 keymap('n', '<leader>rw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', { desc = "Replace current word" })
+

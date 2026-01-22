@@ -13,6 +13,7 @@ PLUGINS=(
     "nvim-tree/nvim-web-devicons"
     "MunifTanjim/nui.nvim"
     "rebelot/kanagawa.nvim"
+    "cpea2506/one_monokai.nvim"
     "sainnhe/sonokai"
     "xiyaowong/transparent.nvim"
     "goolord/alpha-nvim"

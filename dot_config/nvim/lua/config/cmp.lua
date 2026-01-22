@@ -1,3 +1,4 @@
+-- lua/config/cmp.lua
 local ok_cmp, cmp = pcall(require, "cmp")
 if not ok_cmp then return end
 

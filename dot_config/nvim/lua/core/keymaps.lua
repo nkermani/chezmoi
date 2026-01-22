@@ -1,5 +1,74 @@
-local keymap = vim.keymap.set
 -- lua/core/keymaps.lua
+
+local keymap = vim.keymap.set
+local opts = { noremap = true, silent = true }
+
+-- Détection de l'OS
+local is_mac = vim.loop.os_uname().sysname == "Darwin"
+local is_wsl = vim.fn.has("wsl") == 1
+local is_linux = not is_mac and not is_wsl
+
+if is_mac then
+    -- Navigation entre fenêtres (Alt au lieu de Ctrl si Conflit Mission Control)
+    keymap("n", "<M-h>", "<C-w>h", { desc = "Fenêtre gauche" })
+    keymap("n", "<M-j>", "<C-w>j", { desc = "Fenêtre bas" })
+    keymap("n", "<M-k>", "<C-w>k", { desc = "Fenêtre haut" })
+    keymap("n", "<M-l>", "<C-w>l", { desc = "Fenêtre droite" })
+
+    -- Clipboard spécifique (assure la liaison avec pbcopy)
+    vim.opt.clipboard = "unnamedplus"
+
+    -- Correction du Scroll (Molette naturelle Mac)
+    keymap({'n', 'i', 'v'}, '<ScrollWheelUp>', '<C-y>', opts)
+    keymap({'n', 'i', 'v'}, '<ScrollWheelDown>', '<C-e>', opts)
+end
+
+if is_linux then
+    -- Correction spécifique pour CTRL + / qui envoie parfois <C-_>
+    keymap({'n', 'i', 'v'}, '<C-_>', 'gcc', { remap = true })
+
+    -- Utilisation de xclip ou xsel (automatique par Neovim si installés)
+    -- Pas de changements majeurs requis, Linux est le plus "standard" pour Neovim.
+end
+
+if is_wsl then
+    -- Synchronisation forcée du presse-papier WSL -> Windows
+    -- Nécessite win32yank.exe dans le PATH Windows
+    if vim.fn.executable("win32yank.exe") == 1 then
+        vim.g.clipboard = {
+            name = "win32yank-wsl",
+            copy = {
+                ["+"] = "win32yank.exe -i --universalnewlline",
+                ["*"] = "win32yank.exe -i --universalnewlline",
+            },
+            paste = {
+                ["+"] = "win32yank.exe -o --universalnewlline",
+                ["*"] = "win32yank.exe -o --universalnewlline",
+            },
+            cache_enabled = 0,
+        }
+    end
+end
+
+-- Navigation par mot (Compatible Mac Option et Linux/WSL Ctrl)
+local word_keys = is_mac and '<M-' or '<C-'
+keymap({'n', 'v'}, word_keys .. 'Left>',  'b', opts)
+keymap({'n', 'v'}, word_keys .. 'Right>', 'w', opts)
+keymap('i',        word_keys .. 'Left>',  '<C-o>b', opts)
+keymap('i',        word_keys .. 'Right>', '<C-o>w', opts)
+
+-- Sauvegarde universelle (CTRL+S)
+keymap('n', '<C-s>', ':w<CR>', { desc = "Save" })
+keymap('i', '<C-s>', '<C-o>:w<CR>', { desc = "Save" })
+
+-- Quitter proprement (Correction de vos fautes de frappe)
+keymap('n', '<C-q>', ':q<CR>', { desc = "Quit" })
+keymap('i', '<C-q>', '<C-o>:q<CR>', { desc = "Quit" })
+keymap('v', '<C-q>', '<Esc>:q<CR>', { desc = "Quit" })
+
+-- Suppression sans polluer le registre (Blackhole)
+keymap({"n", "v"}, "x", '"_x', opts)
+keymap({"n", "v"}, "d", '"_d', opts)
 
 -- Crée des points d'undo sur les caractères de ponctuation
 local chars = {',', '.', '!', '?', ';', ' ', '(', ')', '[', ']', '{', '}'}
@@ -314,7 +383,6 @@ keymap("n", "q", "<nop>", opts)
 -- ===================================================================
 --
 -- Mode normal : Sauvegarde le fichier courant
-
 keymap('n', '<C-s>', ':w<CR>', { desc = "Sauvegarder le fichier" })
 -- Mode insertion : Sauvegarde le fichier courant sans quitter le mode Insertion
 -- On utilise <C-o> pour exécuter une commande normale sans quitter l'insert
@@ -377,30 +445,49 @@ keymap('v', '<C-l>', 'j', { desc = "Sélectionner ligne suivante" })
 -- TERMINAL TOGGLE (CTRL + K)
 -- ===================================================================
 -- Fonction pour basculer le terminal (Toggle)
-local function toggle_terminal()
-  local term_buf = nil
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.bo[buf].buftype == "terminal" then
-      term_buf = buf
-      break
-    end
-  end
+-- local function toggle_terminal()
+--   local term_buf = nil
+--   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+--     if vim.bo[buf].buftype == "terminal" then
+--       term_buf = buf
+--       break
+--     end
+--   end
+--
+--   local win = vim.fn.bufwinid(term_buf or -1)
+--   if win ~= -1 then
+--     -- Si le terminal est ouvert, on le cache
+--     vim.api.nvim_win_hide(win)
+--   else
+--     -- Sinon on l'ouvre (en bas, taille 15)
+--     if term_buf then
+--       vim.cmd("botright sbuf " .. term_buf)
+--     else
+--       vim.cmd("botright split | term")
+--     end
+--     vim.cmd("resize 15")
+--     vim.cmd("startinsert")
+--   end
+-- end
 
-  local win = vim.fn.bufwinid(term_buf or -1)
-  if win ~= -1 then
-    -- Si le terminal est ouvert, on le cache
-    vim.api.nvim_win_hide(win)
-  else
-    -- Sinon on l'ouvre (en bas, taille 15)
-    if term_buf then
-      vim.cmd("botright sbuf " .. term_buf)
-    else
-      vim.cmd("botright split | term")
+local function toggle_terminal()
+    local term_buf = nil
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.bo[buf].buftype == "terminal" then
+            term_buf = buf
+            break
+        end
     end
-    vim.cmd("resize 15")
-    vim.cmd("startinsert")
-  end
+
+    local win = vim.fn.bufwinid(term_buf or -1)
+    if win ~= -1 then
+        vim.api.nvim_win_hide(win)
+    else
+        vim.cmd("botright 15split | " .. (term_buf and ("buffer " .. term_buf) or "term"))
+        vim.cmd("startinsert")
+    end
 end
+vim.keymap.set({'n', 't'}, '<C-k>', toggle_terminal, { desc = "Toggle Terminal" })
 
 -- Mappings avec CTRL + k
 -- En mode Normal pour ouvrir
@@ -423,7 +510,6 @@ end, { desc = "Open Config Files" })
 
 -- Fin du fichier keymaps.lua
 
-
 -- ===================================================================
 -- BUFFERLINE (TABS) NAVIGATION
 -- ===================================================================
@@ -440,3 +526,4 @@ keymap("n", "<leader>b<Right>", ":BufferLineMoveNext<CR>", { desc = "Move Buffer
 -- Close buffer (keeps window open)
 keymap("n", "<leader>x", ":bdelete<CR>", { desc = "Close Buffer" })
 keymap("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick Buffer" })
+
