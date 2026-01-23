@@ -33,6 +33,8 @@ PLUGINS=(
     "folke/snacks.nvim"
     "nvim-pack/nvim-spectre"
     "zbirenbaum/copilot.lua"
+    "letieu/btw.nvim"
+    "stevearc/oil.nvim"
 )
 
 for plugin in "${PLUGINS[@]}"; do
@@ -48,3 +50,4 @@ done
 # Mise à jour de Treesitter une fois terminé
 echo "🌲 Mise à jour de Treesitter..."
 nvim --headless -c "TSUpdate" -c "quit" || true
+

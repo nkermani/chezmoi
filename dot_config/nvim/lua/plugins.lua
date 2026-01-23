@@ -45,4 +45,6 @@ pack.add({
     -- 다목적 도구 / Swiss Army Knife / Couteau Suisse
     { src = 'https://github.com/folke/snacks.nvim' },
     { src = 'https://github.com/nvim-pack/nvim-spectre' },
+    { src = 'https://github.com/letieu/btw.nvim' },
+    { src = 'https://github.com/stevearc/oil.nvim' },
 })
