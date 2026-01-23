@@ -1,22 +1,34 @@
 -- lua/config/colorscheme.lua
+-- Colorscheme file
+-- rebelot/kanagawa.nvim
+-- cpea2506/one_monokai.nvim
+-- sainnhe/sonokai
+
 local ok_monokai, monokai = pcall(require, "one_monokai")
 local ok_kanagawa, kanagawa = pcall(require, "kanagawa")
+local ok_sonokai, sonokai = pcall(require, "sonokai")
 
--- 1. Configurer Kanagawa (même si on ne l'utilise pas, pour éviter l'erreur Lualine)
+-- 1. Sonokai
+if ok_sonokai then
+    vim.g.sonokai_style = 'atlantis'
+    vim.g.sonokai_transparent_background = 0
+    vim.g.sonokai_better_performance = 1
+end
+
+-- 2. Kanagawa
 if ok_kanagawa then
-    kanagawa.setup({ transparent = true })
-end
-
--- 2. Configurer One Monokai
-if ok_monokai then
-    monokai.setup({
-        transparent = true,
-        italics = true,
+    kanagawa.setup({
+        transparent = true, -- Pour le flou/blur
+        theme = "wave",
     })
-    -- On applique One Monokai
-    vim.cmd("colorscheme one_monokai")
-else
-    -- Fallback si One Monokai n'est pas trouvé
-    vim.cmd("colorscheme habamax")
 end
 
+if ok_sonokai then
+    vim.cmd("colorscheme sonokai")
+elseif ok_monokai then
+    vim.cmd("colorscheme one_monokai")
+elseif ok_kanagawa then
+    vim.cmd("colorscheme kanagawa")
+else
+    vim.cmd("colorscheme industry")
+end

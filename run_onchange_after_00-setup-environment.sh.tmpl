@@ -147,6 +147,33 @@ if [ -f "$INSTALL_PLUGINS_SCRIPT" ]; then
     chmod +x "$INSTALL_PLUGINS_SCRIPT" && bash "$INSTALL_PLUGINS_SCRIPT"
 fi
 
+# --- 7.5 LUA LANGUAGE SERVER (LuaLS) ---
+echo "🌙 Installing Lua Language Server..."
+LUA_LS_DIR="$APPS_DIR/lua-language-server"
+if [ ! -f "$BIN_DIR/lua-language-server" ]; then
+    if [[ "$OS_TYPE" == "Darwin" ]]; then
+        if command -v brew &>/dev/null; then
+            brew install lua-language-server
+            # Link to your local bin for consistency
+            ln -sf "$(which lua-language-server)" "$BIN_DIR/lua-language-server"
+        fi
+    else
+        # Manual installation for Linux/42
+        mkdir -p "$LUA_LS_DIR"
+        LUA_VER=$(curl -sI "https://github.com/LuaLS/lua-language-server/releases/latest" | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
+
+        # Determine platform suffix for the download
+        PLATFORM="linux-x64"
+        [[ "$ARCH_TYPE" == "aarch64" ]] && PLATFORM="linux-arm64"
+
+        echo "  📦 Fetching LuaLS $LUA_VER for $PLATFORM..."
+        curl -LSs "https://github.com/LuaLS/lua-language-server/releases/download/${LUA_VER}/lua-language-server-${LUA_VER}-${PLATFORM}.tar.gz" | tar -xzC "$LUA_LS_DIR"
+
+        # Create the symlink to your personal bin
+        ln -sf "$LUA_LS_DIR/bin/lua-language-server" "$BIN_DIR/lua-language-server"
+    fi
+fi
+
 # --- 8. PERSONAL DATA (Notes) ---
 echo "📓 Syncing knowledge base..."
 NOTES_DIR="$NK_DIR/notes"

@@ -1,4 +1,5 @@
 -- lua/core/options.lua
+-- Options
 local opt = vim.opt
 local g = vim.g
 
@@ -107,4 +108,3 @@ vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
 vim.opt.signcolumn = "yes" -- Garde la colonne des signes (pour les erreurs/git) fixe pour éviter les sauts d'écran
 -- OU
 -- vim.opt.signcolumn = "no" -- Pour tout cacher
-

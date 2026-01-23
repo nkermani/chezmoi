@@ -1,5 +1,5 @@
 -- lua/core/keymaps.lua
-
+-- Keymaps
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
@@ -9,45 +9,12 @@ local is_wsl = vim.fn.has("wsl") == 1
 local is_linux = not is_mac and not is_wsl
 
 if is_mac then
-    -- Navigation entre fenêtres (Alt au lieu de Ctrl si Conflit Mission Control)
-    keymap("n", "<M-h>", "<C-w>h", { desc = "Fenêtre gauche" })
-    keymap("n", "<M-j>", "<C-w>j", { desc = "Fenêtre bas" })
-    keymap("n", "<M-k>", "<C-w>k", { desc = "Fenêtre haut" })
-    keymap("n", "<M-l>", "<C-w>l", { desc = "Fenêtre droite" })
-
-    -- Clipboard spécifique (assure la liaison avec pbcopy)
-    vim.opt.clipboard = "unnamedplus"
-
-    -- Correction du Scroll (Molette naturelle Mac)
-    keymap({'n', 'i', 'v'}, '<ScrollWheelUp>', '<C-y>', opts)
-    keymap({'n', 'i', 'v'}, '<ScrollWheelDown>', '<C-e>', opts)
 end
 
 if is_linux then
-    -- Correction spécifique pour CTRL + / qui envoie parfois <C-_>
-    keymap({'n', 'i', 'v'}, '<C-_>', 'gcc', { remap = true })
-
-    -- Utilisation de xclip ou xsel (automatique par Neovim si installés)
-    -- Pas de changements majeurs requis, Linux est le plus "standard" pour Neovim.
 end
 
 if is_wsl then
-    -- Synchronisation forcée du presse-papier WSL -> Windows
-    -- Nécessite win32yank.exe dans le PATH Windows
-    if vim.fn.executable("win32yank.exe") == 1 then
-        vim.g.clipboard = {
-            name = "win32yank-wsl",
-            copy = {
-                ["+"] = "win32yank.exe -i --universalnewlline",
-                ["*"] = "win32yank.exe -i --universalnewlline",
-            },
-            paste = {
-                ["+"] = "win32yank.exe -o --universalnewlline",
-                ["*"] = "win32yank.exe -o --universalnewlline",
-            },
-            cache_enabled = 0,
-        }
-    end
 end
 
 -- Navigation par mot (Compatible Mac Option et Linux/WSL Ctrl)
@@ -526,4 +493,3 @@ keymap("n", "<leader>b<Right>", ":BufferLineMoveNext<CR>", { desc = "Move Buffer
 -- Close buffer (keeps window open)
 keymap("n", "<leader>x", ":bdelete<CR>", { desc = "Close Buffer" })
 keymap("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick Buffer" })
-

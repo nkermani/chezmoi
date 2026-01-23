@@ -1,4 +1,6 @@
 -- lua/core/autocmds.lua
+-- You can specify commands to be executed automatically when reading or writing
+
 local autocmd = vim.api.nvim_create_autocmd
 
 -- Surligner brièvement le texte lors d'un "yank" (copie)

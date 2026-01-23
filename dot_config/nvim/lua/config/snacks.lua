@@ -1,5 +1,5 @@
 -- lua/config/snacks.lua
-
+-- folke/snacks.nvim -> A collection of small QoL plugins for Neovim
 local ok, snacks = pcall(require, "snacks")
 if not ok then return end
 
@@ -20,7 +20,19 @@ snacks.setup({
   dashboard = { enabled = false },
 
   -- Indentations (Peut remplacer indent-blankline si tu veux)
-  indent = { enabled = true },
+  indent = {
+      enabled = true,
+      char = "╎",           -- Un caractère fin pour le look "clean"
+      scope_char = "┃",     -- Un caractère plus épais pour la portée actuelle
+      only_scope = false,   -- Affiche les lignes partout (mettre à true pour encore plus de minimalisme)
+      animate = {
+        enabled = true,     -- Ajoute une animation fluide sur le changement de scope
+        style = "out",      -- Effet de "fading"
+      },
+      blank = {
+        char = " ",         -- Pas de caractères sur les lignes vides (très clean)
+      },
+  },
 
   -- Pour faire des captures d'écran de ton code (Super pour tes projets 42 !)
   input = { enabled = true },
@@ -37,4 +49,3 @@ keymap("n", "<leader>nh", function() snacks.notifier.show_history() end, { desc 
 
 -- Renommer un fichier physiquement et mettre à jour les imports
 keymap("n", "<leader>rn", function() snacks.rename.rename_file() end, { desc = "Rename File" })
-

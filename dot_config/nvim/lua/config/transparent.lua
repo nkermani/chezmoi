@@ -1,4 +1,5 @@
 -- lua/config/transparent.lua
+-- xiyaowong/transparent.nvim -> Remove all background colors to make nvim transparent.
 local ok, transparent = pcall(require, "transparent")
 if not ok then return end
 
@@ -98,4 +99,3 @@ transparent.setup({
 transparent.clear_prefix('lualine')
 transparent.clear_prefix('BufferLine')
 transparent.toggle(true)
-

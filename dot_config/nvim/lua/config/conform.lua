@@ -1,4 +1,6 @@
 -- lua/config/conform.lua
+-- stevearc/conform.nvim -> Lightweight yet powerful formatter plugin for Neovim
+
 require("conform").setup({
     formatters_by_ft = {
         lua = {},  -- stylua disabled, will use LSP fallback

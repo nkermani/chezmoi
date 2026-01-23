@@ -1,4 +1,5 @@
 -- lua/config/telescope.lua
+-- nvim-telescope/telescope.nvim -> telescope.nvim is a highly extendable fuzzy finder over lists.
 local ok, telescope = pcall(require, "telescope")
 if not ok then return end
 
@@ -94,4 +95,3 @@ end
 
 -- Raccourci pour pouvoir l'appeler depuis Alpha ou ailleurs
 vim.keymap.set("n", "<leader>fp", find_projects, { desc = "Find Projects (No Preview)" })
-

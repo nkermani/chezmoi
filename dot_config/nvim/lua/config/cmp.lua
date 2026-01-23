@@ -1,4 +1,6 @@
 -- lua/config/cmp.lua
+-- hrsh7th/nvim-cmp -> Completion engine
+
 local ok_cmp, cmp = pcall(require, "cmp")
 if not ok_cmp then return end
 
@@ -50,4 +52,3 @@ cmp.setup({
         { name = 'path' },
     })
 })
-

@@ -1,12 +1,8 @@
-l-- lua/plugins.lua
-local pack = vim.pack
-
 -- lua/plugins.lua
 local pack = vim.pack
 
 pack.add({
     -- 핵심 유틸리티 / Core Utilities / Utilitaires de base
-    { src = 'https://github.com/nvim-neo-tree/neo-tree.nvim' },
     { src = 'https://github.com/nvim-lua/plenary.nvim' },
     { src = 'https://github.com/nvim-tree/nvim-web-devicons' },
     { src = 'https://github.com/MunifTanjim/nui.nvim' },
@@ -16,20 +12,17 @@ pack.add({
     { src = 'https://github.com/cpea2506/one_monokai.nvim' },
     { src = 'https://github.com/sainnhe/sonokai' },
     { src = 'https://github.com/xiyaowong/transparent.nvim' },
-    { src = 'https://github.com/goolord/alpha-nvim' },
     { src = 'https://github.com/folke/noice.nvim' },
-    { src = 'https://github.com/lukas-reineke/indent-blankline.nvim' },
 
     -- 상태 표시줄 및 내비게이션 / Statusline & Navigation / Barre d'état et Navigation
     { src = 'https://github.com/nvim-lualine/lualine.nvim' },
     { src = 'https://github.com/nvim-telescope/telescope.nvim' },
     { src = 'https://github.com/folke/trouble.nvim' },
-    { src = 'https://github.com/akinsho/bufferline.nvim' },
 
     -- LSP 및 지능형 기능 / LSP & Intelligence / LSP et Intelligence
-    { src = 'https://github.com/williamboman/mason.nvim' },
-    { src = 'https://github.com/williamboman/mason-lspconfig.nvim' },
     { src = 'https://github.com/neovim/nvim-lspconfig' },
+    { src = 'https://github.com/mason-org/mason.nvim' },
+    { src = 'https://github.com/mason-org/mason-lspconfig.nvim' },
     { src = 'https://github.com/hrsh7th/nvim-cmp' },
     { src = 'https://github.com/hrsh7th/cmp-nvim-lsp' },
     { src = 'https://github.com/hrsh7th/cmp-buffer' },
@@ -44,14 +37,11 @@ pack.add({
     { src = 'https://github.com/windwp/nvim-autopairs' },
     { src = 'https://github.com/stevearc/conform.nvim' },
     { src = 'https://github.com/lewis6991/gitsigns.nvim' },
-    { src = 'https://github.com/MeanderingProgrammer/render-markdown.nvim' },
+
     -- Multicurseurs (Style VSCode)
     { src = 'https://github.com/mg979/vim-visual-multi' },
+
     -- 다목적 도구 / Swiss Army Knife / Couteau Suisse
     { src = 'https://github.com/folke/snacks.nvim' },
     { src = 'https://github.com/nvim-pack/nvim-spectre' },
-    { src = 'https://github.com/ahmedkhalf/project.nvim' },
-    { src = 'https://github.com/numToStr/Comment.nvim' },
-    { src = 'https://github.com/inhesrom/remote-ssh.nvim'}
 })
-
