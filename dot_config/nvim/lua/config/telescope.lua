@@ -95,3 +95,4 @@ end
 
 -- Raccourci pour pouvoir l'appeler depuis Alpha ou ailleurs
 vim.keymap.set("n", "<leader>fp", find_projects, { desc = "Find Projects (No Preview)" })
+

@@ -3,40 +3,6 @@
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
--- Détection de l'OS
-local is_mac = vim.loop.os_uname().sysname == "Darwin"
-local is_wsl = vim.fn.has("wsl") == 1
-local is_linux = not is_mac and not is_wsl
-
-if is_mac then
-end
-
-if is_linux then
-end
-
-if is_wsl then
-end
-
--- Navigation par mot (Compatible Mac Option et Linux/WSL Ctrl)
-local word_keys = is_mac and '<M-' or '<C-'
-keymap({'n', 'v'}, word_keys .. 'Left>',  'b', opts)
-keymap({'n', 'v'}, word_keys .. 'Right>', 'w', opts)
-keymap('i',        word_keys .. 'Left>',  '<C-o>b', opts)
-keymap('i',        word_keys .. 'Right>', '<C-o>w', opts)
-
--- Sauvegarde universelle (CTRL+S)
-keymap('n', '<C-s>', ':w<CR>', { desc = "Save" })
-keymap('i', '<C-s>', '<C-o>:w<CR>', { desc = "Save" })
-
--- Quitter proprement (Correction de vos fautes de frappe)
-keymap('n', '<C-q>', ':q<CR>', { desc = "Quit" })
-keymap('i', '<C-q>', '<C-o>:q<CR>', { desc = "Quit" })
-keymap('v', '<C-q>', '<Esc>:q<CR>', { desc = "Quit" })
-
--- Suppression sans polluer le registre (Blackhole)
-keymap({"n", "v"}, "x", '"_x', opts)
-keymap({"n", "v"}, "d", '"_d', opts)
-
 -- Crée des points d'undo sur les caractères de ponctuation
 local chars = {',', '.', '!', '?', ';', ' ', '(', ')', '[', ']', '{', '}'}
 for _, char in ipairs(chars) do
@@ -98,7 +64,9 @@ keymap("n", "<C-S-f>", ":Telescope live_grep<CR>", { desc = "Search text in proj
 vim.keymap.set('n', '<leader>pi', function()
     -- On ne charge le fichier plugins que ICI, à la demande
     dofile(vim.fn.stdpath("config") .. "/lua/plugins.lua")
-    print("Vérification des plugins en cours...")
+    -- print("Vérification des plugins en cours...")
+    vim.notify("Vérification des plugins en cours...", vim.log.levels.INFO)
+
 end, { desc = "Plugins Install/Check" })
 
 -- Raccourci pour synchroniser vers START après l'install
@@ -493,3 +461,4 @@ keymap("n", "<leader>b<Right>", ":BufferLineMoveNext<CR>", { desc = "Move Buffer
 -- Close buffer (keeps window open)
 keymap("n", "<leader>x", ":bdelete<CR>", { desc = "Close Buffer" })
 keymap("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick Buffer" })
+

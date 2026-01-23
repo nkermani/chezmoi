@@ -7,7 +7,7 @@ require("core.autocmds")
 
 -- Configs
 require("config.mason")
-require("config.transparent")
+-- require("config.transparent")
 require("config.colorscheme")
 require("config.devicons")
 require("config.lualine")
@@ -26,3 +26,4 @@ require("config.multicursor")
 
 -- LSP
 require("lsp.lsp")
+

@@ -202,20 +202,18 @@ fi
 #     fi
 # fi
 
-# # 9.2 OPENCODE.AI
-# if [ ! -d "$APPS_DIR/opencode" ]; then
-#     echo "  🤖 Installing OpenCode.ai (Local installation)..."
-#     mkdir -p "$APPS_DIR/opencode"
-
-#     # Run the official installer within the apps directory to keep it portable
-#     (cd "$APPS_DIR" && curl -fsSL https://opencode.ai/install | bash)
-
-#     # Create symlinks in your personal bin directory
-#     # 'code' is linked to opencode here to use it as your primary AI-powered editor
-#     ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/opencode"
-#     ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/code"
-#     echo "  ✅ OpenCode.ai installed"
-# fi
+ # 9.2 OPENCODE.AI
+ if [ ! -d "$APPS_DIR/opencode" ]; then
+     echo "  🤖 Installing OpenCode.ai (Local installation)..."
+     mkdir -p "$APPS_DIR/opencode"
+     # Run the official installer within the apps directory to keep it portable
+     (cd "$APPS_DIR" && curl -fsSL https://opencode.ai/install | bash)
+     # Create symlinks in your personal bin directory
+     # 'code' is linked to opencode here to use it as your primary AI-powered editor
+     ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/opencode"
+     ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/code"
+     echo "  ✅ OpenCode.ai installed"
+ fi
 
 # 9.3 Yazi File Manager
 echo "📂 Checking Yazi..."

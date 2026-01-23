@@ -7,7 +7,9 @@ local tel_remote_ok, tel_remote = pcall(require, "telescope-remote-buffer")
 if tel_remote_ok then
     tel_remote.setup()
 else
-    print("Avertissement: telescope-remote-buffer non chargé")
+    -- print("Avertissement: telescope-remote-buffer non chargé")
+    vim.notify("Avertissement: telescope-remote-buffer non chargé", vim.log.levels.WARN)
+
 end
 
 remote_ssh.setup({
