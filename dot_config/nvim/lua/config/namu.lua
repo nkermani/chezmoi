@@ -16,5 +16,7 @@ namu.setup({
     },
 })
 
--- Raccourci pour chercher une fonction/symbole dans le fichier
-vim.keymap.set("n", "<leader>s", function() require("namu.namu_symbols").show() end, { desc = "Search Symbols (Namu)" })
+vim.keymap.set("n", "<leader>s", "<cmd>Namu symbols<cr>", {
+    desc = "Jump to LSP symbol",
+    silent = true,
+})

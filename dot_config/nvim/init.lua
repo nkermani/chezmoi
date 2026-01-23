@@ -25,6 +25,8 @@ require("config.snacks")
 require("config.multicursor")
 require("config.oil")
 require("config.btw")
+require("config.spectre")
 
 -- LSP (Local & Fast)
 require("lsp").setup()
+

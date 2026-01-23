@@ -21,19 +21,19 @@ if vim.fn.has("unix") == 1 then
     vim.opt.undofile = true
 end
 
-vim.opt.endofline = true     -- S'assure qu'il y a un \n à la fin
-vim.opt.fixendofline = true  -- Rétablit le \n s'il est supprimé
-vim.opt.autochdir = false -- Neovim change de dossier de travail automatiquement vers le fichier ouvert
+vim.opt.endofline = true    -- S'assure qu'il y a un \n à la fin
+vim.opt.fixendofline = true -- Rétablit le \n s'il est supprimé
+vim.opt.autochdir = false   -- Neovim change de dossier de travail automatiquement vers le fichier ouvert
 
-vim.opt.mouse = "a"           -- Active la souris partout
+vim.opt.mouse = "a"         -- Active la souris partout
 -- vim.opt.mousemodel = "extend" -- Permet des sélections souris fluides
 vim.opt.selection = "inclusive"
 
 -- Interface
-opt.number = true             -- Affiche les numéros de ligne
-opt.relativenumber = false     -- Numéros relatifs (très utile pour sauter des lignes)
-opt.cursorline = true         -- Souligne la ligne actuelle
-opt.termguicolors = true      -- Couleurs 24-bit (nécessaire pour la JetBrains Mono)
+opt.number = true          -- Affiche les numéros de ligne
+opt.relativenumber = false -- Numéros relatifs (très utile pour sauter des lignes)
+opt.cursorline = true      -- Souligne la ligne actuelle
+opt.termguicolors = true   -- Couleurs 24-bit (nécessaire pour la JetBrains Mono)
 -- Remplace le tilde (~) par un espace vide
 vim.opt.fillchars = { eob = " " }
 
@@ -42,14 +42,14 @@ vim.opt.wrap = false -- Désactive le retour à la ligne pour permettre le scrol
 -- Indentation (Standard Rust/C)
 opt.shiftwidth = 4
 opt.tabstop = 4
-opt.expandtab = true          -- Utilise des espaces au lieu de tabulations
+opt.expandtab = true -- Utilise des espaces au lieu de tabulations
 opt.smartindent = true
 
 -- Comportement
-opt.ignorecase = true         -- Ignore la casse lors de la recherche...
-opt.smartcase = true          -- ...sauf s'il y a une majuscule
-opt.updatetime = 250          -- Plus rapide pour les diagnostics LSP
-opt.scrolloff = 8             -- Garde 8 lignes visibles en haut/bas
+opt.ignorecase = true -- Ignore la casse lors de la recherche...
+opt.smartcase = true  -- ...sauf s'il y a une majuscule
+opt.updatetime = 250  -- Plus rapide pour les diagnostics LSP
+opt.scrolloff = 8     -- Garde 8 lignes visibles en haut/bas
 
 -- Synchronise le presse-papier de Neovim avec le presse-papier du système
 -- Cela permet de copier dans Neovim et coller dans Chrome (et inversement) sans config spéciale
@@ -86,7 +86,7 @@ local function clean_on_save()
     local last_line = vim.api.nvim_buf_line_count(0)
     local last_line_content = vim.api.nvim_buf_get_lines(0, last_line - 1, last_line, false)[1]
     if last_line_content ~= "" then
-        vim.api.nvim_buf_set_lines(0, last_line, last_line, false, {""})
+        vim.api.nvim_buf_set_lines(0, last_line, last_line, false, { "" })
     end
 
     -- Replacer le curseur
@@ -106,5 +106,4 @@ vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
 })
 
 vim.opt.signcolumn = "yes" -- Garde la colonne des signes (pour les erreurs/git) fixe pour éviter les sauts d'écran
--- OU
--- vim.opt.signcolumn = "no" -- Pour tout cacher
+

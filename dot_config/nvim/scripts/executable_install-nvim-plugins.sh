@@ -35,6 +35,7 @@ PLUGINS=(
     "zbirenbaum/copilot.lua"
     "letieu/btw.nvim"
     "stevearc/oil.nvim"
+    "bassamsdata/namu.nvim"
 )
 
 for plugin in "${PLUGINS[@]}"; do

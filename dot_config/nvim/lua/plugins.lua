@@ -47,4 +47,5 @@ pack.add({
     { src = 'https://github.com/nvim-pack/nvim-spectre' },
     { src = 'https://github.com/letieu/btw.nvim' },
     { src = 'https://github.com/stevearc/oil.nvim' },
+    { src = 'https://github.com/bassamsdata/namu.nvim' },
 })
