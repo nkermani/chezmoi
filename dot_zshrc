@@ -16,6 +16,7 @@ export NK_APPS="$NK_DIR/apps"
 export NK_BIN="$NK_DIR/bin"
 
 # 2. PATH & ENV
+export LSP="$NK_DIR/lsp"
 export ZSH="$NK_APPS/ohmyzsh"
 export NVM_DIR="$HOME/.nvm"
 export ZSH_CUSTOM="$ZSH/custom"
@@ -29,7 +30,7 @@ typeset -U path
 path=($NK_BIN $HOME/.local/bin $HOME/.opencode/bin $HOME/.cargo/bin /usr/local/bin $path)
 
 # 2. Vos dossiers perso (en fin de liste pour ne pas masquer les binaires système essentiels)
-export PATH="$NK_BIN:$PATH"
+export PATH="$LSP:$NK_BIN:$PATH"
 
 # 3. OH-MY-ZSH (Chargement silencieux)
 ZSH_THEME="robbyrussell"
@@ -316,4 +317,6 @@ fi
 
 alias brain="smart-editor $NOTES_DIR"
 alias cdn="cd $NOTES_DIR"
+
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 

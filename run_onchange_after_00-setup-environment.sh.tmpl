@@ -147,33 +147,80 @@ if [ -f "$INSTALL_PLUGINS_SCRIPT" ]; then
     chmod +x "$INSTALL_PLUGINS_SCRIPT" && bash "$INSTALL_PLUGINS_SCRIPT"
 fi
 
-# --- 7.5 LUA LANGUAGE SERVER (LuaLS) ---
-echo "🌙 Installing Lua Language Server..."
-LUA_LS_DIR="$APPS_DIR/lua-language-server"
-if [ ! -f "$BIN_DIR/lua-language-server" ]; then
-    if [[ "$OS_TYPE" == "Darwin" ]]; then
-        if command -v brew &>/dev/null; then
-            brew install lua-language-server
-            # Link to your local bin for consistency
-            ln -sf "$(which lua-language-server)" "$BIN_DIR/lua-language-server"
-        fi
+# --- 7.1 ADDITIONAL LSP SERVERS (Sudoless) ---
+LSP_BIN_DIR="$HOME/.nkermani/bin/lsp"
+mkdir -p "$LSP_BIN_DIR"
+
+# Fonction utilitaire pour les LSP installables via NPM
+install_npm_lsp() {
+    local name=$1
+    local package=$2
+    local binary=$3
+    if [ ! -f "$LSP_BIN_DIR/$binary" ]; then
+        echo "  📦 Installing $name..."
+        npm install -g "$package" --prefix "$APPS_DIR/$name" &>/dev/null
+        ln -sf "$APPS_DIR/$name/bin/$binary" "$LSP_BIN_DIR/$binary"
+    fi
+}
+
+echo "🛠️  Setting up additional LSP servers in $LSP_BIN_DIR..."
+
+# 1. Lua (LuaLS)
+if [ ! -f "$LSP_BIN_DIR/lua-language-server" ]; then
+    echo "  🌙 Installing LuaLS..."
+    if [[ "$OS_TYPE" == "Darwin" ]] && command -v brew &>/dev/null; then
+        brew install lua-language-server
+        ln -sf "$(which lua-language-server)" "$LSP_BIN_DIR/lua-language-server"
     else
-        # Manual installation for Linux/42
+        LUA_LS_DIR="$APPS_DIR/lua-language-server"
         mkdir -p "$LUA_LS_DIR"
         LUA_VER=$(curl -sI "https://github.com/LuaLS/lua-language-server/releases/latest" | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
-
-        # Determine platform suffix for the download
         PLATFORM="linux-x64"
         [[ "$ARCH_TYPE" == "aarch64" ]] && PLATFORM="linux-arm64"
 
-        echo "  📦 Fetching LuaLS $LUA_VER for $PLATFORM..."
         curl -LSs "https://github.com/LuaLS/lua-language-server/releases/download/${LUA_VER}/lua-language-server-${LUA_VER}-${PLATFORM}.tar.gz" | tar -xzC "$LUA_LS_DIR"
-
-        # Create the symlink to your personal bin
-        ln -sf "$LUA_LS_DIR/bin/lua-language-server" "$BIN_DIR/lua-language-server"
+        ln -sf "$LUA_LS_DIR/bin/lua-language-server" "$LSP_BIN_DIR/lua-language-server"
     fi
 fi
 
+# 2. Python (Pyright)
+install_npm_lsp "pyright" "pyright" "pyright-langserver"
+
+# 3. JavaScript / TypeScript
+install_npm_lsp "typescript-lsp" "typescript typescript-language-server" "typescript-language-server"
+
+# 4. Shell (Bash)
+install_npm_lsp "bash-lsp" "bash-language-server" "bash-language-server"
+
+# 5. Dotenv
+install_npm_lsp "dotenv-lsp" "dot-language-server" "dot-language-server"
+
+# 6. C / C++ (clangd)
+if [ ! -f "$LSP_BIN_DIR/clangd" ]; then
+    echo "  ⚙️  Installing clangd..."
+    if [[ "$OS_TYPE" == "Darwin" ]]; then
+        brew install llvm && ln -sf "$(brew --prefix llvm)/bin/clangd" "$LSP_BIN_DIR/clangd"
+    else
+        CLANGD_DIR="$APPS_DIR/clangd"
+        mkdir -p "$CLANGD_DIR"
+        curl -L -s https://github.com/clangd/clangd/releases/download/17.0.3/clangd-linux-17.0.3.zip -o /tmp/clangd.zip
+        unzip -q /tmp/clangd.zip -d "$CLANGD_DIR"
+        ln -sf "$CLANGD_DIR/clangd_17.0.3/bin/clangd" "$LSP_BIN_DIR/clangd"
+        rm /tmp/clangd.zip
+    fi
+fi
+
+# 7. C# (OmniSharp)
+if [ ! -f "$LSP_BIN_DIR/omnisharp" ]; then
+    echo "  🎯 Installing OmniSharp..."
+    OMNISHARP_DIR="$APPS_DIR/omnisharp"
+    mkdir -p "$OMNISHARP_DIR"
+    OS_SUFFIX="linux-x64"
+    [[ "$OS_TYPE" == "Darwin" ]] && OS_SUFFIX="osx-arm64-net6.0"
+
+    curl -L -s "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-${OS_SUFFIX}.tar.gz" | tar -xzC "$OMNISHARP_DIR"
+    ln -sf "$OMNISHARP_DIR/OmniSharp" "$LSP_BIN_DIR/omnisharp"
+fi
 # --- 8. PERSONAL DATA (Notes) ---
 echo "📓 Syncing knowledge base..."
 NOTES_DIR="$NK_DIR/notes"
