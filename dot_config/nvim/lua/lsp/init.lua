@@ -15,14 +15,17 @@ function M.setup()
                 vim.lsp.start({
                     name = 'lua_ls',
                     cmd = { 'lua-language-server' },
-                    root_dir = vim.fs.dirname(vim.fs.find({'.git', '.luarc.json'}, { upward = true })[1]),
+                    root_dir = vim.fs.dirname(vim.fs.find({'.git', '.luarc.json'}, { upward = true })[1]) or vim.loop.cwd(),
                     settings = {
                         Lua = {
                             diagnostics = { globals = { 'vim' } },
                             workspace = {
                                 library = vim.api.nvim_get_runtime_file("", true),
                                 checkThirdParty = false, 
+                                maxPreload = 1000,
+                                preloadFileSize = 1000,
                             },
+                            telemetry = { enable = false },
                         },
                     },
                 })
@@ -38,7 +41,7 @@ function M.setup()
                 vim.lsp.start({
                     name = 'rust-analyzer',
                     cmd = { 'rust-analyzer' },
-                    root_dir = vim.fs.dirname(vim.fs.find({'Cargo.toml'}, { upward = true })[1]),
+                    root_dir = vim.fs.dirname(vim.fs.find({'Cargo.toml'}, { upward = true })[1]) or vim.loop.cwd(),
                 })
             end,
         })
@@ -52,7 +55,7 @@ function M.setup()
                 vim.lsp.start({
                     name = 'clangd',
                     cmd = { 'clangd' },
-                    root_dir = vim.fs.dirname(vim.fs.find({'.git', 'compile_commands.json'}, { upward = true })[1]),
+                    root_dir = vim.fs.dirname(vim.fs.find({'.git', 'compile_commands.json'}, { upward = true })[1]) or vim.loop.cwd(),
                 })
             end,
         })
