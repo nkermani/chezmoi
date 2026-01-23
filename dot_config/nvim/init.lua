@@ -6,7 +6,7 @@ require("core.keymaps")
 require("core.autocmds")
 
 -- Configs
-require("config.mason")
+-- require("config.mason") -- Disabled for instant startup
 -- require("config.transparent")
 require("config.colorscheme")
 require("config.devicons")
@@ -16,7 +16,7 @@ require("config.treesitter")
 require("config.namu")
 require("config.telescope")
 require("config.cmp")
-require("config.lspconfig")
+-- require("config.lspconfig") -- Disabled for instant startup
 require("config.noice")
 require("config.autopairs")
 require("config.conform")
@@ -24,6 +24,6 @@ require("config.trouble")
 require("config.snacks")
 require("config.multicursor")
 
--- LSP
-require("lsp.lsp")
+-- LSP (Local & Fast)
+require("lsp").setup()
 

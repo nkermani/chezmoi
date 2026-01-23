@@ -20,10 +20,11 @@ pack.add({
     { src = 'https://github.com/folke/trouble.nvim' },
 
     -- LSP 및 지능형 기능 / LSP & Intelligence / LSP et Intelligence
-    { src = 'https://github.com/neovim/nvim-lspconfig' },
-    { src = 'https://github.com/mason-org/mason.nvim' },
-    { src = 'https://github.com/mason-org/mason-lspconfig.nvim' },
+    -- { src = 'https://github.com/neovim/nvim-lspconfig' },
+    -- { src = 'https://github.com/mason-org/mason.nvim' },
+    -- { src = 'https://github.com/mason-org/mason-lspconfig.nvim' },
     { src = 'https://github.com/hrsh7th/nvim-cmp' },
+
     { src = 'https://github.com/hrsh7th/cmp-nvim-lsp' },
     { src = 'https://github.com/hrsh7th/cmp-buffer' },
     { src = 'https://github.com/hrsh7th/cmp-path' },

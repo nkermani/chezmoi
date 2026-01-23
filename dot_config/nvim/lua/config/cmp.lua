@@ -8,7 +8,7 @@ cmp.setup({
     mapping = cmp.mapping.preset.insert({
         ['<C-b>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete(),
+        -- ['<C-Space>'] = cmp.mapping.complete(),
 
         -- 1. Désactiver ENTER pour la complétion (comportement normal de touche Entrée)
         ['<CR>'] = cmp.mapping.confirm({ select = false }),
@@ -25,11 +25,13 @@ cmp.setup({
             -- Le mode 's' (select) pour les snippets
             s = cmp.mapping.confirm({ select = true }),
         })
-        ,        -- Super Tab : Gestion intelligente des priorités
+        , -- Virgule importante ici
+        -- Super Tab : Gestion intelligente des priorités
         ['<Tab>'] = cmp.mapping(function(fallback)
-            local copilot = require("copilot.suggestion")
 
-            if copilot.is_visible() then
+            local has_copilot, copilot = pcall(require, "copilot.suggestion")
+
+            if has_copilot and copilot.is_visible() then
                 copilot.accept() -- 1. Priorité à Copilot
             elseif cmp.visible() then
                 cmp.select_next_item() -- 2. Si menu LSP ouvert, on navigue
@@ -37,6 +39,7 @@ cmp.setup({
                 fallback() -- 3. Sinon, on fait un vrai Tab (indentation)
             end
         end, { "i", "s" }),
+
 
         ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
