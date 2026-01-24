@@ -7,8 +7,8 @@ require("core.autocmds")
 
 -- Configs
 -- require("config.mason") -- Disabled for instant startup
--- require("config.transparent")
 require("config.colorscheme")
+require("config.transparent")
 require("config.devicons")
 require("config.lualine")
 require("config.gitsigns")

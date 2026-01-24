@@ -17,12 +17,12 @@ transparent.setup({
         'NeoTreeDirectoryName',
         'NeoTreeFileName',
 
-        'BufferLineFill',              -- L'arrière-plan vide derrière les onglets
-        'BufferLineBackground',        -- Les onglets inactifs
-        'BufferLineSeparator',         -- Les séparateurs entre onglets
+        'BufferLineFill',       -- L'arrière-plan vide derrière les onglets
+        'BufferLineBackground', -- Les onglets inactifs
+        'BufferLineSeparator',  -- Les séparateurs entre onglets
         'BufferLineSeparatorVisible',
         'BufferLineSeparatorSelected',
-        'BufferLineTab',               -- Les onglets de type "Tab"
+        'BufferLineTab', -- Les onglets de type "Tab"
         'BufferLineTabSelected',
         'BufferLineTabSeparator',
         'BufferLineTabSeparatorSelected',
@@ -50,24 +50,24 @@ transparent.setup({
         'AlphaNormal',
         'AlphaShortcut',
         'AlphaFooter',
-        'NoiceCmdlinePopup',         -- Fond de la fenêtre
-        'NoiceCmdlinePopupBorder',   -- Bordure de la fenêtre
-        'NoiceCmdlinePopupTitle',    -- Titre si présent
-        'NoiceCmdlineIcon',          -- L'icône (le ">" ou l'icône de recherche)
-        'NoiceCmdlineIconSearch',    -- Spécifique à la recherche "/"
-        'NoiceConfirm',              -- Fenêtres de confirmation
-        'NoiceConfirmBorder',        -- Bordure de confirmation
-        'NoicePopupmenu',            -- Menu de complétion de Noice
-        'NoicePopupmenuBorder',      -- Bordure de la complétion
+        'NoiceCmdlinePopup',       -- Fond de la fenêtre
+        'NoiceCmdlinePopupBorder', -- Bordure de la fenêtre
+        'NoiceCmdlinePopupTitle',  -- Titre si présent
+        'NoiceCmdlineIcon',        -- L'icône (le ">" ou l'icône de recherche)
+        'NoiceCmdlineIconSearch',  -- Spécifique à la recherche "/"
+        'NoiceConfirm',            -- Fenêtres de confirmation
+        'NoiceConfirmBorder',      -- Bordure de confirmation
+        'NoicePopupmenu',          -- Menu de complétion de Noice
+        'NoicePopupmenuBorder',    -- Bordure de la complétion
 
-        'TelescopeNormal',       -- Fond de la fenêtre principale
-        'TelescopeBorder',       -- Bordures des fenêtres
-        'TelescopePromptNormal', -- Fond de la barre de recherche
-        'TelescopePromptBorder', -- Bordure de la barre de recherche
-        'TelescopeResultsNormal',-- Fond de la liste des résultats
-        'TelescopeResultsBorder',-- Bordure de la liste des résultats
-        'TelescopePreviewNormal',-- Fond de la prévisualisation
-        'TelescopePreviewBorder',-- Bordure de la prévisualisation
+        'TelescopeNormal',         -- Fond de la fenêtre principale
+        'TelescopeBorder',         -- Bordures des fenêtres
+        'TelescopePromptNormal',   -- Fond de la barre de recherche
+        'TelescopePromptBorder',   -- Bordure de la barre de recherche
+        'TelescopeResultsNormal',  -- Fond de la liste des résultats
+        'TelescopeResultsBorder',  -- Bordure de la liste des résultats
+        'TelescopePreviewNormal',  -- Fond de la prévisualisation
+        'TelescopePreviewBorder',  -- Bordure de la prévisualisation
 
         -- Dans extra_groups de transparent.lua
         'VM_Cursor',
@@ -99,3 +99,4 @@ transparent.setup({
 transparent.clear_prefix('lualine')
 transparent.clear_prefix('BufferLine')
 transparent.toggle(true)
+

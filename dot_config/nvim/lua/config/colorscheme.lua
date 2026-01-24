@@ -10,8 +10,8 @@ local ok_sonokai, sonokai = pcall(require, "sonokai")
 
 -- 1. Sonokai
 if ok_sonokai then
-    vim.g.sonokai_style = 'atlantis'
-    vim.g.sonokai_transparent_background = 0
+    vim.g.sonokai_style = 'shusia'
+    vim.g.sonokai_transparent_background = 1
     vim.g.sonokai_better_performance = 1
 end
 
@@ -20,6 +20,12 @@ if ok_kanagawa then
     kanagawa.setup({
         transparent = true, -- Pour le flou/blur
         theme = "wave",
+    })
+end
+
+if ok_monokai then
+    monokai.setup({
+        transparent = true, -- Pour le flou/blur
     })
 end
 
