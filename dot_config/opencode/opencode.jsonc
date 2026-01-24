@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "default", // Le thème 'default' hérite généralement des couleurs du terminal
+  "theme": "system", // Le thème 'default' hérite généralement des couleurs du terminal
   "tui": {
     "diff_style": "auto"
   }
