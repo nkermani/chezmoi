@@ -7,4 +7,5 @@ Having shortcut as follow
 * Have a shortcut to chdir with folder faster (move into it)
 
 * Find a good way to fix macOS Layout Keys to keep a natural experience
+* Get why bat shows Process exited with code 0 at the very end of BAT preview
 
