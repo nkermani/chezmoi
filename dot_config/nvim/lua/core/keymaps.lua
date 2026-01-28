@@ -3,7 +3,10 @@
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
--- Crée des points d'undo sur les caractères de ponctuation
+-- DÉSACTIVER le scroll par défaut de CTRL+D pour laisser multicursor l'utiliser
+vim.keymap.set({ 'n', 'v', 'i' }, '<C-d>', '<nop>', { noremap = false })
+vim.keymap.set({ 'n', 'v', 'i' }, '<C-u>', '<nop>', { noremap = false })
+
 local chars = { ',', '.', '!', '?', ';', ' ', '(', ')', '[', ']', '{', '}' }
 for _, char in ipairs(chars) do
     keymap('i', char, char .. '<c-g>u', { noremap = true, silent = true })
@@ -14,10 +17,12 @@ vim.keymap.set({ 'n', 'v', 'i' }, '<C-z>', '<nop>')
 vim.keymap.set({ 'n', 'v', 'i' }, '<C-S-z>', '<nop>')
 
 -- Changer de fenêtre (split) avec CTRL + Flèches
-keymap("n", "<C-Left>", "<C-w>h", { desc = "Fenêtre de gauche" })
+-- NOTE: Les raccourcis CTRL+Left/Right sont réassignés plus bas pour le saut de mots.
+-- keymap("n", "<C-Left>", "<C-w>h", { desc = "Fenêtre de gauche" })
 -- keymap("n", "<C-Down>", "<C-w>j", { desc = "Fenêtre du bas" })
 -- keymap("n", "<C-Up>", "<C-w>k", { desc = "Fenêtre du haut" })
-keymap("n", "<C-Right>", "<C-w>l", { desc = "Fenêtre de droite" })
+-- keymap("n", "<C-Right>", "<C-w>l", { desc = "Fenêtre de droite" })
+
 -- Navigation rapide entre les splits avec Ctrl + hjkl
 keymap("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
 keymap("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
@@ -109,7 +114,7 @@ for _, map in ipairs(directions) do
 end
 
 -- ===================================================================
--- NAVIGATION DÉBUT/FIN DE LIGNE (HOME/END & ALT + FLECHES)
+-- NAVIGATION DÉBUT/FIN DE LIGNE (HOME/END)
 -- ===================================================================
 
 -- Mode NORMAL
@@ -132,9 +137,10 @@ keymap('v', '<M-Right>', '$', opts)
 keymap('v', '<Home>', '^', opts)
 keymap('v', '<End>', '$', opts)
 
--- 2. MOT PAR MOT (CTRL + Flèches)
+-- 2. MOT PAR MOT (CTRL + Flèches / ALT + Flèches)
 keymap({ 'n', 'v' }, '<C-Left>', 'b', opts)
 keymap({ 'n', 'v' }, '<C-Right>', 'w', opts)
+
 keymap('i', '<C-Left>', '<C-o>b', opts)
 keymap('i', '<C-Right>', '<C-o>w', opts)
 
@@ -197,7 +203,8 @@ keymap('n', '<C-v>', '"+p', { desc = "Coller depuis le presse-papier système" }
 -- Mode Insertion : Coller depuis le presse-papier système sans quitter le mode Insertion
 keymap('i', '<C-v>', '<C-r>+', { desc = "Coller depuis le presse-papier système" })
 -- Mode Visuel : Remplacer la sélection par le contenu du presse-papier système
-keymap('v', '<C-v>', '"+p', { desc = "Coller depuis le presse-papier système" })
+-- Utilise "P" au lieu de "p" en visuel pour NE PAS écraser le registre avec le texte supprimé
+keymap('v', '<C-v>', '"+P', { desc = "Coller depuis le presse-papier système sans écraser" })
 
 -- ===================================================================
 -- SUPPRESSION RAPIDE (Début/Fin de ligne)
