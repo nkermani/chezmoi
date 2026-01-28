@@ -4,14 +4,14 @@ local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 -- Crée des points d'undo sur les caractères de ponctuation
-local chars = {',', '.', '!', '?', ';', ' ', '(', ')', '[', ']', '{', '}'}
+local chars = { ',', '.', '!', '?', ';', ' ', '(', ')', '[', ']', '{', '}' }
 for _, char in ipairs(chars) do
-  keymap('i', char, char .. '<c-g>u', { noremap = true, silent = true })
+    keymap('i', char, char .. '<c-g>u', { noremap = true, silent = true })
 end
 
 -- Désactive la suspension de Neovim avec CTRL+Z
-vim.keymap.set({'n', 'v', 'i'}, '<C-z>', '<nop>')
-vim.keymap.set({'n', 'v', 'i'}, '<C-S-z>', '<nop>')
+vim.keymap.set({ 'n', 'v', 'i' }, '<C-z>', '<nop>')
+vim.keymap.set({ 'n', 'v', 'i' }, '<C-S-z>', '<nop>')
 
 -- Changer de fenêtre (split) avec CTRL + Flèches
 keymap("n", "<C-Left>", "<C-w>h", { desc = "Fenêtre de gauche" })
@@ -66,7 +66,6 @@ vim.keymap.set('n', '<leader>pi', function()
     dofile(vim.fn.stdpath("config") .. "/lua/plugins.lua")
     -- print("Vérification des plugins en cours...")
     vim.notify("Vérification des plugins en cours...", vim.log.levels.INFO)
-
 end, { desc = "Plugins Install/Check" })
 
 -- Raccourci pour synchroniser vers START après l'install
@@ -77,7 +76,7 @@ vim.keymap.set('n', '<leader>ps', ':!./sync_plugins.sh<CR>', { desc = "Sync Plug
 keymap("x", "p", [["_dP]])
 
 -- Copier/Couper vers le registre système explicitement (au cas où)
-keymap({"n", "v"}, "<leader>y", [["+y]], { desc = "Yank to system clipboard" })
+keymap({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to system clipboard" })
 keymap("n", "<leader>Y", [["+Y]], { desc = "Yank line to system clipboard" })
 -- Appuyer sur Échap pour enlever la surbrillance de la recherche (hlsearch)
 keymap("n", "<Esc>", "<cmd>noh<cr><Esc>", { desc = "Clear search highlights" })
@@ -97,8 +96,8 @@ keymap("v", "<S-Tab>", "<gv", { desc = "Unindent selection" })
 -- ===================================================================
 -- 1. DÉBUT / FIN DE LIGNE (Home/End & ALT + Flèches)
 local directions = {
-    { mode = {'n', 'i', 'v'}, keys = {'<Home>', '<M-Left>'},  target = '^', desc = "Début de ligne" },
-    { mode = {'n', 'i', 'v'}, keys = {'<End>',  '<M-Right>'}, target = '$', desc = "Fin de ligne" }
+    { mode = { 'n', 'i', 'v' }, keys = { '<Home>', '<M-Left>' }, target = '^', desc = "Début de ligne" },
+    { mode = { 'n', 'i', 'v' }, keys = { '<End>', '<M-Right>' }, target = '$', desc = "Fin de ligne" }
 }
 
 for _, map in ipairs(directions) do
@@ -114,50 +113,50 @@ end
 -- ===================================================================
 
 -- Mode NORMAL
-keymap('n', '<M-Left>',  '^', opts)
+keymap('n', '<M-Left>', '^', opts)
 keymap('n', '<M-Right>', '$', opts)
-keymap('n', '<Home>',    '^', opts)
-keymap('n', '<End>',     '$', opts)
+keymap('n', '<Home>', '^', opts)
+keymap('n', '<End>', '$', opts)
 
 -- Mode INSERTION
 -- On utilise <C-o> pour exécuter une commande normale sans quitter l'insert
-keymap('i', '<M-Left>',  '<C-o>^', opts)
+keymap('i', '<M-Left>', '<C-o>^', opts)
 keymap('i', '<M-Right>', '<C-o>$', opts)
-keymap('i', '<Home>',    '<C-o>^', opts)
-keymap('i', '<End>',     '<C-o>$', opts)
+keymap('i', '<Home>', '<C-o>^', opts)
+keymap('i', '<End>', '<C-o>$', opts)
 
 -- Mode VISUEL
 -- En visuel, on veut déplacer le curseur pour étendre la sélection
-keymap('v', '<M-Left>',  '^', opts)
+keymap('v', '<M-Left>', '^', opts)
 keymap('v', '<M-Right>', '$', opts)
-keymap('v', '<Home>',    '^', opts)
-keymap('v', '<End>',     '$', opts)
+keymap('v', '<Home>', '^', opts)
+keymap('v', '<End>', '$', opts)
 
 -- 2. MOT PAR MOT (CTRL + Flèches)
-keymap({'n', 'v'}, '<C-Left>',  'b', opts)
-keymap({'n', 'v'}, '<C-Right>', 'w', opts)
-keymap('i',        '<C-Left>',  '<C-o>b', opts)
-keymap('i',        '<C-Right>', '<C-o>w', opts)
+keymap({ 'n', 'v' }, '<C-Left>', 'b', opts)
+keymap({ 'n', 'v' }, '<C-Right>', 'w', opts)
+keymap('i', '<C-Left>', '<C-o>b', opts)
+keymap('i', '<C-Right>', '<C-o>w', opts)
 
 -- 3. SÉLECTION MOT PAR MOT (CTRL + SHIFT + Flèches)
-keymap('n', '<C-S-Left>',  'vb', opts)
+keymap('n', '<C-S-Left>', 'vb', opts)
 keymap('n', '<C-S-Right>', 'vw', opts)
-keymap('i', '<C-S-Left>',  '<Esc>vb', opts)
+keymap('i', '<C-S-Left>', '<Esc>vb', opts)
 keymap('i', '<C-S-Right>', '<Esc>vw', opts)
-keymap('v', '<C-S-Left>',  'b', opts)
+keymap('v', '<C-S-Left>', 'b', opts)
 keymap('v', '<C-S-Right>', 'w', opts)
 
 -- 4. SUPPRESSION MOT ENTIER (CTRL + Backspace / ALT + Backspace)
 -- Note: Dans certains terminaux CTRL+BS envoie <C-H> ou <C-w>
-keymap('i', '<C-BS>',    '<C-w>', opts)
-keymap('i', '<M-BS>',    '<C-w>', opts)
-keymap('i', '<C-H>',     '<C-w>', opts) -- Pour certains terminaux Linux
+keymap('i', '<C-BS>', '<C-w>', opts)
+keymap('i', '<M-BS>', '<C-w>', opts)
+keymap('i', '<C-H>', '<C-w>', opts) -- Pour certains terminaux Linux
 
 -- Mode Normal : Supprimer le mot avant le curseur
-keymap('n', '<C-BS>',    'db', opts)
-keymap('n', '<M-BS>',    'db', opts)
-keymap('n', '<C-H>',     'db', opts) -- Pour certains terminaux Linux
-keymap('n', '<BS>',      'X', opts)  -- BACKSPACE supprime le caractère précédent (comme DEL en mode normal)
+keymap('n', '<C-BS>', 'db', opts)
+keymap('n', '<M-BS>', 'db', opts)
+keymap('n', '<C-H>', 'db', opts) -- Pour certains terminaux Linux
+keymap('n', '<BS>', 'X', opts)   -- BACKSPACE supprime le caractère précédent (comme DEL en mode normal)
 
 -- 5. FORMATAGE & ÉCRAN
 keymap('n', '<leader>nl', ':set number!<CR>', { desc = "Toggle Line Numbers" })
@@ -218,19 +217,19 @@ keymap('n', '<M-Delete>', 'D', { desc = "Supprimer jusqu'à la fin de ligne" })
 
 -- DÉPLACER des lignes (Alt + J/K ou Alt + Flèches)
 keymap('n', '<M-Down>', ':m .+1<CR>==', opts)
-keymap('n', '<M-Up>',   ':m .-2<CR>==', opts)
+keymap('n', '<M-Up>', ':m .-2<CR>==', opts)
 keymap('i', '<M-Down>', '<Esc>:m .+1<CR>==gi', opts)
-keymap('i', '<M-Up>',   '<Esc>:m .-2<CR>==gi', opts)
+keymap('i', '<M-Up>', '<Esc>:m .-2<CR>==gi', opts)
 keymap('v', '<M-Down>', ":m '>+1<CR>gv=gv", opts)
-keymap('v', '<M-Up>',   ":m '<-2<CR>gv=gv", opts)
+keymap('v', '<M-Up>', ":m '<-2<CR>gv=gv", opts)
 
 -- DUPLIQUER des lignes (Shift + Alt + Flèches)
 keymap('n', '<S-M-Down>', 'yyp', opts)
-keymap('n', '<S-M-Up>',   'yyP', opts)
+keymap('n', '<S-M-Up>', 'yyP', opts)
 keymap('i', '<S-M-Down>', '<Esc>yypgi', opts)
-keymap('i', '<S-M-Up>',   '<Esc>yyPgi', opts)
+keymap('i', '<S-M-Up>', '<Esc>yyPgi', opts)
 keymap('v', '<S-M-Down>', "yPgv", opts)
-keymap('v', '<S-M-Up>',   "yPgv", opts)
+keymap('v', '<S-M-Up>', "yPgv", opts)
 
 -- ===================================================================
 -- SÉLECTION TOTALE (CTRL + A)
@@ -248,20 +247,20 @@ keymap('v', '<C-a>', '<Esc>ggVG', { desc = "Sélectionner tout" })
 -- ===================================================================
 -- SCROLL VERTICAL (ALT + MOLETTE)
 -- ===================================================================
-keymap({'n', 'i', 'v'}, '<M-ScrollWheelDown>', '15<C-e>', opts)
-keymap({'n', 'i', 'v'}, '<M-ScrollWheelUp>', '15<C-y>', opts)
+keymap({ 'n', 'i', 'v' }, '<M-ScrollWheelDown>', '15<C-e>', opts)
+keymap({ 'n', 'i', 'v' }, '<M-ScrollWheelUp>', '15<C-y>', opts)
 
 -- ===================================================================
 -- SCROLL HORIZONTAL (SHIFT + MOLETTE)
 -- ===================================================================
 
 -- Scroll vers le bas plus vite (5 lignes par cran)
-keymap({'n', 'i', 'v'}, '<S-ScrollWheelDown>', '5zh', opts)
-keymap({'n', 'i', 'v'}, '<S-2-ScrollWheelDown>', '5zh', opts) -- Gère le double-clic de molette
+keymap({ 'n', 'i', 'v' }, '<S-ScrollWheelDown>', '5zh', opts)
+keymap({ 'n', 'i', 'v' }, '<S-2-ScrollWheelDown>', '5zh', opts) -- Gère le double-clic de molette
 
 -- Scroll vers le haut plus vite (5 lignes par cran)
-keymap({'n', 'i', 'v'}, '<S-ScrollWheelUp>', '5zl', opts)
-keymap({'n', 'i', 'v'}, '<S-2-ScrollWheelUp>', '5zl', opts)
+keymap({ 'n', 'i', 'v' }, '<S-ScrollWheelUp>', '5zl', opts)
+keymap({ 'n', 'i', 'v' }, '<S-2-ScrollWheelUp>', '5zl', opts)
 
 -- ===================================================================
 -- DOUBLE-CLIC : SÉLECTION + MODE INSERTION AU DÉBUT
@@ -294,15 +293,18 @@ keymap('v', '<C-/>', 'gc', { remap = true, desc = "Comment selection" })
 -- ===================================================================
 
 -- Supprimer un caractère (x)
-keymap({"n", "v"}, "x", '"_x', opts)
+keymap({ "n", "v" }, "x", '"_x', opts)
 
 -- Supprimer (d, dd, D)
-keymap({"n", "v"}, "d", '"_d', opts)
-keymap({"n", "v"}, "D", '"_D', opts)
+keymap({ "n", "v" }, "d", '"_d', opts)
+keymap({ "n", "v" }, "D", '"_D', opts)
 
 -- Supprimer et insérer (c, C) - Optionnel mais souvent souhaité
-keymap({"n", "v"}, "c", '"_c', opts)
-keymap({"n", "v"}, "C", '"_C', opts)
+keymap({ "n", "v" }, "c", '"_c', opts)
+keymap({ "n", "v" }, "C", '"_C', opts)
+
+-- Backspace pour supprimer la sélection (Visual Block, etc.)
+keymap("v", "<BS>", '"_d', opts)
 
 -- ===================================================================
 -- DÉSACTIVER L'HISTORIQUE DES COMMANDES (q: / q?)
@@ -356,7 +358,7 @@ keymap('v', '<C-S-q>', '<Esc>:!qCR>', { desc = "Quitter Neovim" })
 -- UNDO / REDO (STYLE VS CODE)
 -- ===================================================================
 -- Bloquer la suspension du terminal par CTRL+Z
-keymap({'n', 'v', 'i'}, '<C-z>', '<nop>', opts)
+keymap({ 'n', 'v', 'i' }, '<C-z>', '<nop>', opts)
 -- Mode NORMAL
 keymap("n", "<C-z>", "u", { desc = "Undo" })
 keymap("n", "<C-y>", "<C-r>", { desc = "Redo" })
@@ -427,7 +429,7 @@ local function toggle_terminal()
         vim.cmd("startinsert")
     end
 end
-vim.keymap.set({'n', 't'}, '<C-k>', toggle_terminal, { desc = "Toggle Terminal" })
+vim.keymap.set({ 'n', 't' }, '<C-k>', toggle_terminal, { desc = "Toggle Terminal" })
 
 -- Mappings avec CTRL + k
 -- En mode Normal pour ouvrir
@@ -444,7 +446,7 @@ vim.keymap.set('n', 'cf', function()
     require('telescope.builtin').find_files({
         prompt_title = " Config Files",
         cwd = "~/.config/nvim", -- Telescope cherche uniquement ici
-        hidden = true,     -- Pour voir les fichiers cachés comme .zshrc
+        hidden = true,          -- Pour voir les fichiers cachés comme .zshrc
     })
 end, { desc = "Open Config Files" })
 
@@ -466,4 +468,3 @@ keymap("n", "<leader>b<Right>", ":BufferLineMoveNext<CR>", { desc = "Move Buffer
 -- Close buffer (keeps window open)
 keymap("n", "<leader>x", ":bdelete<CR>", { desc = "Close Buffer" })
 keymap("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick Buffer" })
-
