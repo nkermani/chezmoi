@@ -9,6 +9,7 @@ require("core.autocmds")
 -- require("config.mason") -- Disabled for instant startup
 require("config.colorscheme")
 require("config.transparent")
+
 require("config.devicons")
 require("config.lualine")
 require("config.gitsigns")
@@ -16,6 +17,7 @@ require("config.treesitter")
 require("config.namu")
 require("config.telescope")
 require("config.cmp")
+
 -- require("config.lspconfig") -- Disabled for instant startup
 require("config.noice")
 require("config.autopairs")
@@ -29,4 +31,3 @@ require("config.spectre")
 
 -- LSP (Local & Fast)
 require("lsp").setup()
-

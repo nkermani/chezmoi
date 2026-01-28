@@ -8,52 +8,60 @@ local builtin = require("telescope.builtin")
 
 -- 1. FONCTION DE PREVIEW PERSONNALISÉE (BAT)
 local bat_previewer = function(opts)
-  return previewers.new_termopen_previewer({
-    get_command = function(entry)
-      local path = entry.path or entry.filename
-      if path == nil or path == "" then return {"echo", "No preview available"} end
+    return previewers.new_termopen_previewer({
+        get_command = function(entry)
+            local path = entry.path or entry.filename
+            if path == nil or path == "" then return { "echo", "No preview available" } end
 
-      local cmd = "bat"
-      if vim.fn.executable("batcat") == 1 then cmd = "batcat" end
+            local cmd = "bat"
+            if vim.fn.executable("batcat") == 1 then cmd = "batcat" end
 
-      return { cmd, "--style=numbers", "--color=always", "--pager=never", path }
-    end
-  })
+            return { cmd, "--style=numbers", "--color=always", "--pager=never", path }
+        end
+    })
 end
 
--- 2. SETUP TELESCOPE (Optimisé pour écran scindé)
+-- 2. SETUP TELESCOPE
 telescope.setup({
-  defaults = {
-    mappings = {
-      i = {
-        ["<C-u>"] = false,
-      },
-    },
-    file_ignore_patterns = {
-       "node_modules", ".git/", ".cache", "Downloads/", "Documents/42/utils/",
-    },
+    defaults = {
+        mappings = {
+            i = {
+                ["<C-u>"] = false,
+            },
+        },
+        file_ignore_patterns = {
+            "node_modules", ".git/", ".cache", "Downloads/", "Documents/42/utils/",
+        },
 
-    -- Utilisation de bat pour tout
-    file_previewer = bat_previewer,
-    grep_previewer = bat_previewer,
-    qflist_previewer = bat_previewer,
+        -- Utilisation de bat pour tout
+        file_previewer = bat_previewer,
+        grep_previewer = bat_previewer,
+        qflist_previewer = bat_previewer,
 
-    -- CONFIGURATION DYNAMIQUE DE L'ÉCRAN
-    layout_strategy = "flex",
-    layout_config = {
-      flex = {
-        flip_columns = 120, -- Bascule en mode vertical si moins de 120 colonnes
-      },
-      horizontal = {
-        preview_width = 0.6,
-        preview_cutoff = 60,
-      },
-      vertical = {
-        preview_height = 0.5,
-        preview_cutoff = 0, -- Force la preview même si la fenêtre est petite
-      },
+        -- CONFIGURATION DYNAMIQUE DE L'ÉCRAN
+        layout_strategy = "flex",
+        layout_config = {
+            flex = {
+                flip_columns = 120, -- Bascule en mode vertical si moins de 120 colonnes
+            },
+            horizontal = {
+                preview_width = 0.6,
+                preview_cutoff = 60,
+            },
+            vertical = {
+                preview_height = 0.5,
+                preview_cutoff = 0, -- Force la preview même si la fenêtre est petite
+            },
+        },
+        -- Configuration de la fenêtre de preview pour enlever les marges
+        path_display = { "truncate" },
+        winblend = 0,
+        border = true,
+        borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+        color_devicons = true,
+        use_less = true,
+        set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
     },
-  },
 })
 
 -- 3. RACCOURCIS (KEYMAPS)
@@ -95,4 +103,3 @@ end
 
 -- Raccourci pour pouvoir l'appeler depuis Alpha ou ailleurs
 vim.keymap.set("n", "<leader>fp", find_projects, { desc = "Find Projects (No Preview)" })
-

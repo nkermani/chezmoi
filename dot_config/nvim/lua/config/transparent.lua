@@ -5,61 +5,60 @@ if not ok then return end
 
 transparent.setup({
     extra_groups = {
-        'NormalFloat',
-        'NvimTreeNormal',
-        -- Dans ton extra_groups de transparent.lua
-        'NeoTreeNormal',
-        'NeoTreeNormalNC',
-        'NeoTreeVertSplit',
-        'NeoTreeWinSeparator',
-        'NeoTreeEndOfBuffer',
-        'NeoTreeRootName',
-        'NeoTreeDirectoryName',
-        'NeoTreeFileName',
+        -- =====================================================================
+        -- 1. BASE & POPUPS
+        -- =====================================================================
+        -- 'NormalFloat',
+        -- 'FloatBorder',
+        -- 'NvimTreeNormal',
 
-        'BufferLineFill',       -- L'arrière-plan vide derrière les onglets
-        'BufferLineBackground', -- Les onglets inactifs
-        'BufferLineSeparator',  -- Les séparateurs entre onglets
-        'BufferLineSeparatorVisible',
-        'BufferLineSeparatorSelected',
-        'BufferLineTab', -- Les onglets de type "Tab"
-        'BufferLineTabSelected',
-        'BufferLineTabSeparator',
-        'BufferLineTabSeparatorSelected',
-        'BufferLineIndicatorSelected', -- Le petit indicateur de sélection
-        'BufferLineOffsetSeparator',
-        'BufferLineTabClose',
-        'BufferLineCloseButton',
-        'BufferLineCloseButtonSelected',
-        'BufferLineFill',
-        'BufferLineIndicatorSelected',
+        -- =====================================================================
+        -- 2. NEOTREE
+        -- =====================================================================
+        -- 'NeoTreeNormal',
+        -- 'NeoTreeNormalNC',
+        -- 'NeoTreeVertSplit',
+        -- 'NeoTreeWinSeparator',
+        -- 'NeoTreeEndOfBuffer',
+        -- 'NeoTreeRootName',
+        -- 'NeoTreeDirectoryName',
+        -- 'NeoTreeFileName',
 
+        -- =====================================================================
+        -- 3. BUFFERLINE (TABS)
+        -- =====================================================================
+        -- 'BufferLineFill',       -- L'arrière-plan vide derrière les onglets
+        -- 'BufferLineBackground', -- Les onglets inactifs
+        -- 'BufferLineSeparator',  -- Les séparateurs entre onglets
+        -- 'BufferLineSeparatorVisible',
+        -- 'BufferLineSeparatorSelected',
+        -- 'BufferLineTab', -- Les onglets de type "Tab"
+        -- 'BufferLineTabSelected',
+        -- 'BufferLineTabSeparator',
+        -- 'BufferLineTabSeparatorSelected',
+        -- 'BufferLineIndicatorSelected', -- Le petit indicateur de sélection
+        -- 'BufferLineOffsetSeparator',
+        -- 'BufferLineTabClose',
+        -- 'BufferLineCloseButton',
+        -- 'BufferLineCloseButtonSelected',
+        -- 'BufferLineFill',
+        -- 'BufferLineIndicatorSelected',
+
+        -- =====================================================================
+        -- 4. STATUSLINE (LUALINE) - ACTIVE
+        -- =====================================================================
         'StatusLine',
         'StatusLineNC',
-        'LazyNormal',
+        'lualine_c_normal',   -- Le milieu en mode Normal
+        'lualine_c_insert',   -- Le milieu en mode Insert
+        'lualine_c_visual',   -- Le milieu en mode Visual
+        'lualine_c_replace',  -- Le milieu en mode Replace
+        'lualine_c_command',  -- Le milieu en mode Command
+        'lualine_c_inactive', -- Le milieu quand la fenêtre n'est pas focus
 
-        -- Dans ton extra_groups de transparent.lua
-        'SnacksNotifier',
-        'SnacksNotifierBorder',
-        'SnacksNormal',
-        'SnacksBackdrop', -- Utile pour le focus
-
-        -- Dans extra_groups de transparent.lua
-        'AlphaHeader',
-        'AlphaButtons',
-        'AlphaNormal',
-        'AlphaShortcut',
-        'AlphaFooter',
-        'NoiceCmdlinePopup',       -- Fond de la fenêtre
-        'NoiceCmdlinePopupBorder', -- Bordure de la fenêtre
-        'NoiceCmdlinePopupTitle',  -- Titre si présent
-        'NoiceCmdlineIcon',        -- L'icône (le ">" ou l'icône de recherche)
-        'NoiceCmdlineIconSearch',  -- Spécifique à la recherche "/"
-        'NoiceConfirm',            -- Fenêtres de confirmation
-        'NoiceConfirmBorder',      -- Bordure de confirmation
-        'NoicePopupmenu',          -- Menu de complétion de Noice
-        'NoicePopupmenuBorder',    -- Bordure de la complétion
-
+        -- =====================================================================
+        -- 5. TELESCOPE - ACTIVE
+        -- =====================================================================
         'TelescopeNormal',         -- Fond de la fenêtre principale
         'TelescopeBorder',         -- Bordures des fenêtres
         'TelescopePromptNormal',   -- Fond de la barre de recherche
@@ -68,35 +67,82 @@ transparent.setup({
         'TelescopeResultsBorder',  -- Bordure de la liste des résultats
         'TelescopePreviewNormal',  -- Fond de la prévisualisation
         'TelescopePreviewBorder',  -- Bordure de la prévisualisation
+        'TelescopeTitle',          -- Titre des fenêtres
+        'TelescopePromptPrefix',   -- Préfixe de la recherche
+        'TelescopeSelection',      -- Élément sélectionné
+        'TelescopeSelectionCaret', -- Curseur de sélection
 
-        -- Dans extra_groups de transparent.lua
-        'VM_Cursor',
-        'VM_Extend',
-        'VM_Insert',
+        -- =====================================================================
+        -- 6. NOICE (CMDLINE & NOTIFICATIONS)
+        -- =====================================================================
+        -- 'NoiceCmdlinePopup',       -- Fond de la fenêtre
+        -- 'NoiceCmdlinePopupBorder', -- Bordure de la fenêtre
+        -- 'NoiceCmdlinePopupTitle',  -- Titre si présent
+        -- 'NoiceCmdlineIcon',        -- L'icône (le ">" ou l'icône de recherche)
+        -- 'NoiceCmdlineIconSearch',  -- Spécifique à la recherche "/"
+        -- 'NoiceConfirm',            -- Fenêtres de confirmation
+        -- 'NoiceConfirmBorder',      -- Bordure de confirmation
+        -- 'NoicePopupmenu',          -- Menu de complétion de Noice
+        -- 'NoicePopupmenuBorder',    -- Bordure de la complétion
 
-        -- AJOUTS POUR LE CLIC DROIT ET MENUS POPUP
-        'Pmenu',      -- Fond du menu popup (clic droit, autocomplétion)
-        'PmenuSel',   -- Fond de l'élément sélectionné dans le menu
-        'PmenuSbar',  -- Barre de défilement du menu
-        'PmenuThumb', -- Curseur de la barre de défilement
+        -- =====================================================================
+        -- 7. SNACKS (NOTIFICATIONS)
+        -- =====================================================================
+        -- 'SnacksNotifier',
+        -- 'SnacksNotifierBorder',
+        -- 'SnacksNormal',
+        -- 'SnacksBackdrop',
 
-        -- GROUPES LUALINE
-        'lualine_c_normal',   -- Le milieu en mode Normal
-        'lualine_c_insert',   -- Le milieu en mode Insert
-        'lualine_c_visual',   -- Le milieu en mode Visual
-        'lualine_c_replace',  -- Le milieu en mode Replace
-        'lualine_c_command',  -- Le milieu en mode Command
-        'lualine_c_inactive', -- Le milieu quand la fenêtre n'est pas focus
+        -- =====================================================================
+        -- 8. ALPHA (DASHBOARD)
+        -- =====================================================================
+        -- 'AlphaHeader',
+        -- 'AlphaButtons',
+        -- 'AlphaNormal',
+        -- 'AlphaShortcut',
+        -- 'AlphaFooter',
+
+        -- =====================================================================
+        -- 9. AUTOCOMPLETION & MENUS (PMENU)
+        -- =====================================================================
+        -- 'Pmenu',      -- Fond du menu popup (clic droit, autocomplétion)
+        -- 'PmenuSel',   -- Fond de l'élément sélectionné dans le menu
+        -- 'PmenuSbar',  -- Barre de défilement du menu
+        -- 'PmenuThumb', -- Curseur de la barre de défilement
+
+        -- =====================================================================
+        -- 10. PLUGINS DIVERS (Lazy, VM, etc.)
+        -- =====================================================================
+        -- 'LazyNormal',
+        -- 'VM_Cursor',
+        -- 'VM_Extend',
+        -- 'VM_Insert',
     },
     exclude_groups = {
+        -- Groupes qu'on ne veut JAMAIS rendre transparents (pour garder le fond opaque)
+        'Normal',
+        'NormalNC',
+        'SignColumn',
+        'EndOfBuffer',
+        'NvimTreeNormal',
+        'NeoTreeNormal',
+
+        -- Lualine parts to keep opaque
         'lualine_a_normal',
         'lualine_a_insert',
         'lualine_a_visual',
         'lualine_a_command',
+        'lualine_b_normal',
+        'lualine_b_insert',
+        'lualine_b_visual',
+        'lualine_b_command',
     },
 })
 
+-- Force le nettoyage des préfixes pour Lualine (assure une transparence totale)
 transparent.clear_prefix('lualine')
-transparent.clear_prefix('BufferLine')
-transparent.toggle(true)
 
+-- BufferLine n'est plus transparent, donc on commente ça
+-- transparent.clear_prefix('BufferLine')
+
+transparent.toggle(true)

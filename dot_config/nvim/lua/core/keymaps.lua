@@ -89,7 +89,11 @@ vim.keymap.set('n', '<leader>nl', function()
 end, { desc = "Toggle Line Numbers" })
 
 -- ===================================================================
--- NAVIGATION STYLE VSCODE (Normal, Insert, Visual)
+-- INDENTATION (TAB / SHIFT+TAB)
+-- ===================================================================
+-- Mode Visual : Indenter / Désindenter
+keymap("v", "<Tab>", ">gv", { desc = "Indent selection" })
+keymap("v", "<S-Tab>", "<gv", { desc = "Unindent selection" })
 -- ===================================================================
 -- 1. DÉBUT / FIN DE LIGNE (Home/End & ALT + Flèches)
 local directions = {
@@ -191,7 +195,7 @@ keymap('v', '<C-x>', '"+d', { desc = "Couper la sélection vers le presse-papier
 -- Mode Normal : Coller après le curseur
 keymap('n', '<C-v>', '"+p', { desc = "Coller depuis le presse-papier système" })
 -- Mode Insertion : Coller depuis le presse-papier système sans quitter le mode Insertion
-keymap('i', '<C-v>', '<C-o>"+p', { desc = "Coller depuis le presse-papier système" })
+keymap('i', '<C-v>', '<C-r>+', { desc = "Coller depuis le presse-papier système" })
 -- Mode Visuel : Remplacer la sélection par le contenu du presse-papier système
 keymap('v', '<C-v>', '"+p', { desc = "Coller depuis le presse-papier système" })
 
