@@ -98,6 +98,11 @@ end, { desc = "Toggle Line Numbers" })
 -- Mode Visual : Indenter / Désindenter
 keymap("v", "<Tab>", ">gv", { desc = "Indent selection" })
 keymap("v", "<S-Tab>", "<gv", { desc = "Unindent selection" })
+-- Mode Normal : Indenter / Désindenter
+keymap("n", "<Tab>", ">>", { desc = "Indent line" })
+keymap("n", "<S-Tab>", "<<", { desc = "Unindent line" })
+-- Mode Insertion : Indenter / Désindenter
+keymap("i", "<S-Tab>", "<C-d>", { desc = "Unindent line" }) -- <C-d> en insert désindente
 -- ===================================================================
 -- 1. DÉBUT / FIN DE LIGNE (Home/End & ALT + Flèches)
 local directions = {
@@ -172,6 +177,41 @@ keymap("n", "<C-Delete>", "dw", { desc = "Delete word forward" })
 -- CTRL + Delete pour supprimer le mot suivant (Mode Insertion)
 -- On passe en mode normal temporairement pour faire 'dw' puis on revient en insertion
 keymap("i", "<C-Delete>", "<C-o>dw", { desc = "Delete word forward in insert mode" })
+-- ===================================================================
+-- VISUAL BLOCK MODE (Alternative à CTRL+V qui est pris par Coller)
+-- ===================================================================
+keymap('n', '<leader>v', '<C-v>', { desc = "Visual Block Mode" })
+
+-- ===================================================================
+-- MACOS "COMMAND" SHORTCUTS (Support expérimental)
+-- Nécessite que le terminal envoie les bons codes pour Cmd (D)
+-- ===================================================================
+-- Sauvegarder (Cmd+S)
+keymap({ 'n', 'i', 'v' }, '<D-s>', '<cmd>w<CR>', { desc = "Save File" })
+
+-- Copier (Cmd+C)
+keymap('v', '<D-c>', '"+y', { desc = "Copy" })
+keymap('n', '<D-c>', '"+yy', { desc = "Copy Line" })
+keymap('i', '<D-c>', '<Esc>"+yygi', { desc = "Copy Line" })
+
+-- Coller (Cmd+V)
+keymap('n', '<D-v>', '"+p', { desc = "Paste" })
+keymap('i', '<D-v>', '<C-r>+', { desc = "Paste" })
+keymap('v', '<D-v>', '"+P', { desc = "Paste" })
+
+-- Couper (Cmd+X)
+keymap('v', '<D-x>', '"+d', { desc = "Cut" })
+keymap('n', '<D-x>', '"+dd', { desc = "Cut Line" })
+keymap('i', '<D-x>', '<Esc>"+ddgi', { desc = "Cut Line" })
+
+-- Undo (Cmd+Z)
+keymap('n', '<D-z>', 'u', { desc = "Undo" })
+keymap('i', '<D-z>', '<C-o>u', { desc = "Undo" })
+keymap('v', '<D-z>', '<Esc>ugv', { desc = "Undo" })
+
+-- Tout sélectionner (Cmd+A)
+keymap({ 'n', 'v', 'i' }, '<D-a>', '<Esc>ggVG', { desc = "Select All" })
+
 -- ===================================================================
 -- OPTIONS COMMUNES POUR LES Raccourcis
 -- ==================================================================
@@ -477,4 +517,6 @@ keymap("n", "<leader>x", ":bdelete<CR>", { desc = "Close Buffer" })
 keymap("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick Buffer" })
 
 -- Raccourci pour SCP remote edit
-keymap("n", "<leader>re", ":e scp://user@host//path/to/file", { desc = "Remote Edit (SCP)" })
+-- Anciennement scp://, maintenant optimisé pour oil-ssh://
+-- Note: Pour que oil-ssh fonctionne, il faut juste utiliser oil-ssh:// au lieu de scp://
+keymap("n", "<leader>re", ":e oil-ssh://user@host//path/to/file", { desc = "Remote Edit (Oil-SSH)" })
