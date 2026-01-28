@@ -475,3 +475,6 @@ keymap("n", "<leader>b<Right>", ":BufferLineMoveNext<CR>", { desc = "Move Buffer
 -- Close buffer (keeps window open)
 keymap("n", "<leader>x", ":bdelete<CR>", { desc = "Close Buffer" })
 keymap("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick Buffer" })
+
+-- Raccourci pour SSHFS remote edit script
+keymap("n", "<leader>re", ":!~/.config/nvim/scripts/remote_edit.sh ", { desc = "Remote Edit (sshfs)" })
