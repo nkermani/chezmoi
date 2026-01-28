@@ -74,6 +74,47 @@ else
     done
 fi
 
+# --- 3.1 SSHFS (Sudoless / Local) ---
+# Check if sshfs is already installed in system or local bin
+if ! command -v sshfs &>/dev/null && [ ! -f "$BIN_DIR/sshfs" ]; then
+    echo "  📡 Installing SSHFS (Portable)..."
+
+    if [[ "$OS_TYPE" == "Darwin" ]]; then
+        if command -v brew &>/dev/null; then
+            echo "    Running brew install (may require permissions for macfuse)..."
+            # brew install macfuse sshfs  # Commented out to avoid blocking if sudo required for macfuse kext
+            # Ideally user installs macfuse separately as it needs kernel extension approval
+             if ! brew list sshfs &>/dev/null; then
+                brew install sshfs || echo "    ⚠️  SSHFS brew install failed (check macfuse)"
+             fi
+        else
+            echo "    ⚠️  Homebrew not found, skipping SSHFS on macOS"
+        fi
+    elif [[ "$OS_TYPE" == "Linux" ]]; then
+        # For Linux (especially 42/School), we try to compile libfuse/sshfs locally
+        # or use an AppImage if available. However, sshfs typically needs fuse kernel module
+        # which is system-level.
+        # In strictly sudoless envs like 42, fuse might be restricted.
+        # IF fuse is available (/dev/fuse exists and readable), we can try a static build or local compile.
+
+        if [ -r "/dev/fuse" ]; then
+            echo "    ✅ FUSE device detected. Attempting to install local SSHFS..."
+
+            # Since static binaries for SSHFS are rare, we might need to rely on system package
+            # or skip if not possible.
+            # Strategy: Check for pre-installed sshfs first (common in labs)
+            if ! command -v sshfs &>/dev/null; then
+                echo "    ⚠️  SSHFS not found in PATH. It is hard to install portable SSHFS without root due to libfuse."
+                echo "       Please ask admin to install 'sshfs' or use 'nvim scp://' fallback."
+            fi
+        else
+            echo "    ❌ /dev/fuse not accessible. SSHFS cannot work here."
+        fi
+    fi
+else
+    echo "  ✅ SSHFS is already installed."
+fi
+
 # --- 4. FONTS (Typography) ---
 if [[ "$OS_TYPE" == "Linux" ]]; then
     echo "🔡 Checking Fonts..."
@@ -294,6 +335,4 @@ echo "-------------------------------------------------------"
 echo "✅ Deployment Successful!"
 echo "✨ Restart your terminal or run 'source ~/.zshrc'"
 echo "-------------------------------------------------------"
-
-# End of Script
 
