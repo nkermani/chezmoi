@@ -16,7 +16,7 @@ M.colors = {
     visual = "#343434",
     border = "#424242",
     error_bg = "#603336",
-    search_bg = "#32593d",
+    search_bg = "#A379D9",
 }
 
 function M.setup()
@@ -82,8 +82,8 @@ function M.setup()
 
     -- Search
     hl(0, "Search", { bg = c.search_bg, fg = "#ffffff" })
-    hl(0, "IncSearch", { bg = "#3f9b4f", fg = "#ffffff" })
-    hl(0, "CurSearch", { bg = "#3f9b4f", fg = "#ffffff" })
+    hl(0, "IncSearch", { bg = "#A379D9", fg = "#ffffff" })
+    hl(0, "CurSearch", { bg = "#A379D9", fg = "#ffffff" })
 
     -- UI / Pmenu
     hl(0, "Pmenu", { bg = c.cursor_line, fg = c.fg })
@@ -139,6 +139,11 @@ function M.setup()
     hl(0, "GitSignsAdd", { fg = c.green })
     hl(0, "GitSignsChange", { fg = c.cyan })
     hl(0, "GitSignsDelete", { fg = c.red })
+
+    -- Floating Windows & Noice
+    hl(0, "FloatBorder", { fg = c.border })
+    hl(0, "NoiceCmdlinePopupBorder", { fg = c.border })
+    hl(0, "NoiceCmdlinePopupTitle", { fg = c.cyan })
 end
 
 return M

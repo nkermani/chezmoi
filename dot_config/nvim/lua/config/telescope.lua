@@ -3,23 +3,7 @@
 local ok, telescope = pcall(require, "telescope")
 if not ok then return end
 
-local previewers = require('telescope.previewers')
 local builtin = require("telescope.builtin")
-
--- 1. FONCTION DE PREVIEW PERSONNALISÉE (BAT)
-local bat_previewer = function(opts)
-    return previewers.new_termopen_previewer({
-        get_command = function(entry)
-            local path = entry.path or entry.filename
-            if path == nil or path == "" then return { "echo", "No preview available" } end
-
-            local cmd = "bat"
-            if vim.fn.executable("batcat") == 1 then cmd = "batcat" end
-
-            return { cmd, "--style=numbers", "--color=always", "--pager=never", "--theme=CyberpunkJB", path }
-        end
-    })
-end
 
 -- 2. SETUP TELESCOPE
 telescope.setup({
@@ -32,11 +16,6 @@ telescope.setup({
         file_ignore_patterns = {
             "node_modules", ".git/", ".cache", "Downloads/", "Documents/42/utils/",
         },
-
-        -- Utilisation de bat pour tout
-        file_previewer = bat_previewer,
-        grep_previewer = bat_previewer,
-        qflist_previewer = bat_previewer,
 
         -- CONFIGURATION DYNAMIQUE DE L'ÉCRAN
         layout_strategy = "flex",
