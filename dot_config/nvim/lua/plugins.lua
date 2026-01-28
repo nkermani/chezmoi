@@ -19,6 +19,7 @@ pack.add({
     { src = 'https://github.com/loctvl842/monokai-pro.nvim' },
     { src = 'https://github.com/datsfilipe/vesper.nvim' },
     { src = 'https://github.com/folke/tokyonight.nvim' },
+    { src = 'https://github.com/scottmckendry/cyberdream.nvim' },
     { src = 'https://github.com/xiyaowong/transparent.nvim' },
     { src = 'https://github.com/folke/noice.nvim' },
 

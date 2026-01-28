@@ -1,0 +1,144 @@
+local M = {}
+
+M.colors = {
+    bg = "#212121",
+    fg = "#cacaca",
+    red = "#f3505c",
+    green = "#51f66f",
+    yellow = "#eedb85",
+    blue = "#368aec",
+    magenta = "#d867c6",
+    cyan = "#00f0ff", -- Interpreted from f0ff
+    orange = "#ffc07a",
+    comment = "#777777",
+    cursor_line = "#272727",
+    line_nr = "#676767",
+    visual = "#343434",
+    border = "#424242",
+    error_bg = "#603336",
+    search_bg = "#32593d",
+}
+
+function M.setup()
+    vim.cmd("hi clear")
+    if vim.fn.exists("syntax_on") then
+        vim.cmd("syntax reset")
+    end
+    vim.o.termguicolors = true
+    vim.g.colors_name = "cyberpunk_jb"
+
+    local c = M.colors
+    local hl = vim.api.nvim_set_hl
+
+    -- Base
+    hl(0, "Normal", { fg = c.fg, bg = c.bg })
+    hl(0, "NormalFloat", { fg = c.fg, bg = c.bg })
+    hl(0, "Cursor", { fg = c.bg, bg = c.fg })
+    hl(0, "CursorLine", { bg = c.cursor_line })
+    hl(0, "LineNr", { fg = c.line_nr })
+    hl(0, "CursorLineNr", { fg = c.cyan, bold = true })
+    hl(0, "Visual", { bg = c.visual })
+    hl(0, "SignColumn", { bg = c.bg })
+    hl(0, "VertSplit", { fg = c.border })
+    hl(0, "WinSeparator", { fg = c.border })
+    hl(0, "StatusLine", { bg = c.cursor_line, fg = c.fg })
+    hl(0, "StatusLineNC", { bg = c.bg, fg = c.comment })
+
+    -- Syntax
+    hl(0, "Comment", { fg = c.comment, italic = true })
+    hl(0, "Constant", { fg = c.magenta })
+    hl(0, "String", { fg = c.yellow })
+    hl(0, "Character", { fg = c.yellow })
+    hl(0, "Number", { fg = c.blue })
+    hl(0, "Boolean", { fg = c.magenta })
+    hl(0, "Float", { fg = c.blue })
+
+    hl(0, "Identifier", { fg = c.fg })
+    hl(0, "Function", { fg = c.cyan })
+
+    hl(0, "Statement", { fg = c.red })
+    hl(0, "Conditional", { fg = c.red })
+    hl(0, "Repeat", { fg = c.red })
+    hl(0, "Label", { fg = c.red })
+    hl(0, "Operator", { fg = c.fg })
+    hl(0, "Keyword", { fg = c.red })
+    hl(0, "Exception", { fg = c.red })
+
+    hl(0, "PreProc", { fg = c.orange })
+    hl(0, "Include", { fg = c.red })
+    hl(0, "Define", { fg = c.red })
+    hl(0, "Macro", { fg = c.orange })
+
+    hl(0, "Type", { fg = c.green })
+    hl(0, "StorageClass", { fg = c.red })
+    hl(0, "Structure", { fg = c.red })
+    hl(0, "Typedef", { fg = c.red })
+
+    hl(0, "Special", { fg = c.magenta })
+    hl(0, "SpecialChar", { fg = c.magenta })
+
+    hl(0, "Error", { fg = c.red, bg = c.error_bg, bold = true })
+    hl(0, "Todo", { fg = c.orange, bold = true })
+
+    -- Search
+    hl(0, "Search", { bg = c.search_bg, fg = "#ffffff" })
+    hl(0, "IncSearch", { bg = "#3f9b4f", fg = "#ffffff" })
+    hl(0, "CurSearch", { bg = "#3f9b4f", fg = "#ffffff" })
+
+    -- UI / Pmenu
+    hl(0, "Pmenu", { bg = c.cursor_line, fg = c.fg })
+    hl(0, "PmenuSel", { bg = c.visual, fg = c.cyan, bold = true })
+    hl(0, "PmenuSbar", { bg = c.bg })
+    hl(0, "PmenuThumb", { bg = c.comment })
+
+    -- Diagnostics
+    hl(0, "DiagnosticError", { fg = c.red })
+    hl(0, "DiagnosticWarn", { fg = c.orange })
+    hl(0, "DiagnosticInfo", { fg = c.blue })
+    hl(0, "DiagnosticHint", { fg = c.cyan })
+
+    -- Treesitter
+    hl(0, "@variable", { fg = c.fg })
+    hl(0, "@variable.builtin", { fg = c.red })
+    hl(0, "@property", { fg = c.fg })
+    hl(0, "@field", { fg = c.fg })
+    hl(0, "@parameter", { fg = c.fg }) -- Or orange?
+    hl(0, "@function", { fg = c.cyan })
+    hl(0, "@function.builtin", { fg = c.cyan })
+    hl(0, "@method", { fg = c.cyan })
+    hl(0, "@keyword", { fg = c.red })
+    hl(0, "@keyword.function", { fg = c.red })
+    hl(0, "@string", { fg = c.yellow })
+    hl(0, "@type", { fg = c.green })
+    hl(0, "@type.builtin", { fg = c.green })
+    hl(0, "@constructor", { fg = c.green })
+    hl(0, "@operator", { fg = c.fg })
+    hl(0, "@punctuation", { fg = c.fg })
+    hl(0, "@punctuation.delimiter", { fg = c.fg })
+    hl(0, "@punctuation.bracket", { fg = c.fg })
+    hl(0, "@tag", { fg = c.red })
+    hl(0, "@tag.attribute", { fg = c.orange })
+    hl(0, "@tag.delimiter", { fg = c.fg })
+
+    -- Telescope
+    hl(0, "TelescopeNormal", { bg = c.bg, fg = c.fg })
+    hl(0, "TelescopeBorder", { fg = c.border })
+    hl(0, "TelescopeTitle", { fg = c.cyan })
+    hl(0, "TelescopeSelection", { bg = c.visual, fg = c.cyan })
+
+    -- NeoTree / NvimTree
+    hl(0, "NeoTreeNormal", { bg = c.bg, fg = c.fg })
+    hl(0, "NeoTreeNormalNC", { bg = c.bg, fg = c.fg })
+    hl(0, "NeoTreeDirectoryName", { fg = c.green })
+    hl(0, "NeoTreeFileName", { fg = c.fg })
+    hl(0, "NeoTreeGitModified", { fg = c.cyan })
+    hl(0, "NeoTreeGitDeleted", { fg = c.comment })
+    hl(0, "NeoTreeGitUntracked", { fg = c.green })
+
+    -- GitSigns
+    hl(0, "GitSignsAdd", { fg = c.green })
+    hl(0, "GitSignsChange", { fg = c.cyan })
+    hl(0, "GitSignsDelete", { fg = c.red })
+end
+
+return M

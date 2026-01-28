@@ -16,7 +16,7 @@ local bat_previewer = function(opts)
             local cmd = "bat"
             if vim.fn.executable("batcat") == 1 then cmd = "batcat" end
 
-            return { cmd, "--style=numbers", "--color=always", "--pager=never", "--theme=gruvbox-dark", path }
+            return { cmd, "--style=numbers", "--color=always", "--pager=never", "--theme=CyberpunkJB", path }
         end
     })
 end

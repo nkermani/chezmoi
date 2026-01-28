@@ -37,7 +37,7 @@ opt.termguicolors = true   -- Couleurs 24-bit (nécessaire pour la JetBrains Mon
 -- Remplace le tilde (~) par un espace vide
 vim.opt.fillchars = { eob = " " }
 
-vim.opt.wrap = false -- Désactive le retour à la ligne pour permettre le scroll horizontal
+vim.opt.wrap = true -- Désactive le retour à la ligne pour permettre le scroll horizontal
 
 -- Indentation (Standard Rust/C)
 opt.shiftwidth = 4
@@ -106,4 +106,3 @@ vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
 })
 
 vim.opt.signcolumn = "yes" -- Garde la colonne des signes (pour les erreurs/git) fixe pour éviter les sauts d'écran
-

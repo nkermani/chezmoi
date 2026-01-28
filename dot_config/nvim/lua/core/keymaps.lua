@@ -157,6 +157,7 @@ keymap('i', '<C-H>',     '<C-w>', opts) -- Pour certains terminaux Linux
 keymap('n', '<C-BS>',    'db', opts)
 keymap('n', '<M-BS>',    'db', opts)
 keymap('n', '<C-H>',     'db', opts) -- Pour certains terminaux Linux
+keymap('n', '<BS>',      'X', opts)  -- BACKSPACE supprime le caractère précédent (comme DEL en mode normal)
 
 -- 5. FORMATAGE & ÉCRAN
 keymap('n', '<leader>nl', ':set number!<CR>', { desc = "Toggle Line Numbers" })

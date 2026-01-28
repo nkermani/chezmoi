@@ -14,10 +14,12 @@ local themes = {
     sonokai = "sonokai",
     catppuccin = "catppuccin",
     tokyonight = "tokyonight", -- Variantes: tokyonight-storm, tokyonight-night, tokyonight-moon, tokyonight-day
+    cyberdream = "cyberdream",
+    cyberpunk_jb = "cyberpunk_jb",
 }
 
 -- CONFIGURATION PRINCIPALE
-local main_theme = themes.everforest
+local main_theme = themes.cyberpunk_jb
 
 -- =============================================================================
 -- Chargement sécurisé des plugins de thèmes
@@ -34,11 +36,27 @@ local catppuccin = safe_require("catppuccin")
 local tokyonight = safe_require("tokyonight")
 local monokai_pro = safe_require("monokai-pro")
 local github_theme = safe_require("github-theme")
--- Note: Certains thèmes comme sonokai, everforest, gruvbox s'utilisent via variables globales vim.g
+local cyberdream = safe_require("cyberdream")
+local cyberpunk_jb = safe_require("config.cyberpunk_theme")
 
 -- =============================================================================
 -- Configurations spécifiques des thèmes
 -- =============================================================================
+
+if cyberpunk_jb then
+    -- La configuration se fait via le fichier colors/cyberpunk_jb.lua
+    -- qui appelle config.cyberpunk_theme.setup()
+end
+
+if cyberdream then
+    cyberdream.setup({
+        transparent = false,
+        italic_comments = true,
+        hide_fillchars = true,
+        borderless_telescope = true,
+        terminal_colors = true,
+    })
+end
 
 if tokyonight then
     tokyonight.setup({

@@ -1,0 +1,24 @@
+{
+  "defs": {
+    "bg": "#212121",
+    "fg": "#CACACA",
+    "primary": "#00F0FF",
+    "secondary": "#368AEC",
+    "accent": "#F3505C",
+    "bg_dark": "#1D1D1D",
+    "bg_light": "#272727"
+  },
+  "theme": {
+    "primary": "primary",
+    "secondary": "secondary",
+    "accent": "accent",
+    "text": "fg",
+    "background": "bg",
+    "surface": "bg_light",
+    "border": "#424242",
+    "success": "#51F66F",
+    "warning": "#EEDB85",
+    "error": "#F3505C",
+    "info": "#00F0FF"
+  }
+}
