@@ -7,8 +7,9 @@ require("oil").setup({
     keymaps = {
         ["<C-h>"] = false,
         ["<M-h>"] = "actions.select_split",
-        ["<C-l>"] = false,             -- Release Ctrl+L for global "Select Line" map
-        ["R"] = "actions.refresh",     -- Shift+R to refresh
+        ["<C-l>"] = false,                 -- Release Ctrl+L for global "Select Line" map
+        ["<C-s>"] = false,                 -- Release Ctrl+S for global "Save" map (Commit changes)
+        ["R"] = "actions.refresh",         -- Shift+R to refresh
         ["<leader>r"] = "actions.refresh", -- Leader+r to refresh
     },
     view_options = {
