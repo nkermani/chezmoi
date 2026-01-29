@@ -9,6 +9,7 @@ require("oil").setup({
         ["<M-h>"] = "actions.select_split",
         ["<C-l>"] = false,                 -- Release Ctrl+L for global "Select Line" map
         ["<C-s>"] = false,                 -- Release Ctrl+S for global "Save" map (Commit changes)
+        ["<C-c>"] = false,                 -- Release Ctrl+C for global "Copy" map (Close oil is normally default)
         ["R"] = "actions.refresh",         -- Shift+R to refresh
         ["<leader>r"] = "actions.refresh", -- Leader+r to refresh
     },
