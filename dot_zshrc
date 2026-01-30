@@ -16,7 +16,7 @@ export NK_APPS="$NK_DIR/apps"
 export NK_BIN="$NK_DIR/bin"
 
 # 2. PATH & ENV
-export LSP="$NK_DIR/lsp"
+export LSP="$NK_BIN/lsp"
 export ZSH="$NK_APPS/ohmyzsh"
 export NVM_DIR="$HOME/.nvm"
 export ZSH_CUSTOM="$ZSH/custom"

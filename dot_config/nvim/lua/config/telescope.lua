@@ -14,7 +14,7 @@ telescope.setup({
             },
         },
         file_ignore_patterns = {
-            "node_modules", ".git/", ".cache", "Downloads/", "Documents/42/utils/",
+            "node_modules", ".git/", ".cache", "Downloads/", "Documents/42/utils/", ".pdf", ".tar.gz"
         },
 
         -- CONFIGURATION DYNAMIQUE DE L'ÉCRAN
@@ -119,7 +119,7 @@ local remote_ssh_connect = function()
     -- Liste de tes serveurs habituels (à personnaliser)
     local hosts = {
         { name = "Rainfall (42)", url = "oil-ssh://nkermani@rainfall//home/nkermani/" },
-        { name = "Goinfre (42)", url = "oil-ssh://nkermani@rainfall//goinfre/nkermani/" },
+        { name = "Goinfre (42)",  url = "oil-ssh://nkermani@rainfall//goinfre/nkermani/" },
         -- Ajoute d'autres serveurs ici
         -- { name = "Mon Serveur", url = "oil-ssh://user@ip//path/" },
     }
@@ -149,4 +149,3 @@ local remote_ssh_connect = function()
 end
 
 vim.keymap.set("n", "<leader>rr", remote_ssh_connect, { desc = "Remote Hosts (Telescope)" })
-

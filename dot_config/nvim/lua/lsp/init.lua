@@ -60,6 +60,29 @@ function M.setup()
             end,
         })
     end
+
+    -- 4. Pyright (Python)
+    if vim.fn.executable('pyright-langserver') == 1 then
+        vim.api.nvim_create_autocmd('FileType', {
+            pattern = 'python',
+            callback = function(args)
+                vim.lsp.start({
+                    name = 'pyright',
+                    cmd = { 'pyright-langserver', '--stdio' },
+                    root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', '.git'}, { upward = true })[1]) or vim.loop.cwd(),
+                    settings = {
+                        python = {
+                            analysis = {
+                                autoSearchPaths = true,
+                                useLibraryCodeForTypes = true,
+                                diagnosticMode = 'openFilesOnly',
+                            },
+                        },
+                    },
+                })
+            end,
+        })
+    end
     
     -- Configurer l'apparence des diagnostics (erreurs, warnings)
     vim.diagnostic.config({
