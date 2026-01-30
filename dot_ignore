@@ -1,0 +1,32 @@
+# Global ignore file for ripgrep (rg) and fd
+# These tools respect .ignore, .gitignore, and .fdignore
+
+# System Heavy Directories
+Library/
+Applications/
+System/
+/Volumes/
+.Trash/
+
+# Media / Large Assets (Unless you specifically search inside them)
+Music/
+Movies/
+Pictures/
+Downloads/
+
+# Development / Caches
+.cache/
+.npm/
+.yarn/
+.cargo/
+.gem/
+node_modules/
+dist/
+build/
+target/
+vendor/
+
+# Virtual Environments
+.venv/
+env/
+venv/
