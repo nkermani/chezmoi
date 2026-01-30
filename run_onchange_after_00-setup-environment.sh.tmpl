@@ -138,7 +138,9 @@ if [ ! -f "$BIN_DIR/nvim" ]; then
     mkdir -p "$NVIM_INSTALL_DIR"
     if [[ "$OS_TYPE" == "Darwin" ]]; then
         # Native Apple Silicon support
-        curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-arm64.tar.gz | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
+        local MACOS_ARCH="x86_64"
+        [[ "$(uname -m)" == "arm64" ]] && MACOS_ARCH="arm64"
+        curl -LSs "https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-${MACOS_ARCH}.tar.gz" | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
     else
         curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
     fi
@@ -187,8 +189,24 @@ if [ ! -f "$LSP_BIN_DIR/lua-language-server" ]; then
     fi
 fi
 
-# 2. Python (Pyright)
+# 2. Python (Pyright + Formatters)
 install_npm_lsp "pyright" "pyright" "pyright-langserver"
+
+if ! command -v black &>/dev/null || ! command -v isort &>/dev/null; then
+    echo "  🐍 Installing Python formatters (black, isort)..."
+    if [[ "$OS_TYPE" == "Darwin" ]] && command -v brew &>/dev/null; then
+        brew install black isort
+    else
+        # Manual installation via pip (User mode) for Linux/42
+        if command -v pip3 &>/dev/null; then
+            pip3 install --user black isort
+        elif command -v pip &>/dev/null; then
+            pip install --user black isort
+        else
+            echo "  ⚠️  pip not found, skipping Python formatters."
+        fi
+    fi
+fi
 
 # 3. JavaScript / TypeScript
 install_npm_lsp "typescript-lsp" "typescript typescript-language-server" "typescript-language-server"

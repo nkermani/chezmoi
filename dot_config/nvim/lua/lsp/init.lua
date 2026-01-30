@@ -65,6 +65,7 @@ function M.setup()
     if vim.fn.executable('pyright-langserver') == 1 then
         vim.api.nvim_create_autocmd('FileType', {
             pattern = 'python',
+            group = vim.api.nvim_create_augroup('LspPyright', { clear = true }), -- Clear existing autocommands to prevent duplication
             callback = function(args)
                 vim.lsp.start({
                     name = 'pyright',
