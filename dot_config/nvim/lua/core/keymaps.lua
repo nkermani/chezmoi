@@ -481,9 +481,18 @@ keymap('n', 'fp', function()
         },
         attach_mappings = function(_, map)
             local actions = require("telescope.actions")
+            local action_state = require("telescope.actions.state")
             -- On map <Esc> pour quitter directement au lieu de passer en mode normal
             map('i', '<Esc>', actions.close)
-            -- Entrée ouvre le fichier (comportement normal), mais tu peux juste lire et faire Esc
+
+            -- Entrée ouvre le fichier dans un split vertical
+            map('i', '<C-x>', function(prompt_bufnr)
+                actions.file_vsplit(prompt_bufnr)
+            end)
+
+            -- Si tu veux aussi un raccourci pour split horizontal, par exemple <C-x>
+            map('i', '<CR>', actions.file_split)
+
             return true
         end,
     })
