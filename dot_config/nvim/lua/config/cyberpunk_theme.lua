@@ -25,7 +25,7 @@ function M.setup()
         vim.cmd("syntax reset")
     end
     vim.o.termguicolors = true
-    vim.g.colors_name = "cyberpunk_jb"
+    vim.g.colors_name = "cyberpunk_nk"
 
     local c = M.colors
     local hl = vim.api.nvim_set_hl

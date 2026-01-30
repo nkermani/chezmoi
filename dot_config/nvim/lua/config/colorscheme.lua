@@ -15,11 +15,11 @@ local themes = {
     catppuccin = "catppuccin",
     tokyonight = "tokyonight", -- Variantes: tokyonight-storm, tokyonight-night, tokyonight-moon, tokyonight-day
     cyberdream = "cyberdream",
-    cyberpunk_jb = "cyberpunk_jb",
+    cyberpunk_nk = "cyberpunk_nk",
 }
 
 -- CONFIGURATION PRINCIPALE
-local main_theme = themes.cyberpunk_jb
+local main_theme = themes.cyberpunk_nk
 
 -- =============================================================================
 -- Chargement sécurisé des plugins de thèmes
@@ -37,14 +37,14 @@ local tokyonight = safe_require("tokyonight")
 local monokai_pro = safe_require("monokai-pro")
 local github_theme = safe_require("github-theme")
 local cyberdream = safe_require("cyberdream")
-local cyberpunk_jb = safe_require("config.cyberpunk_theme")
+local cyberpunk_nk = safe_require("config.cyberpunk_theme")
 
 -- =============================================================================
 -- Configurations spécifiques des thèmes
 -- =============================================================================
 
-if cyberpunk_jb then
-    -- La configuration se fait via le fichier colors/cyberpunk_jb.lua
+if cyberpunk_nk then
+    -- La configuration se fait via le fichier colors/cyberpunk_nk.lua
     -- qui appelle config.cyberpunk_theme.setup()
 end
 
