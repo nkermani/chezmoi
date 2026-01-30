@@ -138,9 +138,9 @@ ai() {
 air() {
   local search_cmd
   if [[ "$1" == "-a" ]]; then
-    search_cmd="fd --type d --hidden --exclude .git . ~"
+    search_cmd="fd --type d --hidden --exclude .git --exclude Library . ~"
   else
-    search_cmd="fd --type d . ~"
+    search_cmd="fd --type d --exclude Library . ~"
   fi
 
   local target=$(eval "$search_cmd" | fzf \
@@ -188,10 +188,10 @@ fr() {
     local dir
     if [[ "$1" == "-a" ]]; then
         # Affiche TOUT dans le HOME
-        dir=$(fd --type d --hidden --exclude .git . ~ | fzf --prompt="🏠 Go to Home (All): ")
+        dir=$(fd --type d --hidden --exclude .git --exclude Library . ~ | fzf --prompt="🏠 Go to Home (All): ")
     else
         # Cache les .files du HOME
-        dir=$(fd --type d --hidden --exclude .git --exclude '.*' . ~ | fzf --prompt="🏠 Go to Home: ")
+        dir=$(fd --type d --hidden --exclude .git --exclude Library --exclude '.*' . ~ | fzf --prompt="🏠 Go to Home: ")
     fi
 
     [[ -n "$dir" ]] && cd "$dir"
@@ -218,7 +218,7 @@ fe() {
 # FRE : Find & Edit (Home Path)
 fre() {
     local v=$(_get_viewer)
-    local fd_cmd=("fd" "-a" "--type" "f" "--exclude" ".git")
+    local fd_cmd=("fd" "-a" "--type" "f" "--exclude" ".git" "--exclude" "Library")
     local query=""
 
     if [[ "$1" == "-a" ]]; then
@@ -245,7 +245,7 @@ fo() {
 
 fro() {
     local dir
-    local cmd="fd --type d --hidden --exclude .git . ~"
+    local cmd="fd --type d --hidden --exclude .git --exclude Library . ~"
     [[ "$1" != "-a" ]] && cmd+=" --exclude '.*'"
     dir=$(eval "$cmd" | fzf --prompt="💻 Open Home folder with Code: ")
     [[ -n "$dir" ]] && smart-editor "$dir"
@@ -264,15 +264,16 @@ _get_viewer() {
 # FZF SEARCH FUNCTIONS
 fcat() { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git | fzf --preview "$v {}"); [[ -n "$f" ]] && cat "$f"; }
 vf()   { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git | fzf --preview "$v {}"); [[ -n "$f" ]] && smart-editor "$f"; }
-vfg()  { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git . ~ | fzf --preview "$v {}"); [[ -n "$f" ]] && smart-editor "$f"; }
+vfg()  { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git --exclude Library . ~ | fzf --preview "$v {}"); [[ -n "$f" ]] && smart-editor "$f"; }
 
 # 7. INITIALISATIONS OPTIMISÉES (Lazy-loading)
 # FZF & Zoxide
 [ -n "$commands[fzf]" ] && source <(fzf --zsh 2>/dev/null || fzf --bash 2>/dev/null)
 [ -n "$commands[zoxide]" ] && eval "$(zoxide init zsh)"
 
-export FZF_DEFAULT_COMMAND='fd --type f --absolute-path'
+export FZF_DEFAULT_COMMAND='fd --type f --absolute-path --exclude Library'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git --exclude Library'
 
 # Dans ton .zshrc
 if [ -d "/goinfre/$USER/.nvm" ]; then
@@ -315,7 +316,7 @@ if [ -d "$NOTES_DIR/.git" ]; then
     ( builtin cd "$NOTES_DIR" && git pull --quiet &> /dev/null & )
 fi
 
-alias brain="smart-editor $NOTES_DIR"
+alias brain="cd $NOTES_DIR && smart-editor $NOTES_DIR"
 alias cdn="cd $NOTES_DIR"
 
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
