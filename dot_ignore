@@ -8,25 +8,50 @@ System/
 /Volumes/
 .Trash/
 
-# Media / Large Assets (Unless you specifically search inside them)
+# Media / Large Assets
 Music/
 Movies/
 Pictures/
 Downloads/
+Public/
+Desktop/
+Documents/
 
-# Development / Caches
+# Development / Caches / Build Artifacts
 .cache/
 .npm/
 .yarn/
 .cargo/
 .gem/
+.gradle/
+.m2/
 node_modules/
 dist/
 build/
+out/
 target/
 vendor/
+bower_components/
+coverage/
+.next/
+.nuxt/
 
-# Virtual Environments
+# Version Control & Editor Configs
+.git/
+.hg/
+.svn/
+.idea/
+.vscode/
+.DS_Store
+
+# Virtual Environments & Python
 .venv/
 env/
 venv/
+__pycache__/
+*.pyc
+
+# Logs and Databases
+*.log
+*.sqlite
+*.db
