@@ -32,6 +32,13 @@ keymap("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
 keymap("n", "<S-Right>", "l", { desc = "Move right" })
 keymap("n", "<S-Left>", "h", { desc = "Move left" })
 
+-- Disable Shift+Arrows (Stop them from moving/paging)
+keymap({ "n", "v" }, "<S-Up>", "<nop>", { desc = "Disable Shift+Up" })
+keymap({ "n", "v" }, "<S-Down>", "<nop>", { desc = "Disable Shift+Down" })
+
+-- Ajouter une ligne vide en dessous (Shift + Entrée)
+keymap("n", "<S-Enter>", "o<Esc>", { desc = "Insert blank line below" })
+
 keymap("v", "<S-Right>", "l", { desc = "Extend selection right" })
 keymap("v", "<S-Left>", "h", { desc = "Extend selection left" })
 
@@ -199,7 +206,6 @@ end, { desc = "Delete behaves like Insert mode" })
 -- Enter : Coupe la ligne à la position du curseur (Smart Split)
 -- Utilise i<CR><Esc> pour respecter l'indentation automatique et les hooks
 keymap('n', '<CR>', 'i<CR><Esc>', { desc = "Enter splits line" })
-
 
 -- 5. FORMATAGE & ÉCRAN
 keymap('n', '<leader>nl', ':set number!<CR>', { desc = "Toggle Line Numbers" })

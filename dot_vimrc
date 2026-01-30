@@ -48,6 +48,7 @@ set smartindent
 " MAPPINGS DE BASE & NAVIGATION (core/keymaps.lua)
 " ===================================================================
 
+
 " Désactive la suspension CTRL+Z
 nnoremap <C-z> <nop>
 vnoremap <C-z> <nop>
@@ -79,6 +80,17 @@ nnoremap <C-f> /
 vnoremap <C-f> y/<C-r>"<CR>
 inoremap <C-f> <Esc>/
 nnoremap <Esc> :noh<CR><Esc>
+
+
+
+" Disable Shift+Arrows (Stop them from moving/paging)
+nnoremap <S-Up> <nop>
+nnoremap <S-Down> <nop>
+vnoremap <S-Up> <nop>
+vnoremap <S-Down> <nop>
+
+" Ajouter une ligne vide en dessous (Shift + Entrée)
+nnoremap <S-Enter> o<Esc>
 
 " ===================================================================
 " STYLE VS CODE (Navigation, Copier/Coller)
