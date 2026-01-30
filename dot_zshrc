@@ -138,9 +138,9 @@ ai() {
 air() {
   local search_cmd
   if [[ "$1" == "-a" ]]; then
-    search_cmd="fd --type d --hidden --no-ignore --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Documents --exclude Desktop --exclude Public --exclude .Trash ~"
+    search_cmd="fd --type d --hidden --no-ignore --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Documents --exclude Desktop --exclude Public --exclude .Trash . ~"
   else
-    search_cmd="fd --type d ~"
+    search_cmd="fd --type d . ~"
   fi
 
   local target=$(eval "$search_cmd" | fzf \
@@ -188,7 +188,7 @@ fr() {
     local dir
     if [[ "$1" == "-a" ]]; then
         # Affiche TOUT dans le HOME
-        dir=$(fd --type d --hidden --no-ignore --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Documents --exclude Desktop --exclude Public --exclude .Trash . ~ | fzf --prompt="🏠 Go to Home (All): ")
+        dir=$(fd --type d --hidden --no-ignore --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash . ~ | fzf --prompt="🏠 Go to Home (All): ")
     else
         # Cache les .files du HOME
         dir=$(fd --type d --hidden --exclude '.*' . ~ | fzf --prompt="🏠 Go to Home: ")
@@ -228,7 +228,7 @@ fre() {
         query="$1"
     fi
     # Force exclude heavy folders even with -a
-    fd_cmd+=("--exclude" "Library" "--exclude" "Music" "--exclude" "Movies" "--exclude" "Pictures" "--exclude" "Downloads" "--exclude" "Documents" "--exclude" "Desktop" "--exclude" "Public" "--exclude" ".Trash")
+    fd_cmd+=("--exclude" "Library" "--exclude" "Music" "--exclude" "Movies" "--exclude" "Pictures" "--exclude" "Downloads" "--exclude" "Desktop" "--exclude" "Public" "--exclude" ".Trash")
 
     # On cherche dans le Home (~)
     local file=$("${fd_cmd[@]}" . ~ | fzf --query "$query" --preview "$v {}")
@@ -248,7 +248,7 @@ fo() {
 fro() {
     local dir
     local cmd="fd --type d --hidden"
-    [[ "$1" == "-a" ]] && cmd+=" --no-ignore --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Documents --exclude Desktop --exclude Public --exclude .Trash"
+    [[ "$1" == "-a" ]] && cmd+=" --no-ignore --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash"
     cmd+=" . ~"
 
     [[ "$1" != "-a" ]] && cmd+=" --exclude '.*'"

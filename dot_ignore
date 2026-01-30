@@ -15,7 +15,6 @@ Pictures/
 Downloads/
 Public/
 Desktop/
-Documents/
 
 # Development / Caches / Build Artifacts
 .cache/
@@ -35,6 +34,10 @@ bower_components/
 coverage/
 .next/
 .nuxt/
+.rustup/
+.vscode/
+
+.nkermani/
 
 # Version Control & Editor Configs
 .git/
@@ -55,3 +58,4 @@ __pycache__/
 *.log
 *.sqlite
 *.db
+
