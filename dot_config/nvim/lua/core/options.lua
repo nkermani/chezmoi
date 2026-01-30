@@ -69,6 +69,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- Fonction pour nettoyer les espaces et les lignes vides
 local function clean_on_save()
+    -- Ne pas exécuter si on est dans un fichier python (laisser black gérer)
+    if vim.bo.filetype == "python" then
+        return
+    end
+
     -- Mémoriser la position du curseur
     local save_cursor = vim.fn.getpos(".")
 
@@ -79,15 +84,10 @@ local function clean_on_save()
     -- Cela laisse une seule ligne vide entre deux blocs de texte
     vim.cmd([[%s/\n\{3,}/\r\r/e]])
 
-    -- 3. Supprimer TOUTES les lignes vides à la toute fin du fichier
-    -- On nettoie tout le "gras" à la fin
-    vim.cmd([[%s/\n\+\%$//e]])
-
-    -- 4. Ajouter manuellement UN seul retour à la ligne à la fin du fichier
-    -- On utilise une fonction Lua pour être plus précis que le regex
+    -- 3. Ajouter UNE ligne vide à la fin si elle n'existe pas
     local last_line = vim.api.nvim_buf_line_count(0)
-    local last_line_content = vim.api.nvim_buf_get_lines(0, last_line - 1, last_line, false)[1]
-    if last_line_content ~= "" then
+    local last_content = vim.api.nvim_buf_get_lines(0, last_line - 1, last_line, false)[1]
+    if last_content ~= "" then
         vim.api.nvim_buf_set_lines(0, last_line, last_line, false, { "" })
     end
 

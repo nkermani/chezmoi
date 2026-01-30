@@ -164,9 +164,10 @@ keymap('i', '<M-BS>', '<C-w>', opts)
 keymap('i', '<C-H>', '<C-w>', opts) -- Pour certains terminaux Linux
 
 -- Mode Normal : Supprimer le mot avant le curseur
-keymap('n', '<C-BS>', 'db', opts)
-keymap('n', '<M-BS>', 'db', opts)
-keymap('n', '<C-H>', 'db', opts) -- Pour certains terminaux Linux
+-- keymap('n', '<C-BS>', 'db', opts)
+-- keymap('n', '<M-BS>', 'db', opts)
+-- keymap('n', '<C-H>', 'db', opts) -- Pour certains terminaux Linux
+
 -- keymap('n', '<BS>', 'X', opts)   -- BACKSPACE supprime le caractère précédent (comme DEL en mode normal)
 
 -- Comportement Backspace / Delete / Enter style "Éditeur moderne" en mode Normal
@@ -507,13 +508,13 @@ local function toggle_terminal()
         vim.cmd("startinsert")
     end
 end
-vim.keymap.set({ 'n', 't' }, '<C-k>', toggle_terminal, { desc = "Toggle Terminal" })
+-- vim.keymap.set({ 'n', 't' }, '<C-k>', toggle_terminal, { desc = "Toggle Terminal" })
 
 -- Mappings avec CTRL + k
 -- En mode Normal pour ouvrir
-vim.keymap.set('n', '<C-k>', toggle_terminal, { desc = "Toggle Terminal" })
+-- vim.keymap.set('n', '<C-k>', toggle_terminal, { desc = "Toggle Terminal" })
 -- En mode Terminal pour cacher
-vim.keymap.set('t', '<C-k>', toggle_terminal, { desc = "Hide Terminal" })
+-- vim.keymap.set('t', '<C-k>', toggle_terminal, { desc = "Hide Terminal" })
 
 -- Quitter le mode insertion dans le terminal avec CTRL + x
 -- (Très utile pour remonter dans ton historique gdb sur Rainfall)
