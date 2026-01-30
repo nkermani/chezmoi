@@ -48,8 +48,8 @@ local function change_directory(opts)
     })
 end
 
-vim.keymap.set("n", "_", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-vim.keymap.set("n", "-", "<CMD>Oil .<CR>", { desc = "Open Oil in CWD" })
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+vim.keymap.set("n", "_", "<CMD>Oil .<CR>", { desc = "Open Oil in CWD" })
 vim.keymap.set("n", "<leader>cd", function() change_directory({ open_oil = false }) end, { desc = "Change directory" })
 vim.keymap.set("n", "<leader>co", function() change_directory({ open_oil = true }) end,
     { desc = "Change dir and open Oil" })
