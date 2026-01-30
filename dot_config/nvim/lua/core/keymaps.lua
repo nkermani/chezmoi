@@ -462,6 +462,30 @@ keymap('i', '<C-l>', '<Esc>V', { desc = "Sélectionner la ligne" })
 -- Mode Visuel : Étend la sélection à la ligne suivante (très utile)
 keymap('v', '<C-l>', 'j', { desc = "Sélectionner ligne suivante" })
 
+-- Lecture rapide de fichier sans quitter le buffer (Preview)
+-- Utilise 'fp' (File Preview) pour ouvrir Telescope buffer en mode preview uniquement
+keymap('n', 'fp', function()
+    require('telescope.builtin').find_files({
+        previewer = true,
+        layout_strategy = 'vertical',
+        layout_config = {
+            width = 0.9,
+            height = 0.9,
+            preview_height = 0.7, -- Grande zone de lecture
+        },
+        attach_mappings = function(_, map)
+            local actions = require("telescope.actions")
+            -- On map <Esc> pour quitter directement au lieu de passer en mode normal
+            map('i', '<Esc>', actions.close)
+            -- Entrée ouvre le fichier (comportement normal), mais tu peux juste lire et faire Esc
+            return true
+        end,
+    })
+end, { desc = "File Preview (Read Only)" })
+
+-- Toggle Git Blame sur la ligne courante
+keymap('n', '<leader>gb', ':Gitsigns toggle_current_line_blame<CR>', { desc = "Toggle Git Blame Line" })
+
 -- ===================================================================
 -- TERMINAL TOGGLE (CTRL + K)
 -- ===================================================================
