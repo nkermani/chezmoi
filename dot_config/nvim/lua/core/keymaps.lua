@@ -33,8 +33,8 @@ keymap("n", "<S-Right>", "l", { desc = "Move right" })
 keymap("n", "<S-Left>", "h", { desc = "Move left" })
 
 -- Disable Shift+Arrows (Stop them from moving/paging)
-keymap({ "n", "v" }, "<S-Up>", "<nop>", { desc = "Disable Shift+Up" })
-keymap({ "n", "v" }, "<S-Down>", "<nop>", { desc = "Disable Shift+Down" })
+keymap({ "n", "v", "i" }, "<S-Up>", "<Up>", { desc = "Move Up" })
+keymap({ "n", "v", "i" }, "<S-Down>", "<Down>", { desc = "Move Down" })
 
 -- Ajouter une ligne vide en dessous (Shift + Entrée)
 keymap("n", "<S-Enter>", "o<Esc>", { desc = "Insert blank line below" })
