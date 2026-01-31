@@ -433,11 +433,11 @@ keymap('v', '<C-q>', '<Esc>:qCR>', { desc = "Quitter Neovim" })
 -- ===================================================================
 -- Mode normal : Quitte NEOVIM
 -- On utilise :q! pour forcer la fermeture sans sauvegarder
-keymap('n', '<C-S-q>', ':!q<CR>', { desc = "Quitter Neovim" })
+keymap('n', '<C-S-q>', ':q!<CR>', { desc = "Force Quit Current (No Save)" })
 -- Mode insertion : Quitte NEOVIM sans quitter le mode Insertion
-keymap('i', '<C-S-q>', '<C-o>:!qCR>', { desc = "Quitter Neovim" })
+keymap('i', '<C-S-q>', '<C-o>:q!<CR>', { desc = "Force Quit Current (No Save)" })
 -- Mode visuel : Quitte NEOVIM et reste en mode Visuel
-keymap('v', '<C-S-q>', '<Esc>:!qCR>', { desc = "Quitter Neovim" })
+keymap('v', '<C-S-q>', '<Esc>:q!<CR>', { desc = "Force Quit Current (No Save)" })
 -- ===================================================================
 -- ===================================================================
 -- UNDO / REDO (STYLE VS CODE)
