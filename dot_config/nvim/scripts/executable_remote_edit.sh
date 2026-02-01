@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script to mount a remote directory using sshfs for Neovim
-
+# check
 # Check if sshfs is installed
 if ! command -v sshfs &> /dev/null; then
     echo "Error: sshfs is not installed."
@@ -35,3 +35,4 @@ else
     echo "Failed to mount."
     exit 1
 fi
+

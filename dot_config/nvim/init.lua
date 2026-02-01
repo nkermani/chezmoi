@@ -10,6 +10,8 @@ require("core.autocmds")
 require("config.colorscheme")
 require("config.transparent")
 
+require("config.copilot")
+
 require("config.devicons")
 require("config.lualine")
 require("config.gitsigns")
