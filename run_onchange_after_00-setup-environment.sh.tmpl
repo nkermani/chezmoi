@@ -189,21 +189,34 @@ if [ ! -f "$LSP_BIN_DIR/lua-language-server" ]; then
     fi
 fi
 
-# 2. Python (Pyright + Formatters)
+# 2. Python (Pyright + Formatters + pylsp)
 install_npm_lsp "pyright" "pyright" "pyright-langserver"
 
-if ! command -v black &>/dev/null || ! command -v isort &>/dev/null; then
-    echo "  🐍 Installing Python formatters (black, isort)..."
-    if [[ "$OS_TYPE" == "Darwin" ]] && command -v brew &>/dev/null; then
-        brew install black isort
-    else
-        # Manual installation via pip (User mode) for Linux/42
+if [[ "$OS_TYPE" == "Darwin" ]] && command -v brew &>/dev/null; then
+    command -v pipx &>/dev/null || brew install pipx
+    pipx ensurepath &>/dev/null
+    command -v black &>/dev/null || pipx install black
+    command -v isort &>/dev/null || pipx install isort
+    command -v pylsp &>/dev/null || pipx install 'python-lsp-server[rope]'
+else
+    if ! command -v black &>/dev/null || ! command -v isort &>/dev/null; then
+        echo "  🐍 Installing Python formatters (black, isort)..."
         if command -v pip3 &>/dev/null; then
             pip3 install --user black isort
         elif command -v pip &>/dev/null; then
             pip install --user black isort
         else
             echo "  ⚠️  pip not found, skipping Python formatters."
+        fi
+    fi
+    if ! command -v pylsp &>/dev/null; then
+        echo "  🐍 Installing pylsp with rope support..."
+        if command -v pip3 &>/dev/null; then
+            pip3 install --user 'python-lsp-server[rope]'
+        elif command -v pip &>/dev/null; then
+            pip install --user 'python-lsp-server[rope]'
+        else
+            echo "  ⚠️  pip not found, skipping pylsp."
         fi
     fi
 fi

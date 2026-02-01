@@ -83,19 +83,36 @@ local lspconfig = require("lspconfig")
 -- })
 
 -- Utilisation de la nouvelle API de la v0.12
--- Cela configure automatiquement rust-analyzer s'il est dans ton PATH
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+vim.lsp.config('*', {
+    capabilities = capabilities,
+})
+
 if vim.fn.executable('rust-analyzer') == 1 then
-    vim.lsp.enable('rust-analyzer')
+    vim.lsp.enable('rust_analyzer')
 end
 
--- Configuration des diagnostics (nouveautés v0.10+)
+if vim.fn.executable('pylsp') == 1 then
+    vim.lsp.config('pylsp', {
+        capabilities = capabilities,
+        settings = {
+            pylsp = {
+                plugins = {
+                    rope_autoimport = { enabled = true },
+                    rope_completion = { enabled = true, eager = true },
+                }
+            }
+        }
+    })
+    vim.lsp.enable('pylsp')
+end
+
 vim.diagnostic.config({
     float = { border = "rounded" },
     virtual_text = true,
     signs = true,
 })
-
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Mappings LSP natifs (plus besoin de plugins pour ça)
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = "Goto Definition" })
