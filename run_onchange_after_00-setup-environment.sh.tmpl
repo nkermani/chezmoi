@@ -283,6 +283,36 @@ fi
      ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/code"
      echo "  ✅ OpenCode.ai installed"
  fi
+ 
+ # 9.2.1 BUN (for oh-my-opencode)
+ if ! command -v bun &>/dev/null; then
+    echo "  🍞 Installing Bun..."
+    # Custom installation directory to keep it contained in apps
+    export BUN_INSTALL="$APPS_DIR/bun"
+    curl -fsSL https://bun.sh/install | bash
+    # Link binaries
+    ln -sf "$BUN_INSTALL/bin/bun" "$BIN_DIR/bun"
+    ln -sf "$BUN_INSTALL/bin/bunx" "$BIN_DIR/bunx"
+ fi
+
+ # 9.2.2 OH-MY-OPENCODE (Plugin)
+ if command -v opencode &>/dev/null; then
+     if ! opencode --version 2>&1 | grep -q "oh-my-opencode"; then
+         echo "  ✨ Installing Oh My OpenCode..."
+         # Assuming user wants standard setup without TUI to avoid hangs
+         # Defaulting to GitHub Copilot support as seen in user's current setup
+         # We'll use npx/bunx to run the installer non-interactively
+         if command -v bunx &>/dev/null; then
+             bunx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
+         elif command -v npx &>/dev/null; then
+             npx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
+         else
+             echo "  ⚠️  bunx/npx not found. Please install Bun or Node.js to install oh-my-opencode."
+         fi
+     else
+         echo "  ✅ Oh My OpenCode is already installed."
+     fi
+ fi
 
 # 9.3 Yazi File Manager
 echo "📂 Checking Yazi..."
