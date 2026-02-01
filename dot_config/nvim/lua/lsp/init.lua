@@ -7,7 +7,6 @@ function M.setup()
     -- Pas de mason, pas de lspconfig, juste vim.lsp.start
 
     -- 1. Lua Language Server
-    -- Vérifie si la commande existe dans le PATH
     if vim.fn.executable('lua-language-server') == 1 then
         vim.api.nvim_create_autocmd('FileType', {
             pattern = 'lua',
@@ -15,15 +14,14 @@ function M.setup()
                 vim.lsp.start({
                     name = 'lua_ls',
                     cmd = { 'lua-language-server' },
-                    root_dir = vim.fs.dirname(vim.fs.find({'.git', '.luarc.json'}, { upward = true })[1]) or vim.loop.cwd(),
+                    root_dir = vim.fs.dirname(vim.fs.find({'.git', '.luarc.json'}, { upward = true })[1]) or vim.uv.cwd(),
+                    capabilities = require('cmp_nvim_lsp').default_capabilities(),
                     settings = {
                         Lua = {
                             diagnostics = { globals = { 'vim' } },
                             workspace = {
                                 library = vim.api.nvim_get_runtime_file("", true),
                                 checkThirdParty = false, 
-                                maxPreload = 1000,
-                                preloadFileSize = 1000,
                             },
                             telemetry = { enable = false },
                         },
@@ -41,7 +39,8 @@ function M.setup()
                 vim.lsp.start({
                     name = 'rust-analyzer',
                     cmd = { 'rust-analyzer' },
-                    root_dir = vim.fs.dirname(vim.fs.find({'Cargo.toml'}, { upward = true })[1]) or vim.loop.cwd(),
+                    root_dir = vim.fs.dirname(vim.fs.find({'Cargo.toml'}, { upward = true })[1]) or vim.uv.cwd(),
+                    capabilities = require('cmp_nvim_lsp').default_capabilities(),
                 })
             end,
         })
@@ -55,30 +54,41 @@ function M.setup()
                 vim.lsp.start({
                     name = 'clangd',
                     cmd = { 'clangd' },
-                    root_dir = vim.fs.dirname(vim.fs.find({'.git', 'compile_commands.json'}, { upward = true })[1]) or vim.loop.cwd(),
+                    root_dir = vim.fs.dirname(vim.fs.find({'.git', 'compile_commands.json'}, { upward = true })[1]) or vim.uv.cwd(),
+                    capabilities = require('cmp_nvim_lsp').default_capabilities(),
                 })
             end,
         })
     end
 
-    -- 4. Pyright (Python)
-    if vim.fn.executable('pyright-langserver') == 1 then
+    -- 4. Pylsp (Python) - supports snippet placeholders for function params
+    if vim.fn.executable('pylsp') == 1 then
         vim.api.nvim_create_autocmd('FileType', {
             pattern = 'python',
-            group = vim.api.nvim_create_augroup('LspPyright', { clear = true }), -- Clear existing autocommands to prevent duplication
+            group = vim.api.nvim_create_augroup('LspPylsp', { clear = true }),
             callback = function(args)
                 vim.lsp.start({
-                    name = 'pyright',
-                    cmd = { 'pyright-langserver', '--stdio' },
-                    root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', '.git'}, { upward = true })[1]) or vim.loop.cwd(),
+                    name = 'pylsp',
+                    cmd = { 'pylsp' },
+                    root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', '.git'}, { upward = true })[1]) or vim.uv.cwd(),
+                    capabilities = require('cmp_nvim_lsp').default_capabilities(),
                     settings = {
-                        python = {
-                            analysis = {
-                                autoSearchPaths = true,
-                                useLibraryCodeForTypes = true,
-                                diagnosticMode = 'openFilesOnly',
-                            },
-                        },
+                        pylsp = {
+                            plugins = {
+                                jedi_completion = {
+                                    enabled = true,
+                                    include_params = true,
+                                    eager = false,
+                                    resolve_at_most = 15,
+                                    fuzzy = false,
+                                },
+                                rope_autoimport = { enabled = false },
+                                rope_completion = { enabled = false },
+                                pycodestyle = { enabled = false },
+                                pylint = { enabled = false },
+                                mccabe = { enabled = false },
+                            }
+                        }
                     },
                 })
             end,
