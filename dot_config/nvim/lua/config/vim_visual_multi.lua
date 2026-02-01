@@ -11,8 +11,8 @@ vim.g.VM_maps = {
     ['Find Under']         = '<C-d>',           -- Sélectionner le mot sous le curseur
     ['Find Subword Under'] = '<C-d>',           -- Sélectionner le sous-mot
     ['Select All']         = '<C-S-d>',         -- Tout sélectionner (équivalent CTRL+D VSCode répété)
-    ['Add Cursor Down']    = '<C-Down>',        -- Ajouter un curseur en bas
-    ['Add Cursor Up']      = '<C-Up>',          -- Ajouter un curseur en haut
+    ['Add Cursor Down']    = '<C-S-Down>',      -- Ajouter un curseur en bas (Ctrl+Shift+Down)
+    ['Add Cursor Up']      = '<C-S-Up>',        -- Ajouter un curseur en haut (Ctrl+Shift+Up)
     ['Skip Region']        = '<C-x>',           -- Sauter la sélection actuelle (skip)
     ['Remove Region']      = 'q',               -- Enlever la sélection (custom)
 }
