@@ -29,26 +29,59 @@ keymap("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
 keymap("n", "<C-k>", "<C-w>k", { desc = "Go to upper window" })
 keymap("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
 
-keymap("n", "<S-Right>", "l", { desc = "Move right" })
-keymap("n", "<S-Left>", "h", { desc = "Move left" })
+-- ===================================================================
+-- SELECTION SHORTCUTS
+-- ===================================================================
 
--- Disable Shift+Arrows (Stop them from moving/paging)
-keymap({ "n", "v", "i" }, "<S-Up>", "<Up>", { desc = "Move Up" })
-keymap({ "n", "v", "i" }, "<S-Down>", "<Down>", { desc = "Move Down" })
+-- SHIFT + ARROWS (Select Characters/Lines)
+keymap("n", "<S-Up>", "v<Up>", { desc = "Select Up" })
+keymap("n", "<S-Down>", "v<Down>", { desc = "Select Down" })
+keymap("n", "<S-Left>", "v<Left>", { desc = "Select Left" })
+keymap("n", "<S-Right>", "v<Right>", { desc = "Select Right" })
+
+keymap("v", "<S-Up>", "<Up>", { desc = "Extend Up" })
+keymap("v", "<S-Down>", "<Down>", { desc = "Extend Down" })
+keymap("v", "<S-Left>", "<Left>", { desc = "Extend Left" })
+keymap("v", "<S-Right>", "<Right>", { desc = "Extend Right" })
+
+keymap("i", "<S-Up>", "<Esc>v<Up>", { desc = "Select Up" })
+keymap("i", "<S-Down>", "<Esc>v<Down>", { desc = "Select Down" })
+keymap("i", "<S-Left>", "<Esc>v<Left>", { desc = "Select Left" })
+keymap("i", "<S-Right>", "<Esc>v<Right>", { desc = "Select Right" })
 
 -- Ajouter une ligne vide en dessous (Shift + Entrée)
 keymap("n", "<S-Enter>", "o<Esc>", { desc = "Insert blank line below" })
 
-keymap("v", "<S-Right>", "l", { desc = "Extend selection right" })
-keymap("v", "<S-Left>", "h", { desc = "Extend selection left" })
+-- CTRL + SHIFT + ARROWS (Select Word/Line)
+-- Note: Left/Right are also mapped lower down (around line 160)
+keymap("n", "<C-S-Up>", "v<Up>", { desc = "Select Line Up" })
+keymap("n", "<C-S-Down>", "v<Down>", { desc = "Select Line Down" })
+keymap("v", "<C-S-Up>", "<Up>", { desc = "Extend Line Up" })
+keymap("v", "<C-S-Down>", "<Down>", { desc = "Extend Line Down" })
+keymap("i", "<C-S-Up>", "<Esc>v<Up>", { desc = "Select Line Up" })
+keymap("i", "<C-S-Down>", "<Esc>v<Down>", { desc = "Select Line Down" })
 
--- CTRL + SHIFT + UP pour aller tout en haut (gg)
-keymap("n", "<C-S-Up>", "gg", { desc = "Go to top of file" })
-keymap("i", "<C-S-Up>", "<C-o>gg", { desc = "Go to top of file from Insert" })
+keymap("n", "<C-S-Left>", "vb", { desc = "Select Word Left" })
+keymap("n", "<C-S-Right>", "vw", { desc = "Select Word Right" })
+keymap("v", "<C-S-Left>", "b", { desc = "Extend Word Left" })
+keymap("v", "<C-S-Right>", "w", { desc = "Extend Word Right" })
+keymap("i", "<C-S-Left>", "<Esc>vb", { desc = "Select Word Left" })
+keymap("i", "<C-S-Right>", "<Esc>vw", { desc = "Select Word Right" })
 
--- CTRL + SHIFT + DOWN pour aller tout en bas (G)
-keymap("n", "<C-S-Down>", "G", { desc = "Go to bottom of file" })
-keymap("i", "<C-S-Down>", "<C-o>G", { desc = "Go to bottom of file from Insert" })
+-- ALT + SHIFT + ARROWS (Select Extremities)
+keymap("n", "<M-S-Left>", "v^", { desc = "Select to Start of Line" })
+keymap("n", "<M-S-Right>", "v$", { desc = "Select to End of Line" })
+keymap("v", "<M-S-Left>", "^", { desc = "Extend to Start of Line" })
+keymap("v", "<M-S-Right>", "$", { desc = "Extend to End of Line" })
+keymap("i", "<M-S-Left>", "<Esc>v^", { desc = "Select to Start of Line" })
+keymap("i", "<M-S-Right>", "<Esc>v$", { desc = "Select to End of Line" })
+
+-- keymap("n", "<M-S-Up>", "vgg", { desc = "Select to Start of File" })
+-- keymap("n", "<M-S-Down>", "vG", { desc = "Select to End of File" })
+-- keymap("v", "<M-S-Up>", "gg", { desc = "Extend to Start of File" })
+-- keymap("v", "<M-S-Down>", "G", { desc = "Extend to End of File" })
+-- keymap("i", "<M-S-Up>", "<Esc>vgg", { desc = "Select to Start of File" })
+-- keymap("i", "<M-S-Down>", "<Esc>vG", { desc = "Select to End of File" })
 
 -- Redimensionner avec ALT + Flèches
 -- keymap("n", "<M-Up>", "<cmd>resize +2<cr>", { desc = "Augmenter la hauteur" })
