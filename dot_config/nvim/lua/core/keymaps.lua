@@ -203,10 +203,10 @@ keymap('i', '<C-BS>', '<C-w>', opts)
 keymap('i', '<M-BS>', '<C-w>', opts)
 keymap('i', '<C-H>', '<C-w>', opts) -- Pour certains terminaux Linux
 
--- Mode Normal : Supprimer le mot avant le curseur
--- keymap('n', '<C-BS>', 'db', opts)
--- keymap('n', '<M-BS>', 'db', opts)
--- keymap('n', '<C-H>', 'db', opts) -- Pour certains terminaux Linux
+keymap('n', '<C-BS>', 'db', opts)
+keymap('n', '<C-H>', 'db', opts)
+keymap('v', '<C-BS>', '"_d', opts)
+keymap('v', '<C-H>', '"_d', opts)
 
 -- keymap('n', '<BS>', 'X', opts)   -- BACKSPACE supprime le caractère précédent (comme DEL en mode normal)
 
