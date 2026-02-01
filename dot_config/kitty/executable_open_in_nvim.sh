@@ -1,15 +1,26 @@
 #!/bin/bash
 input="$1"
+echo "DEBUG: $input" >> /tmp/kitty_debug.log
 
-if [[ "$input" =~ ^(.+):([0-9]+):([0-9]+) ]]; then
-    file="${BASH_REMATCH[1]}"
+if [[ "$input" =~ File\ \"([^\"]+)\",\ line\ ([0-9]+) ]]; then
+    path="${BASH_REMATCH[1]}"
     line="${BASH_REMATCH[2]}"
-    col="${BASH_REMATCH[3]}"
-    kitty @ launch --type=overlay /Users/nkermani/.nkermani/bin/nvim "+call cursor($line,$col)" "$file"
-elif [[ "$input" =~ ^(.+):([0-9]+) ]]; then
-    file="${BASH_REMATCH[1]}"
+elif [[ "$input" =~ ([^\",:[:space:]]+):([0-9]+):([0-9]+) ]]; then
+    path="${BASH_REMATCH[1]}"
     line="${BASH_REMATCH[2]}"
-    kitty @ launch --type=overlay /Users/nkermani/.nkermani/bin/nvim "+$line" "$file"
+elif [[ "$input" =~ ([^\",:[:space:]]+):([0-9]+) ]]; then
+    path="${BASH_REMATCH[1]}"
+    line="${BASH_REMATCH[2]}"
 else
-    kitty @ launch --type=overlay /Users/nkermani/.nkermani/bin/nvim "$input"
+    path="${input//\"/}"
+    path="${path//,/}"
+    line=""
+fi
+
+echo "DEBUG: path=$path line=$line" >> /tmp/kitty_debug.log
+
+if [[ -n "$line" ]]; then
+    kitty @ launch --type=overlay /Users/nkermani/.nkermani/bin/nvim "+$line" "$path"
+else
+    kitty @ launch --type=overlay /Users/nkermani/.nkermani/bin/nvim "$path"
 fi
