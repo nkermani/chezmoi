@@ -197,7 +197,10 @@ if [[ "$OS_TYPE" == "Darwin" ]] && command -v brew &>/dev/null; then
     pipx ensurepath &>/dev/null
     command -v black &>/dev/null || pipx install black
     command -v isort &>/dev/null || pipx install isort
-    command -v pylsp &>/dev/null || pipx install 'python-lsp-server[rope]'
+    if ! command -v pylsp &>/dev/null; then
+        pipx install 'python-lsp-server[rope]'
+    fi
+    pipx inject python-lsp-server pyflakes pycodestyle 2>/dev/null || true
 else
     if ! command -v black &>/dev/null || ! command -v isort &>/dev/null; then
         echo "  🐍 Installing Python formatters (black, isort)..."
@@ -212,11 +215,17 @@ else
     if ! command -v pylsp &>/dev/null; then
         echo "  🐍 Installing pylsp with rope support..."
         if command -v pip3 &>/dev/null; then
-            pip3 install --user 'python-lsp-server[rope]'
+            pip3 install --user 'python-lsp-server[rope]' pyflakes pycodestyle
         elif command -v pip &>/dev/null; then
-            pip install --user 'python-lsp-server[rope]'
+            pip install --user 'python-lsp-server[rope]' pyflakes pycodestyle
         else
             echo "  ⚠️  pip not found, skipping pylsp."
+        fi
+    else
+        if command -v pip3 &>/dev/null; then
+            pip3 install --user pyflakes pycodestyle 2>/dev/null || true
+        elif command -v pip &>/dev/null; then
+            pip install --user pyflakes pycodestyle 2>/dev/null || true
         fi
     fi
 fi

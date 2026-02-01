@@ -2,10 +2,9 @@
 
 local M = {}
 
-function M.setup()
-    -- Configuration native minimaliste pour les LSP
-    -- Pas de mason, pas de lspconfig, juste vim.lsp.start
+M.pycodestyle_enabled = false
 
+function M.setup()
     -- 1. Lua Language Server
     if vim.fn.executable('lua-language-server') == 1 then
         vim.api.nvim_create_autocmd('FileType', {
@@ -61,7 +60,7 @@ function M.setup()
         })
     end
 
-    -- 4. Pylsp (Python) - supports snippet placeholders for function params
+    -- 4. Pylsp (Python)
     if vim.fn.executable('pylsp') == 1 then
         vim.api.nvim_create_autocmd('FileType', {
             pattern = 'python',
@@ -84,7 +83,8 @@ function M.setup()
                                 },
                                 rope_autoimport = { enabled = false },
                                 rope_completion = { enabled = false },
-                                pycodestyle = { enabled = false },
+                                pyflakes = { enabled = true },
+                                pycodestyle = { enabled = M.pycodestyle_enabled },
                                 pylint = { enabled = false },
                                 mccabe = { enabled = false },
                             }
@@ -95,14 +95,12 @@ function M.setup()
         })
     end
     
-    -- Configurer l'apparence des diagnostics (erreurs, warnings)
     vim.diagnostic.config({
         float = { border = "rounded" },
         virtual_text = true,
         signs = true,
     })
     
-    -- Mappings natifs (légers)
     vim.api.nvim_create_autocmd('LspAttach', {
         callback = function(args)
             local opts = { buffer = args.buf }
@@ -113,5 +111,16 @@ function M.setup()
         end,
     })
 end
+
+function M.toggle_pycodestyle()
+    M.pycodestyle_enabled = not M.pycodestyle_enabled
+    for _, client in ipairs(vim.lsp.get_clients({ name = 'pylsp' })) do
+        client.settings.pylsp.plugins.pycodestyle.enabled = M.pycodestyle_enabled
+        client:notify('workspace/didChangeConfiguration', { settings = client.settings })
+    end
+    vim.notify('pycodestyle: ' .. (M.pycodestyle_enabled and 'ON' or 'OFF'), vim.log.levels.INFO)
+end
+
+vim.keymap.set('n', '<leader>tp', function() require('lsp').toggle_pycodestyle() end, { desc = "Toggle pycodestyle" })
 
 return M

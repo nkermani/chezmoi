@@ -534,6 +534,13 @@ end, { desc = "File Preview (Read Only)" })
 -- Toggle Git Blame sur la ligne courante
 keymap('n', '<leader>gb', ':Gitsigns toggle_current_line_blame<CR>', { desc = "Toggle Git Blame Line" })
 
+-- Toggle Diagnostics (erreurs/warnings LSP)
+local diagnostics_visible = true
+keymap('n', '<leader>td', function()
+    diagnostics_visible = not diagnostics_visible
+    vim.diagnostic.enable(diagnostics_visible)
+end, { desc = "Toggle Diagnostics" })
+
 -- ===================================================================
 -- TERMINAL TOGGLE (CTRL + K)
 -- ===================================================================
