@@ -14,7 +14,7 @@
       }
     }
   },
-  "theme": "lucent-orng",
+  "theme": "system",
   "tui": {
     "diff_style": "auto"
   }
