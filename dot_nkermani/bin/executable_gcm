@@ -1,0 +1,53 @@
+#!/bin/bash
+# gcm - Generate commit message with AI (Conventional Commits)
+
+diff=$(git diff --cached --stat 2>/dev/null)
+if [[ -z "$diff" ]]; then
+    diff=$(git diff --stat 2>/dev/null)
+fi
+
+if [[ -z "$diff" ]]; then
+    echo "No changes to commit"
+    exit 1
+fi
+
+full_diff=$(git diff --cached 2>/dev/null)
+if [[ -z "$full_diff" ]]; then
+    full_diff=$(git diff 2>/dev/null)
+fi
+
+prompt="Generate a professional git commit message using Conventional Commits format.
+
+RULES:
+- Start with a type prefix: feat:, fix:, docs:, style:, refactor:, perf:, test:, build:, ci:, chore:, revert:
+- Optional scope in parentheses: feat(auth):, fix(api):
+- Title max 50 chars, imperative mood (add, fix, update, remove, not added, fixed)
+- No period at end of title
+- Optional body after blank line for complex changes
+
+TYPES:
+- feat: new feature
+- fix: bug fix
+- docs: documentation only
+- style: formatting, no code change
+- refactor: code restructure, no feature/fix
+- perf: performance improvement
+- test: adding/fixing tests
+- build: build system, dependencies
+- ci: CI/CD changes
+- chore: maintenance, no prod code change
+- revert: revert previous commit
+
+Output ONLY the commit message, nothing else.
+
+Changes:
+$full_diff"
+
+msg=$(opencode run --agent=oracle "$prompt" 2>/dev/null | tail -n +2)
+
+if [[ -n "$msg" ]]; then
+    echo "$msg"
+else
+    echo "Failed to generate commit message"
+    exit 1
+fi

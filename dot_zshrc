@@ -155,6 +155,7 @@ alias ai-all='ai'
 alias aichat='opencode chat'
 alias aip='opencode project'
 alias aie='opencode explain'
+alias gcm='~/.nkermani/scripts/gcm.sh'
 
 # CAT / BAT
 if command -v bat >/dev/null 2>&1; then
