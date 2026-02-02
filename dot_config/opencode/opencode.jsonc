@@ -1,6 +1,10 @@
 {
-  "plugin": ["oh-my-opencode@latest"],
   "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "opencode-gemini-auth@latest",
+    "oh-my-opencode@latest"
+  ],
+  "default_agent": "42",
   // "theme": "cyberpunk-jb",
   // "theme": "everforest",
   "theme": "lucent-orng",
