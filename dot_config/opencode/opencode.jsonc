@@ -4,7 +4,7 @@
     "opencode-gemini-auth@latest",
     "oh-my-opencode@latest"
   ],
-  "default_agent": "42",
+  "default_agent": "42-NK",
   // "theme": "cyberpunk-jb",
   // "theme": "everforest",
   "provider": {
