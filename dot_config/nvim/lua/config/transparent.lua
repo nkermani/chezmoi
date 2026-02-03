@@ -119,23 +119,29 @@ transparent.setup({
         -- 'VM_Insert',
     },
     exclude_groups = {
-        -- Groupes qu'on ne veut JAMAIS rendre transparents (pour garder le fond opaque)
-        'Normal',
-        'NormalNC',
+        -- Groupes de base à garder opaques
+        -- 'Normal',
+        -- 'NormalNC',
         'SignColumn',
         'EndOfBuffer',
         'NvimTreeNormal',
         'NeoTreeNormal',
 
-        -- Lualine parts to keep opaque
+        -- 1. Garder la ligne actuelle (CursorLine) opaque
+        'CursorLine',
+        'CursorLineNr', -- Le numéro de ligne correspondant
+
+        -- 2. Garder les éléments de Lualine (NORMAL, ligne:col) opaques
         'lualine_a_normal',
         'lualine_a_insert',
         'lualine_a_visual',
         'lualine_a_command',
+        'lualine_a_replace',
         'lualine_b_normal',
-        'lualine_b_insert',
-        'lualine_b_visual',
-        'lualine_b_command',
+        -- 'lualine_c_normal', -- Optionnel : garde le milieu de la barre opaque
+        'lualine_z_normal', -- C'est souvent ici que se trouve "ligne:col"
+        'lualine_z_insert',
+        'lualine_z_visual',
     },
 })
 
