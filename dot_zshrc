@@ -117,8 +117,8 @@ ai() {
 
   # Gestion des arguments
   if [[ "$1" == "-a" ]]; then
-    # On autorise les dossiers cachés (sauf .git)
-    search_cmd="fd --type d --hidden --exclude .git ."
+    # On autorise les dossiers cachés (sauf .git et .cache)
+    search_cmd="fd --type d --hidden --exclude .git --exclude .cache ."
   elif [[ -n "$1" ]]; then
     # Si un argument direct est passé (ex: ai mon_dossier)
     opencode "$1"
@@ -140,9 +140,9 @@ ai() {
 air() {
   local search_cmd
   if [[ "$1" == "-a" ]]; then
-    search_cmd="fd --type d --hidden --no-ignore --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Documents --exclude Desktop --exclude Public --exclude .Trash . ~"
+    search_cmd="fd --type d --hidden --no-ignore --exclude .git --exclude .cache --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Documents --exclude Desktop --exclude Public --exclude .Trash . ~"
   else
-    search_cmd="fd --type d . ~"
+    search_cmd="fd --type d --exclude .git --exclude .cache . ~"
   fi
 
   local target=$(eval "$search_cmd" | fzf \
@@ -177,10 +177,24 @@ f() {
     local dir
     if [[ "$1" == "-a" ]]; then
         # Affiche TOUT (y compris les .files et .directories)
-        dir=$(fd --type d --hidden --exclude .git | fzf --prompt="📂 Go to (All): ")
+        dir=$(fd --type d --hidden --exclude .git --exclude .cache | fzf --prompt="📂 Go to (All): ")
     else
-        # Cache les dossiers commençant par un point (ex: .config, .local)
-        dir=$(fd --type d --hidden --exclude .git --exclude '.*' | fzf --prompt="📂 Go to: ")
+        # Cache les dossiers cachés
+        dir=$(fd --type d --exclude .git --exclude .cache | fzf --prompt="📂 Go to: ")
+    fi
+
+    [[ -n "$dir" ]] && cd "$dir"
+}
+
+# Navigation rapide depuis le HOME
+fr() {
+    local dir
+    if [[ "$1" == "-a" ]]; then
+        # Recherche globale incluant les dossiers cachés et ignorant le .gitignore
+        dir=$(fd --type d --hidden --no-ignore --exclude .git --exclude .cache --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash . ~ | fzf --prompt="📂 Go to Home (All): ")
+    else
+        # Recherche globale standard
+        dir=$(fd --type d --exclude .git --exclude .cache . ~ | fzf --prompt="📂 Go to Home: ")
     fi
 
     [[ -n "$dir" ]] && cd "$dir"
@@ -204,9 +218,9 @@ alias y='yy .'
 yf() {
     local dir
     if [[ "$1" == "-a" ]]; then
-        dir=$(fd --type d --hidden --exclude .git | fzf --prompt="󰇥 Yazi (All): ")
+        dir=$(fd --type d --hidden --exclude .git --exclude .cache | fzf --prompt="󰇥 Yazi (All): ")
     else
-        dir=$(fd --type d --hidden --exclude .git --exclude '.*' | fzf --prompt="󰇥 Yazi: ")
+        dir=$(fd --type d --exclude .git --exclude .cache | fzf --prompt="󰇥 Yazi: ")
     fi
     [[ -n "$dir" ]] && yy "$dir"
 }
@@ -215,9 +229,9 @@ yf() {
 yfr() {
     local dir
     if [[ "$1" == "-a" ]]; then
-        dir=$(fd --type d --hidden --no-ignore --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash . ~ | fzf --prompt="󰇥 Yazi Home (All): ")
+        dir=$(fd --type d --hidden --no-ignore --exclude .git --exclude .cache --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash . ~ | fzf --prompt="󰇥 Yazi Home (All): ")
     else
-        dir=$(fd --type d --hidden --exclude '.*' . ~ | fzf --prompt="󰇥 Yazi Home: ")
+        dir=$(fd --type d --exclude .git --exclude .cache . ~ | fzf --prompt="󰇥 Yazi Home: ")
     fi
     [[ -n "$dir" ]] && yy "$dir"
 }
@@ -226,7 +240,7 @@ yfr() {
 # FE : Find & Edit (Current Path)
 fe() {
     local v=$(_get_viewer)
-    local fd_cmd=("fd" "-a" "--type" "f" "--exclude" ".git")
+    local fd_cmd=("fd" "-a" "--type" "f" "--exclude" ".git" "--exclude" ".cache")
     local query=""
 
     # Gestion du flag -a
@@ -254,7 +268,7 @@ fre() {
         query="$1"
     fi
     # Force exclude heavy folders even with -a
-    fd_cmd+=("--exclude" "Library" "--exclude" "Music" "--exclude" "Movies" "--exclude" "Pictures" "--exclude" "Downloads" "--exclude" "Desktop" "--exclude" "Public" "--exclude" ".Trash")
+    fd_cmd+=("--exclude" ".git" "--exclude" ".cache" "--exclude" "Library" "--exclude" "Music" "--exclude" "Movies" "--exclude" "Pictures" "--exclude" "Downloads" "--exclude" "Desktop" "--exclude" "Public" "--exclude" ".Trash")
 
     # On cherche dans le Home (~)
     local file=$("${fd_cmd[@]}" . ~ | fzf --query "$query" --preview "$v {}")
@@ -264,7 +278,7 @@ fre() {
 # --- Ouverture avec Code (smart-editor) ---
 fo() {
     local dir
-    local cmd="fd --type d --hidden --exclude .git"
+    local cmd="fd --type d --hidden --exclude .git --exclude .cache"
     [[ "$1" != "-a" ]] && cmd+=" --exclude '.*'"
     dir=$(eval "$cmd" | fzf --prompt="💻 Open with Code: ")
     # Utilise smart-editor pour gérer WSL/42/Linux
@@ -274,10 +288,10 @@ fo() {
 fro() {
     local dir
     local cmd="fd --type d --hidden"
-    [[ "$1" == "-a" ]] && cmd+=" --no-ignore --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash"
+    [[ "$1" == "-a" ]] && cmd+=" --no-ignore --exclude .git --exclude .cache --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash"
     cmd+=" . ~"
 
-    [[ "$1" != "-a" ]] && cmd+=" --exclude '.*'"
+    [[ "$1" != "-a" ]] && cmd+=" --exclude '.*' --exclude .git --exclude .cache"
     dir=$(eval "$cmd" | fzf --prompt="💻 Open Home folder with Code: ")
     [[ -n "$dir" ]] && smart-editor "$dir"
 }
@@ -293,9 +307,9 @@ _get_viewer() {
 }
 
 # FZF SEARCH FUNCTIONS
-fcat() { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git | fzf --preview "$v {}"); [[ -n "$f" ]] && cat "$f"; }
-vf()   { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git | fzf --preview "$v {}"); [[ -n "$f" ]] && smart-editor "$f"; }
-vfg()  { local v=$(_get_viewer); local f=$(fd --type f --hidden . ~ | fzf --preview "$v {}"); [[ -n "$f" ]] && smart-editor "$f"; }
+fcat() { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git --exclude .cache | fzf --preview "$v {}"); [[ -n "$f" ]] && cat "$f"; }
+vf()   { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git --exclude .cache | fzf --preview "$v {}"); [[ -n "$f" ]] && smart-editor "$f"; }
+vfg()  { local v=$(_get_viewer); local f=$(fd --type f --hidden --exclude .git --exclude .cache . ~ | fzf --preview "$v {}"); [[ -n "$f" ]] && smart-editor "$f"; }
 
 # 7. INITIALISATIONS OPTIMISÉES (Lazy-loading)
 # FZF & Zoxide
@@ -352,3 +366,10 @@ alias cdn="cd $NOTES_DIR"
 
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+
+# bun completions
+[ -s "/home/nkermani/.nkermani/apps/bun/_bun" ] && source "/home/nkermani/.nkermani/apps/bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.nkermani/apps/bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
