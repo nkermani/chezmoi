@@ -186,19 +186,42 @@ f() {
     [[ -n "$dir" ]] && cd "$dir"
 }
 
-# Navigation rapide dans le HOME
-fr() {
+# --- Yazi (Terminal File Manager) ---
+# Wrapper pour changer de répertoire à la fermeture
+yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+# Alias y pour ouvrir yazi dans le dossier courant
+alias y='yy .'
+
+# Navigation Yazi via FZF (Current Path)
+yf() {
     local dir
     if [[ "$1" == "-a" ]]; then
-        # Affiche TOUT dans le HOME
-        dir=$(fd --type d --hidden --no-ignore --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash . ~ | fzf --prompt="🏠 Go to Home (All): ")
+        dir=$(fd --type d --hidden --exclude .git | fzf --prompt="󰇥 Yazi (All): ")
     else
-        # Cache les .files du HOME
-        dir=$(fd --type d --hidden --exclude '.*' . ~ | fzf --prompt="🏠 Go to Home: ")
+        dir=$(fd --type d --hidden --exclude .git --exclude '.*' | fzf --prompt="󰇥 Yazi: ")
     fi
-
-    [[ -n "$dir" ]] && cd "$dir"
+    [[ -n "$dir" ]] && yy "$dir"
 }
+
+# Navigation Yazi via FZF (Home Path)
+yfr() {
+    local dir
+    if [[ "$1" == "-a" ]]; then
+        dir=$(fd --type d --hidden --no-ignore --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash . ~ | fzf --prompt="󰇥 Yazi Home (All): ")
+    else
+        dir=$(fd --type d --hidden --exclude '.*' . ~ | fzf --prompt="󰇥 Yazi Home: ")
+    fi
+    [[ -n "$dir" ]] && yy "$dir"
+}
+
 
 # FE : Find & Edit (Current Path)
 fe() {

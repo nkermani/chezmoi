@@ -1,0 +1,21 @@
+[opener]
+edit = [
+	{ run = 'smart-editor "$@"', block = true, for = "unix" },
+]
+
+[open]
+rules = [
+	{ name = "*", use = "edit" },
+]
+
+[manager]
+show_hidden = true
+sort_by = "alphabetical"
+sort_sensitive = false
+sort_reverse = false
+sort_dir_first = true
+# Memorize last directory
+cwd = "~/.config/yazi/last-cwd"
+
+[theme]
+use = "cyberpunk_nk"

@@ -1,0 +1,106 @@
+# Yazi Cyberpunk NK Theme
+# Matches Neovim cyberpunk_nk theme
+
+[manager]
+cwd = { fg = "#00f0ff", italic = true }
+
+# Hover
+hovered         = { fg = "#212121", bg = "#368aec", bold = true }
+preview_hovered = { underline = true }
+
+# Find
+find_keyword  = { fg = "#eedb85", italic = true }
+find_position = { fg = "#d867c6", bg = "reset", italic = true }
+
+# Marker
+marker_selected = { fg = "#51f66f", bg = "#51f66f" }
+marker_copied   = { fg = "#eedb85", bg = "#eedb85" }
+marker_cut      = { fg = "#f3505c", bg = "#f3505c" }
+
+# Tab
+tab_active   = { fg = "#212121", bg = "#cacaca" }
+tab_inactive = { fg = "#cacaca", bg = "#272727" }
+tab_width    = 1
+
+# Border
+border_symbol = "│"
+border_style  = { fg = "#424242" }
+
+# Highlighting
+syntect_theme = ""
+
+[status]
+separator_open  = ""
+separator_close = ""
+separator_style = { fg = "#272727", bg = "#272727" }
+
+# Mode
+mode_normal = { fg = "#212121", bg = "#368aec", bold = true }
+mode_select = { fg = "#212121", bg = "#51f66f", bold = true }
+mode_unset  = { fg = "#212121", bg = "#d867c6", bold = true }
+
+# Progress
+progress_label  = { fg = "#ffffff", bold = true }
+progress_normal = { fg = "#368aec", bg = "#272727" }
+progress_error  = { fg = "#f3505c", bg = "#272727" }
+
+# Permissions
+permissions_t = { fg = "#368aec" }
+permissions_r = { fg = "#eedb85" }
+permissions_w = { fg = "#f3505c" }
+permissions_x = { fg = "#51f66f" }
+permissions_s = { fg = "#777777" }
+
+[select]
+border   = { fg = "#368aec" }
+active   = { fg = "#d867c6", bold = true }
+inactive = { fg = "#cacaca" }
+
+[input]
+border   = { fg = "#368aec" }
+title    = { fg = "#cacaca" }
+value    = { fg = "#cacaca" }
+selected = { bg = "#343434" }
+
+[completion]
+border   = { fg = "#368aec" }
+active   = { fg = "#d867c6", bg = "#343434" }
+inactive = { fg = "#cacaca" }
+
+[tasks]
+border  = { fg = "#368aec" }
+title   = { fg = "#cacaca" }
+hovered = { fg = "#d867c6", underline = true }
+
+[which]
+mask            = { bg = "#272727" }
+cand            = { fg = "#00f0ff" }
+rest            = { fg = "#777777" }
+desc            = { fg = "#d867c6" }
+separator       = " ➜ "
+separator_style = { fg = "#424242" }
+
+[help]
+on      = { fg = "#51f66f" }
+exec    = { fg = "#00f0ff" }
+desc    = { fg = "#cacaca" }
+hovered = { bg = "#343434", bold = true }
+footer  = { fg = "#272727", bg = "#cacaca" }
+
+[filetype]
+rules = [
+	# Images
+	{ mime = "image/*", fg = "#00f0ff" },
+	# Media
+	{ mime = "{video,audio}/*", fg = "#d867c6" },
+	# Archives
+	{ mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip2,lzma,compress,archive,cpio,shar,lha,lzh,iso,cab,debian-binary,x-debian-package,x-redhat-package-manager,x-archive,x-cpio,x-shar,x-lha,x-lzh,x-iso9660-image,x-cab}", fg = "#f3505c" },
+	# Documents
+	{ mime = "application/{pdf,doc,docx,xls,xlsx,ppt,pptx}", fg = "#ffc07a" },
+	# Empty files
+	{ mime = "inode/x-empty", fg = "#f3505c" },
+	# Directories
+	{ name = "*/", fg = "#51f66f" },
+	# Fallback
+	{ name = "*", fg = "#cacaca" }
+]
