@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Discord Focus
+Exec=python3 /home/nkermani/.nkermani/bin/42/focus_manager.py /usr/share/applications/discord.desktop
+Icon=discord
+# StartupWMClass=discord

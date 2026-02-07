@@ -1,3 +1,10 @@
 .ropeproject
 *.db
 .DS_Store
+
+# Si ce n'est PAS une machine 42, on ignore ces dossiers/fichiers
+{{ if not .is_42 }}
+.nkermani/bin/42
+.local/share/applications/42-*.desktop
+{{ end }}
+

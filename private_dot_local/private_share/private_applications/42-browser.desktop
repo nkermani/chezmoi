@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Brave Focus
+Exec=python3 /home/nkermani/.nkermani/bin/42/focus_manager.py /usr/share/applications/brave-browser.desktop
+Icon=brave-browser
+# StartupWMClass=brave-browser

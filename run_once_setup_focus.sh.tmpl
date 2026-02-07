@@ -1,0 +1,20 @@
+{{- if .is_42 -}}
+#!/bin/bash
+echo "Configuration 42 détectée : Installation du Focus Manager..."
+# 1. Compilation
+mkdir -p {{ .chezmoi.homeDir }}/.nkermani/bin/42
+gcc {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus.c -o {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus -lX11
+# 2. Raccourcis Dock (1-4)
+for i in {1..4}; do
+    gsettings set org.gnome.shell.keybindings switch-to-application-$i "['<Super>$i']"
+done
+# 3. Raccourci Bureau (5)
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>5', '<Super>d']"
+gsettings set org.gnome.shell.keybindings switch-to-application-5 "[]"
+# 4. Désactiver animations
+gsettings set org.gnome.desktop.interface enable-animations false
+# 5. Favoris
+gsettings set org.gnome.shell favorite-apps "['42-kitty.desktop', '42-browser.desktop', '42-finder.desktop', '42-discord.desktop']"
+echo "Setup 42 terminé."
+{{- end -}}
+

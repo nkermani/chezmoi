@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Nautilus Focus
+Exec=python3 /home/nkermani/.nkermani/bin/42/focus_manager.py /usr/share/applications/org.gnome.Nautilus.desktop
+Icon=org.gnome.Nautilus
+# StartupWMClass=org.gnome.Nautilus
