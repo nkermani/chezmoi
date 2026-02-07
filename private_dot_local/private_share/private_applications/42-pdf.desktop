@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=PDF Focus
+Exec=python3 /home/nkermani/.nkermani/bin/42/focus_manager.py /usr/share/applications/org.gnome.Evince.desktop
+Icon=org.gnome.Evince

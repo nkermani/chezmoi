@@ -15,6 +15,8 @@ def focus_app(desktop_file):
         app_name = "brave"
     elif "discord" in desktop_file:
         app_name = "discord"
+    elif "Evince" in desktop_file:
+        app_name = "evince"
     elif "Nautilus" in desktop_file:
         app_name = "nautilus"
         
@@ -36,6 +38,9 @@ def focus_app(desktop_file):
             return
         except:
             pass
+
+    if "Evince" in desktop_file:
+        return
 
     paths = [
 

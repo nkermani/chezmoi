@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Focus Discord
+Exec=/home/nkermani/.nkermani/bin/42/focus_discord.sh
+Icon=discord
+Terminal=false
