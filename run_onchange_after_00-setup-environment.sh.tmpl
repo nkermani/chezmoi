@@ -63,6 +63,13 @@ else
         git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --bin && cp ~/.fzf/bin/fzf "$BIN_DIR/" && rm -rf ~/.fzf
     }
 
+    # Install rust-analyzer standalone for Linux
+    if [ ! -f "$BIN_DIR/rust-analyzer" ]; then
+        echo "  🦀 Installing rust-analyzer standalone..."
+        curl -L https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz | gunzip > "$BIN_DIR/rust-analyzer"
+        chmod +x "$BIN_DIR/rust-analyzer"
+    fi
+
     for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat"; do
         IFS=":" read -r name bin repo <<< "$tool"
         if [ ! -f "$BIN_DIR/$bin" ]; then
