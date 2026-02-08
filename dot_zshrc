@@ -21,6 +21,9 @@ export ZSH="$NK_APPS/ohmyzsh"
 export NVM_DIR="$HOME/.nvm"
 export ZSH_CUSTOM="$ZSH/custom"
 
+export PATH="$PATH:~/.junest/usr/bin_wrappers"
+export PATH=~/.local/share/junest/bin:$PATH
+
 export GOOGLE_CLOUD_PROJECT="opencode-42"
 
 if [[ "$UNAME_S" == "Darwin" ]]; then
@@ -39,6 +42,10 @@ ZSH_THEME="robbyrussell"
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions auto-notify you-should-use zsh-history-substring-search)
 [ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
 
+if [[ "$OS_TYPE" == "linux" ]]; then
+    alias gfn='junest -f -- bash -c "cd ~/Downloads/squashfs-root && ./geforcenow-electron --no-sandbox"'
+fi
+
 if [[ "$OS_TYPE" == "macos" ]]; then
     alias code='open -a "Visual Studio Code"'
 fi
@@ -54,7 +61,7 @@ if [[ "$OS_TYPE" == "wsl2" ]]; then
         # Le & à la fin du subshell détache naturellement le processus
         ( "$VSCODE_EXE" --remote wsl+Ubuntu-22.04 "${@:-.}" &> /dev/null & )
     }
-    alias c='vscode'
+alias c='vscode'
 fi
 
 # 5. SMART-EDITOR
@@ -112,44 +119,44 @@ alias clear='clear -x'
 
 # 6. FONCTIONS PERSO & AI
 ai() {
-  local search_cmd
-  local hidden_flag=""
+    local search_cmd
+    local hidden_flag=""
 
-  # Gestion des arguments
-  if [[ "$1" == "-a" ]]; then
-    # On autorise les dossiers cachés (sauf .git et .cache)
-    search_cmd="fd --type d --hidden --exclude .git --exclude .cache ."
-  elif [[ -n "$1" ]]; then
-    # Si un argument direct est passé (ex: ai mon_dossier)
-    opencode "$1"
-    return
-  else
-    # Par défaut : dossiers visibles uniquement
-    search_cmd="fd --type d ."
-  fi
+    # Gestion des arguments
+    if [[ "$1" == "-a" ]]; then
+        # On autorise les dossiers cachés (sauf .git et .cache)
+        search_cmd="fd --type d --hidden --exclude .git --exclude .cache ."
+    elif [[ -n "$1" ]]; then
+        # Si un argument direct est passé (ex: ai mon_dossier)
+        opencode "$1"
+        return
+    else
+        # Par défaut : dossiers visibles uniquement
+        search_cmd="fd --type d ."
+    fi
 
-  local target=$(eval "$search_cmd" | fzf \
-    --prompt="󰚝 OpenCode (Local): " \
-    --header="Select a folder to start agent")
+    local target=$(eval "$search_cmd" | fzf \
+        --prompt="󰚝 OpenCode (Local): " \
+        --header="Select a folder to start agent")
 
-  [[ -n "$target" ]] && cd "$target" && opencode .
+    [[ -n "$target" ]] && cd "$target" && opencode .
 }
 
 # air : Recherche globale depuis le HOME (~/)
 # air -a : Recherche globale incluant les dossiers cachés
 air() {
-  local search_cmd
-  if [[ "$1" == "-a" ]]; then
-    search_cmd="fd --type d --hidden --no-ignore --exclude .git --exclude .cache --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Documents --exclude Desktop --exclude Public --exclude .Trash . ~"
-  else
-    search_cmd="fd --type d --exclude .git --exclude .cache . ~"
-  fi
+    local search_cmd
+    if [[ "$1" == "-a" ]]; then
+        search_cmd="fd --type d --hidden --no-ignore --exclude .git --exclude .cache --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Documents --exclude Desktop --exclude Public --exclude .Trash . ~"
+    else
+        search_cmd="fd --type d --exclude .git --exclude .cache . ~"
+    fi
 
-  local target=$(eval "$search_cmd" | fzf \
-    --prompt="󰚝 OpenCode (Global ~/): " \
-    --header="Search folders from home")
+    local target=$(eval "$search_cmd" | fzf \
+        --prompt="󰚝 OpenCode (Global ~/): " \
+        --header="Search folders from home")
 
-  [[ -n "$target" ]] && cd "$target" && opencode .
+    [[ -n "$target" ]] && cd "$target" && opencode .
 }
 
 # Alias pour l'option -a (ouvre tout, même les fichiers cachés)
@@ -167,9 +174,9 @@ elif command -v batcat >/dev/null 2>&1; then
 fi
 
 _get_viewer() {
-  command -v bat >/dev/null 2>&1 && echo "bat --color=always --style=numbers" || \
-  command -v batcat >/dev/null 2>&1 && echo "batcat --color=always --style=numbers" || \
-  echo "cat"
+    command -v bat >/dev/null 2>&1 && echo "bat --color=always --style=numbers" || \
+        command -v batcat >/dev/null 2>&1 && echo "batcat --color=always --style=numbers" || \
+        echo "cat"
 }
 
 # Navigation rapide dans le dossier courant
@@ -203,12 +210,12 @@ fr() {
 # --- Yazi (Terminal File Manager) ---
 # Wrapper pour changer de répertoire à la fermeture
 yy() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        builtin cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
 }
 
 # Alias y pour ouvrir yazi dans le dossier courant
@@ -235,7 +242,6 @@ yfr() {
     fi
     [[ -n "$dir" ]] && yy "$dir"
 }
-
 
 # FE : Find & Edit (Current Path)
 fe() {
@@ -335,16 +341,16 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
         source "$NVM_DIR/nvm.sh"
         nvm "$@"
     }
-    node() {
-        unfunction nvm node npm
-        source "$NVM_DIR/nvm.sh"
-        node "$@"
-    }
-    npm() {
-        unfunction nvm node npm
-        source "$NVM_DIR/nvm.sh"
-        npm "$@"
-    }
+node() {
+    unfunction nvm node npm
+    source "$NVM_DIR/nvm.sh"
+    node "$@"
+}
+npm() {
+    unfunction nvm node npm
+    source "$NVM_DIR/nvm.sh"
+    npm "$@"
+}
 fi
 
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
@@ -366,10 +372,12 @@ alias cdn="cd $NOTES_DIR"
 
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-
 # bun completions
 [ -s "/home/nkermani/.nkermani/apps/bun/_bun" ] && source "/home/nkermani/.nkermani/apps/bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.nkermani/apps/bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+alias gfn='junest -f -- bash -c "cd ~/Downloads/squashfs-root && ./geforcenow-electron --no-sandbox"'
+

@@ -19,6 +19,8 @@ def focus_app(desktop_file):
         app_name = "evince"
     elif "Nautilus" in desktop_file:
         app_name = "nautilus"
+    elif "geforcenow" in desktop_file:
+        app_name = "GeForce NOW"
         
     if app_name:
         res = subprocess.run(["/home/nkermani/.nkermani/bin/42/simple_focus", app_name], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)

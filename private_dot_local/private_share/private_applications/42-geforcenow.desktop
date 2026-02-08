@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=GeForce Now Focus
+Exec=python3 /home/nkermani/.nkermani/bin/42/focus_manager.py geforcenow
+Icon=network-workgroup
