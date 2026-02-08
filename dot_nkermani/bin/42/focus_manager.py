@@ -42,6 +42,7 @@ def focus_app(desktop_file):
             pass
 
     if "Evince" in desktop_file:
+        subprocess.Popen(["evince"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
         return
 
     paths = [

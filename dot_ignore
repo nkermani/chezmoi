@@ -1,61 +1,161 @@
 # Global ignore file for ripgrep (rg) and fd
-# These tools respect .ignore, .gitignore, and .fdignore
 
-# System Heavy Directories
+# --- System & OS Heavy ---
 Library/
 Applications/
 System/
 /Volumes/
 .Trash/
+.DS_Store
+.thumbnails/
+.dbus/
+.gvfs/
+.local/share/Trash/
+.local/share/flatpak/
+.local/share/Steam/
+snap/
 
-# Media / Large Assets
+# --- Media ---
 Music/
 Movies/
 Pictures/
-Downloads/
 Public/
 Desktop/
+Videos/
 
-# Development / Caches / Build Artifacts
+Templates/
+
+VirtualBox VMs/
+
+# --- Browsers & Electron (Huge file counts) ---
+.mozilla/
+.config/google-chrome/
+.config/BraveSoftware/
+.config/discord/
+.config/GeForce NOW/
+.config/Microsoft/
+.config/Code/
+.config/go/
+.config/yay/
+.config/ibus/
+.config/htop/
+.config/pulse/
+.config/Slack/
+.config/goa-1.0/
+.config/hexchat/
+.config/gtk-4.0/
+.config/gtk-3.0/
+.config/xfce4/
+.config/xfce4-session/
+.config/xfce4-desktop/
+.config/xfce4-panel/
+.config/xfce4-appfinder/
+.config/xfce4-notifyd/
+
+.config/gnome-session/
+.config/gnome-control-center/
+.config/gnome-shell/
+.config/gnome-settings-daemon/
+.config/gnome-terminal/
+.config/gnome-system-monitor/
+.config/gnome-system-tools/
+.config/gnome-tweaks/
+.config/gnome-extensions/
+.config/gnome-calendar/
+.config/gnome-contacts/
+.config/gnome-maps/
+
+.config/evolution/
+.config/gnome-shell/
+.config/dconf/
+.config/ghidra/
+.config/systemd/
+.config/Electron/
+
+.vscode-server/
+
+.nkermani/apps/*
+.nkermani/bin/*
+.nkermani/notes/*
+.nkermani/scripts/*
+
+# --- Package Managers & Version Managers (Hidden even with -a) ---
+.dotnet/
+.claude/
+.gphoto/
+.pki/
+.fontconfig/
+.apps/
+.java/
 .cache/
 .npm/
+.nvm/
+.bun/
+.deno/
 .yarn/
+.pnpm-store/
 .cargo/
+.rustup/
 .gem/
 .gradle/
 .m2/
+.antidote/
+.junest/
+.local/
+.asdf/
+.sdkman/
+.nix-profile/
+.nix-defexpr/
+.nix-channels/
+.conda/
+anaconda3/
+miniconda3/
+.pyenv/
+.rbenv/
+.nodenv/
+.goenv/
+.jenv/
+.ghcup/
+.opam/
+.rvm/
+.composer/
+.perl5/
+.cpan/
+.linuxbrew/
 node_modules/
+vendor/
+go/pkg/mod/
+
+# --- Build & Tooling ---
 dist/
 build/
 out/
 target/
-vendor/
-bower_components/
-coverage/
 .next/
 .nuxt/
-.rustup/
 .vscode/
+.idea/
+.ansible/
+.docker/
+.vagrant/
+.vagrant.d/
+.local/share/containers/
+.local/share/toolbox/
+.krew/
 
-.nkermani/
-
-# Version Control & Editor Configs
+# --- Version Control ---
 .git/
 .hg/
 .svn/
-.idea/
-.vscode/
-.DS_Store
 
-# Virtual Environments & Python
+# --- Virtualization & Wine ---
+.wine/
+.wine64/
+.local/share/wine/
+
+# --- Python ---
 .venv/
-env/
 venv/
 __pycache__/
 *.pyc
-
-# Logs and Databases
-*.log
-*.sqlite
-*.db
 
