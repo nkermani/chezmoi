@@ -19,7 +19,14 @@ mkdir -p "$APPS_DIR" "$BIN_DIR"
 # OS Detection
 OS_TYPE=$(uname -s)
 ARCH_TYPE=$(uname -m)
-IS_WSL=$(grep -i "microsoft" /proc/version 2>/dev/null)
+IS_WSL=""
+if [[ "$OS_TYPE" == "Linux" ]]; then
+    if [[ -f /proc/sys/kernel/osrelease ]] && grep -qi "microsoft" /proc/sys/kernel/osrelease; then
+        IS_WSL="true"
+    elif grep -qi "microsoft" /proc/version 2>/dev/null; then
+        IS_WSL="true"
+    fi
+fi
 
 # --- 2. SHELL SETUP (Oh My Zsh & Plugins) ---
 echo "🐚 Configuring Zsh environment..."
@@ -63,20 +70,17 @@ else
         git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --bin && cp ~/.fzf/bin/fzf "$BIN_DIR/" && rm -rf ~/.fzf
     }
 
-    # Install rust-analyzer standalone for Linux
-    if [ ! -f "$BIN_DIR/rust-analyzer" ]; then
-        echo "  🦀 Installing rust-analyzer standalone..."
-        curl -L https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz | gunzip > "$BIN_DIR/rust-analyzer"
-        chmod +x "$BIN_DIR/rust-analyzer"
-    fi
+    # Architecture detection for Linux binaries
+    LINUX_ARCH="x86_64"
+    [[ "$ARCH_TYPE" == "aarch64" ]] && LINUX_ARCH="aarch64"
 
     for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat"; do
         IFS=":" read -r name bin repo <<< "$tool"
         if [ ! -f "$BIN_DIR/$bin" ]; then
             echo "  📦 Fetching $name..."
             VER=$(curl -sI "https://github.com/$repo/releases/latest" | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
-            curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}-${VER}-x86_64-unknown-linux-musl.tar.gz" | tar -xzC /tmp
-            find /tmp/${name}-${VER}-x86_64-unknown-linux-musl -name "$bin" -type f -exec cp {} "$BIN_DIR/" \;
+            curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}-${VER}-${LINUX_ARCH}-unknown-linux-musl.tar.gz" | tar -xzC /tmp
+            find /tmp/${name}-${VER}-${LINUX_ARCH}-unknown-linux-musl -name "$bin" -type f -exec cp {} "$BIN_DIR/" \;
         fi
     done
 fi
@@ -272,6 +276,27 @@ if [ ! -f "$LSP_BIN_DIR/omnisharp" ]; then
     curl -L -s "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-${OS_SUFFIX}.tar.gz" | tar -xzC "$OMNISHARP_DIR"
     ln -sf "$OMNISHARP_DIR/OmniSharp" "$LSP_BIN_DIR/omnisharp"
 fi
+
+# 8. Rust (rust-analyzer)
+if [ ! -f "$LSP_BIN_DIR/rust-analyzer" ]; then
+    echo "  🦀 Installing rust-analyzer..."
+    if [[ "$OS_TYPE" == "Darwin" ]] && command -v brew &>/dev/null; then
+        brew install rust-analyzer
+        ln -sf "$(which rust-analyzer)" "$LSP_BIN_DIR/rust-analyzer"
+    else
+        RA_ARCH="x86_64"
+        [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && RA_ARCH="aarch64"
+        
+        RA_OS="unknown-linux-gnu"
+        [[ "$OS_TYPE" == "Darwin" ]] && RA_OS="apple-darwin"
+        
+        curl -L "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-${RA_ARCH}-${RA_OS}.gz" | gunzip > "$LSP_BIN_DIR/rust-analyzer"
+        chmod +x "$LSP_BIN_DIR/rust-analyzer"
+    fi
+    # Ensure it's also in the main bin directory for convenience
+    ln -sf "$LSP_BIN_DIR/rust-analyzer" "$BIN_DIR/rust-analyzer"
+fi
+
 # --- 8. PERSONAL DATA (Notes) ---
 echo "📓 Syncing knowledge base..."
 NOTES_DIR="$NK_DIR/notes"
