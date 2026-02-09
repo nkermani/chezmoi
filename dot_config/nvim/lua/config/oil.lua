@@ -7,15 +7,30 @@ require("oil").setup({
     keymaps = {
         ["<C-h>"] = false,
         ["<M-h>"] = "actions.select_split",
-        ["<C-l>"] = false,                 -- Release Ctrl+L for global "Select Line" map
-        ["<C-s>"] = false,                 -- Release Ctrl+S for global "Save" map (Commit changes)
-        ["<C-c>"] = false,                 -- Release Ctrl+C for global "Copy" map (Close oil is normally default)
-        ["R"] = "actions.refresh",         -- Shift+R to refresh
-        ["<leader>r"] = "actions.refresh", -- Leader+r to refresh
+        ["<C-l>"] = false,
+        ["<C-s>"] = false,
+        ["<C-c>"] = false,
+        ["R"] = "actions.refresh",
+        ["<leader>r"] = "actions.refresh",
     },
     view_options = {
-        show_hidden = true,
+        show_hidden = false,
+        is_hidden_file = function(name, bufnr)
+            local hidden = { [".DS_Store"] = true, [".git"] = true, ["node_modules"] = true }
+            return hidden[name] or vim.startswith(name, ".")
+        end,
     },
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    group = vim.api.nvim_create_augroup("OilAutoCd", { clear = true }),
+    pattern = "oil://*",
+    callback = function()
+        local dir = require("oil").get_current_dir()
+        if dir then
+            pcall(vim.api.nvim_set_current_dir, dir)
+        end
+    end,
 })
 
 -- Fonction générique pour changer de répertoire

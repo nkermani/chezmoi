@@ -29,6 +29,9 @@ VirtualBox VMs/
 
 # --- Browsers & Electron (Huge file counts) ---
 .mozilla/
+
+.copilot/
+
 .config/google-chrome/
 .config/BraveSoftware/
 .config/discord/
@@ -74,10 +77,10 @@ VirtualBox VMs/
 
 .vscode-server/
 
-.nkermani/apps/*
-.nkermani/bin/*
-.nkermani/notes/*
-.nkermani/scripts/*
+.nkermani/apps/*/**
+.nkermani/bin/*/**
+.nkermani/notes/*/**
+.nkermani/scripts/*/**
 
 # --- Package Managers & Version Managers (Hidden even with -a) ---
 .dotnet/

@@ -146,7 +146,7 @@ ai() {
 air() {
     local search_cmd
     if [[ "$1" == "-a" ]]; then
-        search_cmd="fd --type d --hidden --no-ignore --exclude .git --exclude .cache --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Documents --exclude Desktop --exclude Public --exclude .Trash . ~"
+        search_cmd="fd --type d --hidden . ~"
     else
         search_cmd="fd --type d --exclude .git --exclude .cache . ~"
     fi
@@ -196,8 +196,8 @@ f() {
 fr() {
     local dir
     if [[ "$1" == "-a" ]]; then
-        # Recherche globale incluant les dossiers cachés et ignorant le .gitignore
-        dir=$(fd --type d --hidden --no-ignore --exclude .git --exclude .cache --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash . ~ | fzf --prompt="📂 Go to Home (All): ")
+        # Recherche globale incluant les dossiers cachés
+        dir=$(fd --type d --hidden . ~ | fzf --prompt="📂 Go to Home (All): ")
     else
         # Recherche globale standard
         dir=$(fd --type d --exclude .git --exclude .cache . ~ | fzf --prompt="📂 Go to Home: ")
@@ -235,7 +235,7 @@ yf() {
 yfr() {
     local dir
     if [[ "$1" == "-a" ]]; then
-        dir=$(fd --type d --hidden --no-ignore --exclude .git --exclude .cache --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash . ~ | fzf --prompt="󰇥 Yazi Home (All): ")
+        dir=$(fd --type d --hidden . ~ | fzf --prompt="󰇥 Yazi Home (All): ")
     else
         dir=$(fd --type d --exclude .git --exclude .cache . ~ | fzf --prompt="󰇥 Yazi Home: ")
     fi
@@ -250,7 +250,7 @@ fe() {
 
     # Gestion du flag -a
     if [[ "$1" == "-a" ]]; then
-        fd_cmd+=("--hidden" "--no-ignore")
+        fd_cmd+=("--hidden")
         query="$2" # On prend le mot suivant comme recherche fzf
     else
         query="$1"
@@ -267,13 +267,13 @@ fre() {
     local query=""
 
     if [[ "$1" == "-a" ]]; then
-        fd_cmd+=("--hidden" "--no-ignore")
+        fd_cmd+=("--hidden")
         query="$2"
     else
         query="$1"
     fi
     # Force exclude heavy folders even with -a
-    fd_cmd+=("--exclude" ".git" "--exclude" ".cache" "--exclude" "Library" "--exclude" "Music" "--exclude" "Movies" "--exclude" "Pictures" "--exclude" "Downloads" "--exclude" "Desktop" "--exclude" "Public" "--exclude" ".Trash")
+    fd_cmd+=("--exclude" ".git" "--exclude" ".cache" "--exclude" "Library" "--exclude" "Music" "--exclude" "Movies" "--exclude" "Pictures" "--exclude" "Desktop" "--exclude" "Public" "--exclude" ".Trash")
 
     # On cherche dans le Home (~)
     local file=$("${fd_cmd[@]}" . ~ | fzf --query "$query" --preview "$v {}")
@@ -293,10 +293,10 @@ fo() {
 fro() {
     local dir
     local cmd="fd --type d --hidden"
-    [[ "$1" == "-a" ]] && cmd+=" --no-ignore --exclude .git --exclude .cache --exclude Library --exclude Music --exclude Movies --exclude Pictures --exclude Downloads --exclude Desktop --exclude Public --exclude .Trash"
+    [[ "$1" == "-a" ]] && cmd+=""
     cmd+=" . ~"
 
-    [[ "$1" != "-a" ]] && cmd+=" --exclude '.*' --exclude .git --exclude .cache"
+    [[ "$1" != "-a" ]] && cmd+=" --exclude '.*'"
     dir=$(eval "$cmd" | fzf --prompt="💻 Open Home folder with Code: ")
     [[ -n "$dir" ]] && smart-editor "$dir"
 }
