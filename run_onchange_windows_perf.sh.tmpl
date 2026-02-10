@@ -1,0 +1,40 @@
+{{- if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+#!/bin/bash
+
+# Hash de contrôle pour forcer l'exécution si les valeurs changent :
+# Delay: 170 | Rate: 10 | Sensitivity: 10 | Animations: OFF
+
+echo "🚀 Configuration des performances Windows (Keyboard, Mouse & Snappy UI)..."
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command '
+    # 1. Keyboard Tweaks (Registry)
+    $kbdPath = "HKCU:\Control Panel\Accessibility\Keyboard Response"
+    Write-Host "Updating Keyboard Response Registry..." -ForegroundColor Cyan
+    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 170
+    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 10
+    Set-ItemProperty -Path $kbdPath -Name "Flags" -Value 59
+
+    # 2. Disable Mouse Acceleration & Set Sensitivity (6th Notch = 10)
+    Write-Host "Disabling Mouse Acceleration..." -ForegroundColor Cyan
+    $mousePath = "HKCU:\Control Panel\Mouse"
+    Set-ItemProperty -Path $mousePath -Name "MouseSpeed" -Value 0
+    Set-ItemProperty -Path $mousePath -Name "MouseThreshold1" -Value 0
+    Set-ItemProperty -Path $mousePath -Name "MouseThreshold2" -Value 0
+    Set-ItemProperty -Path $mousePath -Name "MouseSensitivity" -Value 10
+
+    # 3. Snappy UI (Disable Animations & Menu Delays)
+    Write-Host "Disabling Windows Animations..." -ForegroundColor Cyan
+    $desktopPath = "HKCU:\Control Panel\Desktop"
+    $metricsPath = "HKCU:\Control Panel\Desktop\WindowMetrics"
+
+    # Supprime le délai d apparition des menus (clic droit, etc.)
+    Set-ItemProperty -Path $desktopPath -Name "MenuShowDelay" -Value 0
+    # Désactive l animation de réduction/agrandissement des fenêtres
+    Set-ItemProperty -Path $metricsPath -Name "MinAnimate" -Value 0
+    # Désactive les ombres sous le curseur et les menus
+    Set-ItemProperty -Path $desktopPath -Name "UserPreferencesMask" -Value ([byte[]](0x90,0x12,0x03,0x80,0x10,0x00,0x00,0x00))
+
+    Write-Host "✅ Terminé ! Redémarrez Windows pour appliquer l intégralité des changements." -ForegroundColor Green
+'
+{{- end }}
+
