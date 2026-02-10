@@ -2,7 +2,7 @@
 #!/bin/bash
 
 # Hash de contrôle pour forcer l'exécution si les valeurs changent :
-# Delay: 170 | Rate: 10 | Sensitivity: 10 | Animations: OFF | Safety: ON
+# Delay: 210 | Rate: 12 | Sensitivity: 10 | Animations: OFF | Safety: ON
 
 echo "🚀 Configuration des performances Windows (Keyboard, Mouse & Snappy UI)..."
 
@@ -10,8 +10,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -Command '
     # 1. Keyboard Tweaks (Registry) - Mode Haute Performance
     $kbdPath = "HKCU:\Control Panel\Accessibility\Keyboard Response"
     Write-Host "Updating Keyboard Response Registry..." -ForegroundColor Cyan
-    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 170
-    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 10
+    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 210
+    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 12
     # Flags 59 : Active FilterKeys + Désactive les sons/notifications pour éviter les blocages
     Set-ItemProperty -Path $kbdPath -Name "Flags" -Value 59
 
