@@ -60,4 +60,7 @@ pack.add({
     { src = 'https://github.com/letieu/btw.nvim' },
     { src = 'https://github.com/stevearc/oil.nvim' },
     { src = 'https://github.com/bassamsdata/namu.nvim' },
+    { src = 'https://github.com/YouSame2/inlinediff-nvim' },
+    { src = 'https://github.com/malewicz1337/oil-git.nvim' },
+    { src = 'https://github.com/esmuellert/codediff.nvim' },
 })

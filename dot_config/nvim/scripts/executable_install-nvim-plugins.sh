@@ -48,6 +48,9 @@ PLUGINS=(
     "letieu/btw.nvim"
     "stevearc/oil.nvim"
     "bassamsdata/namu.nvim"
+    "YouSame2/inlinediff-nvim"
+    "malewicz1337/oil-git.nvim"
+    "esmuellert/codediff.nvim"
 )
 
 for plugin in "${PLUGINS[@]}"; do
@@ -63,4 +66,10 @@ done
 # Mise à jour de Treesitter une fois terminé
 echo "🌲 Mise à jour de Treesitter..."
 nvim --headless -c "TSUpdate" -c "quit" || true
+
+CODEDIFF_DIR="$PLUGIN_DIR/codediff.nvim"
+if [ -d "$CODEDIFF_DIR" ]; then
+    echo "🔨 Compilation de codediff.nvim..."
+    (cd "$CODEDIFF_DIR" && make)
+fi
 

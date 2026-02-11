@@ -33,6 +33,76 @@ keymap("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
 -- SELECTION SHORTCUTS
 -- ===================================================================
 
+local function wrap_selection(open, close)
+    return function()
+        local mode = vim.fn.mode()
+        local save_reg = vim.fn.getreg('v')
+        local save_regtype = vim.fn.getregtype('v')
+        
+        vim.cmd('normal! "vy')
+        local text = vim.fn.getreg('v')
+        
+        if mode == 'V' then
+            text = open .. text:gsub('\n$', '') .. close .. '\n'
+        else
+            text = open .. text .. close
+        end
+        
+        vim.fn.setreg('v', text)
+        vim.cmd('normal! gv"vp')
+        vim.cmd('normal! `[v`]')
+        
+        vim.fn.setreg('v', save_reg, save_regtype)
+    end
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        vim.keymap.set("x", "[", wrap_selection("[", "]"), { buffer = true, nowait = true, desc = "Wrap with []" })
+    end,
+})
+
+local function jump_to_bracket(target)
+    return function()
+        local start_pos = vim.api.nvim_win_get_cursor(0)
+        local pattern = target == "open" and "[{(]" or "[})]"
+        local flags = target == "open" and "bW" or "W"
+        
+        local search_pos = vim.fn.searchpos(pattern, flags .. 'n')
+        
+        if target == "open" then
+            vim.cmd("silent! normal! [{")
+            vim.cmd("silent! normal! [(")
+        else
+            vim.cmd("silent! normal! ]}")
+            vim.cmd("silent! normal! ])")
+        end
+        local unmatched_pos = vim.api.nvim_win_get_cursor(0)
+        
+        if search_pos[1] ~= 0 then
+            if unmatched_pos[1] == start_pos[1] and unmatched_pos[2] == start_pos[2] then
+                vim.fn.cursor(search_pos[1], search_pos[2])
+            else
+                local dist_unmatched = math.abs(unmatched_pos[1] - start_pos[1])
+                local dist_search = math.abs(search_pos[1] - start_pos[1])
+                if dist_search < dist_unmatched then
+                    vim.fn.cursor(search_pos[1], search_pos[2])
+                end
+            end
+        end
+    end
+end
+
+keymap({ "n", "x" }, "<leader>[", jump_to_bracket("open"), { desc = "Jump to opening bracket" })
+keymap({ "n", "x" }, "<leader>]", jump_to_bracket("close"), { desc = "Jump to closing bracket" })
+
+keymap("x", "(", wrap_selection("(", ")"), { desc = "Wrap with ()", nowait = true })
+keymap("x", "{", wrap_selection("{", "}"), { desc = "Wrap with {}", nowait = true })
+keymap("x", '"', wrap_selection('"', '"'), { desc = 'Wrap with ""', nowait = true })
+keymap("x", "'", wrap_selection("'", "'"), { desc = "Wrap with ''", nowait = true })
+keymap("x", "`", wrap_selection("`", "`"), { desc = "Wrap with ``", nowait = true })
+
 -- SHIFT + ARROWS (Select Characters/Lines)
 keymap("n", "<S-Up>", "v<Up>", { desc = "Select Up" })
 keymap("n", "<S-Down>", "v<Down>", { desc = "Select Down" })

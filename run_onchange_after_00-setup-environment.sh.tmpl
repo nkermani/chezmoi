@@ -57,12 +57,12 @@ for item in "${plugin_list[@]}"; do
     fi
 done
 
-# --- 3. SYSTEM TOOLS (FZF, Ripgrep, FD, Bat) ---
+# --- 3. SYSTEM TOOLS (FZF, Ripgrep, FD, Bat, CMake) ---
 echo "🛠️  Installing CLI utilities..."
 if [[ "$OS_TYPE" == "Darwin" ]]; then
     # Homebrew handles architecture automatically on macOS
     if command -v brew &>/dev/null; then
-        brew install fzf ripgrep fd bat
+        brew install fzf ripgrep fd bat cmake
     fi
 else
     # Manual installation for Linux/42 (Portable Binaries)
@@ -83,6 +83,16 @@ else
             find /tmp/${name}-${VER}-${LINUX_ARCH}-unknown-linux-musl -name "$bin" -type f -exec cp {} "$BIN_DIR/" \;
         fi
     done
+
+    # CMake installation for Linux/42 (Portable Binary)
+    if [ ! -f "$BIN_DIR/cmake" ]; then
+        echo "  📦 Fetching CMake..."
+        CMAKE_VER="3.31.5"
+        # Kitware uses x86_64 and aarch64
+        curl -LSs "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}.tar.gz" | tar -xzC "$APPS_DIR"
+        ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/cmake" "$BIN_DIR/cmake"
+        ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/ctest" "$BIN_DIR/ctest"
+    fi
 fi
 
 # --- 3.1 SSHFS (REMOVED due to macOS restrictions) ---

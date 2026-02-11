@@ -1,8 +1,10 @@
 -- lua/core/options.lua
 -- Options
+local opt = vim.opt
+local g = vim.g
 
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+g.mapleader = " "
+g.maplocalleader = " "
 
 -- ===================================================================
 -- PERSISTENT UNDO (Historique des modifications)
@@ -28,41 +30,29 @@ vim.opt.mouse = "a"         -- Active la souris partout
 vim.opt.selection = "inclusive"
 
 -- Interface
-vim.opt.number = true          -- Affiche les numéros de ligne
-vim.opt.relativenumber = false -- Numéros relatifs (très utile pour sauter des lignes)
-vim.opt.cursorline = true      -- Souligne la ligne actuelle
-vim.opt.termguicolors = true   -- Couleurs 24-bit (nécessaire pour la JetBrains Mono)
+opt.number = true          -- Affiche les numéros de ligne
+opt.relativenumber = false -- Numéros relatifs (très utile pour sauter des lignes)
+opt.cursorline = true      -- Souligne la ligne actuelle
+opt.termguicolors = true   -- Couleurs 24-bit (nécessaire pour la JetBrains Mono)
 -- Remplace le tilde (~) par un espace vide
 vim.opt.fillchars = { eob = " " }
-
-vim.opt.timeoutlen = 300 -- Accélère la réponse des combinaisons de touches
-
--- Au lieu de lazyredraw qui bug, on optimise le scroll
-vim.opt.scrolljump = 5 -- Défilement par blocs de 5 lignes pour économiser le rendu
-vim.opt.scrolloff = 8  -- Garde 8 lignes de contexte (plus fluide pour l'œil)
-
--- Désactive lazyredraw si tu l'avais activé car il cause tes problèmes
-vim.opt.lazyredraw = false
-vim.opt.redrawtime = 100 -- Temps de redessinage plus rapide pour les changements rapides
-
--- Optimisation du rendu pour les déplacements rapides
--- vim.opt.lazyredraw = true
--- vim.opt.ttyfast = true
 
 vim.opt.wrap = true -- Désactive le retour à la ligne pour permettre le scroll horizontal
 
 -- Indentation (Standard Rust/C)
-vim.opt.shiftwidth = 4
-vim.opt.tabstop = 4
-vim.opt.expandtab = true -- Utilise des espaces au lieu de tabulations
-vim.opt.smartindent = true
+opt.shiftwidth = 4
+opt.tabstop = 4
+opt.expandtab = true -- Utilise des espaces au lieu de tabulations
+opt.smartindent = true
 
 -- Comportement
-vim.opt.ignorecase = true              -- Ignore la casse lors de la recherche...
-vim.opt.smartcase = true               -- ...sauf s'il y a une majuscule
-vim.opt.updatetime = 250               -- Plus rapide pour les diagnostics LSP
-vim.opt.scrolloff = 8                  -- Garde 8 lignes visibles en haut/bas
-vim.opt.backspace = "indent,eol,start" -- Permet à backspace de supprimer
+opt.ignorecase = true -- Ignore la casse lors de la recherche...
+opt.smartcase = true  -- ...sauf s'il y a une majuscule
+opt.updatetime = 250  -- Plus rapide pour les diagnostics LSP
+opt.scrolloff = 8     -- Garde 8 lignes visibles en haut/bas
+opt.backspace = "indent,eol,start" -- Permet à backspace de supprimer : indentation, retours à la ligne (eol) et avant l'insertion (start)
+
+
 -- Synchronise le presse-papier de Neovim avec le presse-papier du système
 -- Cela permet de copier dans Neovim et coller dans Chrome (et inversement) sans config spéciale
 vim.opt.clipboard = "unnamedplus"

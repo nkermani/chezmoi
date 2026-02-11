@@ -29,6 +29,8 @@ require("config.snacks")
 require("config.multicursor")
 require("config.vim_visual_multi")
 require("config.oil")
+require("config.inlinediff")
+require("config.codediff")
 require("config.btw")
 require("config.spectre")
 

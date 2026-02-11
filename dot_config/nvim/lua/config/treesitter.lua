@@ -11,7 +11,6 @@ end
 configs.setup({
     ensure_installed = { 'c', 'lua', 'python', 'markdown', 'rust' },
     highlight = { enable = true },
-    indent = { enable = false },
 })
 
 -- Spécifique 42
