@@ -600,7 +600,8 @@ end, { desc = "File Preview (Read Only)" })
 keymap('n', '<leader>gb', ':Gitsigns toggle_current_line_blame<CR>', { desc = "Toggle Git Blame Line" })
 
 -- Toggle Diagnostics (erreurs/warnings LSP)
-local diagnostics_visible = true
+local diagnostics_visible = false
+vim.diagnostic.enable(false)
 keymap('n', '<leader>td', function()
     diagnostics_visible = not diagnostics_visible
     vim.diagnostic.enable(diagnostics_visible)
