@@ -605,6 +605,8 @@ vim.diagnostic.enable(false)
 keymap('n', '<leader>td', function()
     diagnostics_visible = not diagnostics_visible
     vim.diagnostic.enable(diagnostics_visible)
+    local status = diagnostics_visible and "ON" or "OFF"
+    vim.notify("Diagnostics " .. status, vim.log.levels.INFO, { title = "LSP" })
 end, { desc = "Toggle Diagnostics" })
 
 -- ===================================================================

@@ -5,6 +5,11 @@ end
 
 codediff.setup({
     view_type = "tab",
+    keymaps = {
+        view = {
+            open_in_prev_tab = "<CR>",
+        }
+    }
 })
 
 vim.keymap.set("n", "<leader>df", "<cmd>CodeDiff<cr>", { desc = "Open VSCode-style Diff" })

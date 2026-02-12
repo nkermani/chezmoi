@@ -6,6 +6,7 @@ require("conform").setup({
         lua = {},  -- stylua disabled, will use LSP fallback
         python = { "isort", "black" },
         c = { "clang-format" },
+        rust = { "rustfmt" },
     },
     format_on_save = { timeout_ms = 500, lsp_fallback = true },
 })

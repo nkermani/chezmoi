@@ -32,7 +32,7 @@ vim.opt.selection = "inclusive"
 -- Interface
 opt.number = true          -- Affiche les numéros de ligne
 opt.relativenumber = false -- Numéros relatifs (très utile pour sauter des lignes)
-opt.numberwidth = 2
+opt.numberwidth = 4
 opt.statuscolumn = "%s%=%l  "
 opt.cursorline = true
 opt.termguicolors = true
@@ -52,8 +52,8 @@ opt.ignorecase = true -- Ignore la casse lors de la recherche...
 opt.smartcase = true  -- ...sauf s'il y a une majuscule
 opt.updatetime = 250  -- Plus rapide pour les diagnostics LSP
 opt.scrolloff = 8     -- Garde 8 lignes visibles en haut/bas
-opt.backspace = "indent,eol,start" -- Permet à backspace de supprimer : indentation, retours à la ligne (eol) et avant l'insertion (start)
-
+opt.backspace =
+"indent,eol,start"    -- Permet à backspace de supprimer : indentation, retours à la ligne (eol) et avant l'insertion (start)
 
 -- Synchronise le presse-papier de Neovim avec le presse-papier du système
 -- Cela permet de copier dans Neovim et coller dans Chrome (et inversement) sans config spéciale

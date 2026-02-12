@@ -116,7 +116,7 @@ function M.toggle_pycodestyle()
     M.pycodestyle_enabled = not M.pycodestyle_enabled
     for _, client in ipairs(vim.lsp.get_clients({ name = 'pylsp' })) do
         client.settings.pylsp.plugins.pycodestyle.enabled = M.pycodestyle_enabled
-        client:notify('workspace/didChangeConfiguration', { settings = client.settings })
+        client.rpc.notify('workspace/didChangeConfiguration', { settings = client.settings })
     end
     vim.notify('pycodestyle: ' .. (M.pycodestyle_enabled and 'ON' or 'OFF'), vim.log.levels.INFO)
 end
