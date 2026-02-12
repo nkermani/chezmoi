@@ -18,20 +18,17 @@ telescope.setup({
         },
 
         -- CONFIGURATION DYNAMIQUE DE L'ÉCRAN
-        layout_strategy = "flex",
+        sorting_strategy = "descending",
+        layout_strategy = "vertical",
         layout_config = {
-            flex = {
-                flip_columns = 120, -- Bascule en mode vertical si moins de 120 colonnes
-            },
-            horizontal = {
-                preview_width = 0.6,
-                preview_cutoff = 60,
-            },
             vertical = {
-                preview_height = 0.5,
-                preview_cutoff = 0, -- Force la preview même si la fenêtre est petite
+                width = 0.5,
+                height = 0.8,
+                preview_height = 0.6,
+                preview_cutoff = 0,
             },
         },
+        prompt_position = "bottom",
         -- Configuration de la fenêtre de preview pour enlever les marges
         path_display = { "truncate" },
         winblend = 0,

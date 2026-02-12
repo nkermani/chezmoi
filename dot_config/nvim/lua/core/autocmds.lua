@@ -1,15 +1,15 @@
-vim.api.nvim_create_autocmd("VimEnter", {
+vim.api.nvim_create_autocmd("BufReadPost", {
     callback = function()
-        local arg = vim.fn.argv(0)
-        
-        if arg ~= "" and vim.fn.isdirectory(arg) == 1 then
-            vim.schedule(function()
-                if vim.bo.filetype == "oil" then
-                    vim.cmd("bwipeout!")
-                end
-                require("oil").toggle_float(arg)
-            end)
+        local ft = vim.bo.filetype
+        local skip = { "oil", "dashboard", "telescope", "Trouble", "qf" }
+        for _, s in ipairs(skip) do
+            if ft == s then return end
         end
+        
+        vim.schedule(function()
+            if vim.bo.filetype ~= "oil" then
+                pcall(function() require("no-neck-pain").enable() end)
+            end
+        end)
     end,
 })
-
