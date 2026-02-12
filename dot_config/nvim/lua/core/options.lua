@@ -32,8 +32,10 @@ vim.opt.selection = "inclusive"
 -- Interface
 opt.number = true          -- Affiche les numéros de ligne
 opt.relativenumber = false -- Numéros relatifs (très utile pour sauter des lignes)
-opt.cursorline = true      -- Souligne la ligne actuelle
-opt.termguicolors = true   -- Couleurs 24-bit (nécessaire pour la JetBrains Mono)
+opt.numberwidth = 2
+opt.statuscolumn = "%s%=%l  "
+opt.cursorline = true
+opt.termguicolors = true
 -- Remplace le tilde (~) par un espace vide
 vim.opt.fillchars = { eob = " " }
 
@@ -107,4 +109,4 @@ vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
     command = "silent! wa", -- 'wa' sauvegarde tous les buffers modifiés sans erreur
 })
 
-vim.opt.signcolumn = "yes" -- Garde la colonne des signes (pour les erreurs/git) fixe pour éviter les sauts d'écran
+vim.opt.signcolumn = "yes:2"
