@@ -1,18 +1,15 @@
--- lua/core/autocmds.lua
--- You can specify commands to be executed automatically when reading or writing
-
-local autocmd = vim.api.nvim_create_autocmd
-
--- Surligner brièvement le texte lors d'un "yank" (copie)
-autocmd("TextYankPost", {
-  desc = "Highlight when yanking text",
-  callback = function()
-    vim.highlight.on_yank({ timeout = 200 })
-  end,
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        local arg = vim.fn.argv(0)
+        
+        if arg ~= "" and vim.fn.isdirectory(arg) == 1 then
+            vim.schedule(function()
+                if vim.bo.filetype == "oil" then
+                    vim.cmd("bwipeout!")
+                end
+                require("oil").toggle_float(arg)
+            end)
+        end
+    end,
 })
 
--- Supprimer les espaces blancs en fin de ligne au moment de sauvegarder
-autocmd("BufWritePre", {
-  pattern = "*",
-  command = [[%s/\s\+$//e]],
-})

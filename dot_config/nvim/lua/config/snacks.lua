@@ -16,30 +16,29 @@ snacks.setup({
     -- Animation fluide du scroll (très agréable visuellement)
     scroll = { enabled = true },
 
-    -- Dashboard (Optionnel si tu préfères Snacks à Alpha, mais on le laisse désactivé pour l'instant)
-    dashboard = { enabled = false },
-
-    -- Indentations (Peut remplacer indent-blankline si tu veux)
-    indent = {
+    zen = {
         enabled = true,
-        char = "╎", -- Un caractère fin pour le look "clean"
-        scope_char = "┃", -- Un caractère plus épais pour la portée actuelle
-        only_scope = false, -- Affiche les lignes partout (mettre à true pour encore plus de minimalisme)
-        animate = {
-            enabled = true, -- Ajoute une animation fluide sur le changement de scope
-            style = "out", -- Effet de "fading"
+        minimal = false,
+        toggles = {
+            dim = false,
+            git = false,
+            diagnostics = true,
         },
-        blank = {
-            char = " ", -- Pas de caractères sur les lignes vides (très clean)
+        show = {
+            statusline = true,
+            tabline = true,
+        },
+        win = {
+            width = 0.6,
         },
     },
-
-    -- Pour faire des captures d'écran de ton code (Super pour tes projets 42 !)
-    input = { enabled = true },
 })
 
 -- === RACCOURCIS UTILES ===
 local keymap = vim.keymap.set
+
+keymap("n", "<leader>z", function() snacks.zen() end, { desc = "Toggle Zen Mode" })
+keymap("n", "<leader>Z", function() snacks.zen.zoom() end, { desc = "Toggle Zoom Mode" })
 
 -- Supprimer le buffer actuel proprement sans fermer ta fenêtre/split
 keymap("n", "<leader>bd", function() snacks.bufdelete() end, { desc = "Delete Buffer" })

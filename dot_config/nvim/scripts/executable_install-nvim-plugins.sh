@@ -51,6 +51,7 @@ PLUGINS=(
     "YouSame2/inlinediff-nvim"
     "malewicz1337/oil-git.nvim"
     "esmuellert/codediff.nvim"
+    "shortcuts/no-neck-pain.nvim"
 )
 
 for plugin in "${PLUGINS[@]}"; do
