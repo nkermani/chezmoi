@@ -282,29 +282,24 @@ keymap('v', '<C-H>', '"_d', opts)
 
 -- Comportement Backspace / Delete / Enter style "Éditeur moderne" en mode Normal
 
--- Backspace : Efface le caractère précédent, et si début de ligne, joint avec la ligne précédente
 keymap('n', '<BS>', function()
-    local col = vim.fn.col('.')
-    if col == 1 then
-        -- Si on est au début de la ligne, on remonte (k) et on joint (gJ)
-        local row = vim.fn.line('.')
-        if row > 1 then
+    if vim.fn.col('.') == 1 then
+        if vim.fn.line('.') > 1 then
             vim.cmd('normal! kgJ')
         end
     else
-        vim.cmd('normal! X')
+        vim.cmd('normal! x')
     end
-end, { desc = "Backspace behaves like Insert mode" })
+end, { desc = "Backspace: Join with previous line or delete character" })
 
--- Delete : Efface le caractère sous le curseur. Si ligne vide, la supprime (joint).
 keymap('n', '<Del>', function()
-    local line_len = #vim.fn.getline('.')
-    if line_len == 0 then
+    local line = vim.fn.getline('.')
+    if #line == 0 or vim.fn.col('.') >= #line then
         vim.cmd('normal! gJ')
     else
         vim.cmd('normal! x')
     end
-end, { desc = "Delete behaves like Insert mode" })
+end, { desc = "Delete: Join with next line or delete character" })
 
 -- Enter : Coupe la ligne à la position du curseur (Smart Split)
 -- Utilise i<CR><Esc> pour respecter l'indentation automatique et les hooks
