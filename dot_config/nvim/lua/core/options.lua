@@ -1,10 +1,8 @@
 -- lua/core/options.lua
 -- Options
-local opt = vim.opt
-local g = vim.g
 
-g.mapleader = " "
-g.maplocalleader = " "
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 -- ===================================================================
 -- PERSISTENT UNDO (Historique des modifications)
@@ -30,31 +28,29 @@ vim.opt.mouse = "a"         -- Active la souris partout
 vim.opt.selection = "inclusive"
 
 -- Interface
-opt.number = true          -- Affiche les numéros de ligne
-opt.relativenumber = false -- Numéros relatifs (très utile pour sauter des lignes)
-opt.numberwidth = 4
-opt.signcolumn = "yes"
-opt.cursorline = true
-opt.termguicolors = true
+vim.opt.number = true          -- Affiche les numéros de ligne
+vim.opt.relativenumber = false -- Numéros relatifs (très utile pour sauter des lignes)
+vim.opt.numberwidth = 4
+vim.opt.signcolumn = "yes"
+vim.opt.cursorline = true
+vim.opt.termguicolors = true
 -- Remplace le tilde (~) par un espace vide
 vim.opt.fillchars = { eob = " " }
 
 vim.opt.wrap = true -- Désactive le retour à la ligne pour permettre le scroll horizontal
 
 -- Indentation (Standard Rust/C)
-opt.shiftwidth = 4
-opt.tabstop = 4
-opt.expandtab = true -- Utilise des espaces au lieu de tabulations
-opt.smartindent = true
+vim.opt.shiftwidth = 4
+vim.opt.tabstop = 4
+vim.opt.expandtab = true -- Utilise des espaces au lieu de tabulations
+vim.opt.smartindent = true
 
 -- Comportement
-opt.ignorecase = true -- Ignore la casse lors de la recherche...
-opt.smartcase = true  -- ...sauf s'il y a une majuscule
-opt.updatetime = 250  -- Plus rapide pour les diagnostics LSP
-opt.scrolloff = 8     -- Garde 8 lignes visibles en haut/bas
-opt.backspace =
-"indent,eol,start"    -- Permet à backspace de supprimer : indentation, retours à la ligne (eol) et avant l'insertion (start)
-
+vim.opt.ignorecase = true -- Ignore la casse lors de la recherche...
+vim.opt.smartcase = true  -- ...sauf s'il y a une majuscule
+vim.opt.updatetime = 250  -- Plus rapide pour les diagnostics LSP
+vim.opt.scrolloff = 8     -- Garde 8 lignes visibles en haut/bas
+vim.opt.backspace = "indent,eol,start"
 -- Synchronise le presse-papier de Neovim avec le presse-papier du système
 -- Cela permet de copier dans Neovim et coller dans Chrome (et inversement) sans config spéciale
 vim.opt.clipboard = "unnamedplus"
