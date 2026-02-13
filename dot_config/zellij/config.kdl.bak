@@ -1,0 +1,29 @@
+// ~/.config/zellij/config.kdl
+
+themes {
+    cyberpunk {
+        fg "#cacaca"
+        bg "#212121"
+        black "#212121"
+        red "#f3505c"
+        green "#51f66f"
+        yellow "#eedb85"
+        blue "#368aec"
+        magenta "#d867c6"
+        cyan "#00f0ff"
+        white "#ffffff"
+        orange "#ff9e64"
+    }
+}
+
+theme "cyberpunk"
+pane_frames true
+default_layout "compact"
+mouse_mode true
+copy_command "pbcopy" // macOS standard
+
+ui {
+    pane_frames {
+        rounded_corners true
+    }
+}
