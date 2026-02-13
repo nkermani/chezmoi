@@ -43,7 +43,14 @@ plugins=(git zsh-syntax-highlighting zsh-autosuggestions auto-notify you-should-
 [ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
 
 if [[ "$OS_TYPE" == "linux" ]]; then
-    alias gfn='junest -f -- bash -c "cd ~/Downloads/squashfs-root && ./geforcenow-electron --no-sandbox"'
+alias gfn='junest -f -- bash -c "cd ~/Downloads/squashfs-root && ./geforcenow-electron --no-sandbox"'
+
+# --- AUTO-START ZELLIJ ---
+if [[ -z "$ZELLIJ" ]] && [[ -z "$TMUX" ]] && command -v zellij >/dev/null 2>&1; then
+    # Attach to an existing session or create a new one named 'main'
+    exec zellij attach -c main
+fi
+
     export PATH="$PATH:~/.junest/usr/bin_wrappers"
     export PATH=~/.local/share/junest/bin:$PATH
 fi
