@@ -57,13 +57,60 @@ for item in "${plugin_list[@]}"; do
     fi
 done
 
-# --- 3. SYSTEM TOOLS (FZF, Ripgrep, FD, Bat, CMake, Tmux) ---
+# --- 3. SYSTEM TOOLS (FZF, Ripgrep, FD, Bat, CMake, Tmux, Zellij) ---
 echo "🛠️  Installing CLI utilities..."
 if [[ "$OS_TYPE" == "Darwin" ]]; then
     # Homebrew handles architecture automatically on macOS
     if command -v brew &>/dev/null; then
-        brew install fzf ripgrep fd bat cmake tmux
+        brew install fzf ripgrep fd bat cmake tmux zellij
     fi
+else
+    # Manual installation for Linux/42 (Portable Binaries)
+    [ ! -f "$BIN_DIR/fzf" ] && {
+        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --bin && cp ~/.fzf/bin/fzf "$BIN_DIR/" && rm -rf ~/.fzf
+    }
+
+    # Architecture detection for Linux binaries
+    LINUX_ARCH="x86_64"
+    [[ "$ARCH_TYPE" == "aarch64" ]] && LINUX_ARCH="aarch64"
+
+    for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat"; do
+        IFS=":" read -r name bin repo <<< "$tool"
+        if [ ! -f "$BIN_DIR/$bin" ]; then
+            echo "  📦 Fetching $name..."
+            VER=$(curl -sI "https://github.com/$repo/releases/latest" | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
+            curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}-${VER}-${LINUX_ARCH}-unknown-linux-musl.tar.gz" | tar -xzC /tmp
+            find /tmp/${name}-${VER}-${LINUX_ARCH}-unknown-linux-musl -name "$bin" -type f -exec cp {} "$BIN_DIR/" \;
+        fi
+    done
+
+    # CMake installation for Linux/42 (Portable Binary)
+    if [ ! -f "$BIN_DIR/cmake" ]; then
+        echo "  📦 Fetching CMake..."
+        CMAKE_VER="3.31.5"
+        curl -LSs "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}.tar.gz" | tar -xzC "$APPS_DIR"
+        ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/cmake" "$BIN_DIR/cmake"
+        ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/ctest" "$BIN_DIR/ctest"
+    fi
+
+    # Tmux installation for Linux/42 (Static Binary)
+    if [ ! -f "$BIN_DIR/tmux" ]; then
+        echo "  📦 Fetching Tmux (Static)..."
+        TMUX_STATIC_URL="https://github.com/nicolas-van/tmux-main/releases/download/3.5a/tmux-linux-x86_64"
+        [[ "$ARCH_TYPE" == "aarch64" ]] && TMUX_STATIC_URL="https://github.com/nicolas-van/tmux-main/releases/download/3.5a/tmux-linux-arm64"
+        curl -LSs "$TMUX_STATIC_URL" -o "$BIN_DIR/tmux"
+        chmod +x "$BIN_DIR/tmux"
+    fi
+
+    # Zellij installation for Linux/42 (Portable Binary)
+    if [ ! -f "$BIN_DIR/zellij" ]; then
+        echo "  📦 Fetching Zellij..."
+        ZELLIJ_ARCH="x86_64"
+        [[ "$ARCH_TYPE" == "aarch64" ]] && ZELLIJ_ARCH="aarch64"
+        curl -LSs "https://github.com/zellij-org/zellij/releases/latest/download/zellij-${ZELLIJ_ARCH}-unknown-linux-musl.tar.gz" | tar -xzC "$BIN_DIR"
+    fi
+fi
+
 else
     # Manual installation for Linux/42 (Portable Binaries)
     [ ! -f "$BIN_DIR/fzf" ] && {
