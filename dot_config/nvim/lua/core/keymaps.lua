@@ -23,6 +23,11 @@ vim.keymap.set({ 'n', 'v', 'i' }, '<C-S-z>', '<nop>')
 -- keymap("n", "<C-Up>", "<C-w>k", { desc = "Fenêtre du haut" })
 -- keymap("n", "<C-Right>", "<C-w>l", { desc = "Fenêtre de droite" })
 
+-- Command Palette
+keymap({ 'n', 'v', 'i' }, "<C-p>", ":Telescope commands<CR>", { desc = "Command Palette" })
+
+keymap({ 'n', 'v', 'i' }, "<C-S-p>", ":Telescope commands<CR>", { desc = "Command Palette" })
+
 -- Navigation rapide entre les splits avec Ctrl + hjkl
 keymap("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
 keymap("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
@@ -38,20 +43,20 @@ local function wrap_selection(open, close)
         local mode = vim.fn.mode()
         local save_reg = vim.fn.getreg('v')
         local save_regtype = vim.fn.getregtype('v')
-        
+
         vim.cmd('normal! "vy')
         local text = vim.fn.getreg('v')
-        
+
         if mode == 'V' then
             text = open .. text:gsub('\n$', '') .. close .. '\n'
         else
             text = open .. text .. close
         end
-        
+
         vim.fn.setreg('v', text)
         vim.cmd('normal! gv"vp')
         vim.cmd('normal! `[v`]')
-        
+
         vim.fn.setreg('v', save_reg, save_regtype)
     end
 end
@@ -68,9 +73,9 @@ local function jump_to_bracket(target)
         local start_pos = vim.api.nvim_win_get_cursor(0)
         local pattern = target == "open" and "[{(]" or "[})]"
         local flags = target == "open" and "bW" or "W"
-        
+
         local search_pos = vim.fn.searchpos(pattern, flags .. 'n')
-        
+
         if target == "open" then
             vim.cmd("silent! normal! [{")
             vim.cmd("silent! normal! [(")
@@ -79,7 +84,7 @@ local function jump_to_bracket(target)
             vim.cmd("silent! normal! ])")
         end
         local unmatched_pos = vim.api.nvim_win_get_cursor(0)
-        
+
         if search_pos[1] ~= 0 then
             if unmatched_pos[1] == start_pos[1] and unmatched_pos[2] == start_pos[2] then
                 vim.fn.cursor(search_pos[1], search_pos[2])
