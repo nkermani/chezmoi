@@ -16,6 +16,15 @@ snacks.setup({
     -- Animation fluide du scroll (très agréable visuellement)
     scroll = { enabled = true },
 
+    indent = {
+        enabled = true,
+        char = "│",
+        scope = {
+            enabled = true,
+            char = "│",
+        },
+    },
+
     zen = {
         enabled = true,
         minimal = false,
@@ -29,7 +38,10 @@ snacks.setup({
             tabline = true,
         },
         win = {
-            width = 0.6,
+            width = 0.85,
+            height = 0.85,
+            border = "rounded",
+            backdrop = { transparent = true, opacity = 40 },
         },
     },
 })

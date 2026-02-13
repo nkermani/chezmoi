@@ -63,15 +63,6 @@ require("oil").setup({
             return hidden[name] or vim.startswith(name, ".")
         end,
     },
-    float = {
-        padding = 2,
-        max_width = 60,
-        max_height = 20,
-        border = "rounded",
-        win_options = {
-            winhl = "Normal:Normal",
-        },
-    },
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
@@ -123,8 +114,8 @@ local function change_directory(opts)
     })
 end
 
-vim.keymap.set("n", "-", function() require("oil").toggle_float() end, { desc = "Open Oil (Centered)" })
-vim.keymap.set("n", "_", function() require("oil").toggle_float() end, { desc = "Open Oil (Centered)" })
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+vim.keymap.set("n", "_", "<CMD>Oil .<CR>", { desc = "Open Oil in CWD" })
 
 vim.keymap.set("n", "<leader>gd", function()
     change_directory({

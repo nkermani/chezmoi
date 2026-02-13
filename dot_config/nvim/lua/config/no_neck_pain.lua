@@ -2,20 +2,19 @@ local ok, nnp = pcall(require, "no-neck-pain")
 if not ok then return end
 
 nnp.setup({
-    width = 120,
+    width = 100,
     autocmds = {
-        enableOnVimEnter = false,
+        enableOnVimEnter = true,
         enableOnTabEnter = true,
-        skipEnteringNoNeckPainOnFileType = { "oil", "dashboard", "telescope", "Trouble", "qf" },
+        skipEnteringNoNeckPainOnFileType = { "dashboard", "telescope", "Trouble", "qf", "oil" },
     },
     mappings = {
         enabled = true,
         toggle = "<leader>np",
     },
     buffers = {
-        right = {
-            enabled = false,
-        },
+        left = { enabled = true, width = 0.02 },
+        right = { enabled = true, width = 0.02 },
         colors = {
             background = "NONE",
         },
