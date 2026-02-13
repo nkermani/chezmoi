@@ -15,6 +15,9 @@ export NK_DIR="$HOME/.nkermani"
 export NK_APPS="$NK_DIR/apps"
 export NK_BIN="$NK_DIR/bin"
 
+# Force TERM to xterm-kitty for Kitty terminal features
+[[ "$TERM" == "xterm-kitty" ]] || export TERM="xterm-kitty"
+
 # 2. PATH & ENV
 export LSP="$NK_BIN/lsp"
 export ZSH="$NK_APPS/ohmyzsh"
@@ -113,6 +116,9 @@ alias e='smart-editor'
 alias c='code'
 alias v='vim'
 alias n='nvim'
+
+# Kitty SSH kitten
+alias ssh="kitten ssh"
 
 alias clear='clear -x'
 

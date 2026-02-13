@@ -57,12 +57,12 @@ for item in "${plugin_list[@]}"; do
     fi
 done
 
-# --- 3. SYSTEM TOOLS (FZF, Ripgrep, FD, Bat, CMake) ---
+# --- 3. SYSTEM TOOLS (FZF, Ripgrep, FD, Bat, CMake, Tmux) ---
 echo "🛠️  Installing CLI utilities..."
 if [[ "$OS_TYPE" == "Darwin" ]]; then
     # Homebrew handles architecture automatically on macOS
     if command -v brew &>/dev/null; then
-        brew install fzf ripgrep fd bat cmake
+        brew install fzf ripgrep fd bat cmake tmux
     fi
 else
     # Manual installation for Linux/42 (Portable Binaries)
@@ -88,10 +88,19 @@ else
     if [ ! -f "$BIN_DIR/cmake" ]; then
         echo "  📦 Fetching CMake..."
         CMAKE_VER="3.31.5"
-        # Kitware uses x86_64 and aarch64
         curl -LSs "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}.tar.gz" | tar -xzC "$APPS_DIR"
         ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/cmake" "$BIN_DIR/cmake"
         ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/ctest" "$BIN_DIR/ctest"
+    fi
+
+    # Tmux installation for Linux/42 (Static Binary)
+    if [ ! -f "$BIN_DIR/tmux" ]; then
+        echo "  📦 Fetching Tmux (Static)..."
+        # Using a reliable static build for Linux
+        TMUX_STATIC_URL="https://github.com/nicolas-van/tmux-main/releases/download/3.5a/tmux-linux-x86_64"
+        [[ "$ARCH_TYPE" == "aarch64" ]] && TMUX_STATIC_URL="https://github.com/nicolas-van/tmux-main/releases/download/3.5a/tmux-linux-arm64"
+        curl -LSs "$TMUX_STATIC_URL" -o "$BIN_DIR/tmux"
+        chmod +x "$BIN_DIR/tmux"
     fi
 fi
 
