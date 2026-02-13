@@ -33,7 +33,7 @@ vim.opt.selection = "inclusive"
 opt.number = true          -- Affiche les numéros de ligne
 opt.relativenumber = false -- Numéros relatifs (très utile pour sauter des lignes)
 opt.numberwidth = 4
-opt.statuscolumn = "%s%=%l  "
+opt.signcolumn = "yes"
 opt.cursorline = true
 opt.termguicolors = true
 -- Remplace le tilde (~) par un espace vide
