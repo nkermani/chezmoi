@@ -1,0 +1,51 @@
+[window]
+padding = { x = 30, y = 30 }
+opacity = 0.95
+decorations = "None"
+
+[font]
+normal = { family = "JetBrainsMonoNL Nerd Font Mono", style = "Regular" }
+size = 12.0
+
+[font.offset]
+x = -1
+y = -1
+
+[cursor]
+style = { shape = "Beam", blinking = "Always" }
+thickness = 0.15
+
+[colors.primary]
+background = "#212121"
+foreground = "#cacaca"
+
+[colors.cursor]
+text = "#212121"
+cursor = "#cacaca"
+
+[colors.selection]
+text = "#cacaca"
+background = "#343434"
+
+[colors.normal]
+black   = "#212121"
+red     = "#f3505c"
+green   = "#51f66f"
+yellow  = "#eedb85"
+blue    = "#368aec"
+magenta = "#d867c6"
+cyan    = "#00f0ff"
+white   = "#cacaca"
+
+[colors.bright]
+black   = "#676767"
+red     = "#f3505c"
+green   = "#51f66f"
+yellow  = "#eedb85"
+blue    = "#368aec"
+magenta = "#d867c6"
+cyan    = "#00f0ff"
+white   = "#ffffff"
+
+[selection]
+save_to_clipboard = true

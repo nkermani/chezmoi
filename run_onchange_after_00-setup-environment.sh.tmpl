@@ -94,19 +94,20 @@ else
     fi
 
     # Tmux installation for Linux/42 (Static Binary)
-    if [ ! -f "$BIN_DIR/tmux" ]; then
+    if [ ! -f "$BIN_DIR/tmux" ] || head -n 1 "$BIN_DIR/tmux" 2>/dev/null | grep -q "Not Found"; then
         echo "  📦 Fetching Tmux (Static)..."
-        TMUX_STATIC_URL="https://github.com/nicolas-van/tmux-main/releases/download/3.5a/tmux-linux-x86_64"
-        [[ "$ARCH_TYPE" == "aarch64" ]] && TMUX_STATIC_URL="https://github.com/nicolas-van/tmux-main/releases/download/3.5a/tmux-linux-arm64"
-        curl -LSs "$TMUX_STATIC_URL" -o "$BIN_DIR/tmux"
+        TMUX_VER="3.6a"
+        TMUX_ARCH="x86_64"
+        [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && TMUX_ARCH="arm64"
+        curl -LSs "https://github.com/tmux/tmux-builds/releases/download/v${TMUX_VER}/tmux-${TMUX_VER}-linux-${TMUX_ARCH}.tar.gz" | tar -xzC "$BIN_DIR"
         chmod +x "$BIN_DIR/tmux"
     fi
 
     # Zellij installation for Linux/42 (Portable Binary)
     if [ ! -f "$BIN_DIR/zellij" ]; then
         echo "  📦 Fetching Zellij..."
-        ZELLIJ_ARCH="x86_64"
-        [[ "$ARCH_TYPE" == "aarch64" ]] && ZELLIJ_ARCH="aarch64"
+        local ZELLIJ_ARCH="x86_64"
+        [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZELLIJ_ARCH="aarch64"
         curl -LSs "https://github.com/zellij-org/zellij/releases/latest/download/zellij-${ZELLIJ_ARCH}-unknown-linux-musl.tar.gz" | tar -xzC "$BIN_DIR"
     fi
 fi
@@ -127,8 +128,9 @@ if [[ "$OS_TYPE" == "Linux" ]]; then
     fi
 fi
 
-# --- 5. TERMINAL (Kitty) ---
-echo "🐱 Configuring Kitty Terminal..."
+# --- 5. TERMINAL (Kitty & Alacritty) ---
+echo "🐱 Configuring Terminals..."
+# Kitty
 if [[ "$OS_TYPE" == "Darwin" ]]; then
     if ! command -v kitty &>/dev/null; then
         brew install --cask kitty
@@ -138,6 +140,63 @@ elif [[ "{{ .is_42 }}" == "true" && -z "$IS_WSL" ]]; then
     if [ ! -d "$APPS_DIR/kitty.app" ]; then
         curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest="$APPS_DIR"
         ln -sf "$APPS_DIR/kitty.app/bin/kitty" "$BIN_DIR/kitty"
+    fi
+fi
+
+# Alacritty
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+    if ! command -v alacritty &>/dev/null; then
+        brew install --cask alacritty
+    fi
+else
+    if ! command -v alacritty &>/dev/null; then
+        if [[ "{{ .has_sudo }}" == "true" ]]; then
+            echo "  📦 Installing Alacritty via package manager..."
+            if command -v apt &>/dev/null; then
+                sudo apt update && sudo apt install -y alacritty
+            elif command -v dnf &>/dev/null; then
+                sudo dnf install -y alacritty
+            fi
+        else
+            echo "  📦 Installing Alacritty (AppImage)..."
+            ALACRITTY_URL=$(curl -s https://api.github.com/repos/pkgforge-dev/alacritty-AppImage/releases/latest | grep "browser_download_url" | grep "x86_64" | head -n 1 | cut -d '"' -f 4)
+            if [ -n "$ALACRITTY_URL" ]; then
+                curl -LSs "$ALACRITTY_URL" -o "$BIN_DIR/alacritty"
+                chmod +x "$BIN_DIR/alacritty"
+                
+                # Desktop Integration (Icon & Launcher)
+                echo "  🎨 Setting up Alacritty desktop integration..."
+                ICON_DIR="$HOME/.local/share/icons"
+                APP_DIR="$HOME/.local/share/applications"
+                mkdir -p "$ICON_DIR" "$APP_DIR"
+                
+                # Download official icon
+                curl -LSs "https://github.com/alacritty/alacritty/releases/latest/download/Alacritty.svg" -o "$ICON_DIR/alacritty.svg"
+                
+                # Create .desktop file
+                cat <<EOF > "$APP_DIR/alacritty.desktop"
+[Desktop Entry]
+Type=Application
+TryExec=$BIN_DIR/alacritty
+Exec=$BIN_DIR/alacritty
+Icon=alacritty
+Terminal=false
+Categories=System;TerminalEmulator;
+
+Name=Alacritty
+GenericName=Terminal
+Comment=A cross-platform, GPU-accelerated terminal emulator
+StartupWMClass=Alacritty
+Actions=New;
+
+[Desktop Action New]
+Name=New Terminal
+Exec=$BIN_DIR/alacritty
+EOF
+            else
+                echo "  ⚠️  Could not find Alacritty AppImage URL."
+            fi
+        fi
     fi
 fi
 
@@ -163,15 +222,18 @@ if ! command -v node &>/dev/null; then
 fi
 
 # Rust
+if [[ "{{ .is_42 }}" == "true" ]]; then
+    export RUSTUP_HOME="/goinfre/$USER/.rustup"
+    export CARGO_HOME="/goinfre/$USER/.cargo"
+fi
+
 if ! command -v cargo &>/dev/null; then
     echo "  🦀 Installing Rust..."
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
 fi
 
-# Ensure rust-analyzer component is installed via rustup
-if command -v rustup &>/dev/null; then
-    rustup component add rust-analyzer
-fi
+# Note: rust-analyzer is installed manually in the LSP section to ensure portability
+# especially in environments like 42 where rustup component add might fail.
 
 # --- 7. TEXT EDITORS (Neovim Nightly) ---
 echo "🌙 Configuring Neovim..."
@@ -184,7 +246,9 @@ if [ ! -f "$BIN_DIR/nvim" ]; then
         [[ "$(uname -m)" == "arm64" ]] && MACOS_ARCH="arm64"
         curl -LSs "https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-${MACOS_ARCH}.tar.gz" | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
     else
-        curl -LSs https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
+        local NVIM_ARCH="x86_64"
+        [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && NVIM_ARCH="arm64"
+        curl -LSs "https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-${NVIM_ARCH}.tar.gz" | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
     fi
     ln -sf "$NVIM_INSTALL_DIR/bin/nvim" "$BIN_DIR/nvim"
 fi
@@ -410,7 +474,9 @@ else
     if [ ! -f "$BIN_DIR/yazi" ]; then
         echo "  📦 Installing Yazi..."
         YAZI_VER=$(curl -sI "https://github.com/sxyazi/yazi/releases/latest" | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
-        curl -L -o /tmp/yazi.zip "https://github.com/sxyazi/yazi/releases/download/${YAZI_VER}/yazi-x86_64-unknown-linux-musl.zip"
+        local YAZI_ARCH="x86_64"
+        [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && YAZI_ARCH="aarch64"
+        curl -L -o /tmp/yazi.zip "https://github.com/sxyazi/yazi/releases/download/${YAZI_VER}/yazi-${YAZI_ARCH}-unknown-linux-musl.zip"
         unzip -q -o /tmp/yazi.zip -d /tmp
         YAZI_DIR=$(find /tmp -maxdepth 1 -type d -name "yazi-*-linux-musl" | head -n 1)
         if [ -d "$YAZI_DIR" ]; then

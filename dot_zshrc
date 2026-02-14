@@ -41,9 +41,9 @@ export PATH="$LSP:$NK_BIN:$PATH"
 
 # --- AUTO-START ZELLIJ ---
 # On ne lance Zellij que dans un shell interactif, hors de VS Code et si pas déjà dans Zellij/Tmux
-if [[ -z "$ZELLIJ" ]] && [[ -z "$TMUX" ]] && [[ "$TERM_PROGRAM" != "vscode" ]] && command -v zellij >/dev/null 2>&1; then
-    exec zellij attach -c main
-fi
+# if [[ -z "$ZELLIJ" ]] && [[ -z "$TMUX" ]] && [[ "$TERM_PROGRAM" != "vscode" ]] && command -v zellij >/dev/null 2>&1; then
+#     exec zellij attach -c main
+# fi
 
 # 3. OH-MY-ZSH (Chargement silencieux)
 ZSH_THEME="robbyrussell"
