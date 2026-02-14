@@ -2,7 +2,7 @@ local ok, nnp = pcall(require, "no-neck-pain")
 if not ok then return end
 
 nnp.setup({
-    width = 100,
+    width = 120,
     autocmds = {
         enableOnVimEnter = true,
         enableOnTabEnter = true,
