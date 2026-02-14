@@ -15,8 +15,10 @@ export NK_DIR="$HOME/.nkermani"
 export NK_APPS="$NK_DIR/apps"
 export NK_BIN="$NK_DIR/bin"
 
-# Force TERM to xterm-kitty for Kitty terminal features
-[[ "$TERM" == "xterm-kitty" ]] || export TERM="xterm-kitty"
+# Fallback if TERM is unknown or forced to something missing
+if ! tput colors >/dev/null 2>&1; then
+    export TERM="xterm-256color"
+fi
 
 # 2. PATH & ENV
 export LSP="$NK_BIN/lsp"
@@ -37,6 +39,12 @@ path=($NK_BIN $HOME/.local/bin $HOME/.opencode/bin $HOME/.cargo/bin /usr/local/b
 # 2. Vos dossiers perso (en fin de liste pour ne pas masquer les binaires système essentiels)
 export PATH="$LSP:$NK_BIN:$PATH"
 
+# --- AUTO-START ZELLIJ ---
+# On ne lance Zellij que dans un shell interactif, hors de VS Code et si pas déjà dans Zellij/Tmux
+if [[ -z "$ZELLIJ" ]] && [[ -z "$TMUX" ]] && [[ "$TERM_PROGRAM" != "vscode" ]] && command -v zellij >/dev/null 2>&1; then
+    exec zellij attach -c main
+fi
+
 # 3. OH-MY-ZSH (Chargement silencieux)
 ZSH_THEME="robbyrussell"
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions auto-notify you-should-use zsh-history-substring-search)
@@ -44,12 +52,6 @@ plugins=(git zsh-syntax-highlighting zsh-autosuggestions auto-notify you-should-
 
 if [[ "$OS_TYPE" == "linux" ]]; then
 alias gfn='junest -f -- bash -c "cd ~/Downloads/squashfs-root && ./geforcenow-electron --no-sandbox"'
-
-# --- AUTO-START ZELLIJ ---
-if [[ -z "$ZELLIJ" ]] && [[ -z "$TMUX" ]] && command -v zellij >/dev/null 2>&1; then
-    # Attach to an existing session or create a new one named 'main'
-    exec zellij attach -c main
-fi
 
     export PATH="$PATH:~/.junest/usr/bin_wrappers"
     export PATH=~/.local/share/junest/bin:$PATH

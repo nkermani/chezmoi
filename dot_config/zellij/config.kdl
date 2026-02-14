@@ -322,8 +322,16 @@ themes {
             emphasis_3 216 103 198
         }
         frame_selected {
-            base 81 246 111
-            background 0
+            base 0 240 255
+            background 0 240 255
+            emphasis_0 255 158 100
+            emphasis_1 0 240 255
+            emphasis_2 216 103 198
+            emphasis_3 0
+        }
+        frame_unselected {
+            base 33 33 33
+            background 33 33 33
             emphasis_0 255 158 100
             emphasis_1 0 240 255
             emphasis_2 216 103 198
@@ -395,6 +403,7 @@ load_plugins {
 ui {
     pane_frames {
         rounded_corners true
+        hide_session_name true
     }
 }
 web_client {
