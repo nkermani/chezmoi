@@ -50,7 +50,7 @@ edgy.setup({
     },
     exit_when_last = false,
     wo = {
-        winbar = false,
+        winbar = true,
         winhighlight = "Normal:Normal,NormalNC:NormalNC,WinSeparator:WinSeparator",
     },
 })

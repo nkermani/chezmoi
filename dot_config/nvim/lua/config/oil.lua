@@ -73,20 +73,6 @@ require("oil").setup({
     },
 })
 
--- Autocmd to open Neo-tree when a file is opened from Oil
-vim.api.nvim_create_autocmd("BufReadPost", {
-    callback = function()
-        if vim.bo.filetype ~= "oil" and vim.fn.isdirectory(vim.fn.expand("%:p")) == 0 then
-            vim.defer_fn(function()
-                local ok, nt = pcall(require, "neo-tree.command")
-                if ok then
-                    nt.execute({ action = "show", source = "filesystem", position = "left" })
-                end
-            end, 10)
-        end
-    end,
-})
-
 vim.api.nvim_create_autocmd("BufEnter", {
     group = vim.api.nvim_create_augroup("OilAutoCd", { clear = true }),
     pattern = "oil://*",
@@ -140,9 +126,10 @@ vim.keymap.set("n", "-", function()
     if vim.bo.filetype == "oil" then
         require("oil").open("..")
     else
-        pcall(function()
+        local nt_api = pcall(require, "neo-tree.command")
+        if nt_api then
             require("neo-tree.command").execute({ action = "close" })
-        end)
+        end
         vim.cmd("Oil")
     end
 end, { desc = "Go up in Oil or Open Oil (closing Neo-tree)" })

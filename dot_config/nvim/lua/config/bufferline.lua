@@ -8,7 +8,7 @@ bufferline.setup({
     options = {
         mode = "buffers",
         style_preset = bufferline.style_preset.default,
-        separator_style = "thin",
+        separator_style = "slant",
         always_show_bufferline = true,
         show_buffer_close_icons = true,
         show_close_icon = false,
@@ -23,8 +23,9 @@ bufferline.setup({
         offsets = {
             {
                 filetype = "neo-tree",
-                text = "",
-                highlight = "TabLineFill",
+                text = "EXPLORER",
+                text_align = "center",
+                highlight = "EdgyTitle",
                 separator = true,
             },
         },
