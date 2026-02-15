@@ -16,6 +16,16 @@ bindings = [
 normal = { family = "JetBrainsMonoNL Nerd Font Mono", style = "Regular" }
 size = 11.0
 
+[[keyboard.bindings]]
+key = "F1"
+mods = "Control"
+action = "DecreaseFontSize"
+
+[[keyboard.bindings]]
+key = "F2"
+mods = "Control"
+action = "IncreaseFontSize"
+
 [font.offset]
 x = -1
 y = -1

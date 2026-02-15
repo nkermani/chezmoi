@@ -24,7 +24,8 @@ vim.opt.fixendofline = true -- Rétablit le \n s'il est supprimé
 vim.opt.autochdir = false   -- Neovim change de dossier de travail automatiquement vers le fichier ouvert
 
 vim.opt.mouse = "a"         -- Active la souris partout
--- vim.opt.mousemodel = "extend" -- Permet des sélections souris fluides
+vim.opt.mousemodel = "popup" -- Clic droit ouvre un menu contextuel (style IDE)
+vim.opt.mousemoveevent = true -- Permet de suivre les mouvements de souris pour le hover
 vim.opt.selection = "inclusive"
 
 -- Interface
