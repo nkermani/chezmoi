@@ -1,22 +1,24 @@
 local M = {}
 
 M.colors = {
-    bg = "#212121",
+    bg = "#1e1e1e",
     fg = "#cacaca",
     red = "#f3505c",
     green = "#51f66f",
     yellow = "#eedb85",
     blue = "#368aec",
     magenta = "#d867c6",
-    cyan = "#00f0ff", -- Interpreted from f0ff
+    cyan = "#00f0ff",
     orange = "#ffc07a",
     comment = "#777777",
-    cursor_line = "#303030",
+    cursor_line = "#2a2a2a",
     line_nr = "#676767",
     visual = "#3e4452",
-    border = "#424242",
+    border = "#444444",
+    sidebar_bg = "#252526",
     error_bg = "#603336",
     search_bg = "#A379D9",
+    gold = "#ffcc00",
 }
 
 function M.setup()
@@ -32,118 +34,39 @@ function M.setup()
 
     -- Base
     hl(0, "Normal", { fg = c.fg, bg = c.bg })
-    hl(0, "NormalFloat", { fg = c.fg, bg = c.bg })
+    hl(0, "NormalFloat", { fg = c.fg, bg = c.sidebar_bg })
     hl(0, "Cursor", { fg = c.bg, bg = c.fg })
     hl(0, "CursorLine", { bg = c.cursor_line })
     hl(0, "LineNr", { fg = c.line_nr })
     hl(0, "CursorLineNr", { fg = c.cyan, bold = true })
     hl(0, "Visual", { bg = c.visual })
     hl(0, "SignColumn", { bg = c.bg })
-    hl(0, "VertSplit", { fg = c.bg, bg = c.bg })
-    hl(0, "WinSeparator", { fg = c.bg, bg = c.bg })
-    hl(0, "StatusLine", { bg = c.cursor_line, fg = c.fg })
-    hl(0, "StatusLineNC", { bg = c.bg, fg = c.comment })
+    hl(0, "VertSplit", { fg = c.border, bg = "none" })
+    hl(0, "WinSeparator", { fg = c.border, bg = "none" })
+    hl(0, "StatusLine", { bg = c.sidebar_bg, fg = c.fg })
+    hl(0, "StatusLineNC", { bg = c.sidebar_bg, fg = c.comment })
+    hl(0, "FloatBorder", { fg = c.gold, bg = c.sidebar_bg })
+    hl(0, "FloatTitle", { fg = c.gold, bg = c.sidebar_bg, bold = true })
 
-    -- Syntax
-    hl(0, "Comment", { fg = c.comment, italic = true })
-    hl(0, "Constant", { fg = c.magenta })
-    hl(0, "String", { fg = c.yellow })
-    hl(0, "Character", { fg = c.yellow })
-    hl(0, "Number", { fg = c.blue })
-    hl(0, "Boolean", { fg = c.magenta })
-    hl(0, "Float", { fg = c.blue })
+    hl(0, "EdgyWinBar", { bg = c.sidebar_bg, fg = c.fg })
+    hl(0, "EdgyWinBarNC", { bg = c.sidebar_bg, fg = c.comment })
+    hl(0, "EdgyTitle", { fg = c.cyan, bold = true })
+    hl(0, "EdgyIcon", { fg = c.cyan })
+    hl(0, "EdgyIconActive", { fg = c.magenta })
 
-    hl(0, "Identifier", { fg = c.fg })
-    hl(0, "Function", { fg = c.cyan })
+    hl(0, "NoiceCmdlinePopupBorder", { fg = c.gold })
+    hl(0, "NoiceCmdlinePopupTitle", { fg = c.gold })
+    hl(0, "SnacksNotifierBorder", { fg = c.gold })
+    hl(0, "SnacksNotifierTitle", { fg = c.gold })
+    hl(0, "SnacksPickerBorder", { fg = c.gold })
+    hl(0, "SnacksPickerTitle", { fg = c.gold })
 
-    hl(0, "Statement", { fg = c.red })
-    hl(0, "Conditional", { fg = c.red })
-    hl(0, "Repeat", { fg = c.red })
-    hl(0, "Label", { fg = c.red })
-    hl(0, "Operator", { fg = c.fg })
-    hl(0, "Keyword", { fg = c.red })
-    hl(0, "Exception", { fg = c.red })
-
-    hl(0, "PreProc", { fg = c.orange })
-    hl(0, "Include", { fg = c.red })
-    hl(0, "Define", { fg = c.red })
-    hl(0, "Macro", { fg = c.orange })
-
-    hl(0, "Type", { fg = c.green })
-    hl(0, "StorageClass", { fg = c.red })
-    hl(0, "Structure", { fg = c.red })
-    hl(0, "Typedef", { fg = c.red })
-
-    hl(0, "Special", { fg = c.magenta })
-    hl(0, "SpecialChar", { fg = c.magenta })
-
-    hl(0, "Error", { fg = c.red, bg = c.error_bg, bold = true })
-    hl(0, "Todo", { fg = c.orange, bold = true })
-
-    -- Search
-    hl(0, "Search", { bg = c.search_bg, fg = "#ffffff" })
-    hl(0, "IncSearch", { bg = "#A379D9", fg = "#ffffff" })
-    hl(0, "CurSearch", { bg = "#A379D9", fg = "#ffffff" })
-
-    -- UI / Pmenu
-    hl(0, "Pmenu", { bg = c.cursor_line, fg = c.fg })
-    hl(0, "PmenuSel", { bg = c.visual, fg = c.cyan, bold = true })
-    hl(0, "PmenuSbar", { bg = c.bg })
-    hl(0, "PmenuThumb", { bg = c.comment })
-
-    -- Diagnostics
-    hl(0, "DiagnosticError", { fg = c.red })
-    hl(0, "DiagnosticWarn", { fg = c.orange })
-    hl(0, "DiagnosticInfo", { fg = c.blue })
-    hl(0, "DiagnosticHint", { fg = c.cyan })
-
-    -- Treesitter
-    hl(0, "@variable", { fg = c.fg })
-    hl(0, "@variable.builtin", { fg = c.red })
-    hl(0, "@property", { fg = c.fg })
-    hl(0, "@field", { fg = c.fg })
-    hl(0, "@parameter", { fg = c.fg }) -- Or orange?
-    hl(0, "@function", { fg = c.cyan })
-    hl(0, "@function.builtin", { fg = c.cyan })
-    hl(0, "@method", { fg = c.cyan })
-    hl(0, "@keyword", { fg = c.red })
-    hl(0, "@keyword.function", { fg = c.red })
-    hl(0, "@string", { fg = c.yellow })
-    hl(0, "@type", { fg = c.green })
-    hl(0, "@type.builtin", { fg = c.green })
-    hl(0, "@constructor", { fg = c.green })
-    hl(0, "@operator", { fg = c.fg })
-    hl(0, "@punctuation", { fg = c.fg })
-    hl(0, "@punctuation.delimiter", { fg = c.fg })
-    hl(0, "@punctuation.bracket", { fg = c.fg })
-    hl(0, "@tag", { fg = c.red })
-    hl(0, "@tag.attribute", { fg = c.orange })
-    hl(0, "@tag.delimiter", { fg = c.fg })
-
-    -- Telescope
-    hl(0, "TelescopeNormal", { bg = c.bg, fg = c.fg })
-    hl(0, "TelescopeBorder", { fg = c.border })
-    hl(0, "TelescopeTitle", { fg = c.cyan })
-    hl(0, "TelescopeSelection", { bg = c.visual, fg = c.cyan })
-
-    -- NeoTree / NvimTree
-    hl(0, "NeoTreeNormal", { bg = c.bg, fg = c.fg })
-    hl(0, "NeoTreeNormalNC", { bg = c.bg, fg = c.fg })
-    hl(0, "NeoTreeDirectoryName", { fg = c.green })
-    hl(0, "NeoTreeFileName", { fg = c.fg })
-    hl(0, "NeoTreeGitModified", { fg = c.cyan })
-    hl(0, "NeoTreeGitDeleted", { fg = c.comment })
-    hl(0, "NeoTreeGitUntracked", { fg = c.green })
-
-    -- GitSigns
-    hl(0, "GitSignsAdd", { fg = c.green })
-    hl(0, "GitSignsChange", { fg = c.cyan })
-    hl(0, "GitSignsDelete", { fg = c.red })
-
-    -- Floating Windows & Noice
-    hl(0, "FloatBorder", { fg = c.border })
-    hl(0, "NoiceCmdlinePopupBorder", { fg = c.border })
-    hl(0, "NoiceCmdlinePopupTitle", { fg = c.cyan })
+    -- Bufferline / TabLine
+    hl(0, "TabLine", { bg = c.sidebar_bg, fg = c.line_nr })
+    hl(0, "TabLineFill", { bg = c.sidebar_bg })
+    hl(0, "TabLineSel", { bg = c.bg, fg = c.fg, bold = true })
+    hl(0, "BufferLineFill", { bg = c.sidebar_bg })
+    hl(0, "BufferLineBackground", { bg = c.sidebar_bg, fg = c.line_nr })
 end
 
 return M

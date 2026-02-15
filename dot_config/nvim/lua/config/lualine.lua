@@ -7,9 +7,16 @@ lualine.setup({
     options = {
         theme = "auto",
         globalstatus = true,
-        -- component_separators = { left = '', right = '' },
-        -- section_separators = { left = '', right = '' },
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
+        disabled_filetypes = { "alpha", "neo-tree", "oil", "edgy" },
+    },
+    sections = {
+        lualine_a = { { 'mode', fmt = function(str) return str:sub(1,1) end } },
+        lualine_b = { 'branch' },
+        lualine_c = { { 'filename', path = 1, symbols = { modified = ' ●', readonly = ' 🔒' } } },
+        lualine_x = { 'diagnostics', 'filetype' },
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' },
     },
 })

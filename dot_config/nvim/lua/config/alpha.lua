@@ -17,6 +17,7 @@ dashboard.section.header.val = {
 -- 2. Configuration des boutons (uniquement Find Files et Grep)
 dashboard.section.buttons.val = {
     -- NAVIGATION
+    dashboard.button("e", "󰙅  File Explorer (Oil)", ":Oil<CR>"),
     dashboard.button("f", "󰈞  Find Files (Working Dir)", ":Telescope find_files<CR>"),
     dashboard.button("r", "󰋜  Search Home (~/)", ":Telescope find_files cwd=~<CR>"),
     -- Dans ton fichier alpha.lua, cherche la partie dashboard.button("p", ...)

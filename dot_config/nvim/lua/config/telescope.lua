@@ -18,22 +18,27 @@ telescope.setup({
         },
 
         -- CONFIGURATION DYNAMIQUE DE L'ÉCRAN
-        sorting_strategy = "descending",
-        layout_strategy = "vertical",
+        sorting_strategy = "ascending",
+        layout_strategy = "horizontal",
         layout_config = {
-            vertical = {
-                width = 0.5,
-                height = 0.8,
-                preview_height = 0.6,
-                preview_cutoff = 0,
+            horizontal = {
+                prompt_position = "top",
+                preview_width = 0.55,
+                results_width = 0.8,
             },
+            vertical = {
+                mirror = false,
+            },
+            width = 0.87,
+            height = 0.80,
+            preview_cutoff = 120,
         },
-        prompt_position = "bottom",
+        prompt_position = "top",
         -- Configuration de la fenêtre de preview pour enlever les marges
         path_display = { "truncate" },
         winblend = 0,
         border = true,
-        borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+        borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
         color_devicons = true,
         use_less = true,
         set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,

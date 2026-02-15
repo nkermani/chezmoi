@@ -25,6 +25,9 @@ pack.add({
 
     -- 상태 표시줄 및 내비게이션 / Statusline & Navigation / Barre d'état et Navigation
     { src = 'https://github.com/nvim-lualine/lualine.nvim' },
+    { src = 'https://github.com/akinsho/bufferline.nvim' },
+    { src = 'https://github.com/nvim-neo-tree/neo-tree.nvim' },
+    { src = 'https://github.com/folke/edgy.nvim' },
     { src = 'https://github.com/nvim-telescope/telescope.nvim' },
     { src = 'https://github.com/folke/trouble.nvim' },
 
@@ -63,5 +66,5 @@ pack.add({
     { src = 'https://github.com/YouSame2/inlinediff-nvim' },
     { src = 'https://github.com/malewicz1337/oil-git.nvim' },
     { src = 'https://github.com/esmuellert/codediff.nvim' },
-    { src = 'https://github.com/shortcuts/no-neck-pain.nvim' },
+    { src = 'https://github.com/stevearc/dressing.nvim' },
 })

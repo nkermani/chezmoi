@@ -3,26 +3,44 @@ local ok, neotree = pcall(require, "neo-tree")
 if not ok then return end
 
 neotree.setup({
-    close_if_last_window = true,
-    window = {
-        width = 30,
-        mappings = {
-            ["<space>"] = "none", -- Désactive le focus espace pour tes keymaps
-        }
+    close_if_last_window = false,
+    popup_border_style = "rounded",
+    enable_git_status = true,
+    enable_diagnostics = true,
+    source_selector = {
+        winbar = false,
+        statusline = false,
     },
     filesystem = {
+        hijack_netrw_behavior = "disabled",
         filtered_items = {
-            visible = true, -- Affiche les fichiers cachés par défaut
+            visible = true,
             hide_dotfiles = false,
             hide_gitignored = false,
         },
         follow_current_file = { enabled = true },
-    }
+        use_libuv_file_watcher = true,
+    },
+    window = {
+        position = "left",
+        width = 35,
+        mappings = {
+            ["<space>"] = "none",
+        }
+    },
+    use_default_mappings = true,
+    default_component_configs = {
+        indent = {
+            with_markers = true,
+            indent_marker = "│",
+            last_indent_marker = "└",
+            highlight = "NeoTreeIndentMarker",
+        },
+    },
 })
 
 -- Raccourci pour ouvrir/fermer l'explorateur
 vim.keymap.set('n', '<leader>e', ':Neotree toggle<CR>', { desc = "Toggle Neo-tree" })
-vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "none", ctermbg = "none" })
-vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "none", ctermbg = "none" })
-vim.api.nvim_set_hl(0, "NeoTreeWinSeparator", { bg = "none", fg = "#3b4252" })
+
+
 

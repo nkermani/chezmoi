@@ -1,12 +1,12 @@
 {
   "defs": {
-    "bg": "#212121",
+    "bg": "#1e1e1e",
     "fg": "#CACACA",
     "primary": "#00F0FF",
     "secondary": "#368AEC",
     "accent": "#F3505C",
-    "bg_dark": "#1D1D1D",
-    "bg_light": "#272727"
+    "bg_dark": "#181818",
+    "bg_light": "#252526"
   },
   "theme": {
     "primary": "primary",
@@ -15,7 +15,7 @@
     "text": "fg",
     "background": "bg",
     "surface": "bg_light",
-    "border": "#424242",
+    "border": "#333333",
     "success": "#51F66F",
     "warning": "#EEDB85",
     "error": "#F3505C",

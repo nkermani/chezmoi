@@ -10,13 +10,9 @@ fi
 # --- TERMINFO FALLBACKS ---
 echo "🖥️  Setting up terminfo fallbacks..."
 mkdir -p "$HOME/.terminfo"
-if ! tput -T xterm-kitty colors &>/dev/null; then
-    echo "  🐱 Adding xterm-kitty fallback..."
-    infocmp xterm-256color | sed 's/xterm-256color/xterm-kitty/' | tic -o "$HOME/.terminfo" -
-fi
-if ! tput -T zellij colors &>/dev/null; then
-    echo "  🪟 Adding zellij fallback..."
-    infocmp xterm-256color | sed 's/xterm-256color/zellij/' | tic -o "$HOME/.terminfo" -
+if ! tput -T alacritty colors &>/dev/null; then
+    echo "  🚀 Adding alacritty fallback..."
+    infocmp xterm-256color | sed 's/xterm-256color/alacritty/' | tic -o "$HOME/.terminfo" -
 fi
 
 echo "-------------------------------------------------------"

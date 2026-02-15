@@ -697,7 +697,7 @@ keymap("n", "<leader>b<Left>", ":BufferLineMovePrev<CR>", { desc = "Move Buffer 
 keymap("n", "<leader>b<Right>", ":BufferLineMoveNext<CR>", { desc = "Move Buffer Right" })
 
 -- Close buffer (keeps window open)
-keymap("n", "<leader>x", ":bdelete<CR>", { desc = "Close Buffer" })
+keymap("n", "<leader>x", function() require("snacks").bufdelete() end, { desc = "Close Buffer" })
 keymap("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick Buffer" })
 
 -- Raccourci pour SCP remote edit

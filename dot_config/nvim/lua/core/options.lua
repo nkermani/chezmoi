@@ -34,8 +34,10 @@ vim.opt.numberwidth = 4
 vim.opt.signcolumn = "yes"
 vim.opt.cursorline = true
 vim.opt.termguicolors = true
--- Remplace le tilde (~) par un espace vide
-vim.opt.fillchars = { eob = " " }
+-- Remplace le tilde (~) par un espace vide et améliore les séparateurs
+vim.opt.fillchars = { eob = " ", vert = "│", horiz = "─", diff = "╱", fold = " ", msgsep = "‾", foldopen = "", foldsep = "│", foldclose = "" }
+vim.opt.laststatus = 3 -- Global statusline
+-- vim.opt.winbar = "%f %m" -- Show filename in each window bar for clarity
 
 vim.opt.wrap = true -- Désactive le retour à la ligne pour permettre le scroll horizontal
 

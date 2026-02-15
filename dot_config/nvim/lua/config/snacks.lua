@@ -41,7 +41,7 @@ snacks.setup({
             width = 0.85,
             height = 0.85,
             border = "rounded",
-            backdrop = { transparent = true, opacity = 40 },
+            backdrop = { transparent = false, opacity = 100 },
         },
     },
 })

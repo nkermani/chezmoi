@@ -7,6 +7,18 @@ require("noice").setup({
         progress = { enabled = false },
     },
     presets = { bottom_search = true, command_palette = true, long_message_to_split = true },
+    views = {
+        cmdline_popup = {
+            border = {
+                style = "none",
+                padding = { 1, 2 },
+            },
+            filter_options = {},
+            win_options = {
+                winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+            },
+        },
+    },
     -- Filtrer les messages de notification spammy
     routes = {
         {

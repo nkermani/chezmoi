@@ -44,10 +44,14 @@ end
 
 
 require("oil").setup({
+    default_file_explorer = true,
+    delete_to_trash = true,
+    skip_confirm_for_simple_edits = true,
     columns = {
         "icon",
     },
     keymaps = {
+        ["<CR>"] = "actions.select",
         ["<C-s>"] = false,
         ["<C-h>"] = false,
         ["<M-h>"] = "actions.select_split",
@@ -55,14 +59,32 @@ require("oil").setup({
         ["<C-c>"] = false,
         ["R"] = "actions.refresh",
         ["<Esc>"] = "actions.close",
+        ["q"] = "actions.close",
     },
     view_options = {
-        show_hidden = false,
+        show_hidden = true,
         is_hidden_file = function(name, bufnr)
             local hidden = { [".DS_Store"] = true, [".git"] = true, ["node_modules"] = true }
-            return hidden[name] or vim.startswith(name, ".")
+            return hidden[name]
         end,
     },
+    win_options = {
+        winbar = "",
+    },
+})
+
+-- Autocmd to open Neo-tree when a file is opened from Oil
+vim.api.nvim_create_autocmd("BufReadPost", {
+    callback = function()
+        if vim.bo.filetype ~= "oil" and vim.fn.isdirectory(vim.fn.expand("%:p")) == 0 then
+            vim.defer_fn(function()
+                local ok, nt = pcall(require, "neo-tree.command")
+                if ok then
+                    nt.execute({ action = "show", source = "filesystem", position = "left" })
+                end
+            end, 10)
+        end
+    end,
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
@@ -114,7 +136,16 @@ local function change_directory(opts)
     })
 end
 
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+vim.keymap.set("n", "-", function()
+    if vim.bo.filetype == "oil" then
+        require("oil").open("..")
+    else
+        pcall(function()
+            require("neo-tree.command").execute({ action = "close" })
+        end)
+        vim.cmd("Oil")
+    end
+end, { desc = "Go up in Oil or Open Oil (closing Neo-tree)" })
 vim.keymap.set("n", "_", "<CMD>Oil .<CR>", { desc = "Open Oil in CWD" })
 
 vim.keymap.set("n", "<leader>gd", function()

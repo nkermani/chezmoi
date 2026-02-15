@@ -38,6 +38,10 @@ VirtualBox VMs/
 .config/GeForce NOW/
 .config/Microsoft/
 .config/Code/
+.config/kitty/
+.config/wezterm/
+.config/zellij/
+.config/zed/
 .config/go/
 .config/yay/
 .config/ibus/

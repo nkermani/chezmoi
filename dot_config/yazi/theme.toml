@@ -1,0 +1,47 @@
+[manager]
+cwd = { fg = "#00f0ff" }
+
+# Hover
+hovered         = { bg = "#3e4452", bold = true }
+preview_hovered = { underline = true }
+
+# Find
+find_keyword  = { fg = "#eedb85", italic = true }
+find_position = { fg = "#d867c6", bg = "transparent", bold = true }
+
+# Marker
+marker_selected = { fg = "#51f66f", bg = "#51f66f" }
+marker_copied   = { fg = "#eedb85", bg = "#eedb85" }
+marker_cut      = { fg = "#f3505c", bg = "#f3505c" }
+
+# Tab
+tab_active   = { fg = "#ffffff", bg = "#368aec" }
+tab_inactive = { fg = "#cacaca", bg = "#252526" }
+tab_width    = 1
+
+# Border
+border_symbol = "│"
+border_style  = { fg = "#333333" }
+
+# Highlighting
+[status]
+separator_open  = ""
+separator_close = ""
+separator_style = { fg = "#252526", bg = "#252526" }
+
+# Mode
+mode_normal = { fg = "#ffffff", bg = "#368aec", bold = true }
+mode_select = { fg = "#ffffff", bg = "#51f66f", bold = true }
+mode_unset  = { fg = "#ffffff", bg = "#d867c6", bold = true }
+
+# Progress
+progress_label  = { fg = "#ffffff", bold = true }
+progress_normal = { fg = "#00f0ff", bg = "#252526" }
+progress_error  = { fg = "#f3505c", bg = "#252526" }
+
+# Permissions
+permissions_t = { fg = "#368aec" }
+permissions_r = { fg = "#eedb85" }
+permissions_w = { fg = "#f3505c" }
+permissions_x = { fg = "#51f66f" }
+permissions_s = { fg = "#676767" }
