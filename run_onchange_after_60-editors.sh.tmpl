@@ -31,8 +31,16 @@ install_npm_lsp() {
     local package=$2
     local binary=$3
     if [ ! -f "$LSP_BIN_DIR/$binary" ]; then
+        if ! command -v npm &>/dev/null; then
+            echo "  ⚠️  npm not found, skipping $name."
+            return
+        fi
         echo "  📦 Installing $name..."
-        npm install -g "$package" --prefix "$APPS_DIR/$name" &>/dev/null
+        # CI=true and </dev/null prevent interactive prompts
+        # --no-audit and --no-fund speed up the installation
+        # --loglevel error ensures we only see important messages
+        CI=true npm install -g $package --prefix "$APPS_DIR/$name" \
+            --no-audit --no-fund --loglevel error </dev/null
         ln -sf "$APPS_DIR/$name/bin/$binary" "$LSP_BIN_DIR/$binary"
     fi
 }

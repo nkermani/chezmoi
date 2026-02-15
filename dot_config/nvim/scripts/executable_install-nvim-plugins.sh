@@ -69,7 +69,7 @@ done
 
 # Mise à jour de Treesitter une fois terminé
 echo "🌲 Mise à jour de Treesitter..."
-nvim --headless -c "TSUpdate" -c "quit" || true
+nvim --headless -c "TSUpdateSync" -c "qa" || true
 
 CODEDIFF_DIR="$PLUGIN_DIR/codediff.nvim"
 if [ -d "$CODEDIFF_DIR" ]; then

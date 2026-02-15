@@ -2,6 +2,7 @@
 padding = { x = 0, y = 0 }
 # opacity = 0.95
 decorations = "None"
+startup_mode = "Maximized"
 
 [font]
 normal = { family = "JetBrainsMonoNL Nerd Font Mono", style = "Regular" }
