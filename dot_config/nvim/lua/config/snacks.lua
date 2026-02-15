@@ -42,6 +42,7 @@ snacks.setup({
             height = 0.85,
             border = "rounded",
             backdrop = { transparent = false, opacity = 100 },
+            winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
         },
     },
 })

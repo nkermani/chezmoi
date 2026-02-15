@@ -45,6 +45,11 @@ telescope.setup({
     },
 })
 
+vim.api.nvim_set_hl(0, "TelescopeBorder", { link = "FloatBorder" })
+vim.api.nvim_set_hl(0, "TelescopePromptBorder", { link = "FloatBorder" })
+vim.api.nvim_set_hl(0, "TelescopeResultsBorder", { link = "FloatBorder" })
+vim.api.nvim_set_hl(0, "TelescopePreviewBorder", { link = "FloatBorder" })
+
 -- 3. RACCOURCIS (KEYMAPS)
 local keymap = vim.keymap.set
 
@@ -123,3 +128,4 @@ local remote_ssh_connect = function()
 end
 
 vim.keymap.set("n", "<leader>rr", remote_ssh_connect, { desc = "Remote Hosts (Telescope)" })
+

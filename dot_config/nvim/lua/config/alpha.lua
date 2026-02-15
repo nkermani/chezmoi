@@ -13,6 +13,7 @@ dashboard.section.header.val = {
     " ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
     " ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
 }
+dashboard.section.header.opts.hl = "AlphaHeader"
 
 -- 2. Configuration des boutons (uniquement Find Files et Grep)
 dashboard.section.buttons.val = {
@@ -34,6 +35,11 @@ dashboard.section.buttons.val = {
     dashboard.button("s", "󰄉  Recent Files (History)", ":Telescope oldfiles<CR>"),
     dashboard.button("q", "󰅚  Quit Neovim", ":qa<CR>"),
 }
+
+for _, button in ipairs(dashboard.section.buttons.val) do
+    button.opts.hl = "AlphaButton"
+    button.opts.hl_shortcut = "AlphaButtonShortcut"
+end
 
 -- 3. Optionnel : Enlever la ligne de "footer" (nombre de plugins) pour rester minimaliste
 dashboard.section.footer.val = ""

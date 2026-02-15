@@ -11,6 +11,7 @@ namu.setup({
             window = {
                 border = "rounded",
                 relative = "editor",
+                winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
             },
         },
     },
