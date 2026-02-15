@@ -4,7 +4,7 @@ if not ok then return end
 edgy.setup({
     left = {
         {
-            title = "EXPLORER",
+            title = "%=EXPLORER%=",
             ft = "neo-tree",
             filter = function(buf)
                 return vim.b[buf].neo_tree_source == "filesystem"
@@ -13,7 +13,7 @@ edgy.setup({
             open = "Neotree show",
         },
         {
-            title = "BUFFERS",
+            title = "%=BUFFERS%=",
             ft = "neo-tree",
             filter = function(buf)
                 return vim.b[buf].neo_tree_source == "buffers"
@@ -22,7 +22,7 @@ edgy.setup({
             open = "Neotree buffers",
         },
         {
-            title = "OUTLINE",
+            title = "%=OUTLINE%=",
             ft = "outline",
             pinned = true,
             open = "Outline",
@@ -30,7 +30,7 @@ edgy.setup({
     },
     bottom = {
         {
-            title = "TERMINAL",
+            title = "%=TERMINAL%=",
             ft = "toggleterm",
             size = { height = 0.3 },
             filter = function(buf, win)
@@ -46,10 +46,10 @@ edgy.setup({
         },
         {
             ft = "Trouble",
-            title = "Trouble",
+            title = "%=Trouble%=",
             size = { height = 0.3 },
         },
-        { ft = "qf", title = "Quickfix" },
+        { ft = "qf", title = "%=Quickfix%=" },
         { ft = "help", size = { height = 20 } },
     },
     right = {
