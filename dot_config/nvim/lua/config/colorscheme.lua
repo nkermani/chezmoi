@@ -111,7 +111,7 @@ end
 
 -- Variables Globales pour les thèmes Vim-script (Sonokai, Everforest, Gruvbox)
 vim.g.sonokai_style = 'shusia'
-vim.g.sonokai_transparent_background = 1
+vim.g.sonokai_transparent_background = 0
 vim.g.sonokai_better_performance = 1
 
 vim.g.everforest_background = 'light'
@@ -136,10 +136,8 @@ end
 apply_theme(main_theme)
 
 -- Overrides globaux pour l'esthétique (Bordures et Séparateurs)
-vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#424242", bg = "none" })
-vim.api.nvim_set_hl(0, "VertSplit", { fg = "#424242", bg = "none" })
-vim.api.nvim_set_hl(0, "StatusLine", { bg = "none" })
-vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "none" })
+vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#424242" })
+vim.api.nvim_set_hl(0, "VertSplit", { fg = "#424242" })
 
 -- Optionnel : commande pour changer de thème à la volée
 vim.api.nvim_create_user_command("ThemeSwap", function(opts)

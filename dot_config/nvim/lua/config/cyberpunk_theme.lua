@@ -15,10 +15,13 @@ M.colors = {
     line_nr = "#676767",
     visual = "#3e4452",
     border = "#00f0ff",
-    sidebar_bg = "#1a1a1a",
+    sidebar_bg = "#161616",
+    inactive_bg = "#1e1e1e",
     error_bg = "#603336",
     search_bg = "#d867c6",
     gold = "#ffcc00",
+    active_sidebar_bg = "#1f1f1f",
+    neotree_bg = "#161616",
 }
 
 function M.setup()
@@ -34,33 +37,53 @@ function M.setup()
 
     -- Base
     hl(0, "Normal", { fg = c.fg, bg = c.bg })
-    hl(0, "NormalFloat", { fg = c.fg, bg = c.sidebar_bg })
+    hl(0, "NormalNC", { fg = c.fg, bg = c.inactive_bg })
+    hl(0, "NormalFloat", { fg = c.fg, bg = c.bg })
     hl(0, "Cursor", { fg = c.bg, bg = c.fg })
     hl(0, "CursorLine", { bg = c.cursor_line })
     hl(0, "LineNr", { fg = c.line_nr })
     hl(0, "CursorLineNr", { fg = c.cyan, bold = true })
     hl(0, "Visual", { bg = c.visual })
     hl(0, "SignColumn", { bg = c.bg })
-    hl(0, "VertSplit", { fg = c.border, bg = "none" })
-    hl(0, "WinSeparator", { fg = c.border, bg = "none" })
+    hl(0, "VertSplit", { fg = c.cyan, bg = "none" })
+    hl(0, "WinSeparator", { fg = c.cyan, bg = "none" })
     hl(0, "StatusLine", { bg = c.sidebar_bg, fg = c.fg })
     hl(0, "StatusLineNC", { bg = c.sidebar_bg, fg = c.comment })
-    hl(0, "FloatBorder", { fg = c.border, bg = c.sidebar_bg })
-    hl(0, "FloatTitle", { fg = c.border, bg = c.sidebar_bg, bold = true })
+    hl(0, "WinBar", { bg = c.bg, fg = c.bg })
+    hl(0, "WinBarNC", { bg = c.bg, fg = c.bg })
+    hl(0, "FloatBorder", { fg = c.cyan, bg = c.bg })
+    hl(0, "FloatTitle", { fg = c.cyan, bg = c.bg, bold = true })
 
     -- Edgy
-    hl(0, "EdgyWinBar", { bg = c.sidebar_bg, fg = c.fg })
+    hl(0, "EdgyNormal", { bg = c.sidebar_bg, fg = c.fg })
+    hl(0, "EdgyWinBar", { bg = c.active_sidebar_bg, fg = c.fg })
     hl(0, "EdgyWinBarNC", { bg = c.sidebar_bg, fg = c.comment })
-    hl(0, "EdgyTitle", { fg = c.cyan, bold = true })
-    hl(0, "EdgyIcon", { fg = c.cyan })
-    hl(0, "EdgyIconActive", { fg = c.magenta })
+    hl(0, "EdgyTitle", { bg = c.active_sidebar_bg, fg = c.cyan, bold = true })
+    hl(0, "EdgyIcon", { bg = c.sidebar_bg, fg = c.cyan })
+    hl(0, "EdgyIconActive", { bg = c.active_sidebar_bg, fg = c.cyan })
+
+    hl(0, "NeoTreeNormal", { bg = c.neotree_bg, fg = c.fg })
+    hl(0, "NeoTreeNormalNC", { bg = c.neotree_bg, fg = c.fg })
+    hl(0, "NeoTreeWinSeparator", { fg = c.cyan, bg = c.neotree_bg })
+    hl(0, "NeoTreeEndOfBuffer", { bg = c.neotree_bg, fg = c.neotree_bg })
+
+    hl(0, "ToggleTermNormal", { bg = c.neotree_bg, fg = c.fg })
+    hl(0, "ToggleTermNormalNC", { bg = c.neotree_bg, fg = c.fg })
+
+    hl(0, "GitSignsAdd", { fg = c.green, bg = c.bg })
+    hl(0, "GitSignsChange", { fg = c.gold, bg = c.bg })
+    hl(0, "GitSignsDelete", { fg = c.red, bg = c.bg })
+    hl(0, "GitSignsChangedelete", { fg = c.gold, bg = c.bg })
+    hl(0, "GitSignsTopdelete", { fg = c.red, bg = c.bg })
+    hl(0, "GitSignsUntracked", { fg = c.green, bg = c.bg })
 
     -- Floating Windows & Noice
-    hl(0, "FloatBorder", { fg = c.border, bg = c.sidebar_bg })
-    hl(0, "NoiceCmdlinePopupBorder", { fg = c.red })
-    hl(0, "NoiceCmdlinePopupTitle", { fg = c.red })
+    hl(0, "NoiceCmdlinePopupBorder", { fg = c.cyan, bg = c.bg })
+    hl(0, "NoiceCmdlinePopupTitle", { fg = c.cyan, bg = c.bg, bold = true })
+    hl(0, "NoiceCmdline", { bg = c.bg })
+    hl(0, "NoiceCmdlineIcon", { fg = c.cyan, bg = c.bg })
     hl(0, "SnacksNotifierBorder", { fg = c.gold })
-    hl(0, "SnacksNotifierTitle", { fg = c.gold })
+    hl(0, "SnacksNotifierTitle", { fg = c.cyan })
     hl(0, "SnacksPickerBorder", { fg = c.red })
     hl(0, "SnacksPickerTitle", { fg = c.red })
 

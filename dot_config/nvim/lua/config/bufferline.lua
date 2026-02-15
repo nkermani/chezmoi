@@ -50,17 +50,17 @@ bufferline.setup({
     },
 })
 
-local trans_ok, transparent = pcall(require, "transparent")
-if trans_ok then
-    transparent.clear_prefix('BufferLine')
+-- local trans_ok, transparent = pcall(require, "transparent")
+-- if trans_ok then
+--     transparent.clear_prefix('BufferLine')
+--
+--     vim.g.transparent_groups = vim.list_extend(
+--         vim.g.transparent_groups or {},
+--         vim.tbl_map(function(v)
+--             return v.hl_group
+--         end, vim.tbl_values(require('bufferline.config').highlights))
+--     )
+-- -- end
+-- --
 
-    vim.g.transparent_groups = vim.list_extend(
-        vim.g.transparent_groups or {},
-        vim.tbl_map(function(v)
-            return v.hl_group
-        end, vim.tbl_values(require('bufferline.config').highlights))
-    )
-end
-
-vim.api.nvim_set_hl(0, "TabLineFill", { bg = "none" })
-
+vim.api.nvim_set_hl(0, "TabLineFill", { bg = '#1a1a1a' })

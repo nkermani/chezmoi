@@ -8,7 +8,7 @@ require("core.autocmds")
 -- Configs
 -- require("config.mason") -- Disabled for instant startup
 require("config.colorscheme")
--- require("config.transparent")
+require("config.transparent")
 
 require("config.copilot")
 require("config.snacks")

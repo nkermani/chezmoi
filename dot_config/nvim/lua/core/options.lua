@@ -43,14 +43,11 @@ vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
     callback = function()
         vim.schedule(function()
             if vim.api.nvim_win_is_valid(0) and vim.bo.buftype == "" then
-                vim.wo.winbar = "%#Normal#⠀"
+                vim.wo.winbar = "%#WinBar#⠀"
             end
         end)
     end,
 })
-
-vim.api.nvim_set_hl(0, "WinBar", { bg = "none", fg = "none" })
-vim.api.nvim_set_hl(0, "WinBarNC", { bg = "none", fg = "none" })
 
 vim.opt.wrap = true -- Désactive le retour à la ligne pour permettre le scroll horizontal
 

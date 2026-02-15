@@ -151,4 +151,4 @@ transparent.clear_prefix('lualine')
 -- BufferLine n'est plus transparent, donc on commente ça
 -- transparent.clear_prefix('BufferLine')
 
-transparent.toggle(true)
+transparent.toggle(false)

@@ -77,10 +77,14 @@ vim.api.nvim_create_autocmd("BufEnter", {
     group = vim.api.nvim_create_augroup("OilAutoCd", { clear = true }),
     pattern = "oil://*",
     callback = function()
-        local dir = require("oil").get_current_dir()
-        if dir then
-            pcall(vim.api.nvim_set_current_dir, dir)
-        end
+        vim.schedule(function()
+            if vim.bo.filetype == "oil" then
+                local dir = require("oil").get_current_dir()
+                if dir then
+                    pcall(vim.api.nvim_set_current_dir, dir)
+                end
+            end
+        end)
     end,
 })
 
