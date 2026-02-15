@@ -1,8 +1,16 @@
 [window]
 padding = { x = 0, y = 0 }
-# opacity = 0.95
+opacity = 1.0
 decorations = "None"
 startup_mode = "Maximized"
+
+[keyboard]
+bindings = [
+    { key = "Q", mods = "Control", action = "Quit" },
+    { key = "V", mods = "Control", action = "Paste" },
+    { key = "C", mods = "Control", action = "Copy" },
+    { key = "D", mods = "Control|Shift", chars = "\u001b[68;5u" },
+]
 
 [font]
 normal = { family = "JetBrainsMonoNL Nerd Font Mono", style = "Regular" }

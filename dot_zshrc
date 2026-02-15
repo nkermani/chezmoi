@@ -20,8 +20,10 @@ if ! tput colors >/dev/null 2>&1; then
     export TERM="xterm-256color"
 fi
 
-# Force Alacritty as primary TERM
-export TERM="alacritty"
+# Force Alacritty as primary TERM (only if not in tmux)
+if [[ -z "$TMUX" ]]; then
+    export TERM="alacritty"
+fi
 
 # 2. PATH & ENV
 export LSP="$NK_BIN/lsp"
