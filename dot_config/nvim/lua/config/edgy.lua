@@ -6,17 +6,33 @@ edgy.setup({
         {
             title = "EXPLORER",
             ft = "neo-tree",
-            show = function()
-                return vim.api.nvim_win_get_width(0) > 30
+            filter = function(buf)
+                return vim.b[buf].neo_tree_source == "filesystem"
             end,
             pinned = true,
             open = "Neotree show",
         },
+        {
+            title = "BUFFERS",
+            ft = "neo-tree",
+            filter = function(buf)
+                return vim.b[buf].neo_tree_source == "buffers"
+            end,
+            pinned = true,
+            open = "Neotree buffers",
+        },
+        {
+            title = "OUTLINE",
+            ft = "outline",
+            pinned = true,
+            open = "Outline",
+        },
     },
     bottom = {
         {
+            title = "TERMINAL",
             ft = "toggleterm",
-            size = { height = 0.4 },
+            size = { height = 0.3 },
             filter = function(buf, win)
                 return vim.api.nvim_win_get_config(win).relative == ""
             end,

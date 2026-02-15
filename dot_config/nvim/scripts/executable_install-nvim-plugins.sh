@@ -55,6 +55,8 @@ PLUGINS=(
 	"malewicz1337/oil-git.nvim"
 	"esmuellert/codediff.nvim"
 	"stevearc/dressing.nvim"
+	"akinsho/toggleterm.nvim"
+	"hedwig/outline.nvim"
 )
 
 for plugin in "${PLUGINS[@]}"; do

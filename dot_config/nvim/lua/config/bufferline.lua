@@ -8,7 +8,7 @@ bufferline.setup({
     options = {
         mode = "buffers",
         style_preset = bufferline.style_preset.default,
-        separator_style = "slant",
+        separator_style = "thin",
         always_show_bufferline = true,
         show_buffer_close_icons = true,
         show_close_icon = false,

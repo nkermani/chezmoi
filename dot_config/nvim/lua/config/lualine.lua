@@ -46,11 +46,11 @@ lualine.setup({
         disabled_filetypes = { "alpha", "neo-tree", "oil", "edgy" },
     },
     sections = {
-        lualine_a = { { 'mode', fmt = function(str) return str:sub(1,1) end } },
-        lualine_b = { { 'branch', icon = '' }, 'diff' },
-        lualine_c = { { 'filename', path = 1, symbols = { modified = ' ●', readonly = ' 🔒' } } },
-        lualine_x = { 'diagnostics', 'filetype' },
-        lualine_y = { 'progress' },
-        lualine_z = { 'location' },
+        lualine_a = { { 'mode', fmt = function(str) return str:sub(1, 1) end, padding = { left = 1, right = 1 } } },
+        lualine_b = { { 'branch', icon = '', padding = { left = 1, right = 1 } }, { 'diff', padding = { left = 1, right = 1 } } },
+        lualine_c = { { 'filename', path = 1, symbols = { modified = ' ●', readonly = ' 🔒' }, padding = { left = 1, right = 1 } } },
+        lualine_x = { { 'diagnostics', padding = { left = 1, right = 1 } }, { 'filetype', padding = { left = 1, right = 1 } } },
+        lualine_y = { { 'progress', padding = { left = 1, right = 1 } } },
+        lualine_z = { { 'location', padding = { left = 1, right = 1 } } },
     },
 })
