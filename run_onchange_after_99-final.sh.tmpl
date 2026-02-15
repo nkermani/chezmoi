@@ -1,0 +1,26 @@
+#!/bin/bash
+{{ include ".chezmoitemplates/env.sh.tmpl" }}
+
+# --- FINALIZATION ---
+if [[ "$SHELL" != */zsh ]]; then
+    echo "🐚 Setting default shell to Zsh..."
+    chsh -s $(which zsh)
+fi
+
+# --- TERMINFO FALLBACKS ---
+echo "🖥️  Setting up terminfo fallbacks..."
+mkdir -p "$HOME/.terminfo"
+if ! tput -T xterm-kitty colors &>/dev/null; then
+    echo "  🐱 Adding xterm-kitty fallback..."
+    infocmp xterm-256color | sed 's/xterm-256color/xterm-kitty/' | tic -o "$HOME/.terminfo" -
+fi
+if ! tput -T zellij colors &>/dev/null; then
+    echo "  🪟 Adding zellij fallback..."
+    infocmp xterm-256color | sed 's/xterm-256color/zellij/' | tic -o "$HOME/.terminfo" -
+fi
+
+echo "-------------------------------------------------------"
+echo "✅ Deployment Successful!"
+echo "✨ Restart your terminal or run 'source ~/.zshrc'"
+echo "-------------------------------------------------------"
+

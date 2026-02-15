@@ -8,3 +8,4 @@
 .local/share/applications/42-*.desktop
 {{ end }}
 
+.chezmoitemplates

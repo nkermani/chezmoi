@@ -1,0 +1,33 @@
+#!/bin/bash
+{{ include ".chezmoitemplates/env.sh.tmpl" }}
+
+echo "⚙️  Setting up runtimes..."
+# Node via NVM
+if [[ "$IS_42" == "true" ]]; then
+    export NVM_DIR="/goinfre/$USER/.nvm"
+else
+    export NVM_DIR="$APPS_DIR/nvm"
+fi
+mkdir -p "$NVM_DIR"
+
+if [ ! -d "$NVM_DIR/versions" ]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | NVM_DIR="$NVM_DIR" bash
+fi
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+if ! command -v node &>/dev/null; then
+    nvm install 22 && nvm use 22 && nvm alias default 22
+    ln -sf "$(which node)" "$BIN_DIR/node"
+    ln -sf "$(which npm)" "$BIN_DIR/npm"
+fi
+
+# Rust
+if [[ "$IS_42" == "true" ]]; then
+    export RUSTUP_HOME="/goinfre/$USER/.rustup"
+    export CARGO_HOME="/goinfre/$USER/.cargo"
+fi
+
+if ! command -v cargo &>/dev/null; then
+    echo "  🦀 Installing Rust..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+fi

@@ -1,0 +1,13 @@
+#!/bin/bash
+{{ include ".chezmoitemplates/env.sh.tmpl" }}
+
+if [[ "$OS_TYPE" == "Linux" ]]; then
+    echo "🔡 Checking Fonts..."
+    FONT_DIR="$HOME/.local/share/fonts"
+    if [ ! -d "$FONT_DIR/JetBrainsMono" ] && ! fc-list | grep -qi "JetBrainsMono"; then
+        mkdir -p "$FONT_DIR/JetBrainsMono"
+        curl -L -o /tmp/jb.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+        unzip -o /tmp/jb.zip -d "$FONT_DIR/JetBrainsMono" && rm /tmp/jb.zip
+        fc-cache -f
+    fi
+fi

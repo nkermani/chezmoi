@@ -1,0 +1,61 @@
+#!/bin/bash
+{{ include ".chezmoitemplates/env.sh.tmpl" }}
+
+echo "🐱 Configuring Terminals..."
+
+# Alacritty
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+    if ! command -v alacritty &>/dev/null; then
+        brew install --cask alacritty
+    fi
+else
+    if ! command -v alacritty &>/dev/null; then
+        if [[ "$HAS_SUDO" == "true" ]]; then
+            echo "  📦 Installing Alacritty via package manager..."
+            if command -v apt &>/dev/null; then
+                sudo apt update && sudo apt install -y alacritty
+            elif command -v dnf &>/dev/null; then
+                sudo dnf install -y alacritty
+            fi
+        else
+            echo "  📦 Installing Alacritty (AppImage)..."
+            ALACRITTY_URL=$(curl -s https://api.github.com/repos/pkgforge-dev/alacritty-AppImage/releases/latest | grep "browser_download_url" | grep "x86_64" | head -n 1 | cut -d '"' -f 4)
+            if [ -n "$ALACRITTY_URL" ]; then
+                curl -LSs "$ALACRITTY_URL" -o "$BIN_DIR/alacritty"
+                chmod +x "$BIN_DIR/alacritty"
+                
+                # Desktop Integration (Icon & Launcher)
+                echo "  🎨 Setting up Alacritty desktop integration..."
+                ICON_DIR="$HOME/.local/share/icons"
+                APP_DIR="$HOME/.local/share/applications"
+                mkdir -p "$ICON_DIR" "$APP_DIR"
+                
+                # Download official icon
+                curl -LSs "https://github.com/alacritty/alacritty/releases/latest/download/Alacritty.svg" -o "$ICON_DIR/alacritty.svg"
+                
+                # Create .desktop file
+                cat <<EOF > "$APP_DIR/alacritty.desktop"
+[Desktop Entry]
+Type=Application
+TryExec=$BIN_DIR/alacritty
+Exec=$BIN_DIR/alacritty
+Icon=$HOME/.local/share/icons/alacritty.svg
+Terminal=false
+Categories=System;TerminalEmulator;
+
+Name=Alacritty
+GenericName=Terminal
+Comment=A cross-platform, GPU-accelerated terminal emulator
+StartupWMClass=Alacritty
+Actions=New;
+
+[Desktop Action New]
+Name=New Terminal
+Exec=$BIN_DIR/alacritty
+EOF
+            else
+                echo "  ⚠️  Could not find Alacritty AppImage URL."
+            fi
+        fi
+    fi
+fi

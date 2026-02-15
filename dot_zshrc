@@ -78,6 +78,7 @@ if [[ "$OS_TYPE" == "wsl2" ]]; then
 alias c='vscode'
 fi
 
+
 # 5. SMART-EDITOR
 mkdir -p "$NK_BIN"
 cat << 'EOF' > "$NK_BIN/smart-editor"
@@ -108,10 +109,6 @@ fi
 
 if command -v code >/dev/null 2>&1; then
     exec code "$@"
-elif command -v zed >/dev/null 2>&1; then
-    exec zed "$@"
-elif command -v zed-editor >/dev/null 2>&1; then
-    exec zed-editor "$@"
 else
     exec vi "$@"
 fi
@@ -122,15 +119,14 @@ export EDITOR="smart-editor"
 export VISUAL="smart-editor"
 
 # Alias éditeurs
-alias z='zed'
 alias edit='smart-editor'
 alias e='smart-editor'
 alias c='code'
 alias v='vim'
 alias n='nvim'
 
-# Kitty SSH kitten
-alias ssh="kitten ssh"
+# SSH
+alias ssh="ssh"
 
 alias clear='clear -x'
 
