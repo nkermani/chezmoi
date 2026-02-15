@@ -14,7 +14,7 @@ M.colors = {
     cursor_line = "#2a2a2a",
     line_nr = "#676767",
     visual = "#3e4452",
-    border = "#f3505c",
+    border = "#00f0ff",
     sidebar_bg = "#1a1a1a",
     error_bg = "#603336",
     search_bg = "#d867c6",
@@ -137,4 +137,3 @@ function M.setup()
 end
 
 return M
-

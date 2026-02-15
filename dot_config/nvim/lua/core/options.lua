@@ -37,7 +37,20 @@ vim.opt.termguicolors = true
 -- Remplace le tilde (~) par un espace vide et améliore les séparateurs
 vim.opt.fillchars = { eob = " ", vert = "│", horiz = "─", diff = "╱", fold = " ", msgsep = "‾", foldopen = "", foldsep = "│", foldclose = "" }
 vim.opt.laststatus = 3 -- Global statusline
--- vim.opt.winbar = "%f %m" -- Show filename in each window bar for clarity
+vim.opt.winbar = "⠀"
+
+vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
+    callback = function()
+        vim.schedule(function()
+            if vim.api.nvim_win_is_valid(0) and vim.bo.buftype == "" then
+                vim.wo.winbar = "%#Normal#⠀"
+            end
+        end)
+    end,
+})
+
+vim.api.nvim_set_hl(0, "WinBar", { bg = "none", fg = "none" })
+vim.api.nvim_set_hl(0, "WinBarNC", { bg = "none", fg = "none" })
 
 vim.opt.wrap = true -- Désactive le retour à la ligne pour permettre le scroll horizontal
 

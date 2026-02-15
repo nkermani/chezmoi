@@ -35,6 +35,19 @@ bufferline.setup({
             reveal = { 'close' }
         },
     },
+    highlights = {
+        buffer_selected = {
+            fg = '#ffffff',
+            bold = true,
+            italic = false,
+        },
+        indicator_selected = {
+            fg = '#00f0ff',
+        },
+        modified_selected = {
+            fg = '#51f66f',
+        },
+    },
 })
 
 local trans_ok, transparent = pcall(require, "transparent")

@@ -69,7 +69,7 @@ require("oil").setup({
         end,
     },
     win_options = {
-        winbar = "",
+        winbar = " ",
     },
 })
 
