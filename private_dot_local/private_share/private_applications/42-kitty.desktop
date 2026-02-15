@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Kitty Focus
-Exec=python3 /home/nkermani/.nkermani/bin/42/focus_manager.py /home/nkermani/.local/share/applications/kitty.desktop
-Icon=terminal
-# StartupWMClass=kitty

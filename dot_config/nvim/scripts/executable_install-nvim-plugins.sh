@@ -25,6 +25,8 @@ PLUGINS=(
     "xiyaowong/transparent.nvim"
     "folke/noice.nvim"
     "nvim-lualine/lualine.nvim"
+    "akinsho/bufferline.nvim"
+    "nvim-neo-tree/neo-tree.nvim"
     "nvim-telescope/telescope.nvim"
     "folke/trouble.nvim"
     "neovim/nvim-lspconfig"

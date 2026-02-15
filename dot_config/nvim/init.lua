@@ -8,14 +8,16 @@ require("core.autocmds")
 -- Configs
 -- require("config.mason") -- Disabled for instant startup
 require("config.colorscheme")
-require("config.transparent")
+-- require("config.transparent")
 
 require("config.copilot")
 
 require("config.devicons")
 require("config.lualine")
+require("config.bufferline")
 require("config.gitsigns")
 require("config.treesitter")
+require("config.neotree")
 require("config.namu")
 require("config.telescope")
 require("config.cmp")

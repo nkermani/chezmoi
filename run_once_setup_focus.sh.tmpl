@@ -4,7 +4,7 @@ echo "Configuration 42 détectée : Installation du Focus Manager..."
 # 1. Compilation de l'outil de focus C
 mkdir -p {{ .chezmoi.homeDir }}/.nkermani/bin/42
 gcc {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus.c -o {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus -lX11
-# 2. Raccourcis Dock (1-5) : Kitty, Browser, Finder, PDF, Discord
+# 2. Raccourcis Dock (1-5) : Alacritty, Browser, Finder, PDF, Discord
 for i in {1..5}; do
     gsettings set org.gnome.shell.keybindings switch-to-application-$i "['<Super>$i']"
 done
@@ -14,7 +14,7 @@ gsettings set org.gnome.shell.keybindings switch-to-application-6 "[]"
 # 4. Désactiver les animations pour l'instantanéité
 gsettings set org.gnome.desktop.interface enable-animations false
 # 5. Mise à jour des Favoris (L'ordre ici définit le numéro du Super+N)
-gsettings set org.gnome.shell favorite-apps "['42-kitty.desktop', '42-browser.desktop', '42-finder.desktop', '42-pdf.desktop', '42-discord.desktop']"
+gsettings set org.gnome.shell favorite-apps "['42-alacritty.desktop', '42-browser.desktop', '42-finder.desktop', '42-pdf.desktop', '42-discord.desktop']"
 echo "Setup 42 terminé."
 {{- end -}}
 

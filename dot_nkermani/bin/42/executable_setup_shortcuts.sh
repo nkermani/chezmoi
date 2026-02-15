@@ -5,7 +5,7 @@ for i in {1..9}; do
 done
 
 declare -A apps
-apps["Kitty"]="/home/nkermani/.nkermani/bin/42/focus_kitty.sh:<Super>1"
+apps["Alacritty"]="/home/nkermani/.nkermani/bin/42/focus_alacritty.sh:<Super>1"
 apps["Browser"]="/home/nkermani/.nkermani/bin/42/focus_browser.sh:<Super>2"
 apps["Finder"]="/home/nkermani/.nkermani/bin/42/focus_finder.sh:<Super>3"
 apps["Discord"]="/home/nkermani/.nkermani/bin/42/focus_discord.sh:<Super>4"
@@ -14,7 +14,7 @@ apps["Desktop"]="/home/nkermani/.nkermani/bin/42/focus_desktop.sh:<Super>5"
 BASE="org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
 LIST="["
 i=0
-for name in "Kitty" "Browser" "Finder" "Discord" "Desktop"; do
+for name in "Alacritty" "Browser" "Finder" "Discord" "Desktop"; do
     val=${apps[$name]}
     cmd=${val%:*}
     bind=${val#*:}

@@ -17,14 +17,14 @@ bufferline.setup({
             local icon = level:match("error") and " " or " "
             return " " .. icon .. count
         end,
-        -- offsets = {
-        --     {
-        --         filetype = "neo-tree",
-        --         text = "File Explorer",
-        --         highlight = "NeoTreeNormal",
-        --         separator = false,
-        --     },
-        -- },
+        offsets = {
+            {
+                filetype = "neo-tree",
+                text = "File Explorer",
+                highlight = "NeoTreeNormal",
+                separator = true,
+            },
+        },
     },
 })
 

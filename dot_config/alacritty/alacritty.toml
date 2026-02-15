@@ -1,6 +1,6 @@
 [window]
 padding = { x = 30, y = 30 }
-opacity = 0.95
+# opacity = 0.95
 decorations = "None"
 
 [font]

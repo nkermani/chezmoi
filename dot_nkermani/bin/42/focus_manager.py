@@ -9,8 +9,8 @@ def focus_app(desktop_file):
     subprocess.run(["gsettings", "set", "org.gnome.desktop.interface", "enable-animations", "false"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
     
     app_name = ""
-    if "kitty" in desktop_file:
-        app_name = "kitty"
+    if "alacritty" in desktop_file:
+        app_name = "Alacritty"
     elif "brave" in desktop_file:
         app_name = "brave"
     elif "discord" in desktop_file:
@@ -34,9 +34,9 @@ def focus_app(desktop_file):
         except:
             pass
     
-    if "kitty" in desktop_file:
+    if "alacritty" in desktop_file:
         try:
-            subprocess.run(["/home/nkermani/.nkermani/apps/kitty.app/bin/kitty", "--single-instance"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+            subprocess.run(["/home/nkermani/.nkermani/bin/alacritty"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
             return
         except:
             pass
