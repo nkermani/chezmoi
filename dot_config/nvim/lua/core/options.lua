@@ -73,6 +73,17 @@ vim.opt.backspace = "indent,eol,start"
 -- Cela permet de copier dans Neovim et coller dans Chrome (et inversement) sans config spéciale
 vim.opt.clipboard = "unnamedplus"
 
+-- Fix for Alacritty/WSL2 cursor shape changing
+if vim.fn.has("wsl") == 1 then
+    vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
+    vim.api.nvim_create_autocmd({ "VimEnter", "VimResume" }, {
+        group = vim.api.nvim_create_augroup("AlacrittyCursor", { clear = true }),
+        callback = function()
+            vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
+        end,
+    })
+end
+
 -- Amélioration de l'expérience de "Yank"
 -- Met en surbrillance le texte copié pendant quelques millisecondes (très visuel et pratique)
 vim.api.nvim_create_autocmd("TextYankPost", {
