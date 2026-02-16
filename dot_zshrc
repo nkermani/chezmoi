@@ -83,7 +83,6 @@ if [[ "$OS_TYPE" == "wsl2" ]]; then
 alias c='vscode'
 fi
 
-
 # 5. SMART-EDITOR
 mkdir -p "$NK_BIN"
 cat << 'EOF' > "$NK_BIN/smart-editor"
@@ -136,23 +135,26 @@ alias ssh="ssh"
 alias clear='clear -x'
 
 # 6. FONCTIONS PERSO & AI
-opencode() {
-    local REAL_OPENCODE="/home/nkermani/.opencode/bin/opencode"
-    
-    if [[ "$1" == "--internal" ]]; then
-        shift
-        "$REAL_OPENCODE" "$@"
-    else
-        # On lance une fenêtre Alacritty avec police de 10
-        # Si une session tmux existe, on s'y attache sur la fenêtre opencode
-        if tmux has-session -t nkermani 2>/dev/null; then
-            alacritty.exe -o "font.size=10" -e wsl.exe zsh -c "export SKIP_TMUX_AUTOSTART=1; tmux attach-session -t nkermani \; select-window -t opencode" &!
-        else
-            alacritty.exe -o "font.size=10" -e wsl.exe zsh -c "export SKIP_TMUX_AUTOSTART=1; source ~/.zshrc && opencode --internal $*" &!
-        fi
-    fi
-}
-
+# opencode() {
+#     local REAL_OPENCODE="$HOME/.nkeramni/bin/opencode"
+#
+#     if [[ "$1" == "--internal" ]]; then
+#         shift
+#         "$REAL_OPENCODE" "$@"
+#     else
+#         if [[ "$OS_TYPE" == "wsl2" ]]; then;
+#                 # On lance une fenêtre Alacritty avec police de 10
+#                 # Si une session tmux existe, on s'y attache sur la fenêtre opencode
+#                 if tmux has-session -t nkermani 2>/dev/null; then
+#                     alacritty.exe -o "font.size=10" -e wsl.exe zsh -c "export SKIP_TMUX_AUTOSTART=1; tmux attach-session -t nkermani \; select-window -t opencode" &!
+#                 else
+#                     alacritty.exe -o "font.size=10" -e wsl.exe zsh -c "export SKIP_TMUX_AUTOSTART=1; source ~/.zshrc && opencode --internal $*" &!
+#                 fi
+#         else
+#             "$REAL_OPENCODE" "$@"
+#         fi
+#     fi
+# }
 
 ai() {
     local search_cmd
