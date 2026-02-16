@@ -38,13 +38,18 @@ vim.opt.termguicolors = true
 -- Remplace le tilde (~) par un espace vide et améliore les séparateurs
 vim.opt.fillchars = { eob = " ", vert = "│", horiz = "─", diff = "╱", fold = " ", msgsep = "‾", foldopen = "", foldsep = "│", foldclose = "" }
 vim.opt.laststatus = 3 -- Global statusline
-vim.opt.winbar = "⠀"
+-- Close button function for winbar
+_G.close_buffer_click = function()
+    require("snacks").bufdelete()
+end
+
+vim.opt.winbar = "%=%#WinBar#%@v:lua.close_buffer_click@ 󰅖 %*"
 
 vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
     callback = function()
         vim.schedule(function()
             if vim.api.nvim_win_is_valid(0) and vim.bo.buftype == "" then
-                vim.wo.winbar = "%#WinBar#⠀"
+                vim.wo.winbar = "%=%#WinBar#%@v:lua.close_buffer_click@ 󰅖 %*"
             end
         end)
     end,

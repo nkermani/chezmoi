@@ -60,6 +60,7 @@ require("oil").setup({
         ["R"] = "actions.refresh",
         ["<Esc>"] = "actions.close",
         ["q"] = "actions.close",
+        ["<leader>cd"] = "actions.cd",
     },
     view_options = {
         show_hidden = true,
@@ -71,21 +72,6 @@ require("oil").setup({
     win_options = {
         winbar = " ",
     },
-})
-
-vim.api.nvim_create_autocmd("BufEnter", {
-    group = vim.api.nvim_create_augroup("OilAutoCd", { clear = true }),
-    pattern = "oil://*",
-    callback = function()
-        vim.schedule(function()
-            if vim.bo.filetype == "oil" then
-                local dir = require("oil").get_current_dir()
-                if dir then
-                    pcall(vim.api.nvim_set_current_dir, dir)
-                end
-            end
-        end)
-    end,
 })
 
 local function change_directory(opts)

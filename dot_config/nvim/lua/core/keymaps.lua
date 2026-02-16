@@ -372,10 +372,15 @@ keymap('n', '<3-LeftMouse>', 'V', opts)
 
 -- Menu contextuel (Clic droit)
 vim.cmd([[
+  amenu PopUp.Split\ Vertical <cmd>vsplit<CR>
+  amenu PopUp.Split\ Horizontal <cmd>split<CR>
+  amenu PopUp.Kill\ Buffer <cmd>lua require("snacks").bufdelete()<CR>
+  amenu PopUp.Quit\ Neovim <cmd>qa<CR>
+  amenu PopUp.-1- *
   amenu PopUp.Definition <cmd>lua vim.lsp.buf.definition()<CR>
   amenu PopUp.References <cmd>lua vim.lsp.buf.references()<CR>
   amenu PopUp.Rename <cmd>lua vim.lsp.buf.rename()<CR>
-  amenu PopUp.-1- *
+  amenu PopUp.-2- *
   amenu PopUp.Format <cmd>lua vim.lsp.buf.format()<CR>
 ]])
 
