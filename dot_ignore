@@ -81,6 +81,8 @@ VirtualBox VMs/
 
 .vscode-server/
 
+.OpenJDK21U-jdk_x64_linux_hotspot_21.0.10_7/
+
 .nkermani/apps/*/**
 .nkermani/bin/*/**
 .nkermani/notes/*/**
