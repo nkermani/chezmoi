@@ -10,14 +10,22 @@ vim.api.nvim_create_autocmd("BufEnter", {
             if ft == s then return end
         end
         
-        if vim.fn.isdirectory(vim.fn.expand("%:p")) == 0 and vim.bo.buftype == "" then
-            local nt_api = pcall(require, "neo-tree.command")
-            if nt_api then
-                local manager = require("neo-tree.sources.manager")
-                local state = manager.get_state("filesystem")
-                if not state.winid or not vim.api.nvim_win_is_valid(state.winid) then
-                    require("neo-tree.command").execute({ action = "show", source = "filesystem", position = "left" })
-                end
+        -- Ignore special buffers, floating windows, or directories
+        if vim.bo.buftype ~= "" or vim.api.nvim_win_get_config(0).relative ~= "" or vim.fn.isdirectory(vim.fn.expand("%:p")) ~= 0 then
+            return
+        end
+
+        local ok, nt_command = pcall(require, "neo-tree.command")
+        if ok then
+            local manager = require("neo-tree.sources.manager")
+            local state = manager.get_state("filesystem")
+            if not state.winid or not vim.api.nvim_win_is_valid(state.winid) then
+                vim.schedule(function()
+                    -- Re-check validity inside schedule to avoid E242 (Can't split while closing)
+                    if not state.winid or not vim.api.nvim_win_is_valid(state.winid) then
+                        pcall(nt_command.execute, { action = "show", source = "filesystem", position = "left" })
+                    end
+                end)
             end
         end
     end,
