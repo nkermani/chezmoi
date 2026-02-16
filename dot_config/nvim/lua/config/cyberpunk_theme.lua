@@ -14,14 +14,14 @@ M.colors = {
     cursor_line = "#2a2a2a",
     line_nr = "#676767",
     visual = "#3e4452",
-    border = "#00f0ff",
-    sidebar_bg = "#161616",
-    inactive_bg = "#1e1e1e",
+    border = "#f3505c",
+    sidebar_bg = "#2a2a2a",
+    inactive_bg = "#262626",
     error_bg = "#603336",
     search_bg = "#d867c6",
     gold = "#ffcc00",
-    active_sidebar_bg = "#1f1f1f",
-    neotree_bg = "#161616",
+    active_sidebar_bg = "#323232",
+    neotree_bg = "#2a2a2a",
 }
 
 function M.setup()

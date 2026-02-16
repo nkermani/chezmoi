@@ -1,0 +1,69 @@
+# JetBrains Cyberpunk Palette
+# Red: #f3505c, Green: #51f66f, Yellow: #eedb85, Blue: #368aec, Magenta: #d867c6, Cyan: #00f0ff
+
+format = """
+[ $os$username ](bg:#00f0ff fg:#212121 bold)\
+[ $directory ](bg:#f3505c fg:#ffffff bold)\
+[ $git_branch$git_status ](bg:#eedb85 fg:#212121 bold)\
+$c$elixir$elm$golang$haskell$java$julia$nodejs$nim$rust\
+$docker_context\
+$time\
+\n$character"""
+
+add_newline = false
+
+[os]
+format = "$symbol"
+style = "bg:#00f0ff fg:#212121"
+disabled = false
+
+[os.symbols]
+Windows = "󰍲 "
+Ubuntu = "󰕈 "
+Macos = "󰀵 "
+Linux = "󰌽 "
+Gentoo = "󰣨 "
+Arch = "󰣇 "
+
+[username]
+show_always = true
+style_user = "bg:#00f0ff fg:#212121 bold"
+style_root = "bg:#00f0ff fg:#212121 bold"
+format = "[$user]($style)"
+
+[directory]
+style = "bg:#f3505c fg:#ffffff bold"
+format = "[$path]($style)[$read_only]($read_only_style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = " "
+style = "bg:#eedb85 fg:#212121 bold"
+format = '[$symbol$branch]($style)'
+
+[git_status]
+style = "bg:#eedb85 fg:#212121 bold"
+format = '([\[$all_status$ahead_behind\]]($style))'
+
+[nodejs]
+symbol = " "
+style = "fg:#51f66f"
+format = ' via [$symbol($version)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:#51f66f"
+format = ' via [$symbol($version)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:#51f66f"
+format = ' via [$symbol($version)]($style)'
+
+[time]
+disabled = true
+
+[character]
+success_symbol = "[➜](bold #51f66f) "
+error_symbol = "[➜](bold #d867c6) "
