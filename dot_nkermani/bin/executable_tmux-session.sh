@@ -9,7 +9,7 @@ if [ $? != 0 ]; then
 	tmux send-keys -t $SESSION_NAME:1 "cd ~/Documents/dev/ && nvim ." C-m
 
 	tmux new-window -t $SESSION_NAME:2 -n "opencode"
-	tmux send-keys -t $SESSION_NAME:2 "opencode --internal" C-m
+	tmux send-keys -t $SESSION_NAME:2 "opencode ." C-m
 
 	tmux new-window -t $SESSION_NAME:3 -n "notes"
 	tmux send-keys -t $SESSION_NAME:3 "brain" C-m
@@ -21,7 +21,8 @@ if [ $? != 0 ]; then
 
 	# Lancer la fenêtre Alacritty dédiée pour opencode (dezoomée)
 	# On utilise alacritty.exe (Windows) et on empêche le loop via SKIP_TMUX_AUTOSTART
-	alacritty.exe -o "font.size=10" -e wsl.exe zsh -c "export SKIP_TMUX_AUTOSTART=1; tmux attach-session -t $SESSION_NAME \; select-window -t opencode" &
+	# alacritty.exe -o "font.size=10" -e wsl.exe zsh -c "export SKIP_TMUX_AUTOSTART=1; tmux attach-session -t $SESSION_NAME \; select-window -t opencode" &
 fi
 
 tmux attach-session -t $SESSION_NAME
+

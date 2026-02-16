@@ -36,6 +36,10 @@ export ZSH_CUSTOM="$ZSH/custom"
 
 export GOOGLE_CLOUD_PROJECT="opencode-42"
 
+if [[ "$OS_TYPE" == "linux" ]]; then
+    export PATH="$HOME/.OpenJDK21U-jdk_x64_linux_hotspot_21.0.10_7/OpenJDK21U-jdk_x64_linux_hotspot_21.0.10_7/jdk-21.0.10+7/bin:$PATH"
+fi
+
 if [[ "$UNAME_S" == "Darwin" ]]; then
     # Ajoute les chemins standards de Homebrew et de VS Code
     export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
