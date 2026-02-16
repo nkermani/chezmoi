@@ -4,28 +4,9 @@ if not ok then return end
 edgy.setup({
     left = {
         {
-            title = "%=EXPLORER%=",
             ft = "neo-tree",
-            filter = function(buf)
-                return vim.b[buf].neo_tree_source == "filesystem"
-            end,
             pinned = true,
             open = "Neotree show",
-        },
-        {
-            title = "%=BUFFERS%=",
-            ft = "neo-tree",
-            filter = function(buf)
-                return vim.b[buf].neo_tree_source == "buffers"
-            end,
-            pinned = true,
-            open = "Neotree buffers",
-        },
-        {
-            title = "%=OUTLINE%=",
-            ft = "outline",
-            pinned = true,
-            open = "Outline",
         },
     },
     bottom = {

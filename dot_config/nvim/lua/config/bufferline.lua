@@ -8,10 +8,14 @@ bufferline.setup({
     options = {
         mode = "buffers",
         style_preset = bufferline.style_preset.default,
-        separator_style = "thin",
+        separator_style = "thick",
+        indicator = {
+            style = 'bold',
+        },
         always_show_bufferline = true,
         show_buffer_close_icons = true,
         show_close_icon = false,
+        show_buffer_icons = true,
         color_icons = true,
         diagnostics = "nvim_lsp",
         diagnostics_indicator = function(count, level, diagnostics_dict, context)
@@ -30,9 +34,7 @@ bufferline.setup({
             },
         },
         hover = {
-            enabled = true,
-            delay = 200,
-            reveal = { 'close' }
+            enabled = false, -- Désactivé pour améliorer la réactivité des clics
         },
     },
     highlights = {
@@ -45,6 +47,12 @@ bufferline.setup({
             fg = '#00f0ff',
         },
         modified_selected = {
+            fg = '#51f66f',
+        },
+        modified = {
+            fg = '#51f66f',
+        },
+        modified_visible = {
             fg = '#51f66f',
         },
     },

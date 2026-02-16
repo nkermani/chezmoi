@@ -66,7 +66,7 @@ vim.opt.smartindent = true
 -- Comportement
 vim.opt.ignorecase = true -- Ignore la casse lors de la recherche...
 vim.opt.smartcase = true  -- ...sauf s'il y a une majuscule
-vim.opt.updatetime = 250  -- Plus rapide pour les diagnostics LSP
+vim.opt.updatetime = 100  -- Plus rapide pour les diagnostics LSP et la réactivité UI
 vim.opt.scrolloff = 8     -- Garde 8 lignes visibles en haut/bas
 vim.opt.backspace = "indent,eol,start"
 -- Synchronise le presse-papier de Neovim avec le presse-papier du système

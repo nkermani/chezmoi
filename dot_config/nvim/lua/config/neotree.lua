@@ -8,14 +8,8 @@ neotree.setup({
     enable_git_status = true,
     enable_diagnostics = true,
     source_selector = {
-        winbar = true,
+        winbar = false,
         statusline = false,
-        content_layout = "center",
-        sources = {
-            { source = "filesystem", display_name = " 󰉓 " },
-            { source = "buffers", display_name = " 󰈚 " },
-            { source = "git_status", display_name = " 󰊢 " },
-        },
     },
     filesystem = {
         hijack_netrw_behavior = "disabled",
@@ -54,6 +48,5 @@ vim.keymap.set('n', '<leader>e', function()
     end
     vim.cmd("Neotree toggle")
 end, { desc = "Toggle Neo-tree" })
-
 
 
