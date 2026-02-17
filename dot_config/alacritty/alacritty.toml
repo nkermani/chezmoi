@@ -29,11 +29,11 @@ size = 12.0
 
 [font.normal]
 family = "JetBrainsMono NF"
-style = "Bold"
+style = "SemiBold"
 
 [font.bold]
 family = "JetBrainsMono NF"
-style = "ExtraBold"
+style = "Bold"
 
 [font.italic]
 family = "JetBrainsMono NF"
