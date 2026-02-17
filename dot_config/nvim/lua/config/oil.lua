@@ -52,6 +52,7 @@ require("oil").setup({
     },
     keymaps = {
         ["<CR>"] = "actions.select",
+        ["<2-LeftMouse>"] = "actions.select",
         ["<C-s>"] = false,
         ["<C-h>"] = false,
         ["<M-h>"] = "actions.select_split",

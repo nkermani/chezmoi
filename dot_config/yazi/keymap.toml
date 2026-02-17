@@ -1,0 +1,6 @@
+[manager]
+prepend_keymap = [
+	{ on = [ "<LeftMouse>" ], run = "click", desc = "Click to select or double-click to open" },
+	{ on = [ "<ScrollWheelUp>" ], run = "scroll -1", desc = "Scroll up" },
+	{ on = [ "<ScrollWheelDown>" ], run = "scroll 1", desc = "Scroll down" },
+]

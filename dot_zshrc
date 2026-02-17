@@ -3,6 +3,7 @@
 
 # 1. DÉTECTION OS (Rapide)
 UNAME_S=$(uname -s)
+stty -ixon # Désactive CTRL+S / CTRL+Q pour le flow control
 if [[ "$UNAME_S" == "Darwin" ]]; then
     OS_TYPE="macos"
 elif grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then

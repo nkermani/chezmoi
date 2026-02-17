@@ -10,6 +10,7 @@ rules = [
 
 [manager]
 show_hidden = true
+mouse_events = true
 sort_by = "alphabetical"
 sort_sensitive = false
 sort_reverse = false

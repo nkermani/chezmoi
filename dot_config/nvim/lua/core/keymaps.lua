@@ -341,12 +341,10 @@ keymap("v", "q:", "<nop>", opts)
 keymap("n", "q", "<nop>", opts)
 
 -- SAUVEGARDE RAPIDE (CTRL + S)
-keymap({ 'n', 'i', 'v' }, '<C-s>', ':w<CR>', { desc = "Save File" })
+keymap('n', '<C-s>', '<cmd>w<CR>', { desc = "Save File" })
+keymap('i', '<C-s>', '<Esc><cmd>w<CR>gi', { desc = "Save File" })
+keymap('v', '<C-s>', '<Esc><cmd>w<CR>gv', { desc = "Save File" })
 
--- QUITTER NEOVIM (CTRL + Q)
-keymap('n', '<C-q>', ':q<CR>', { desc = "Quit" })
-keymap('i', '<C-q>', '<C-o>:q<CR>', { desc = "Quit" })
-keymap('v', '<C-q>', '<Esc>:q<CR>', { desc = "Quit" })
 keymap({ 'n', 'i', 'v' }, '<C-S-q>', ':q!<CR>', { desc = "Force Quit" })
 
 -- UNDO / REDO
