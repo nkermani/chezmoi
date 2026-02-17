@@ -1,14 +1,11 @@
 # JetBrains Cyberpunk Palette
 # Red: #f3505c, Green: #51f66f, Yellow: #eedb85, Blue: #368aec, Magenta: #d867c6, Cyan: #00f0ff
 
-# Single line format with Git pushed to the right
-format = """[ $os$username ](bg:#00f0ff fg:#212121 bold)[ $directory ](bg:#f3505c fg:#ffffff bold)$character$fill[ $git_branch$git_status ](bg:#eedb85 fg:#212121 bold) """
+# Single line format
+format = """[ $os$username ](bg:#00f0ff fg:#212121 bold)[ $directory ](bg:#f3505c fg:#ffffff bold)[ $git_branch$git_status ](bg:#eedb85 fg:#212121 bold)$character"""
 
 # Disable the blank line at the start of the prompt
 add_newline = false
-
-[fill]
-symbol = " "
 
 [os]
 format = "$symbol"
@@ -46,7 +43,7 @@ format = '([\[$all_status$ahead_behind\]]($style))'
 
 [character]
 success_symbol = " [➜](bold #51f66f) "
-error_symbol = " [➜](bold #d867c6) "
+error_symbol = " [➜](bold #f3505c) "
 
 [nodejs]
 disabled = true
