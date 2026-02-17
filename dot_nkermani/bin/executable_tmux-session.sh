@@ -19,11 +19,14 @@ if [ $? != 0 ]; then
 		exit 1
 	}
 
-	# On vérifie si le dossier existe avant de CD
-	if [ -d "$HOME/Documents/dev/" ]; then
-		tmux send-keys -t $SESSION_NAME:1 "cd ~/Documents/dev/ && nvim ." C-m
+	if command -v nvim >/dev/null 2>&1; then
+		if [ -d "$HOME/Documents/dev/" ]; then
+			tmux send-keys -t $SESSION_NAME:1 "cd ~/Documents/dev/ && nvim ." C-m
+		else
+			tmux send-keys -t $SESSION_NAME:1 "nvim" C-m
+		fi
 	else
-		tmux send-keys -t $SESSION_NAME:1 "nvim" C-m
+		tmux send-keys -t $SESSION_NAME:1 "vi" C-m
 	fi
 
 	tmux new-window -t $SESSION_NAME:2 -n "opencode"

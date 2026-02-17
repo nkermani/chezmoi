@@ -3,6 +3,10 @@ padding = { x = 0, y = 0 }
 opacity = 1.0
 decorations = "None"
 startup_mode = "Maximized"
+dynamic_title = true
+
+[env]
+TERM = "alacritty"
 
 [keyboard]
 bindings = [
