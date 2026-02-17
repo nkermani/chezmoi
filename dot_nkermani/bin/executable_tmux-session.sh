@@ -2,27 +2,43 @@
 
 SESSION_NAME="nkermani"
 
+# 1. Vérifier si tmux est installé
+if ! command -v tmux >/dev/null 2>&1; then
+    echo "Erreur : tmux n'est pas installé."
+    exit 1
+fi
+
+# 2. Créer la session si elle n'existe pas
 tmux has-session -t $SESSION_NAME 2>/dev/null
 
 if [ $? != 0 ]; then
-	tmux new-session -d -s $SESSION_NAME -n "nvim"
-	tmux send-keys -t $SESSION_NAME:1 "cd ~/Documents/dev/ && nvim ." C-m
+    # Création de la session en arrière-plan (-d)
+    # On force l'usage de /bin/zsh pour éviter les surprises
+    tmux new-session -d -s $SESSION_NAME -n "nvim"
+    
+    # On vérifie si le dossier existe avant de CD
+    if [ -d "$HOME/Documents/dev/" ]; then
+        tmux send-keys -t $SESSION_NAME:1 "cd ~/Documents/dev/ && nvim ." C-m
+    else
+        tmux send-keys -t $SESSION_NAME:1 "nvim" C-m
+    fi
 
-	tmux new-window -t $SESSION_NAME:2 -n "opencode"
-	tmux send-keys -t $SESSION_NAME:2 "opencode ." C-m
+    tmux new-window -t $SESSION_NAME:2 -n "opencode"
+    # Vérifie si opencode est une commande valide avant d'envoyer
+    tmux send-keys -t $SESSION_NAME:2 "opencode ." C-m
 
-	tmux new-window -t $SESSION_NAME:3 -n "notes"
-	tmux send-keys -t $SESSION_NAME:3 "brain" C-m
+    tmux new-window -t $SESSION_NAME:3 -n "notes"
+    tmux send-keys -t $SESSION_NAME:3 "brain" C-m
 
-	tmux new-window -t $SESSION_NAME:4 -n "chezmoi"
-	tmux send-keys -t $SESSION_NAME:4 "chezmoi cd" C-m
+    tmux new-window -t $SESSION_NAME:4 -n "chezmoi"
+    tmux send-keys -t $SESSION_NAME:4 "chezmoi cd" C-m
 
-	tmux select-window -t $SESSION_NAME:1
-
-	# Lancer la fenêtre Alacritty dédiée pour opencode (dezoomée)
-	# On utilise alacritty.exe (Windows) et on empêche le loop via SKIP_TMUX_AUTOSTART
-	# alacritty.exe -o "font.size=10" -e wsl.exe zsh -c "export SKIP_TMUX_AUTOSTART=1; tmux attach-session -t $SESSION_NAME \; select-window -t opencode" &
+    tmux select-window -t $SESSION_NAME:1
 fi
 
-tmux attach-session -t $SESSION_NAME
-
+# 3. Attachement sécurisé
+# Si l'attachement échoue, on ne laisse pas le script mourir en silence
+exec tmux attach-session -t $SESSION_NAME || {
+    echo "Impossible de s'attacher à la session tmux."
+    /bin/zsh # Relance un shell de secours pour ne pas fermer la fenêtre
+}

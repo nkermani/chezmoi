@@ -52,9 +52,10 @@ path=($NK_BIN $HOME/.local/bin $HOME/.opencode/bin $HOME/.cargo/bin /usr/local/b
 export PATH="$LSP:$NK_BIN:$PATH"
 
 # --- AUTO-START TMUX ---
-# On ne lance tmux que dans un shell interactif, hors de VS Code et si pas déjà dans Tmux
-if [[ -z "$TMUX" ]] && [[ "$TERM_PROGRAM" != "vscode" ]] && [[ "$TERM" != "screen"* ]] && [[ -x "$NK_BIN/tmux-session.sh" ]]; then
-    exec "$NK_BIN/tmux-session.sh"
+if [[ -z "$TMUX" ]] && [[ "$TERM_PROGRAM" != "vscode" ]] && [[ $- == *i* ]] && [[ -z "$CHEZMOI" ]]; then
+    if command -v tmux >/dev/null 2>&1 && [[ -x "$NK_BIN/tmux-session.sh" ]]; then
+        exec "$NK_BIN/tmux-session.sh"
+    fi
 fi
 
 # 3. OH-MY-ZSH (Chargement silencieux)
