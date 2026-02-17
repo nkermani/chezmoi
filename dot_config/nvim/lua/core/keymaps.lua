@@ -385,4 +385,5 @@ vim.cmd([[
 -- BUFFERLINE (TABS) NAVIGATION
 keymap("n", "<S-h>", ":BufferLineCyclePrev<CR>", { desc = "Previous Buffer" })
 keymap("n", "<S-l>", ":BufferLineCycleNext<CR>", { desc = "Next Buffer" })
+keymap({ "n", "i", "v" }, "<M-w>", function() require("snacks").bufdelete() end, { desc = "Close Buffer" })
 keymap("n", "<leader>x", function() require("snacks").bufdelete() end, { desc = "Close Buffer" })

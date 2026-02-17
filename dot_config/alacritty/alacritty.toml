@@ -13,6 +13,7 @@ bindings = [
     { key = "V", mods = "Control|Shift", action = "Paste" },
     { key = "C", mods = "Control|Shift", action = "Copy" },
     { key = "D", mods = "Control|Shift", chars = "\u001b[68;5u" },
+    { key = "W", mods = "Command", action = "None" },
 ]
 
 [mouse]
