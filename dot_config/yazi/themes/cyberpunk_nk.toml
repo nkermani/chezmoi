@@ -1,106 +1,85 @@
-# Yazi Cyberpunk NK Theme
-# Matches Neovim cyberpunk_nk theme
-
 [manager]
-cwd = { fg = "#00f0ff", italic = true }
+cwd = { fg = "#00f0ff", bold = true }
 
-# Hover
-hovered         = { fg = "#212121", bg = "#368aec", bold = true }
+hovered         = { fg = "#212121", bg = "#ffcc00", bold = true }
 preview_hovered = { underline = true }
 
-# Find
 find_keyword  = { fg = "#eedb85", italic = true }
-find_position = { fg = "#d867c6", bg = "reset", italic = true }
+find_position = { fg = "#d867c6", bg = "transparent", bold = true }
 
-# Marker
 marker_selected = { fg = "#51f66f", bg = "#51f66f" }
 marker_copied   = { fg = "#eedb85", bg = "#eedb85" }
 marker_cut      = { fg = "#f3505c", bg = "#f3505c" }
 
-# Tab
-tab_active   = { fg = "#212121", bg = "#cacaca" }
-tab_inactive = { fg = "#cacaca", bg = "#272727" }
+tab_active   = { fg = "#212121", bg = "#00f0ff", bold = true }
+tab_inactive = { fg = "#676767", bg = "#2a2a2a" }
 tab_width    = 1
 
-# Border
 border_symbol = "│"
-border_style  = { fg = "#424242" }
+border_style  = { fg = "#00f0ff" }
 
-# Highlighting
-syntect_theme = ""
+syntect_theme = "~/.config/bat/themes/CyberpunkJB.tmTheme"
 
 [status]
-separator_open  = ""
-separator_close = ""
-separator_style = { fg = "#272727", bg = "#272727" }
+separator_open  = ""
+separator_close = ""
+separator_style = { fg = "#2a2a2a", bg = "#2a2a2a" }
 
-# Mode
-mode_normal = { fg = "#212121", bg = "#368aec", bold = true }
+mode_normal = { fg = "#212121", bg = "#00f0ff", bold = true }
 mode_select = { fg = "#212121", bg = "#51f66f", bold = true }
 mode_unset  = { fg = "#212121", bg = "#d867c6", bold = true }
 
-# Progress
 progress_label  = { fg = "#ffffff", bold = true }
-progress_normal = { fg = "#368aec", bg = "#272727" }
-progress_error  = { fg = "#f3505c", bg = "#272727" }
+progress_normal = { fg = "#00f0ff", bg = "#2a2a2a" }
+progress_error  = { fg = "#f3505c", bg = "#2a2a2a" }
 
-# Permissions
 permissions_t = { fg = "#368aec" }
 permissions_r = { fg = "#eedb85" }
 permissions_w = { fg = "#f3505c" }
 permissions_x = { fg = "#51f66f" }
-permissions_s = { fg = "#777777" }
-
-[select]
-border   = { fg = "#368aec" }
-active   = { fg = "#d867c6", bold = true }
-inactive = { fg = "#cacaca" }
+permissions_s = { fg = "#676767" }
 
 [input]
-border   = { fg = "#368aec" }
-title    = { fg = "#cacaca" }
-value    = { fg = "#cacaca" }
-selected = { bg = "#343434" }
+border   = { fg = "#00f0ff" }
+title    = { fg = "#00f0ff" }
+value    = { fg = "#ffffff" }
+selected = { bg = "#333333" }
 
-[completion]
-border   = { fg = "#368aec" }
-active   = { fg = "#d867c6", bg = "#343434" }
-inactive = { fg = "#cacaca" }
+[select]
+border   = { fg = "#00f0ff" }
+active   = { fg = "#ffcc00", bold = true }
+inactive = { fg = "#ffffff" }
 
 [tasks]
-border  = { fg = "#368aec" }
-title   = { fg = "#cacaca" }
-hovered = { fg = "#d867c6", underline = true }
+border  = { fg = "#00f0ff" }
+title   = { fg = "#00f0ff" }
+hovered = { fg = "#212121", bg = "#ffcc00" }
 
 [which]
-mask            = { bg = "#272727" }
+mask            = { bg = "#212121" }
 cand            = { fg = "#00f0ff" }
-rest            = { fg = "#777777" }
+rest            = { fg = "#676767" }
 desc            = { fg = "#d867c6" }
 separator       = " ➜ "
-separator_style = { fg = "#424242" }
+separator_style = { fg = "#333333" }
 
 [help]
 on      = { fg = "#51f66f" }
-exec    = { fg = "#00f0ff" }
-desc    = { fg = "#cacaca" }
-hovered = { bg = "#343434", bold = true }
-footer  = { fg = "#272727", bg = "#cacaca" }
+run     = { fg = "#d867c6" }
+desc    = { fg = "#ffffff" }
+hovered = { bg = "#333333", bold = true }
+footer  = { fg = "#212121", bg = "#cacaca" }
 
 [filetype]
 rules = [
-	# Images
 	{ mime = "image/*", fg = "#00f0ff" },
-	# Media
-	{ mime = "{video,audio}/*", fg = "#d867c6" },
-	# Archives
-	{ mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip2,lzma,compress,archive,cpio,shar,lha,lzh,iso,cab,debian-binary,x-debian-package,x-redhat-package-manager,x-archive,x-cpio,x-shar,x-lha,x-lzh,x-iso9660-image,x-cab}", fg = "#f3505c" },
-	# Documents
-	{ mime = "application/{pdf,doc,docx,xls,xlsx,ppt,pptx}", fg = "#ffc07a" },
-	# Empty files
-	{ mime = "inode/x-empty", fg = "#f3505c" },
-	# Directories
-	{ name = "*/", fg = "#51f66f" },
-	# Fallback
-	{ name = "*", fg = "#cacaca" }
+	{ mime = "video/*", fg = "#d867c6" },
+	{ mime = "audio/*", fg = "#d867c6" },
+	{ mime = "application/zip", fg = "#eedb85" },
+	{ mime = "application/gzip", fg = "#eedb85" },
+	{ mime = "application/x-tar", fg = "#eedb85" },
+	{ mime = "application/x-bzip2", fg = "#eedb85" },
+	{ mime = "application/x-7z-compressed", fg = "#eedb85" },
+	{ mime = "application/x-rar", fg = "#eedb85" },
+	{ mime = "application/pdf", fg = "#f3505c" },
 ]
