@@ -7,12 +7,20 @@ startup_mode = "Maximized"
 [keyboard]
 bindings = [
     { key = "Q", mods = "Control", action = "Quit" },
-    { key = "V", mods = "Control", action = "Paste" },
-    { key = "C", mods = "Control", action = "Copy" },
+    { key = "V", mods = "Control|Shift", action = "Paste" },
+    { key = "C", mods = "Control|Shift", action = "Copy" },
     { key = "D", mods = "Control|Shift", chars = "\u001b[68;5u" },
 ]
 
-[font]
+[mouse]
+bindings = [
+    { mouse = "Middle", action = "PasteSelection" },
+]
+
+[selection]
+save_to_clipboard = true
+semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
+
 normal = { family = "JetBrainsMonoNL Nerd Font Mono", style = "Regular" }
 size = 11.0
 
