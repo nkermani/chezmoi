@@ -1,7 +1,15 @@
 #!/bin/bash
 {{ include ".chezmoitemplates/env.sh.tmpl" }}
 
-if [[ "$OS_TYPE" == "Linux" ]]; then
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+    if command -v brew &>/dev/null; then
+        # Check if font is already installed to avoid unnecessary brew calls
+        if ! brew list --cask font-jetbrains-mono-nerd-font &>/dev/null; then
+            echo "🔡 Installing JetBrainsMono Nerd Font via Homebrew..."
+            brew install --cask font-jetbrains-mono-nerd-font
+        fi
+    fi
+elif [[ "$OS_TYPE" == "Linux" ]]; then
     echo "🔡 Checking Fonts..."
     FONT_DIR="$HOME/.local/share/fonts"
     if [ ! -d "$FONT_DIR/JetBrainsMono" ] && ! fc-list | grep -qi "JetBrainsMono"; then

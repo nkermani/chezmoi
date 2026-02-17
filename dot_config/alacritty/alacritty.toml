@@ -21,7 +21,8 @@ bindings = [
 save_to_clipboard = true
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
-normal = { family = "JetBrainsMonoNL Nerd Font Mono", style = "Regular" }
+[font]
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
 size = 11.0
 
 [font.offset]
@@ -64,6 +65,4 @@ magenta = "#d867c6"
 cyan    = "#00f0ff"
 white   = "#ffffff"
 
-[selection]
-save_to_clipboard = true
 

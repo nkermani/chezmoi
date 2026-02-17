@@ -5,7 +5,7 @@ echo "🛠️  Installing CLI utilities..."
 if [[ "$OS_TYPE" == "Darwin" ]]; then
     # Homebrew handles architecture automatically on macOS
     if command -v brew &>/dev/null; then
-        brew install fzf ripgrep fd bat cmake tmux
+        brew install fzf ripgrep fd bat cmake tmux lazygit starship zoxide
     fi
 else
     # Manual installation for Linux/42 (Portable Binaries)
@@ -40,6 +40,12 @@ else
     if [ ! -f "$BIN_DIR/starship" ]; then
         echo "  📦 Fetching Starship..."
         curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$BIN_DIR"
+    fi
+
+    # Zoxide installation
+    if [ ! -f "$BIN_DIR/zoxide" ]; then
+        echo "  📦 Fetching Zoxide..."
+        curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh -s -- --bin-dir "$BIN_DIR"
     fi
 
     # CMake installation for Linux/42 (Portable Binary)
