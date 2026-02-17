@@ -4,7 +4,7 @@ local status_ok, lualine = pcall(require, "lualine")
 if not status_ok then return end
 
 local colors = {
-    bg       = '#1a1a1a',
+    bg       = '#212121',
     fg       = '#cacaca',
     yellow   = '#eedb85',
     cyan     = '#00f0ff',
@@ -13,22 +13,26 @@ local colors = {
     magenta  = '#d867c6',
     blue     = '#368aec',
     red      = '#f3505c',
+    gold     = '#ffcc00',
 }
 
 local theme = {
     normal = {
-        a = { fg = colors.cyan, bg = colors.bg, gui = 'bold' },
+        a = { fg = colors.bg, bg = colors.cyan, gui = 'bold' },
         b = { fg = colors.fg, bg = colors.bg },
         c = { fg = colors.fg, bg = colors.bg },
+        x = { fg = colors.fg, bg = colors.bg },
+        y = { fg = colors.bg, bg = colors.gold, gui = 'bold' },
+        z = { fg = colors.bg, bg = colors.cyan, gui = 'bold' },
     },
     insert = {
-        a = { fg = colors.green, bg = colors.bg, gui = 'bold' },
+        a = { fg = colors.bg, bg = colors.green, gui = 'bold' },
     },
     visual = {
-        a = { fg = colors.magenta, bg = colors.bg, gui = 'bold' },
+        a = { fg = colors.bg, bg = colors.magenta, gui = 'bold' },
     },
     replace = {
-        a = { fg = colors.red, bg = colors.bg, gui = 'bold' },
+        a = { fg = colors.bg, bg = colors.red, gui = 'bold' },
     },
     inactive = {
         a = { fg = colors.fg, bg = colors.bg },

@@ -1,7 +1,7 @@
 [manager]
 cwd = { fg = "#00f0ff", bold = true }
 
-hovered         = { fg = "#212121", bg = "#00f0ff", bold = true }
+hovered         = { fg = "#212121", bg = "#ffcc00", bold = true }
 preview_hovered = { underline = true }
 
 find_keyword  = { fg = "#eedb85", italic = true }
@@ -11,12 +11,12 @@ marker_selected = { fg = "#51f66f", bg = "#51f66f" }
 marker_copied   = { fg = "#eedb85", bg = "#eedb85" }
 marker_cut      = { fg = "#f3505c", bg = "#f3505c" }
 
-tab_active   = { fg = "#ffffff", bg = "#f3505c", bold = true }
+tab_active   = { fg = "#212121", bg = "#00f0ff", bold = true }
 tab_inactive = { fg = "#676767", bg = "#2a2a2a" }
 tab_width    = 1
 
 border_symbol = "│"
-border_style  = { fg = "#333333" }
+border_style  = { fg = "#00f0ff" }
 
 [status]
 separator_open  = ""
@@ -45,13 +45,13 @@ selected = { bg = "#333333" }
 
 [select]
 border   = { fg = "#00f0ff" }
-active   = { fg = "#f3505c", bold = true }
+active   = { fg = "#ffcc00", bold = true }
 inactive = { fg = "#ffffff" }
 
 [tasks]
 border  = { fg = "#00f0ff" }
 title   = { fg = "#00f0ff" }
-hovered = { fg = "#212121", bg = "#00f0ff" }
+hovered = { fg = "#212121", bg = "#ffcc00" }
 
 [which]
 mask            = { bg = "#212121" }
