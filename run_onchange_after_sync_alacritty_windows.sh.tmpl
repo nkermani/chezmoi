@@ -1,0 +1,12 @@
+{{- if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+#!/bin/bash
+
+# Alacritty config sync to Windows
+# Hash: {{ include "dot_config/alacritty/alacritty.toml" | sha256sum }}
+
+WIN_ALACRITTY_DIR="/mnt/c/Users/kerma/AppData/Roaming/alacritty"
+if [ -d "$WIN_ALACRITTY_DIR" ]; then
+    echo "🪟 Syncing Alacritty config to Windows..."
+    cp "$HOME/.config/alacritty/alacritty.toml" "$WIN_ALACRITTY_DIR/alacritty.toml"
+fi
+{{- end }}

@@ -25,22 +25,22 @@ save_to_clipboard = true
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
 [font]
-size = 11.0
+size = 12.0
 
 [font.normal]
-family = "JetBrainsMono Nerd Font"
+family = "JetBrainsMono NF"
 style = "Bold"
 
 [font.bold]
-family = "JetBrainsMono Nerd Font"
-style = "Bold"
+family = "JetBrainsMono NF"
+style = "ExtraBold"
 
 [font.italic]
-family = "JetBrainsMono Nerd Font"
+family = "JetBrainsMono NF"
 style = "Italic"
 
 [font.bold_italic]
-family = "JetBrainsMono Nerd Font"
+family = "JetBrainsMono NF"
 style = "Bold Italic"
 
 [font.offset]
