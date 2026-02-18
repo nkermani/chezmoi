@@ -88,8 +88,7 @@ fi
 alias lg='lazygit'
 
 if [[ "$OS_TYPE" == "linux" ]]; then
-alias gfn='junest -f -- bash -c "cd ~/Downloads/squashfs-root && ./geforcenow-electron --no-sandbox"'
-
+    alias gfn='junest geforcenow --no-sandbox"'
     export PATH="$PATH:~/.junest/usr/bin_wrappers"
     export PATH=~/.local/share/junest/bin:$PATH
 fi
@@ -445,6 +444,4 @@ alias cdn="cd $NOTES_DIR"
 # bun
 export BUN_INSTALL="$HOME/.nkermani/apps/bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-
-alias gfn='junest -f -- bash -c "cd ~/Downloads/squashfs-root && ./geforcenow-electron --no-sandbox"'
 

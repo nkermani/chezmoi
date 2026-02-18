@@ -4,12 +4,12 @@ echo "Configuration 42 détectée : Installation du Focus Manager..."
 # 1. Compilation de l'outil de focus C
 mkdir -p {{ .chezmoi.homeDir }}/.nkermani/bin/42
 gcc {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus.c -o {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus -lX11
-# 2. Raccourcis Dock (1-9) : Alacritty, Browser, VSCode, Finder, PDF, Discord, Desktop, GeForceNOW, Desktop2
+# 2. Raccourcis Dock (1-9) : Alacritty, Browser, VSCode, Finder, PDF, Discord, GeForceNOW
 for i in {1..9}; do
     gsettings set org.gnome.shell.keybindings switch-to-application-$i "[]"
 done
-# 3. Raccourci Bureau décalé sur Super+D (et Super+7/9 via custom)
-gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+# 3. Raccourci Bureau natif sur Super+7, Super+9 et Super+D
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>7', '<Super>9', '<Super>d']"
 # 4. Désactiver les animations pour l'instantanéité
 gsettings set org.gnome.desktop.interface enable-animations false
 # 5. Mise à jour des Favoris

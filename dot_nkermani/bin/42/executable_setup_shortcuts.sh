@@ -11,10 +11,10 @@ SHORTCUTS=(
 	"Finder|/home/nkermani/.nkermani/bin/42/focus_finder.sh|<Super>4"
 	"PDF|/home/nkermani/.nkermani/bin/42/focus_pdf.sh|<Super>5"
 	"Discord|/home/nkermani/.nkermani/bin/42/focus_discord.sh|<Super>6"
-	"Desktop|/home/nkermani/.nkermani/bin/42/focus_desktop.sh|<Super>7"
 	"GeForceNOW|/home/nkermani/.nkermani/bin/42/focus_geforcenow.sh|<Super>8"
-	"Desktop2|/home/nkermani/.nkermani/bin/42/focus_desktop.sh|<Super>9"
 )
+
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>7', '<Super>9', '<Super>d']"
 
 BASE="org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
 LIST="["

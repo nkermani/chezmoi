@@ -36,16 +36,33 @@ def focus_app(desktop_file):
         except:
             pass
     
+    if "discord" in desktop_file:
+        try:
+            subprocess.Popen(["discord"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+            return
+        except:
+            pass
+
     if "alacritty" in desktop_file:
         try:
-            subprocess.run(["/home/nkermani/.nkermani/bin/alacritty"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+            subprocess.Popen(["alacritty"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+            return
+        except:
+            pass
+
+    if "code" in desktop_file:
+        try:
+            subprocess.Popen(["code"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
             return
         except:
             pass
 
     if "Evince" in desktop_file:
-        subprocess.Popen(["evince"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-        return
+        try:
+            subprocess.Popen(["evince"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+            return
+        except:
+            pass
 
     paths = [
 
