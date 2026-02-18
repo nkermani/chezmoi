@@ -6,7 +6,7 @@ edgy.setup({
         {
             ft = "neo-tree",
             pinned = true,
-            open = "Neotree show",
+            open = function() end,
         },
     },
     bottom = {

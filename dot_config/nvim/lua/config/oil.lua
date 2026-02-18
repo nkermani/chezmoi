@@ -62,6 +62,16 @@ require("oil").setup({
         ["<Esc>"] = "actions.close",
         ["q"] = "actions.close",
         ["<leader>cd"] = "actions.cd",
+        ["<C-t>"] = {
+            callback = function()
+                local dir = require("oil").get_current_dir()
+                local status, tt = pcall(require, "toggleterm")
+                if status then
+                    tt.toggle(nil, nil, dir)
+                end
+            end,
+            desc = "Toggle Terminal in current directory",
+        },
     },
     view_options = {
         show_hidden = true,
