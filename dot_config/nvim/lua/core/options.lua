@@ -39,17 +39,30 @@ vim.opt.termguicolors = true
 vim.opt.fillchars = { eob = " ", vert = "│", horiz = "─", diff = "╱", fold = " ", msgsep = "‾", foldopen = "", foldsep = "│", foldclose = "" }
 vim.opt.laststatus = 3 -- Global statusline
 -- Close button function for winbar
-_G.close_buffer_click = function()
-    require("snacks").bufdelete()
+_G.smart_close = function()
+    local wins = vim.api.nvim_tabpage_list_wins(0)
+    local normal_wins = {}
+    for _, win in ipairs(wins) do
+        local cfg = vim.api.nvim_win_get_config(win)
+        if cfg.relative == "" then
+            table.insert(normal_wins, win)
+        end
+    end
+
+    if #normal_wins > 1 then
+        vim.cmd("close")
+    else
+        require("snacks").bufdelete()
+    end
 end
 
-vim.opt.winbar = "%=%#WinBar#%@v:lua.close_buffer_click@ 󰅖 %*"
+vim.opt.winbar = "%=%#WinBar#%@v:lua.smart_close@ 󰅖 %*"
 
 vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
     callback = function()
         vim.schedule(function()
             if vim.api.nvim_win_is_valid(0) and vim.bo.buftype == "" then
-                vim.wo.winbar = "%=%#WinBar#%@v:lua.close_buffer_click@ 󰅖 %*"
+                vim.wo.winbar = "%=%#WinBar#%@v:lua.smart_close@ 󰅖 %*"
             end
         end)
     end,

@@ -4,6 +4,9 @@ opacity = 1.0
 decorations = "None"
 startup_mode = "Maximized"
 dynamic_title = true
+{{- if eq .chezmoi.os "darwin" }}
+option_as_alt = "Both"
+{{- end }}
 
 [env]
 TERM = "alacritty"

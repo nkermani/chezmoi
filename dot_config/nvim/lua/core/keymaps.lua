@@ -372,7 +372,9 @@ keymap('n', '<3-LeftMouse>', 'V', opts)
 vim.cmd([[
   amenu PopUp.Split\ Vertical <cmd>vsplit<CR>
   amenu PopUp.Split\ Horizontal <cmd>split<CR>
-  amenu PopUp.Kill\ Buffer <cmd>lua require("snacks").bufdelete()<CR>
+  amenu PopUp.Kill\ Buffer <cmd>lua _G.smart_close()<CR>
+  amenu PopUp.Add\ to\ Multi-Selection <Plug>(VM-Visual-Cursors)
+  amenu PopUp.Copy\ (Multi) y
   amenu PopUp.Quit\ Neovim <cmd>qa<CR>
   amenu PopUp.-1- *
   amenu PopUp.Definition <cmd>lua vim.lsp.buf.definition()<CR>
@@ -385,5 +387,5 @@ vim.cmd([[
 -- BUFFERLINE (TABS) NAVIGATION
 keymap("n", "<S-h>", ":BufferLineCyclePrev<CR>", { desc = "Previous Buffer" })
 keymap("n", "<S-l>", ":BufferLineCycleNext<CR>", { desc = "Next Buffer" })
-keymap({ "n", "i", "v" }, "<M-w>", function() require("snacks").bufdelete() end, { desc = "Close Buffer" })
-keymap("n", "<leader>x", function() require("snacks").bufdelete() end, { desc = "Close Buffer" })
+keymap({ "n", "i", "v" }, "<M-w>", function() _G.smart_close() end, { desc = "Smart Close (Pane or Buffer)" })
+keymap("n", "<leader>x", function() _G.smart_close() end, { desc = "Smart Close (Pane or Buffer)" })
