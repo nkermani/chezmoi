@@ -15,6 +15,8 @@ def focus_app(desktop_file):
         app_name = "brave"
     elif "discord" in desktop_file:
         app_name = "discord"
+    elif "code" in desktop_file:
+        app_name = "code"
     elif "Evince" in desktop_file:
         app_name = "evince"
     elif "Nautilus" in desktop_file:

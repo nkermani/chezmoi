@@ -42,6 +42,7 @@ export GOOGLE_CLOUD_PROJECT="opencode-42"
 
 if [[ "$OS_TYPE" == "linux" ]]; then
     export PATH="$HOME/.OpenJDK21U-jdk_x64_linux_hotspot_21.0.10_7/OpenJDK21U-jdk_x64_linux_hotspot_21.0.10_7/jdk-21.0.10+7/bin:$PATH"
+    export PATH="~/.local/share/junest/bin:$PATH"
 fi
 
 if [[ "$UNAME_S" == "Darwin" ]]; then

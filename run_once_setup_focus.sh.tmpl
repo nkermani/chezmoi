@@ -4,17 +4,16 @@ echo "Configuration 42 détectée : Installation du Focus Manager..."
 # 1. Compilation de l'outil de focus C
 mkdir -p {{ .chezmoi.homeDir }}/.nkermani/bin/42
 gcc {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus.c -o {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus -lX11
-# 2. Raccourcis Dock (1-5) : Alacritty, Browser, Finder, PDF, Discord
-for i in {1..5}; do
-    gsettings set org.gnome.shell.keybindings switch-to-application-$i "['<Super>$i']"
+# 2. Raccourcis Dock (1-9) : Alacritty, Browser, VSCode, Finder, PDF, Discord, Desktop, GeForceNOW, Desktop2
+for i in {1..9}; do
+    gsettings set org.gnome.shell.keybindings switch-to-application-$i "[]"
 done
-# 3. Raccourci Bureau décalé sur Super+6
-gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>6', '<Super>d']"
-gsettings set org.gnome.shell.keybindings switch-to-application-6 "[]"
+# 3. Raccourci Bureau décalé sur Super+D (et Super+7/9 via custom)
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
 # 4. Désactiver les animations pour l'instantanéité
 gsettings set org.gnome.desktop.interface enable-animations false
-# 5. Mise à jour des Favoris (L'ordre ici définit le numéro du Super+N)
-gsettings set org.gnome.shell favorite-apps "['42-alacritty.desktop', '42-browser.desktop', '42-finder.desktop', '42-pdf.desktop', '42-discord.desktop']"
+# 5. Mise à jour des Favoris
+gsettings set org.gnome.shell favorite-apps "['42-alacritty.desktop', '42-browser.desktop', 'code.desktop', '42-finder.desktop', '42-pdf.desktop', '42-discord.desktop', '42-geforcenow.desktop']"
 echo "Setup 42 terminé."
 {{- end -}}
 

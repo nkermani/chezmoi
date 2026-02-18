@@ -17,6 +17,38 @@ if command -v gsettings >/dev/null; then
     gsettings set org.gnome.desktop.peripherals.keyboard delay 200
     gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 10
 
+    for i in {1..9}; do
+        gsettings set org.gnome.shell.keybindings switch-to-application-$i "[]"
+    done
+    
+    BASE="org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
+    LIST="["
+    
+    SHORTCUTS=(
+        "Alacritty|/home/nkermani/.nkermani/bin/42/focus_alacritty.sh|<Super>1"
+        "Browser|/home/nkermani/.nkermani/bin/42/focus_browser.sh|<Super>2"
+        "VSCode|/home/nkermani/.nkermani/bin/42/focus_vscode.sh|<Super>3"
+        "Finder|/home/nkermani/.nkermani/bin/42/focus_finder.sh|<Super>4"
+        "PDF|/home/nkermani/.nkermani/bin/42/focus_pdf.sh|<Super>5"
+        "Discord|/home/nkermani/.nkermani/bin/42/focus_discord.sh|<Super>6"
+        "Desktop|/home/nkermani/.nkermani/bin/42/focus_desktop.sh|<Super>7"
+        "GeForceNOW|/home/nkermani/.nkermani/bin/42/focus_geforcenow.sh|<Super>8"
+        "Desktop2|/home/nkermani/.nkermani/bin/42/focus_desktop.sh|<Super>9"
+    )
+
+    for i in "${!SHORTCUTS[@]}"; do
+        IFS="|" read -r name cmd bind <<< "${SHORTCUTS[$i]}"
+        PATH_ID="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom$i/"
+        
+        gsettings set "$BASE:$PATH_ID" name "$name"
+        gsettings set "$BASE:$PATH_ID" command "$cmd"
+        gsettings set "$BASE:$PATH_ID" binding "$bind"
+        LIST+="'$PATH_ID',"
+    done
+    
+    LIST="${LIST%,}]"
+    gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "$LIST"
+
     # Souris : Profil "Flat" pour supprimer l'accélération
     gsettings set org.gnome.desktop.peripherals.mouse acceleration-profile 'flat'
     gsettings set org.gnome.desktop.peripherals.mouse speed 0
