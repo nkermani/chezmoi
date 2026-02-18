@@ -121,6 +121,6 @@ function M.toggle_pycodestyle()
     vim.notify('pycodestyle: ' .. (M.pycodestyle_enabled and 'ON' or 'OFF'), vim.log.levels.INFO)
 end
 
-vim.keymap.set('n', '<leader>tp', function() require('lsp').toggle_pycodestyle() end, { desc = "Toggle pycodestyle" })
+vim.keymap.set('n', '<leader>ty', function() require('lsp').toggle_pycodestyle() end, { desc = "Toggle pycodestyle" })
 
 return M

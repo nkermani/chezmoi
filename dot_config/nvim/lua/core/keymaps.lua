@@ -395,7 +395,7 @@ keymap("n", "<leader>tp", function()
     local ok, precognition = pcall(require, "precognition")
     if ok then
         precognition.toggle()
-        local status = precognition.is_visible() and "ON" or "OFF"
+        local status = precognition.is_visible and "ON" or "OFF"
         vim.notify("Precognition " .. status, vim.log.levels.INFO, { title = "Precognition" })
     end
 end, { desc = "Toggle Precognition" })
