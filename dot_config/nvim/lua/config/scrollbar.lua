@@ -1,10 +1,13 @@
+vim.api.nvim_set_hl(0, "ScrollbarHandle", { bg = "#444444", fg = "none" })
+
 require("scrollbar").setup({
     show = true,
+    zindex = 100,
     handle = {
         text = " ",
-        color = "#00f0ff",
-        cterm = nil,
-        highlight = "CursorColumn",
+        color = "#444444",
+        blend = 0,
+        highlight = "ScrollbarHandle",
     },
     marks = {
         Search = { color = "#d867c6" },

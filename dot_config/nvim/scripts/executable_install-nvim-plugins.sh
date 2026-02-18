@@ -59,7 +59,7 @@ PLUGINS=(
 	"hedyhli/outline.nvim"
 	"tris203/precognition.nvim"
 	"s1n7ax/nvim-window-picker"
-	"wsdjeg/scrollbar.nvim"
+	"petertriho/nvim-scrollbar"
 )
 
 for plugin in "${PLUGINS[@]}"; do
