@@ -31,7 +31,7 @@ require("noice").setup({
                 style = "rounded",
             },
             win_options = {
-                winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+                winhighlight = "NormalFloat:NormalFloat,FloatBorder:SnacksPickerTitle",
             },
         },
     },

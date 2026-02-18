@@ -57,6 +57,8 @@ PLUGINS=(
 	"stevearc/dressing.nvim"
 	"akinsho/toggleterm.nvim"
 	"hedyhli/outline.nvim"
+	"tris203/precognition.nvim"
+	"s1n7ax/nvim-window-picker"
 )
 
 for plugin in "${PLUGINS[@]}"; do

@@ -355,7 +355,16 @@ keymap('v', '<C-l>', 'j', { desc = "Extend selection" })
 -- MOUSE EXPERIENCE (Style IDE)
 -- CTRL + Clic Gauche : Aller à la définition
 keymap("n", "<C-LeftMouse>", "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Go to definition" })
-keymap("n", "<C-M-LeftMouse>", "<cmd>Telescope lsp_references<CR>", { desc = "Show references" })
+keymap("n", "<C-M-LeftMouse>", function()
+    require('telescope.builtin').lsp_references({
+        layout_strategy = 'cursor',
+        layout_config = {
+            width = 0.6,
+            height = 0.4,
+        },
+        borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+    })
+end, { desc = "Peek references" })
 keymap('n', '<2-LeftMouse>', 'viw', opts)
 -- Triple-clic : Sélectionne toute la ligne
 keymap('n', '<3-LeftMouse>', 'V', opts)
@@ -370,7 +379,7 @@ vim.cmd([[
   amenu PopUp.Quit\ Neovim <cmd>qa<CR>
   amenu PopUp.-1- *
   amenu PopUp.Definition <cmd>lua vim.lsp.buf.definition()<CR>
-  amenu PopUp.References <cmd>Telescope lsp_references<CR>
+  amenu PopUp.References <cmd>lua require('telescope.builtin').lsp_references({ layout_strategy = 'cursor', layout_config = { width = 0.6, height = 0.4 } })<CR>
   amenu PopUp.Rename <cmd>lua vim.lsp.buf.rename()<CR>
   amenu PopUp.-2- *
   amenu PopUp.Format <cmd>lua vim.lsp.buf.format()<CR>

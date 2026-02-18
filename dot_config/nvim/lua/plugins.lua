@@ -68,4 +68,5 @@ pack.add({
     { src = 'https://github.com/esmuellert/codediff.nvim' },
     { src = 'https://github.com/stevearc/dressing.nvim' },
     { src = 'https://github.com/tris203/precognition.nvim' },
+    { src = 'https://github.com/s1n7ax/nvim-window-picker' },
 })

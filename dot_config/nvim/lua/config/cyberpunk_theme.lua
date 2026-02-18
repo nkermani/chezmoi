@@ -157,6 +157,12 @@ function M.setup()
     hl(0, "TabLineSel", { bg = c.bg, fg = c.cyan, bold = true })
     hl(0, "BufferLineFill", { bg = c.sidebar_bg })
     hl(0, "BufferLineBackground", { bg = c.sidebar_bg, fg = c.line_nr })
+
+    hl(0, "Pmenu", { bg = c.sidebar_bg, fg = c.fg })
+    hl(0, "PmenuSel", { bg = c.red, fg = c.bg, bold = true })
+    hl(0, "PmenuSbar", { bg = c.sidebar_bg })
+    hl(0, "PmenuThumb", { bg = c.comment })
+    hl(0, "PmenuBorder", { fg = c.red, bg = c.sidebar_bg })
 end
 
 return M
