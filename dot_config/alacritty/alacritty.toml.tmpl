@@ -13,7 +13,7 @@ TERM = "alacritty"
 
 {{- if or (eq .chezmoi.os "windows") (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
 
-[shell]
+[terminal.shell]
 program = "wsl.exe"
 {{- end }}
 
