@@ -11,6 +11,12 @@ option_as_alt = "Both"
 [env]
 TERM = "alacritty"
 
+{{- if or (eq .chezmoi.os "windows") (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
+
+[shell]
+program = "wsl.exe"
+{{- end }}
+
 [keyboard]
 bindings = [
     { key = "V", mods = "Control|Shift", action = "Paste" },
