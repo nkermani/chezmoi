@@ -6,8 +6,8 @@ vim.g.VM_maps = {
     ['Find Under']         = '<C-d>',
     ['Find Subword Under'] = '<C-d>',
     ['Select All']         = '<C-S-a>',
-    ['Add Cursor Down']    = '<C-Down>',
-    ['Add Cursor Up']      = '<C-Up>',
+    ['Add Cursor Down']    = '<C-S-Down>',
+    ['Add Cursor Up']      = '<C-S-Up>',
     ['Skip Region']        = '<C-x>',
     ['Remove Region']      = 'q',
     ['Undo']               = 'u',
@@ -21,4 +21,3 @@ keymap('n', '<C-d>', '<Plug>(VM-Find-Under)', { silent = true, desc = "Multi-cur
 keymap('n', '<leader>mc', '<Plug>(VM-Add-Cursor-At-Pos)', { silent = true, desc = "Multi-cursor: Add Cursor at Pos" })
 keymap('n', '<M-LeftMouse>', '<Plug>(VM-Mouse-Cursor)', { silent = true })
 keymap('v', '<M-LeftMouse>', '<Plug>(VM-Mouse-Cursor)', { silent = true })
-keymap('n', '<C-LeftMouse>', '<Plug>(VM-Mouse-Word)', { silent = true })

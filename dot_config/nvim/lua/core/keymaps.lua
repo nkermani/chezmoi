@@ -119,14 +119,6 @@ keymap("i", "<S-Right>", "<Esc>v<Right>", { desc = "Select Right" })
 -- Ajouter une ligne vide en dessous (Shift + Entrée)
 keymap("n", "<S-Enter>", "o<Esc>", { desc = "Insert blank line below" })
 
--- CTRL + SHIFT + ARROWS (Select Word/Line)
-keymap("n", "<C-S-Up>", "v<Up>", { desc = "Select Line Up" })
-keymap("n", "<C-S-Down>", "v<Down>", { desc = "Select Line Down" })
-keymap("v", "<C-S-Up>", "<Up>", { desc = "Extend Line Up" })
-keymap("v", "<C-S-Down>", "<Down>", { desc = "Extend Line Down" })
-keymap("i", "<C-S-Up>", "<Esc>v<Up>", { desc = "Select Line Up" })
-keymap("i", "<C-S-Down>", "<Esc>v<Down>", { desc = "Select Line Down" })
-
 keymap("n", "<C-S-Left>", "vb", { desc = "Select Word Left" })
 keymap("n", "<C-S-Right>", "vw", { desc = "Select Word Right" })
 keymap("v", "<C-S-Left>", "b", { desc = "Extend Word Left" })
@@ -363,7 +355,7 @@ keymap('v', '<C-l>', 'j', { desc = "Extend selection" })
 -- MOUSE EXPERIENCE (Style IDE)
 -- CTRL + Clic Gauche : Aller à la définition
 keymap("n", "<C-LeftMouse>", "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Go to definition" })
--- Double-clic : Sélectionne le mot
+keymap("n", "<C-M-LeftMouse>", "<cmd>Telescope lsp_references<CR>", { desc = "Show references" })
 keymap('n', '<2-LeftMouse>', 'viw', opts)
 -- Triple-clic : Sélectionne toute la ligne
 keymap('n', '<3-LeftMouse>', 'V', opts)
@@ -378,7 +370,7 @@ vim.cmd([[
   amenu PopUp.Quit\ Neovim <cmd>qa<CR>
   amenu PopUp.-1- *
   amenu PopUp.Definition <cmd>lua vim.lsp.buf.definition()<CR>
-  amenu PopUp.References <cmd>lua vim.lsp.buf.references()<CR>
+  amenu PopUp.References <cmd>Telescope lsp_references<CR>
   amenu PopUp.Rename <cmd>lua vim.lsp.buf.rename()<CR>
   amenu PopUp.-2- *
   amenu PopUp.Format <cmd>lua vim.lsp.buf.format()<CR>
@@ -389,3 +381,20 @@ keymap("n", "<S-h>", ":BufferLineCyclePrev<CR>", { desc = "Previous Buffer" })
 keymap("n", "<S-l>", ":BufferLineCycleNext<CR>", { desc = "Next Buffer" })
 keymap({ "n", "i", "v" }, "<M-w>", function() _G.smart_close() end, { desc = "Smart Close (Pane or Buffer)" })
 keymap("n", "<leader>x", function() _G.smart_close() end, { desc = "Smart Close (Pane or Buffer)" })
+
+keymap("n", "<leader>tp", function()
+    local ok, precognition = pcall(require, "precognition")
+    if ok then
+        precognition.toggle()
+        local status = precognition.is_visible() and "ON" or "OFF"
+        vim.notify("Precognition " .. status, vim.log.levels.INFO, { title = "Precognition" })
+    end
+end, { desc = "Toggle Precognition" })
+
+keymap("n", "<leader>td", function()
+    local is_enabled = vim.diagnostic.is_enabled()
+    vim.diagnostic.enable(not is_enabled)
+    local status = is_enabled and "OFF" or "ON"
+    vim.notify("Diagnostics " .. status, vim.log.levels.INFO, { title = "LSP Diagnostics" })
+end, { desc = "Toggle Diagnostics" })
+
