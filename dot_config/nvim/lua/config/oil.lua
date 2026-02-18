@@ -42,7 +42,6 @@ if git_ok then
     })
 end
 
-
 require("oil").setup({
     default_file_explorer = true,
     delete_to_trash = true,

@@ -15,6 +15,7 @@ require("config.snacks")
 
 require("config.devicons")
 require("config.lualine")
+require("config.scrollbar")
 require("config.bufferline")
 require("config.gitsigns")
 require("config.treesitter")

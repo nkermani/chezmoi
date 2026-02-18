@@ -1,6 +1,8 @@
 -- lua/config/conform.lua
 -- stevearc/conform.nvim -> Lightweight yet powerful formatter plugin for Neovim
 
+vim.g.disable_autoformat = true
+
 require("conform").setup({
     formatters_by_ft = {
         lua = {},
