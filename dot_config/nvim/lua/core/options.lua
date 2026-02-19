@@ -86,10 +86,11 @@ vim.opt.backspace = "indent,eol,start"
 -- Cela permet de copier dans Neovim et coller dans Chrome (et inversement) sans config spéciale
 vim.opt.clipboard = "unnamedplus"
 
-vim.api.nvim_create_autocmd("VisualLeave", {
+vim.api.nvim_create_autocmd("ModeChanged", {
     group = vim.api.nvim_create_augroup("VisualCopy", { clear = true }),
+    pattern = { "[vV\x16]:n", "[vV\x16]:i" },
     callback = function()
-        if vim.v.event.visual_mode ~= "" and vim.v.operator ~= "d" and vim.v.operator ~= "c" then
+        if vim.v.operator ~= "d" and vim.v.operator ~= "c" then
             local save_cursor = vim.fn.getpos(".")
             vim.cmd('silent! normal! gvy')
             vim.fn.setpos(".", save_cursor)

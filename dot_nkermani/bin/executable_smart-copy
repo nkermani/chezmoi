@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Détection de l'outil de copie
+if grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then
+    # WSL2 -> Windows Clipboard
+    cat | clip.exe
+elif [[ "$(uname)" == "Darwin" ]]; then
+    # macOS -> pbcopy
+    cat | pbcopy
+else
+    # Linux -> xclip ou wl-copy
+    if command -v xclip >/dev/null 2>&1; then
+        cat | xclip -selection clipboard -i
+    elif command -v wl-copy >/dev/null 2>&1; then
+        cat | wl-copy
+    else
+        # Fallback : on ne fait rien, l'OSC 52 de tmux tentera le coup
+        cat > /dev/null
+    fi
+fi
