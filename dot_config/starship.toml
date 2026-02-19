@@ -2,40 +2,40 @@
 # Red: #f3505c, Green: #51f66f, Yellow: #eedb85, Blue: #368aec, Magenta: #d867c6, Cyan: #00f0ff
 
 # Single line format
-format = """[ $os$username ](bg:#00f0ff fg:#212121 bold)[ $directory ](bg:#f3505c fg:#ffffff bold)[ $git_branch$git_status ](bg:#eedb85 fg:#212121 bold)$character"""
+format = """[ $os$username ](bg:#00f0ff fg:#212121 bold)[$directory ](bg:#f3505c fg:#ffffff bold)([$git_branch$git_status ](bg:#eedb85 fg:#212121 bold))$character"""
 
 # Disable the blank line at the start of the prompt
 add_newline = false
 
 [os]
-format = "$symbol"
+format = " $symbol "
 style = "bg:#00f0ff fg:#212121"
 disabled = false
 
 [os.symbols]
-Windows = "󰍲 "
-Ubuntu = "󰕈 "
-Macos = "󰀵 "
-Linux = "󰌽 "
-Gentoo = "󰣨 "
-Arch = "󰣇 "
+Windows = "󰍲"
+Ubuntu = "󰕈"
+Macos = "󰀵"
+Linux = "󰌽"
+Gentoo = "󰣨"
+Arch = "󰣇"
 
 [username]
 show_always = true
 style_user = "bg:#00f0ff fg:#212121 bold"
 style_root = "bg:#00f0ff fg:#212121 bold"
-format = "[$user]($style)"
+format = "$user "
 
 [directory]
 style = "bg:#f3505c fg:#ffffff bold"
-format = "[$path]($style)[$read_only]($read_only_style)"
+format = " $path$read_only "
 truncation_length = 3
 truncation_symbol = "…/"
 
 [git_branch]
-symbol = " "
+symbol = ""
 style = "bg:#eedb85 fg:#212121 bold"
-format = '[$symbol$branch]($style)'
+format = ' $symbol $branch'
 
 [git_status]
 style = "bg:#eedb85 fg:#212121 bold"
