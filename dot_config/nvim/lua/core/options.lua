@@ -86,6 +86,17 @@ vim.opt.backspace = "indent,eol,start"
 -- Cela permet de copier dans Neovim et coller dans Chrome (et inversement) sans config spéciale
 vim.opt.clipboard = "unnamedplus"
 
+vim.api.nvim_create_autocmd("VisualLeave", {
+    group = vim.api.nvim_create_augroup("VisualCopy", { clear = true }),
+    callback = function()
+        if vim.v.event.visual_mode ~= "" and vim.v.operator ~= "d" and vim.v.operator ~= "c" then
+            local save_cursor = vim.fn.getpos(".")
+            vim.cmd('silent! normal! gvy')
+            vim.fn.setpos(".", save_cursor)
+        end
+    end,
+})
+
 -- Fix for Alacritty/WSL2 cursor shape changing
 if vim.fn.has("wsl") == 1 then
     vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"

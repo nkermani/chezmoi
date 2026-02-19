@@ -28,7 +28,7 @@ format = "$user "
 
 [directory]
 style = "bg:#f3505c fg:#ffffff bold"
-format = " $path$read_only "
+format = " 󰉋 $path$read_only "
 truncation_length = 3
 truncation_symbol = "…/"
 
