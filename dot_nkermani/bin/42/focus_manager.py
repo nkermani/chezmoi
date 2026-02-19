@@ -5,7 +5,6 @@ import time
 import os
 
 def focus_app(desktop_file):
-    # Ensure animations are disabled for speed
     subprocess.run(["gsettings", "set", "org.gnome.desktop.interface", "enable-animations", "false"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
     
     app_name = ""
@@ -29,57 +28,36 @@ def focus_app(desktop_file):
         if res.returncode == 0:
             return
 
-    if "Nautilus" in desktop_file:
-        try:
-            subprocess.run(["gdbus", "call", "--session", "--dest", "org.gnome.Nautilus", "--object-path", "/org/gnome/Nautilus", "--method", "org.gtk.Application.Activate", "{}"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-            return
-        except:
-            pass
-    
-    if "discord" in desktop_file:
-        try:
-            subprocess.Popen(["discord"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-            return
-        except:
-            pass
-
     if "alacritty" in desktop_file:
-        try:
-            subprocess.Popen(["alacritty"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-            return
-        except:
-            pass
-
-    if "code" in desktop_file:
-        try:
-            subprocess.Popen(["code"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-            return
-        except:
-            pass
-
-    if "Evince" in desktop_file:
-        try:
-            subprocess.Popen(["evince"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-            return
-        except:
-            pass
+        alacritty_bin = "/home/nkermani/.nkermani/bin/alacritty"
+        if not os.path.exists(alacritty_bin):
+            alacritty_bin = "alacritty"
+        
+        env = os.environ.copy()
+        env["SHLVL"] = "0"
+        
+        subprocess.Popen([alacritty_bin], env=env, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        return
 
     paths = [
-
         desktop_file,
         f"/usr/share/applications/{desktop_file}",
-        f"/home/nkermani/.local/share/applications/{desktop_file}"
+        f"/home/nkermani/.local/share/applications/{desktop_file}",
+        f"/home/nkermani/.local/share/chezmoi/private_dot_local/private_share/private_applications/{desktop_file}"
     ]
     
     for path in paths:
-        if not os.path.exists(path):
-            continue
-            
-        try:
-            subprocess.run(["gio", "launch", path], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-            return
-        except:
-            continue
+        if os.path.exists(path):
+            try:
+                subprocess.Popen(["gio", "launch", path], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+                return
+            except:
+                continue
+
+    if "code" in desktop_file:
+        subprocess.Popen(["code"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+    elif "discord" in desktop_file:
+        subprocess.Popen(["discord"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

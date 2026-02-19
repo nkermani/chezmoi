@@ -168,39 +168,6 @@ int main(int argc, char** argv) {
         
         focus_window(display, target_window);
         found = 1;
-    } else {
-        Atom net_wm_window_type = XInternAtom(display, "_NET_WM_WINDOW_TYPE", False);
-        Atom net_wm_window_type_normal = XInternAtom(display, "_NET_WM_WINDOW_TYPE_NORMAL", False);
-        
-        for (long i = 0; i < nitems; i++) {
-            Window w = list[i];
-            
-            Atom type_actual_type;
-            int type_actual_format;
-            unsigned long type_nitems, type_bytes;
-            unsigned char* type_prop = NULL;
-            
-            int is_normal = 1;
-            
-            if (XGetWindowProperty(display, w, net_wm_window_type, 0, 1024, False, XA_ATOM,
-                                   &type_actual_type, &type_actual_format, &type_nitems, &type_bytes, &type_prop) == Success) {
-                if (type_prop) {
-                    Atom* atoms = (Atom*)type_prop;
-                    is_normal = 0;
-                    for (unsigned long j = 0; j < type_nitems; j++) {
-                        if (atoms[j] == net_wm_window_type_normal) {
-                            is_normal = 1;
-                            break;
-                        }
-                    }
-                    XFree(type_prop);
-                }
-            }
-            
-            if (is_normal) {
-                XIconifyWindow(display, w, DefaultScreen(display));
-            }
-        }
     }
 
     XFree(prop);
