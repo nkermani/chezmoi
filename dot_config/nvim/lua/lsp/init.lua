@@ -100,6 +100,8 @@ function M.setup()
         virtual_text = true,
         signs = true,
     })
+
+    vim.diagnostic.enable(false)
     
     vim.api.nvim_create_autocmd('LspAttach', {
         callback = function(args)
