@@ -32,6 +32,7 @@ keymap("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
 
 local function wrap_selection(open, close)
     return function()
+        if not vim.bo.modifiable then return end
         local mode = vim.fn.mode()
         local save_reg = vim.fn.getreg('v')
         local save_regtype = vim.fn.getregtype('v')
@@ -215,13 +216,17 @@ keymap('v', '<C-S-Right>', 'w', opts)
 keymap('i', '<C-BS>', '<C-w>', opts)
 keymap('i', '<M-BS>', '<C-w>', opts)
 keymap('i', '<C-H>', '<C-w>', opts)
-keymap('n', '<C-BS>', 'db', opts)
-keymap('n', '<C-H>', 'db', opts)
+keymap('n', '<C-BS>', function() if vim.bo.modifiable then vim.cmd('normal! db') end end, opts)
+keymap('n', '<C-H>', function() if vim.bo.modifiable then vim.cmd('normal! db') end end, opts)
 keymap('v', '<C-BS>', '"_d', opts)
 keymap('v', '<C-H>', '"_d', opts)
 
 -- Comportement Backspace / Delete / Enter style "Éditeur moderne"
 keymap('n', '<BS>', function()
+    if not vim.bo.modifiable then
+        vim.cmd('normal! h')
+        return
+    end
     if vim.fn.col('.') == 1 then
         if vim.fn.line('.') > 1 then
             vim.cmd('normal! kgJ')
@@ -232,6 +237,9 @@ keymap('n', '<BS>', function()
 end, { desc = "Backspace: Join with previous line or delete character" })
 
 keymap('n', '<Del>', function()
+    if not vim.bo.modifiable then
+        return
+    end
     local line = vim.fn.getline('.')
     if #line == 0 or vim.fn.col('.') >= #line then
         vim.cmd('normal! gJ')
@@ -240,10 +248,18 @@ keymap('n', '<Del>', function()
     end
 end, { desc = "Delete: Join with next line or delete character" })
 
-keymap('n', '<CR>', 'i<CR><Esc>', { desc = "Enter splits line" })
+keymap('n', '<CR>', function()
+    if not vim.bo.modifiable then
+        -- In terminal or non-modifiable buffers, Enter should behave normally
+        -- We use feedkeys to avoid issues with vim.cmd in some contexts
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, false, true), "n", false)
+        return
+    end
+    vim.cmd('normal! i\13\27')
+end, { desc = "Enter splits line" })
 
 -- CTRL + Delete pour supprimer le mot suivant
-keymap("n", "<C-Delete>", "dw", { desc = "Delete word forward" })
+keymap("n", "<C-Delete>", function() if vim.bo.modifiable then vim.cmd('normal! dw') end end, { desc = "Delete word forward" })
 keymap("i", "<C-Delete>", "<C-o>dw", { desc = "Delete word forward in insert mode" })
 
 -- VISUAL BLOCK MODE
@@ -278,25 +294,25 @@ keymap('v', '<C-v>', '"+P', { desc = "Paste without overwrite" })
 
 -- SUPPRESSION RAPIDE
 keymap('i', '<M-BS>', '<C-u>', { desc = "Delete to start of line" })
-keymap('n', '<M-BS>', 'd^', { desc = "Delete to start of line" })
+keymap('n', '<M-BS>', function() if vim.bo.modifiable then vim.cmd('normal! d^') end end, { desc = "Delete to start of line" })
 keymap('i', '<M-Delete>', '<C-o>D', { desc = "Delete to end of line" })
-keymap('n', '<M-Delete>', 'D', { desc = "Delete to end of line" })
+keymap('n', '<M-Delete>', function() if vim.bo.modifiable then vim.cmd('normal! D') end end, { desc = "Delete to end of line" })
 
 -- DÉPLACER des lignes (Alt + J/K)
-keymap('n', '<M-Down>', ':m .+1<CR>==', opts)
-keymap('n', '<M-Up>', ':m .-2<CR>==', opts)
-keymap('i', '<M-Down>', '<Esc>:m .+1<CR>==gi', opts)
-keymap('i', '<M-Up>', '<Esc>:m .-2<CR>==gi', opts)
-keymap('v', '<M-Down>', ":m '>+1<CR>gv=gv", opts)
-keymap('v', '<M-Up>', ":m '<-2<CR>gv=gv", opts)
+keymap('n', '<M-Down>', function() if vim.bo.modifiable then vim.cmd('m .+1') vim.cmd('normal! ==') end end, opts)
+keymap('n', '<M-Up>', function() if vim.bo.modifiable then vim.cmd('m .-2') vim.cmd('normal! ==') end end, opts)
+keymap('i', '<M-Down>', function() if vim.bo.modifiable then vim.cmd('normal! <Esc>') vim.cmd('m .+1') vim.cmd('normal! ==gi') end end, opts)
+keymap('i', '<M-Up>', function() if vim.bo.modifiable then vim.cmd('normal! <Esc>') vim.cmd('m .-2') vim.cmd('normal! ==gi') end end, opts)
+keymap('v', '<M-Down>', function() if vim.bo.modifiable then vim.cmd("m '>+1") vim.cmd('normal! gv=gv') end end, opts)
+keymap('v', '<M-Up>', function() if vim.bo.modifiable then vim.cmd("m '<-2") vim.cmd('normal! gv=gv') end end, opts)
 
 -- DUPLIQUER des lignes (Shift + Alt + Flèches)
-keymap('n', '<S-M-Down>', 'yyp', opts)
-keymap('n', '<S-M-Up>', 'yyP', opts)
-keymap('i', '<S-M-Down>', '<Esc>yypgi', opts)
-keymap('i', '<S-M-Up>', '<Esc>yyPgi', opts)
-keymap('v', '<S-M-Down>', "yPgv", opts)
-keymap('v', '<S-M-Up>', "yPgv", opts)
+keymap('n', '<S-M-Down>', function() if vim.bo.modifiable then vim.cmd('normal! yyp') end end, opts)
+keymap('n', '<S-M-Up>', function() if vim.bo.modifiable then vim.cmd('normal! yyP') end end, opts)
+keymap('i', '<S-M-Down>', function() if vim.bo.modifiable then vim.cmd('normal! <Esc>yypgi') end end, opts)
+keymap('i', '<S-M-Up>', function() if vim.bo.modifiable then vim.cmd('normal! <Esc>yyPgi') end end, opts)
+keymap('v', '<S-M-Down>', function() if vim.bo.modifiable then vim.cmd('normal! yPgv') end end, opts)
+keymap('v', '<S-M-Up>', function() if vim.bo.modifiable then vim.cmd('normal! yPgv') end end, opts)
 
 -- SÉLECTION TOTALE (CTRL + A)
 keymap({ 'n', 'i', 'v' }, '<C-a>', 'ggVG', { desc = "Select All" })

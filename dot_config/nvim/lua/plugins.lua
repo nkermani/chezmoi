@@ -58,6 +58,8 @@ pack.add({
     { src = 'https://github.com/mg979/vim-visual-multi' },
 
     -- 다목적 도구 / Swiss Army Knife / Couteau Suisse
+    { src = 'https://github.com/akinsho/toggleterm.nvim' },
+    { src = 'https://github.com/ibhagwan/fzf-lua' },
     { src = 'https://github.com/folke/snacks.nvim' },
     { src = 'https://github.com/nvim-pack/nvim-spectre' },
     { src = 'https://github.com/letieu/btw.nvim' },
