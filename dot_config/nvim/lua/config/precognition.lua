@@ -26,3 +26,12 @@ precognition.setup({
         NextParagraph = { text = "}", prio = 8 },
     },
 })
+
+vim.keymap.set("n", "<leader>tp", function()
+    local ok, precognition = pcall(require, "precognition")
+    if ok then
+        precognition.toggle()
+        local status = precognition.is_visible and "ON" or "OFF"
+        vim.notify("Precognition " .. status, vim.log.levels.INFO, { title = "Precognition" })
+    end
+end, { desc = "Toggle Precognition" })

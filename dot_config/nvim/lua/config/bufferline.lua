@@ -72,3 +72,10 @@ bufferline.setup({
 -- --
 
 vim.api.nvim_set_hl(0, "TabLineFill", { bg = '#1a1a1a' })
+
+-- KEYMAPS
+local keymap = vim.keymap.set
+keymap("n", "<S-h>", ":BufferLineCyclePrev<CR>", { desc = "Previous Buffer" })
+keymap("n", "<S-l>", ":BufferLineCycleNext<CR>", { desc = "Next Buffer" })
+keymap({ "n", "i", "v" }, "<M-w>", function() _G.smart_close() end, { desc = "Smart Close (Pane or Buffer)" })
+keymap("n", "<leader>x", function() _G.smart_close() end, { desc = "Smart Close (Pane or Buffer)" })

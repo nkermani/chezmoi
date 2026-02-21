@@ -56,7 +56,10 @@ local keymap = vim.keymap.set
 -- Navigation de fichiers
 keymap("n", "ff", builtin.find_files, { desc = "Telescope find files" })
 keymap({'n', 'v', 'i'}, "<C-p>" , builtin.find_files, { desc = "Telescope find files" })
+keymap({'n', 'v', 'i'}, "<C-S-p>" , builtin.commands, { desc = "Command Palette" })
 keymap("n", "fg", builtin.live_grep, { desc = "Telescope live grep" })
+keymap("n", "fw", builtin.live_grep, { desc = "Search text in project" })
+keymap("n", "<C-S-f>", builtin.live_grep, { desc = "Search text in project" })
 keymap("n", "fb", builtin.buffers, { desc = "Telescope buffers" })
 -- Recherche avancée
 keymap("n", "fs", builtin.grep_string, { desc = "Find current word" })
