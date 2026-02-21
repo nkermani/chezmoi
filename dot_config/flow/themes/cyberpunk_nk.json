@@ -1,0 +1,100 @@
+{
+    "name": "Cyberpunk NK",
+    "type": "dark",
+    "colors": {
+        "editor.background": "#212121",
+        "editor.foreground": "#cacaca",
+        "editor.lineHighlightBackground": "#2a2a2a",
+        "editor.selectionBackground": "#3e4452",
+        "editorLineNumber.foreground": "#676767",
+        "editorLineNumber.activeForeground": "#00f0ff",
+        "editorGroup.border": "#f3505c",
+        "editorGroupHeader.tabsBackground": "#2a2a2a",
+        "sideBar.background": "#2a2a2a",
+        "sideBar.foreground": "#cacaca",
+        "sideBar.border": "#f3505c",
+        "statusBar.background": "#2a2a2a",
+        "statusBar.foreground": "#cacaca",
+        "tab.activeBackground": "#212121",
+        "tab.activeForeground": "#00f0ff",
+        "tab.inactiveBackground": "#2a2a2a",
+        "tab.inactiveForeground": "#777777",
+        "tab.activeBorderTop": "#f3505c",
+        "focusBorder": "#00f0ff",
+        "button.background": "#f3505c",
+        "button.foreground": "#ffffff",
+        "activityBarBadge.background": "#f3505c",
+        "activityBarBadge.foreground": "#ffffff",
+        "titleBar.activeBackground": "#2a2a2a",
+        "titleBar.activeForeground": "#cacaca"
+    },
+    "tokenColors": [
+        {
+            "scope": "comment",
+            "settings": {
+                "foreground": "#777777",
+                "fontStyle": "italic"
+            }
+        },
+        {
+            "scope": "string",
+            "settings": {
+                "foreground": "#eedb85"
+            }
+        },
+        {
+            "scope": "constant",
+            "settings": {
+                "foreground": "#d867c6"
+            }
+        },
+        {
+            "scope": "constant.numeric",
+            "settings": {
+                "foreground": "#368aec"
+            }
+        },
+        {
+            "scope": "keyword",
+            "settings": {
+                "foreground": "#f3505c"
+            }
+        },
+        {
+            "scope": "entity.name.function",
+            "settings": {
+                "foreground": "#00f0ff"
+            }
+        },
+        {
+            "scope": "support.function",
+            "settings": {
+                "foreground": "#00f0ff"
+            }
+        },
+        {
+            "scope": "storage.type",
+            "settings": {
+                "foreground": "#51f66f"
+            }
+        },
+        {
+            "scope": "entity.name.type",
+            "settings": {
+                "foreground": "#51f66f"
+            }
+        },
+        {
+            "scope": "variable",
+            "settings": {
+                "foreground": "#cacaca"
+            }
+        },
+        {
+            "scope": "punctuation",
+            "settings": {
+                "foreground": "#cacaca"
+            }
+        }
+    ]
+}

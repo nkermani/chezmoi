@@ -162,6 +162,9 @@ alias e='smart-editor'
 alias c='code'
 alias v='vim'
 alias n='nvim'
+alias fl='flow'
+alias flc='flow ~/.config/flow/config.toml'
+alias flt='flow ~/.config/flow/themes/cyberpunk_nk.json'
 
 # SSH/SCP/SFTP - Fix for remote machines not knowing alacritty or tmux-256color
 _term_fix_ssh() {

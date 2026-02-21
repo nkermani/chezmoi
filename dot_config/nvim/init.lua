@@ -6,11 +6,10 @@ require("core.keymaps")
 require("core.autocmds")
 
 -- Configs
--- require("config.mason") -- Disabled for instant startup
 require("config.colorscheme")
-require("config.transparent")
+-- require("config.transparent")
 
-require("config.copilot")
+-- require("config.copilot")
 require("config.snacks")
 
 require("config.devicons")
@@ -27,7 +26,6 @@ require("config.namu")
 require("config.telescope")
 require("config.cmp")
 
--- require("config.lspconfig") -- Disabled for instant startup
 require("config.noice")
 require("config.dressing")
 require("config.autopairs")
@@ -37,7 +35,6 @@ require("config.multicursor")
 require("config.precognition")
 require("config.window_picker")
 require("config.oil")
--- require("config.no_neck_pain")
 require("config.inlinediff")
 require("config.codediff")
 require("config.btw")
@@ -45,3 +42,4 @@ require("config.spectre")
 
 -- LSP (Local & Fast)
 require("lsp").setup({})
+

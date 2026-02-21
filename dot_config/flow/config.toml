@@ -1,0 +1,3 @@
+theme = "cyberpunk_nk"
+input_mode = "flow"
+gutter_line_numbers_mode = "absolute"
