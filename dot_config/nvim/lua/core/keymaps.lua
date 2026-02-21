@@ -160,7 +160,13 @@ end, { desc = "Plugins Install/Check" })
 vim.keymap.set('n', '<leader>ps', ':!./sync_plugins.sh<CR>', { desc = "Sync Plugins to Start" })
 
 -- Garde le contenu du presse-papier après avoir collé sur une sélection
-keymap("x", "p", [["_dP]])
+keymap("x", "p", function()
+    if vim.bo.modifiable then
+        vim.cmd('normal! "_dP')
+    else
+        vim.cmd('normal! y')
+    end
+end, { desc = "Paste without overwriting register" })
 
 -- Copier/Couper vers le registre système explicitement
 keymap({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to system clipboard" })
@@ -341,12 +347,12 @@ keymap({ "n", "v" }, "c", '"_c', opts)
 keymap({ "n", "v" }, "C", '"_C', opts)
 keymap("v", "<BS>", '"_d', opts)
 
--- DÉSACTIVER L'HISTORIQUE DES COMMANDES
+-- DÉSACTIVER L'HISTORIQUE DES COMMANDES (Optionnel, mais q est utile pour les macros et fermer les fenêtres)
 keymap("n", "q:", "<nop>", opts)
 keymap("n", "q/", "<nop>", opts)
 keymap("n", "q?", "<nop>", opts)
 keymap("v", "q:", "<nop>", opts)
-keymap("n", "q", "<nop>", opts)
+-- keymap("n", "q", "<nop>", opts) -- Commenté car q est indispensable pour fermer les fenêtres flottantes et les macros
 
 -- SAUVEGARDE RAPIDE (CTRL + S)
 keymap('n', '<C-s>', '<cmd>w<CR>', { desc = "Save File" })
@@ -384,6 +390,17 @@ end, { desc = "Peek references" })
 keymap('n', '<2-LeftMouse>', 'viw', opts)
 -- Triple-clic : Sélectionne toute la ligne
 keymap('n', '<3-LeftMouse>', 'V', opts)
+
+-- Raccourci pour fermer les fenêtres flottantes en mode Insertion
+keymap("i", "q", function()
+    local winid = vim.api.nvim_get_current_win()
+    local cfg = vim.api.nvim_win_get_config(winid)
+    if cfg.relative ~= "" then
+        vim.api.nvim_win_close(winid, false)
+    else
+        vim.api.nvim_feedkeys("q", "n", false)
+    end
+end, { desc = "Close floating window in insert mode" })
 
 -- Menu contextuel (Clic droit)
 vim.cmd([[

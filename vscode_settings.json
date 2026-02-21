@@ -1,0 +1,20 @@
+{
+    //////////////////////////////////////////////////////////
+    //                      NKERMANI                        //
+    //////////////////////////////////////////////////////////
+    // General
+    "files.autoSave": "afterDelay",
+    // zenMode
+    "zenMode.fullScreen": false,
+    "zenMode.showTabs": "none",
+    "zenMode.centerLayout": false,
+    "zenMode.hideActivityBar": true,
+    "zenMode.hideStatusBar": true,
+    // Font
+    "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', monospace, Consolas",
+    "editor.fontFamily": "'JetBrainsMono Nerd Font', monospace, Consolas",
+    // Editor
+    "breadcrumbs.enabled": false, // Disables top line describing the path of the files
+
+}
+

@@ -90,7 +90,7 @@ vim.api.nvim_create_autocmd("ModeChanged", {
     group = vim.api.nvim_create_augroup("VisualCopy", { clear = true }),
     pattern = { "[vV\x16]:n", "[vV\x16]:i" },
     callback = function()
-        if vim.v.operator ~= "d" and vim.v.operator ~= "c" then
+        if vim.v.operator ~= "d" and vim.v.operator ~= "c" and vim.bo.modifiable then
             local save_cursor = vim.fn.getpos(".")
             vim.cmd('silent! normal! gvy')
             vim.fn.setpos(".", save_cursor)
@@ -121,8 +121,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- Fonction pour nettoyer les espaces et les lignes vides
 local function clean_on_save()
-    -- Ne pas exécuter si on est dans un fichier python (laisser black gérer)
-    if vim.bo.filetype == "python" then
+    -- Ne pas exécuter si le buffer n'est pas modifiable ou si c'est un fichier python (laisser black gérer)
+    if not vim.bo.modifiable or vim.bo.filetype == "python" then
         return
     end
 
@@ -153,10 +153,14 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     callback = clean_on_save,
 })
 
--- Sauvegarder automatiquement quand Neovim perd le focus
+-- Sauvegarder automatiquement quand Neovim perd le focus ou qu'on change de buffer
 vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
     pattern = "*",
-    command = "silent! wa", -- 'wa' sauvegarde tous les buffers modifiés sans erreur
+    callback = function()
+        if vim.bo.buftype == "" and vim.bo.modifiable and vim.fn.expand("%") ~= "" then
+            vim.cmd("silent! update")
+        end
+    end,
 })
 
 vim.opt.signcolumn = "yes:2"
