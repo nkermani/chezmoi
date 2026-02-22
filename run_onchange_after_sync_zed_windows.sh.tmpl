@@ -1,0 +1,28 @@
+{{- if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+#!/bin/bash
+
+# Zed config sync to Windows
+# Hash: {{ include "dot_config/zed/settings.json" | sha256sum }}
+
+WIN_ZED_DIR="/mnt/c/Users/kerma/AppData/Roaming/Zed"
+WIN_ZED_THEMES_DIR="$WIN_ZED_DIR/themes"
+
+if [ -d "$WIN_ZED_DIR" ]; then
+    echo "🪟 Syncing Zed config to Windows..."
+
+    # Create themes directory if it doesn't exist
+    mkdir -p "$WIN_ZED_THEMES_DIR"
+
+    # Copy theme
+    THEME_SRC="$HOME/.config/zed/themes/cyberpunk_nk.json"
+    if [ -f "$THEME_SRC" ]; then
+        cp "$THEME_SRC" "$WIN_ZED_THEMES_DIR/cyberpunk_nk.json"
+    fi
+
+    # Copy settings
+    SETTINGS_SRC="$HOME/.config/zed/settings.json"
+    if [ -f "$SETTINGS_SRC" ]; then
+        cp "$SETTINGS_SRC" "$WIN_ZED_DIR/settings.json"
+    fi
+fi
+{{- end }}

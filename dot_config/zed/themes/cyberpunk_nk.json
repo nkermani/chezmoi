@@ -1,0 +1,198 @@
+{
+  "name": "Cyberpunk NK",
+  "appearance": "dark",
+  "colors": {
+    "background": "#212121",
+    "foreground": "#cacaca",
+    "selection": "#3e4452",
+    "line_highlight": "#2a2a2a",
+    "comment": "#777777",
+    "link": "#368aec",
+    "syntactics": {
+      "attribute": "#ff9e64",
+      "boolean": "#d867c6",
+      "character": "#eedb85",
+      "comment": {
+        "foreground": "#777777"
+      },
+      "constant": "#d867c6",
+      "constructor": "#51f66f",
+      "enum": "#51f66f",
+      "enum_member": "#ffcc00",
+      "function": "#00f0ff",
+      "function_call": "#00f0ff",
+      "keyword": "#f3505c",
+      "keyword_control": "#f3505c",
+      "number": "#368aec",
+      "operator": "#cacaca",
+      "preproc": "#ff9e64",
+      "property": "#cacaca",
+      "punctuation": "#cacaca",
+      "string": "#eedb85",
+      "string_special": "#eedb85",
+      "tag": "#f3505c",
+      "type": "#51f66f",
+      "type_definition": "#51f66f",
+      "variable": "#cacaca",
+      "variable_builtin": "#f3505c"
+    },
+    "ui": {
+      "arch": "#2a2a2a",
+      "bar": {
+        "background": "#2a2a2a",
+        "foreground": "#f3505c",
+        "inactive_background": "#262626",
+        "inactive_foreground": "#777777"
+      },
+      "border": "transparent",
+      "button": {
+        "background": "#2a2a2a",
+        "foreground": "#cacaca",
+        "hover_background": "#323232",
+        "focused_background": "#f3505c"
+      },
+      "checkbox": {
+        "background": "#2a2a2a",
+        "foreground": "#00f0ff",
+        "focused_background": "#f3505c"
+      },
+      "context_menu": {
+        "background": "#2a2a2a",
+        "foreground": "#cacaca",
+        "match_background": "#d867c6"
+      },
+      "dialog": {
+        "background": "#212121",
+        "border": "#f3505c",
+        "foreground": "#cacaca"
+      },
+      "error": {
+        "background": "#603336",
+        "foreground": "#f3505c"
+      },
+      "error_gutter": "#f3505c",
+      "gutter": {
+        "background": "#212121",
+        "foreground": "#676767"
+      },
+      "highlight": {
+        "foreground": "#212121",
+        "background": "#00f0ff"
+      },
+      "hint": {
+        "background": "#2a2a2a",
+        "foreground": "#00f0ff"
+      },
+      "info": {
+        "background": "#2a2a2a",
+        "foreground": "#368aec"
+      },
+      "line_number": {
+        "foreground": "#676767",
+        "active_foreground": "#00f0ff"
+      },
+      "menu": {
+        "background": "#2a2a2a",
+        "foreground": "#cacaca",
+        "match_background": "#d867c6"
+      },
+      "modal": {
+        "background": "#212121",
+        "border": "#f3505c",
+        "foreground": "#cacaca"
+      },
+      "notice": {
+        "background": "#2a2a2a",
+        "foreground": "#ffcc00"
+      },
+      "pulse": "#d867c6",
+      "scrollbar": {
+        "background": "#2a2a2a",
+        "foreground": "#777777"
+      },
+      "search": {
+        "background": "#d867c6",
+        "border": "#d867c6",
+        "current": "#f3505c",
+        "foreground": "#212121",
+        "match_background": "#d867c6",
+        "selection": "#d867c6"
+      },
+      "selection": {
+        "background": "#3e4452",
+        "foreground": "#cacaca"
+      },
+      "sidebar": {
+        "background": "#2a2a2a",
+        "button_background": "#2a2a2a",
+        "button_foreground": "#cacaca",
+        "foreground": "#cacaca"
+      },
+      "status": {
+        "bar": {
+          "background": "#2a2a2a",
+          "foreground": "#cacaca"
+        },
+        "buffer_active": {
+          "background": "#212121",
+          "foreground": "#00f0ff"
+        },
+        "buffer_inactive": {
+          "background": "#262626",
+          "foreground": "#777777"
+        },
+        "buffer_selected": {
+          "background": "#212121",
+          "foreground": "#00f0ff"
+        },
+        "git_branch": "#f3505c",
+        "git_diff": "#51f66f",
+        "git_ignored": "#777777",
+        "git_modified": "#ffcc00",
+        "git_renamed": "#00f0ff",
+        "git_untracked": "#51f66f",
+        "info": "#368aec",
+        "warning": "#eedb85"
+      },
+      "syntax": {
+        "comment": "#777777",
+        "constant": "#d867c6",
+        "function": "#00f0ff",
+        "keyword": "#f3505c",
+        "number": "#368aec",
+        "operator": "#cacaca",
+        "property": "#cacaca",
+        "punctuation": "#cacaca",
+        "string": "#eedb85",
+        "tag": "#f3505c",
+        "type": "#51f66f",
+        "variable": "#cacaca"
+      },
+      "tab": {
+        "background": "#2a2a2a",
+        "foreground": "#676767",
+        "inactive_background": "#2a2a2a",
+        "inactive_foreground": "#676767",
+        "hover_background": "#323232",
+        "selected_background": "#212121",
+        "selected_foreground": "#00f0ff"
+      },
+      "tooltip": {
+        "background": "#2a2a2a",
+        "foreground": "#cacaca"
+      },
+      "tree": {
+        "indent_guide": "#323232",
+        "indent_guide_active": "#676767",
+        "line_numbers": "#676767",
+        "selection_background": "#3e4452",
+        "selection_foreground": "#cacaca"
+      },
+      "warning": {
+        "background": "#603336",
+        "foreground": "#f3505c"
+      },
+      "white": "#cacaca"
+    }
+  }
+}
