@@ -1,0 +1,23 @@
+{
+    "settings": {
+        "inherit": "flow"
+    },
+    "project": {
+        "press": [
+            ["ctrl+p", "find_file"],
+            ["ctrl+shift+p", "open_command_palette"],
+            ["alt+p", "find_file"],
+            ["alt+shift+p", "open_command_palette"]
+        ]
+    },
+    "normal": {
+        "press": [
+            ["ctrl+p", "find_file"],
+            ["ctrl+shift+p", "open_command_palette"],
+            ["alt+p", "find_file"],
+            ["alt+shift+p", "open_command_palette"],
+            ["ctrl+shift+q", "quit_without_saving"],
+            ["alt+q", "quit_without_saving"]
+        ]
+    }
+}

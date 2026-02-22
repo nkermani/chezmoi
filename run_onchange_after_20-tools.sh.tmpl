@@ -5,7 +5,7 @@ echo "🛠️  Installing CLI utilities..."
 if [[ "$OS_TYPE" == "Darwin" ]]; then
     # Homebrew handles architecture automatically on macOS
     if command -v brew &>/dev/null; then
-        brew install fzf ripgrep fd bat cmake tmux lazygit starship zoxide clang-format
+        brew install fzf ripgrep fd bat cmake tmux lazygit starship zoxide clang-format zellij zig
     fi
 else
     # Manual installation for Linux/42 (Portable Binaries)
@@ -17,7 +17,7 @@ else
     LINUX_ARCH="x86_64"
     [[ "$ARCH_TYPE" == "aarch64" ]] && LINUX_ARCH="aarch64"
 
-    for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat" "lazygit:lazygit:jesseduffield/lazygit"; do
+    for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat" "lazygit:lazygit:jesseduffield/lazygit" "zellij:zellij:zellij-org/zellij"; do
         IFS=":" read -r name bin repo <<< "$tool"
         if [ ! -f "$BIN_DIR/$bin" ]; then
             echo "  📦 Fetching $name..."
@@ -29,6 +29,15 @@ else
                 [[ "$ARCH_TYPE" == "aarch64" ]] && LG_ARCH="arm64"
                 curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}_${VER#v}_Linux_${LG_ARCH}.tar.gz" | tar -xzC /tmp
                 cp /tmp/lazygit "$BIN_DIR/"
+            elif [[ "$name" == "zellij" ]]; then
+                # Zellij has a different naming convention (no version in filename)
+                ZJ_ARCH="x86_64"
+                [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZJ_ARCH="aarch64"
+                curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}-${ZJ_ARCH}-unknown-linux-musl.tar.gz" -o /tmp/zellij.tar.gz
+                tar -xzf /tmp/zellij.tar.gz -C /tmp
+                rm /tmp/zellij.tar.gz
+                cp /tmp/zellij "$BIN_DIR/"
+                rm -rf /tmp/zellij
             else
                 curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}-${VER}-${LINUX_ARCH}-unknown-linux-musl.tar.gz" | tar -xzC /tmp
                 find /tmp/${name}-${VER}-${LINUX_ARCH}-unknown-linux-musl -name "$bin" -type f -exec cp {} "$BIN_DIR/" \;
@@ -65,6 +74,17 @@ else
         [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && TMUX_ARCH="arm64"
         curl -LSs "https://github.com/tmux/tmux-builds/releases/download/v${TMUX_VER}/tmux-${TMUX_VER}-linux-${TMUX_ARCH}.tar.gz" | tar -xzC "$BIN_DIR"
         chmod +x "$BIN_DIR/tmux"
+    fi
+
+    # Zig installation (Portable Binary)
+    if [ ! -f "$BIN_DIR/zig" ]; then
+        echo "  📦 Fetching Zig..."
+        ZIG_VER="0.15.2"
+        ZIG_ARCH="x86_64"
+        [[ "$ARCH_TYPE" == "aarch64" ]] && ZIG_ARCH="aarch64"
+        curl -LSs "https://ziglang.org/download/${ZIG_VER}/zig-${ZIG_ARCH}-linux-${ZIG_VER}.tar.xz" | tar -xJ -C "$APPS_DIR"
+        ln -sf "$APPS_DIR/zig-${ZIG_ARCH}-linux-${ZIG_VER}/zig" "$BIN_DIR/zig"
+        ln -sf "$APPS_DIR/zig-${ZIG_ARCH}-linux-${ZIG_VER}/lib" "$APPS_DIR/zig-${ZIG_ARCH}-linux-${ZIG_VER}/lib64" 2>/dev/null || true
     fi
 fi
 

@@ -59,3 +59,51 @@ EOF
         fi
     fi
 fi
+
+# WezTerm
+if [[ "$OS_TYPE" == "Darwin" ]]; then
+    if ! command -v wezterm &>/dev/null; then
+        echo "  📦 Installing WezTerm via Homebrew..."
+        brew install --cask wezterm
+    fi
+else
+    if ! command -v wezterm &>/dev/null; then
+        echo "  📦 Installing WezTerm..."
+        WEZTERM_VER=$(curl -s https://api.github.com/repos/wezterm/wezterm/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
+        
+        if [[ "$HAS_SUDO" == "true" ]]; then
+            WEZTERM_URL="https://github.com/wezterm/wezterm/releases/download/${WEZTERM_VER}/wezterm-${WEZTERM_VER}.Ubuntu22.04.deb"
+            curl -LSs "$WEZTERM_URL" -o /tmp/wezterm.deb
+            if [ -f /tmp/wezterm.deb ]; then
+                sudo dpkg -i /tmp/wezterm.deb || sudo apt-get install -f -y
+                rm /tmp/wezterm.deb
+            fi
+        else
+            curl -LSs "https://github.com/wezterm/wezterm/releases/download/${WEZTERM_VER}/wezterm-${WEZTERM_VER}.Ubuntu22.04.tar.xz" | tar -xJ -C "$APPS_DIR"
+            ln -sf "$APPS_DIR/wezterm-"*/wezterm "$BIN_DIR/wezterm"
+        fi
+        
+        # Desktop Integration
+        echo "  🎨 Setting up WezTerm desktop integration..."
+        ICON_DIR="$HOME/.local/share/icons"
+        APP_DIR="$HOME/.local/share/applications"
+        mkdir -p "$ICON_DIR" "$APP_DIR"
+        
+        curl -LSs "https://github.com/wez/wezterm/raw/main/terminal-icon.svg" -o "$ICON_DIR/wezterm.svg"
+        
+        cat <<EOF > "$APP_DIR/wezterm.desktop"
+[Desktop Entry]
+Type=Application
+TryExec=wezterm
+exec=wezterm start
+Icon=$HOME/.local/share/icons/wezterm.svg
+Terminal=false
+Categories=System;TerminalEmulator;
+
+Name=WezTerm
+GenericName=Terminal
+Comment=A GPU-accelerated cross-platform terminal emulator
+StartupWMClass=wezterm
+EOF
+    fi
+fi

@@ -9,7 +9,9 @@ option_as_alt = "Both"
 {{- end }}
 
 [env]
-TERM = "alacritty"
+# TERM set to tmux-256color so tmux handles escape sequences properly
+# This ensures Flow (with Kitty keyboard disabled) works correctly in tmux
+TERM = "tmux-256color"
 
 {{- if or (eq .chezmoi.os "windows") (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
 
