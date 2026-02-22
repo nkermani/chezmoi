@@ -25,7 +25,7 @@ dashboard.section.buttons.val = {
     dashboard.button("p", "󱔗  Find Project", ":Telescope find_files cwd=~ find_command=fd,--type,d,--max-depth,7 previewer=false<CR>"),
 
     -- CONFIGURATION
-    dashboard.button("c", "󰒓  Config Files", ":Telescope find_files cwd=~/.config/nvim<CR>"),
+    dashboard.button("c", "󰒓  Config Files", ":Telescope find_files cwd=~/.config/nvim_nkermani<CR>"),
 
     -- RECHERCHE & ÉDITION
     dashboard.button("w", "󰱽  Search Text (Grep)", ":Telescope live_grep<CR>"),
