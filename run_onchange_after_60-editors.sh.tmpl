@@ -188,3 +188,71 @@ if [ ! -f "$LSP_BIN_DIR/rust-analyzer" ]; then
     # Ensure it's also in the main bin directory for convenience
     ln -sf "$LSP_BIN_DIR/rust-analyzer" "$BIN_DIR/rust-analyzer"
 fi
+
+# --- EDITOR INSTALLATIONS ---
+
+echo "📝 Installing editors..."
+
+# 1. Zed Editor
+if [ ! -f "$BIN_DIR/zed" ]; then
+    echo "  🔷 Installing Zed editor..."
+    ZED_DIR="$APPS_DIR/zed"
+    mkdir -p "$ZED_DIR"
+    
+    ZED_ARCH="x86_64"
+    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZED_ARCH="aarch64"
+    
+    if [[ "$OS_TYPE" == "Darwin" ]]; then
+        curl -f https://zed.dev/install.sh | sh
+        ln -sf "$HOME/.local/bin/zed" "$BIN_DIR/zed"
+    else
+        curl -LSs "https://cloud.zed.dev/releases/stable/latest/download?asset=zed&arch=${ZED_ARCH}&os=linux&source=docs" -o /tmp/zed.tar.gz
+        tar -xzf /tmp/zed.tar.gz -C "$ZED_DIR" --strip-components=1
+        ln -sf "$ZED_DIR/bin/zed" "$BIN_DIR/zed"
+        rm -f /tmp/zed.tar.gz
+    fi
+fi
+
+# 2. Helix Editor (hx)
+if [ ! -f "$BIN_DIR/hx" ]; then
+    echo "  🌀 Installing Helix editor..."
+    HELIX_DIR="$APPS_DIR/helix"
+    mkdir -p "$HELIX_DIR/runtime"
+    
+    HELIX_ARCH="x86_64"
+    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && HELIX_ARCH="aarch64"
+    
+    HELIX_OS="linux"
+    [[ "$OS_TYPE" == "Darwin" ]] && HELIX_OS="macos"
+    
+    curl -LSs "https://github.com/helix-editor/helix/releases/download/25.07.1/helix-${HELIX_OS}-${HELIX_ARCH}.tar.gz" -o /tmp/helix.tar.gz
+    tar -xzf /tmp/helix.tar.gz -C "$HELIX_DIR" --strip-components=1
+    ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
+    rm -f /tmp/helix.tar.gz
+fi
+
+# 3. VSCode (if not installed)
+if ! command -v code &>/dev/null && [ ! -f "$BIN_DIR/code" ]; then
+    echo "  💜 Installing VSCode..."
+    VSCODE_DIR="$APPS_DIR/vscode"
+    mkdir -p "$VSCODE_DIR"
+    
+    VSCODE_ARCH="x64"
+    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && VSCODE_ARCH="arm64"
+    
+    if [[ "$OS_TYPE" == "Darwin" ]]; then
+        if [[ "$VSCODE_ARCH" == "arm64" ]]; then
+            curl -LSs "https://update.code.visualstudio.com/latest/darwin-arm64/stable" -o /tmp/VSCode-darwin-arm64.zip
+        else
+            curl -LSs "https://update.code.visualstudio.com/latest/darwin-x64/stable" -o /tmp/VSCode-darwin-x64.zip
+        fi
+        unzip -q /tmp/VSCode-*.zip -d "$VSCODE_DIR"
+        ln -sf "$VSCODE_DIR/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code" "$BIN_DIR/code"
+        rm -f /tmp/VSCode-*.zip
+    else
+        curl -LSs "https://update.code.visualstudio.com/latest/linux-${VSCODE_ARCH}/stable" -o /tmp/vscode.tar.gz
+        tar -xzf /tmp/vscode.tar.gz -C "$VSCODE_DIR" --strip-components=1
+        ln -sf "$VSCODE_DIR/bin/code" "$BIN_DIR/code"
+        rm -f /tmp/vscode.tar.gz
+    fi
+fi

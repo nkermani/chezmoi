@@ -24,16 +24,13 @@ else
                 curl -LSs "$ALACRITTY_URL" -o "$BIN_DIR/alacritty"
                 chmod +x "$BIN_DIR/alacritty"
                 
-                # Desktop Integration (Icon & Launcher)
                 echo "  🎨 Setting up Alacritty desktop integration..."
                 ICON_DIR="$HOME/.local/share/icons"
                 APP_DIR="$HOME/.local/share/applications"
                 mkdir -p "$ICON_DIR" "$APP_DIR"
                 
-                # Download official icon
                 curl -LSs "https://github.com/alacritty/alacritty/releases/latest/download/Alacritty.svg" -o "$ICON_DIR/alacritty.svg"
                 
-                # Create .desktop file
                 cat <<EOF > "$APP_DIR/alacritty.desktop"
 [Desktop Entry]
 Type=Application
@@ -61,49 +58,108 @@ EOF
 fi
 
 # WezTerm
-if [[ "$OS_TYPE" == "Darwin" ]]; then
-    if ! command -v wezterm &>/dev/null; then
-        echo "  📦 Installing WezTerm via Homebrew..."
-        brew install --cask wezterm
-    fi
-else
-    if ! command -v wezterm &>/dev/null; then
-        echo "  📦 Installing WezTerm..."
-        WEZTERM_VER=$(curl -s https://api.github.com/repos/wezterm/wezterm/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
-        
-        if [[ "$HAS_SUDO" == "true" ]]; then
-            WEZTERM_URL="https://github.com/wezterm/wezterm/releases/download/${WEZTERM_VER}/wezterm-${WEZTERM_VER}.Ubuntu22.04.deb"
-            curl -LSs "$WEZTERM_URL" -o /tmp/wezterm.deb
-            if [ -f /tmp/wezterm.deb ]; then
-                sudo dpkg -i /tmp/wezterm.deb || sudo apt-get install -f -y
-                rm /tmp/wezterm.deb
-            fi
-        else
-            curl -LSs "https://github.com/wezterm/wezterm/releases/download/${WEZTERM_VER}/wezterm-${WEZTERM_VER}.Ubuntu22.04.tar.xz" | tar -xJ -C "$APPS_DIR"
-            ln -sf "$APPS_DIR/wezterm-"*/wezterm "$BIN_DIR/wezterm"
-        fi
-        
-        # Desktop Integration
-        echo "  🎨 Setting up WezTerm desktop integration..."
-        ICON_DIR="$HOME/.local/share/icons"
-        APP_DIR="$HOME/.local/share/applications"
-        mkdir -p "$ICON_DIR" "$APP_DIR"
-        
-        curl -LSs "https://github.com/wez/wezterm/raw/main/terminal-icon.svg" -o "$ICON_DIR/wezterm.svg"
-        
-        cat <<EOF > "$APP_DIR/wezterm.desktop"
-[Desktop Entry]
-Type=Application
-TryExec=wezterm
-exec=wezterm start
-Icon=$HOME/.local/share/icons/wezterm.svg
-Terminal=false
-Categories=System;TerminalEmulator;
+#if [[ "$OS_TYPE" == "Darwin" ]]; then
+#    if ! command -v wezterm &>/dev/null; then
+#        echo "  📦 Installing WezTerm via Homebrew..."
+#        brew install --cask wezterm
+#    fi
+#else
+#    if ! command -v wezterm &>/dev/null; then
+#        echo "  📦 Installing WezTerm..."
+#        WEZTERM_VER=$(curl -s https://api.github.com/repos/wezterm/wezterm/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
+#        
+#        if [[ "$HAS_SUDO" == "true" ]]; then
+#            WEZTERM_URL="https://github.com/wezterm/wezterm/releases/download/${WEZTERM_VER}/wezterm-${WEZTERM_VER}.Ubuntu22.04.deb"
+#            curl -LSs "$WEZTERM_URL" -o /tmp/wezterm.deb
+#            if [ -f /tmp/wezterm.deb ]; then
+#                sudo dpkg -i /tmp/wezterm.deb || sudo apt-get install -f -y
+#                rm /tmp/wezterm.deb
+#            fi
+#        else
+#            curl -LSs "https://github.com/wezterm/wezterm/releases/download/${WEZTERM_VER}/wezterm-${WEZTERM_VER}.Ubuntu22.04.tar.xz" | tar -xJ -C "$APPS_DIR"
+#            ln -sf "$APPS_DIR/wezterm-"*/wezterm "$BIN_DIR/wezterm"
+#        fi
+#        
+#        echo "  🎨 Setting up WezTerm desktop integration..."
+#        ICON_DIR="$HOME/.local/share/icons"
+#        APP_DIR="$HOME/.local/share/applications"
+#        mkdir -p "$ICON_DIR" "$APP_DIR"
+#        
+#        curl -LSs "https://github.com/wez/wezterm/raw/main/terminal-icon.svg" -o "$ICON_DIR/wezterm.svg"
+#        
+#        cat <<EOF > "$APP_DIR/wezterm.desktop"
+#[Desktop Entry]
+#Type=Application
+#TryExec=wezterm
+#exec=wezterm start
+##Icon=$HOME/.local/share/icons/wezterm.svg
+##Terminal=false
+#Categories=System;TerminalEmulator;
+#
+#Name=WezTerm
+#GenericName=Terminal
+#Comment=A GPU-accelerated cross-platform terminal emulator
+#StartupWMClass=wezterm
+###EOF
+####    fi
+##fi
 
-Name=WezTerm
-GenericName=Terminal
-Comment=A GPU-accelerated cross-platform terminal emulator
-StartupWMClass=wezterm
-EOF
-    fi
-fi
+# Rio
+#if [[ "$OS_TYPE" == "Darwin" ]]; then
+#    if ! command -v rio &>/dev/null; then
+#        echo "  📦 Installing Rio via Homebrew..."
+#        brew install rio
+#    fi
+#else
+#    if ! command -v rio &>/dev/null; then
+#        echo "  📦 Installing Rio..."
+#        RIO_VER=$(curl -s https://api.github.com/repos/raphamorim/rio/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
+#        
+#        if [[ "$HAS_SUDO" == "true" ]]; then
+#            if command -v apt &>/dev/null; then
+#                RIO_URL="https://github.com/raphamorim/rio/releases/download/${RIO_VER}/rio-${RIO_VER#v}-x86_64-unknown-linux-gnu.deb"
+#                curl -LSs "$RIO_URL" -o /tmp/rio.deb
+#                if [ -f /tmp/rio.deb ]; then
+#                    sudo dpkg -i /tmp/rio.deb || sudo apt-get install -f -y
+#                    rm /tmp/rio.deb
+#                fi
+#            elif command -v dnf &>/dev/null; then
+#                RIO_URL="https://github.com/raphamorim/rio/releases/download/${RIO_VER}/rio-${RIO_VER#v}-x86_64-unknown-linux-gnu.rpm"
+#                curl -LSs "$RIO_URL" -o /tmp/rio.rpm
+#                if [ -f /tmp/rio.rpm ]; then
+#                    sudo dnf install -y /tmp/rio.rpm
+#                    rm /tmp/rio.rpm
+#                fi
+#            fi
+#        else
+#            RIO_URL="https://github.com/raphamorim/rio/releases/download/${RIO_VER}/rio-${RIO_VER#v}-x86_64-unknown-linux-gnu.tar.gz"
+#            curl -LSs "$RIO_URL" | tar -xz -C "$APPS_DIR"
+#            ln -sf "$APPS_DIR/rio-${RIO_VER#v}-x86_64-unknown-linux-gnu/rio" "$BIN_DIR/rio"
+#        fi
+#        
+#        if command -v rio &>/dev/null; then
+#            echo "  🎨 Setting up Rio desktop integration..."
+#            ICON_DIR="$HOME/.local/share/icons"
+#            APP_DIR="$HOME/.local/share/applications"
+#            mkdir -p "$ICON_DIR" "$APP_DIR"
+#            
+#            curl -LSs "https://raw.githubusercontent.com/raphamorim/rio/main/docs/static/assets/rio-logo.png" -o "$ICON_DIR/rio.png"
+#            
+#            cat <<EOF > "$APP_DIR/rio.desktop"
+#[Desktop Entry]
+#Type=Application
+#TryExec=rio
+#exec=rio
+#Icon=$HOME/.local/share/icons/rio.png
+#Terminal=false
+#Categories=System;TerminalEmulator;
+#
+#Name=Rio
+##GenericName=Terminal
+###Comment=A hardware-accelerated GPU terminal emulator
+###StartupWMClass=rio
+##EOF
+#        fi
+#    fi
+#fi
+#
