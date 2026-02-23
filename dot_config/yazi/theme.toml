@@ -18,7 +18,7 @@ tab_width    = 1
 border_symbol = "│"
 border_style  = { fg = "#00f0ff" }
 
-syntect_theme = "~/.config/bat/themes/CyberpunkJB.tmTheme"
+syntect_theme = "~/.config/bat/themes/CyberpunkNK.tmTheme"
 
 [status]
 separator_open  = ""

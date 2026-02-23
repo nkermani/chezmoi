@@ -7,6 +7,11 @@ export FZF_DEFAULT_COMMAND='fd --type f --absolute-path'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND='fd --type d --hidden'
 
+# bat
+if command -v bat >/dev/null 2>&1; then
+    export BAT_THEME="CyberpunkNK"
+fi
+
 # NVM
 if [ -d "/goinfre/$USER/.nvm" ]; then
     export NVM_DIR="/goinfre/$USER/.nvm"
