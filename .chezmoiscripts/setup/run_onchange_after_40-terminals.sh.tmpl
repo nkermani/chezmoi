@@ -58,12 +58,12 @@ EOF
 fi
 
 # Kitty
-if [[ "$OS_TYPE" != "windows" && "$OS_TYPE" != "wsl2" ]]; then
+if [[ "$OS_TYPE" == "Darwin" ]]; then
     if ! command -v kitty &>/dev/null; then
-        if [[ "$OS_TYPE" == "Darwin" ]]; then
-            echo "  📦 Installing Kitty via Homebrew..."
-            brew install --cask kitty
-        else
+        echo "  📦 Installing Kitty via Homebrew..."
+        brew install --cask kitty
+    else
+        if ! command -v kitty &>/dev/null; then
             echo "  📦 Installing Kitty (installer)..."
             curl -L "https://sw.kovidgoyal.net/kitty/installer.sh" -o /tmp/kitty-installer.sh
             bash /tmp/kitty-installer.sh launch=n
@@ -81,7 +81,6 @@ if [[ "$OS_TYPE" != "windows" && "$OS_TYPE" != "wsl2" ]]; then
             if [ -f "$HOME/.local/kitty.app/icons/kitty.png" ]; then
                 cp "$HOME/.local/kitty.app/icons/kitty.png" "$ICON_DIR/kitty.png"
             fi
-            
             cat <<EOF > "$APP_DIR/kitty.desktop"
 [Desktop Entry]
 Type=Application
