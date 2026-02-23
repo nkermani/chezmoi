@@ -18,6 +18,8 @@ tab_width    = 1
 border_symbol = "│"
 border_style  = { fg = "#00f0ff" }
 
+syntect_theme = "~/.config/bat/themes/CyberpunkJB.tmTheme"
+
 [status]
 separator_open  = ""
 separator_close = ""
@@ -81,3 +83,4 @@ rules = [
 	{ mime = "application/x-rar", fg = "#eedb85" },
 	{ mime = "application/pdf", fg = "#f3505c" },
 ]
+
