@@ -41,7 +41,7 @@ def focus_app(desktop_file):
 
     if "code" in desktop_file:
         subprocess.Popen(["/home/nkermani/.nkermani/bin/code"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-        returnd 
+        return
     
     if "discord" in desktop_file:
         subprocess.Popen(["discord"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
