@@ -15,7 +15,7 @@ def focus_app(desktop_file):
     elif "discord" in desktop_file:
         app_name = "discord"
     elif "code" in desktop_file:
-        app_name = "code"
+        app_name = "Visual Studio Code"
     elif "Evince" in desktop_file:
         app_name = "evince"
     elif "Nautilus" in desktop_file:
@@ -39,9 +39,16 @@ def focus_app(desktop_file):
         subprocess.Popen([alacritty_bin], env=env, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
         return
 
+    if "code" in desktop_file:
+        subprocess.Popen(["/home/nkermani/.nkermani/bin/code"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        return
+    
+    if "discord" in desktop_file:
+        subprocess.Popen(["discord"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        return
+
     paths = [
-        desktop_file,
-        f"/usr/share/applications/{desktop_file}",
+        f"/home/nkermani/.nkermani/bin/{desktop_file}",
         f"/home/nkermani/.local/share/applications/{desktop_file}",
         f"/home/nkermani/.local/share/chezmoi/private_dot_local/private_share/private_applications/{desktop_file}"
     ]
@@ -55,7 +62,7 @@ def focus_app(desktop_file):
                 continue
 
     if "code" in desktop_file:
-        subprocess.Popen(["code"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        subprocess.Popen(["/home/nkermani/.nkermani/bin/code"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
     elif "discord" in desktop_file:
         subprocess.Popen(["discord"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
 

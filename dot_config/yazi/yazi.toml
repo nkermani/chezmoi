@@ -1,6 +1,6 @@
 [open]
 rules = [
-	{ name = "*", use = "edit" },
+	{ name = "*", use = "smart-editor" },
 ]
 
 [manager]

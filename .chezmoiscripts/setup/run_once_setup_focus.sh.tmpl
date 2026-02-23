@@ -1,9 +1,11 @@
 {{- if .is_42 -}}
 #!/bin/bash
 echo "Configuration 42 détectée : Installation du Focus Manager..."
-# 1. Compilation de l'outil de focus C
-mkdir -p {{ .chezmoi.homeDir }}/.nkermani/bin/42
-gcc {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus.c -o {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus -lX11
+# 1. S'assurer que le binaire focus existe (déjà compilé dans ~/.nkermani/bin/42/)
+if [ ! -f {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus ]; then
+    mkdir -p {{ .chezmoi.homeDir }}/.nkermani/bin/42
+    gcc {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus.c -o {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus -lX11
+fi
 # 2. Raccourcis Dock (1-9) : Alacritty, Browser, VSCode, Finder, PDF, Discord, GeForceNOW
 for i in {1..9}; do
     gsettings set org.gnome.shell.keybindings switch-to-application-$i "[]"

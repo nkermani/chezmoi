@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Visual Studio Code Focus
+Exec=/usr/bin/python3 /home/nkermani/.nkermani/bin/42/focus_manager.py /home/nkermani/.local/share/applications/vscode.desktop
+Icon=vscode
+StartupWMClass=Visual Studio Code
+Terminal=false
+Categories=System;TerminalEmulator;
