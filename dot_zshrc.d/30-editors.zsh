@@ -20,7 +20,7 @@ cat << 'EOF' > "$NK_BIN/smart-editor"
 W_CODE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
 
 if command -v nvim >/dev/null 2>&1; then
-    NVIM_APPNAME=nvim_nkermani exec nvim "$@"
+    exec nvim "$@"
 fi
 
 if grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then
@@ -43,8 +43,8 @@ else
     exec vi "$@"
 fi
 EOF
-chmod +x "$NK_BIN/smart-editor"
 
+chmod +x "$NK_BIN/smart-editor"
 export EDITOR="smart-editor"
 export VISUAL="smart-editor"
 
@@ -52,12 +52,5 @@ alias edit='smart-editor'
 alias e='smart-editor'
 alias c='code'
 alias v='vim'
-alias nvim-nkermani='NVIM_APPNAME=nvim_nkermani nvim'
-alias nvim-default='NVIM_APPNAME=nvim_default nvim'
-alias nvim-nvchad='NVIM_APPNAME=nvim_nvchad nvim'
-alias nvim-lazyvim='NVIM_APPNAME=nvim_lazyvim nvim'
-alias nvim-stock='NVIM_APPNAME=nvim_stock nvim'
-alias n='nvim-nvchad'
-alias fl='flow'
-alias flc='flow ~/.config/flow/config.toml'
-alias flt='flow ~/.config/flow/themes/cyberpunk_nk.json'
+alias n='nvim'
+
