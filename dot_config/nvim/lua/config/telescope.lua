@@ -91,44 +91,44 @@ local find_projects = function()
 end
 
 -- Fonction pour se connecter rapidement à un remote via Oil-SSH
-local remote_ssh_connect = function()
-    local actions = require("telescope.actions")
-    local action_state = require("telescope.actions.state")
-    local pickers = require("telescope.pickers")
-    local finders = require("telescope.finders")
-    local conf = require("telescope.config").values
+-- local remote_ssh_connect = function()
+--     local actions = require("telescope.actions")
+--     local action_state = require("telescope.actions.state")
+--     local pickers = require("telescope.pickers")
+--     local finders = require("telescope.finders")
+--     local conf = require("telescope.config").values
+--
+--     -- Liste de tes serveurs habituels (à personnaliser)
+--     local hosts = {
+--         -- { name = "Rainfall (42)", url = "oil-ssh://nkermani@rainfall//home/nkermani/" },
+--         -- { name = "Goinfre (42)",  url = "oil-ssh://nkermani@rainfall//goinfre/nkermani/" },
+--         -- Ajoute d'autres serveurs ici
+--         -- { name = "Mon Serveur", url = "oil-ssh://user@ip//path/" },
+--     }
+--
+--     -- pickers.new({}, {
+--     --     prompt_title = "🌐 Remote Connection (Oil-SSH)",
+--     --     finder = finders.new_table({
+--     --         results = hosts,
+--     --         entry_maker = function(entry)
+--     --             return {
+--     --                 value = entry,
+--     --                 display = entry.name,
+--     --                 ordinal = entry.name,
+--     --             }
+--     --         end,
+--     --     }),
+--     --     sorter = conf.generic_sorter({}),
+--     --     attach_mappings = function(prompt_bufnr, map)
+--     --         actions.select_default:replace(function()
+--     --             actions.close(prompt_bufnr)
+--     --             local selection = action_state.get_selected_entry()
+--     --             vim.cmd("edit " .. selection.value.url)
+--     --         end)
+--     --         return true
+--     --     end,
+--     -- }):find()
+-- end
 
-    -- Liste de tes serveurs habituels (à personnaliser)
-    local hosts = {
-        { name = "Rainfall (42)", url = "oil-ssh://nkermani@rainfall//home/nkermani/" },
-        { name = "Goinfre (42)",  url = "oil-ssh://nkermani@rainfall//goinfre/nkermani/" },
-        -- Ajoute d'autres serveurs ici
-        -- { name = "Mon Serveur", url = "oil-ssh://user@ip//path/" },
-    }
-
-    pickers.new({}, {
-        prompt_title = "🌐 Remote Connection (Oil-SSH)",
-        finder = finders.new_table({
-            results = hosts,
-            entry_maker = function(entry)
-                return {
-                    value = entry,
-                    display = entry.name,
-                    ordinal = entry.name,
-                }
-            end,
-        }),
-        sorter = conf.generic_sorter({}),
-        attach_mappings = function(prompt_bufnr, map)
-            actions.select_default:replace(function()
-                actions.close(prompt_bufnr)
-                local selection = action_state.get_selected_entry()
-                vim.cmd("edit " .. selection.value.url)
-            end)
-            return true
-        end,
-    }):find()
-end
-
-vim.keymap.set("n", "<leader>rr", remote_ssh_connect, { desc = "Remote Hosts (Telescope)" })
+-- vim.keymap.set("n", "<leader>rr", remote_ssh_connect, { desc = "Remote Hosts (Telescope)" })
 

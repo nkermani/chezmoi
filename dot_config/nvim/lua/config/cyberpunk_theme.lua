@@ -62,10 +62,21 @@ function M.setup()
     hl(0, "EdgyIcon", { bg = c.sidebar_bg, fg = c.red })
     hl(0, "EdgyIconActive", { bg = c.active_sidebar_bg, fg = c.red })
 
+    -- NeoTree
     hl(0, "NeoTreeNormal", { bg = c.neotree_bg, fg = c.fg })
+    hl(0, "NeoTreeEndOfBuffer", { bg = c.neotree_bg, fg = c.neotree_bg })
+    hl(0, "NeoTreeSignColumn", { bg = c.neotree_bg, fg = c.red })
     hl(0, "NeoTreeNormalNC", { bg = c.neotree_bg, fg = c.fg })
     hl(0, "NeoTreeWinSeparator", { fg = c.red, bg = c.neotree_bg })
     hl(0, "NeoTreeEndOfBuffer", { bg = c.neotree_bg, fg = c.neotree_bg })
+    -- NeoTreeGitAdded             = { fg = c.gitDecoration.addedResourceForeground },
+    -- NeoTreeGitConflict          = { fg = c.gitDecoration.conflictingResourceForeground },
+    -- NeoTreeGitDeleted           = { fg = c.gitDecoration.deletedResourceForeground },
+    -- NeoTreeGitIgnored           = { fg = c.gitDecoration.ignoredResourceForeground },
+    -- NeoTreeGitModified          = { fg = c.gitDecoration.modifiedResourceForeground },
+    -- NeoTreeGitStaged            = { fg = c.gitDecoration.stageModifiedResourceForeground },
+    -- NeoTreeGitRenamed           = { fg = c.gitDecoration.untrackedResourceForeground },
+    -- NeoTreeGitUntracked         = { fg = c.gitDecoration.untrackedResourceForeground },
 
     hl(0, "ToggleTermNormal", { bg = c.neotree_bg, fg = c.fg })
     hl(0, "ToggleTermNormalNC", { bg = c.neotree_bg, fg = c.fg })

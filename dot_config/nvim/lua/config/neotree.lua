@@ -37,6 +37,7 @@ neotree.setup({
             highlight = "NeoTreeIndentMarker",
         },
     },
+
 })
 
 -- Raccourci pour ouvrir/fermer l'explorateur

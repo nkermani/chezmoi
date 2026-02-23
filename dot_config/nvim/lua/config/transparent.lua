@@ -15,34 +15,34 @@ transparent.setup({
         -- =====================================================================
         -- 2. NEOTREE
         -- =====================================================================
-        -- 'NeoTreeNormal',
-        -- 'NeoTreeNormalNC',
-        -- 'NeoTreeVertSplit',
-        -- 'NeoTreeWinSeparator',
-        -- 'NeoTreeEndOfBuffer',
-        -- 'NeoTreeRootName',
-        -- 'NeoTreeDirectoryName',
-        -- 'NeoTreeFileName',
+        'NeoTreeNormal',
+        'NeoTreeNormalNC',
+        'NeoTreeVertSplit',
+        'NeoTreeWinSeparator',
+        'NeoTreeEndOfBuffer',
+        'NeoTreeRootName',
+        'NeoTreeDirectoryName',
+        'NeoTreeFileName',
 
         -- =====================================================================
         -- 3. BUFFERLINE (TABS)
         -- =====================================================================
-        -- 'BufferLineFill',       -- L'arrière-plan vide derrière les onglets
-        -- 'BufferLineBackground', -- Les onglets inactifs
-        -- 'BufferLineSeparator',  -- Les séparateurs entre onglets
-        -- 'BufferLineSeparatorVisible',
-        -- 'BufferLineSeparatorSelected',
-        -- 'BufferLineTab', -- Les onglets de type "Tab"
-        -- 'BufferLineTabSelected',
-        -- 'BufferLineTabSeparator',
-        -- 'BufferLineTabSeparatorSelected',
-        -- 'BufferLineIndicatorSelected', -- Le petit indicateur de sélection
-        -- 'BufferLineOffsetSeparator',
-        -- 'BufferLineTabClose',
-        -- 'BufferLineCloseButton',
-        -- 'BufferLineCloseButtonSelected',
-        -- 'BufferLineFill',
-        -- 'BufferLineIndicatorSelected',
+        'BufferLineFill',       -- L'arrière-plan vide derrière les onglets
+        'BufferLineBackground', -- Les onglets inactifs
+        'BufferLineSeparator',  -- Les séparateurs entre onglets
+        'BufferLineSeparatorVisible',
+        'BufferLineSeparatorSelected',
+        'BufferLineTab', -- Les onglets de type "Tab"
+        'BufferLineTabSelected',
+        'BufferLineTabSeparator',
+        'BufferLineTabSeparatorSelected',
+        'BufferLineIndicatorSelected', -- Le petit indicateur de sélection
+        'BufferLineOffsetSeparator',
+        'BufferLineTabClose',
+        'BufferLineCloseButton',
+        'BufferLineCloseButtonSelected',
+        'BufferLineFill',
+        'BufferLineIndicatorSelected',
 
         -- =====================================================================
         -- 4. STATUSLINE (LUALINE) - ACTIVE
@@ -60,29 +60,29 @@ transparent.setup({
         -- 5. TELESCOPE - ACTIVE
         -- =====================================================================
         'TelescopeNormal',         -- Fond de la fenêtre principale
-        'TelescopeBorder',         -- Bordures des fenêtres
+        -- 'TelescopeBorder',         -- Bordures des fenêtres
         'TelescopePromptNormal',   -- Fond de la barre de recherche
-        'TelescopePromptBorder',   -- Bordure de la barre de recherche
+        -- 'TelescopePromptBorder',   -- Bordure de la barre de recherche
         'TelescopeResultsNormal',  -- Fond de la liste des résultats
-        'TelescopeResultsBorder',  -- Bordure de la liste des résultats
+        -- 'TelescopeResultsBorder',  -- Bordure de la liste des résultats
         'TelescopePreviewNormal',  -- Fond de la prévisualisation
-        'TelescopePreviewBorder',  -- Bordure de la prévisualisation
-        'TelescopeTitle',          -- Titre des fenêtres
+        -- 'TelescopePreviewBorder',  -- Bordure de la prévisualisation
+        -- 'TelescopeTitle',          -- Titre des fenêtres
         'TelescopePromptPrefix',   -- Préfixe de la recherche
-        'TelescopeSelection',      -- Élément sélectionné
-        'TelescopeSelectionCaret', -- Curseur de sélection
+        -- 'TelescopeSelection',      -- Élément sélectionné
+        -- 'TelescopeSelectionCaret', -- Curseur de sélection
 
         -- =====================================================================
         -- 6. NOICE (CMDLINE & NOTIFICATIONS)
         -- =====================================================================
-        -- 'NoiceCmdlinePopup',       -- Fond de la fenêtre
+        'NoiceCmdlinePopup',       -- Fond de la fenêtre
         -- 'NoiceCmdlinePopupBorder', -- Bordure de la fenêtre
         -- 'NoiceCmdlinePopupTitle',  -- Titre si présent
         -- 'NoiceCmdlineIcon',        -- L'icône (le ">" ou l'icône de recherche)
         -- 'NoiceCmdlineIconSearch',  -- Spécifique à la recherche "/"
         -- 'NoiceConfirm',            -- Fenêtres de confirmation
         -- 'NoiceConfirmBorder',      -- Bordure de confirmation
-        -- 'NoicePopupmenu',          -- Menu de complétion de Noice
+        'NoicePopupmenu',          -- Menu de complétion de Noice
         -- 'NoicePopupmenuBorder',    -- Bordure de la complétion
 
         -- =====================================================================
@@ -151,4 +151,5 @@ transparent.clear_prefix('lualine')
 -- BufferLine n'est plus transparent, donc on commente ça
 -- transparent.clear_prefix('BufferLine')
 
-transparent.toggle(false)
+transparent.toggle(true)
+
