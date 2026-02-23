@@ -115,7 +115,7 @@ cat << 'EOF' > "$NK_BIN/smart-editor"
 W_CODE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
 
 if command -v nvim >/dev/null 2>&1; then
-    NVIM_APPNAME=nvim_nvchad exec nvim "$@"
+    NVIM_APPNAME=nvim_nkermani exec nvim "$@"
 fi
 
 if grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then

@@ -1,9 +1,0 @@
-#!/bin/bash
-
-TARGET_DIR="$HOME/.config/nvim"
-SOURCE_DIR="$HOME/.local/share/chezmoi/dot_config/nvim_full"
-
-if [ ! -L "$TARGET_DIR" ] && [ ! -d "$TARGET_DIR" ]; then
-    echo "Creating default nvim config symlink (nvim_full)..."
-    ln -s "$SOURCE_DIR" "$TARGET_DIR"
-fi

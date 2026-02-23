@@ -1,0 +1,23 @@
+{{- if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+#!/bin/bash
+
+# Nvim config sync to Windows (syncs nvchad config as default Windows nvim)
+# Hash: {{ include "dot_config/nvim_nvchad/init.lua" | sha256sum }}
+
+WIN_NVIM_DIR="/mnt/c/Users/kerma/AppData/Local/nvim"
+WIN_NVIM_DATA_DIR="/mnt/c/Users/kerma/AppData/Local/nvim-data"
+
+if [ -d "$WIN_NVIM_DIR" ] || [ -d "$HOME/.config/nvim_nvchad" ]; then
+    echo "🪟 Syncing Nvim config to Windows..."
+
+    # Remove old config if exists
+    if [ -d "$WIN_NVIM_DIR" ]; then
+        rm -rf "$WIN_NVIM_DIR"
+    fi
+
+    # Copy current nvim config
+    if [ -d "$HOME/.config/nvim_nvchad" ]; then
+        cp -r "$HOME/.config/nvim_nvchad" "$WIN_NVIM_DIR"
+    fi
+fi
+{{- end }}

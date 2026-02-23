@@ -1,0 +1,261 @@
+#!/bin/bash
+{{ include ".chezmoitemplates/env.sh.tmpl" }}
+
+echo "🌙 Configuring Neovim..."
+if [ ! -f "$BIN_DIR/nvim" ]; then
+    NVIM_INSTALL_DIR="$APPS_DIR/nvim-nightly"
+    mkdir -p "$NVIM_INSTALL_DIR"
+    if [[ "$OS_TYPE" == "Darwin" ]]; then
+        # Native Apple Silicon support
+        local MACOS_ARCH="x86_64"
+        [[ "$(uname -m)" == "arm64" ]] && MACOS_ARCH="arm64"
+        curl -LSs "https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-${MACOS_ARCH}.tar.gz" | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
+    else
+        local NVIM_ARCH="x86_64"
+        [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && NVIM_ARCH="arm64"
+        curl -LSs "https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-${NVIM_ARCH}.tar.gz" | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
+    fi
+    ln -sf "$NVIM_INSTALL_DIR/bin/nvim" "$BIN_DIR/nvim"
+fi
+
+# Plugin installation
+INSTALL_PLUGINS_SCRIPT="$HOME/.config/nvim_nkermani/scripts/install-nvim-plugins.sh"
+if [ -f "$INSTALL_PLUGINS_SCRIPT" ]; then
+    chmod +x "$INSTALL_PLUGINS_SCRIPT" && bash "$INSTALL_PLUGINS_SCRIPT"
+fi
+
+# --- ADDITIONAL LSP SERVERS (Sudoless) ---
+# Fonction utilitaire pour les LSP installables via NPM
+install_npm_lsp() {
+    local name=$1
+    local package=$2
+    local binary=$3
+    if [ ! -f "$LSP_BIN_DIR/$binary" ]; then
+        if ! command -v npm &>/dev/null; then
+            echo "  ⚠️  npm not found, skipping $name."
+            return
+        fi
+        echo "  📦 Installing $name..."
+        # CI=true and </dev/null prevent interactive prompts
+        # --no-audit and --no-fund speed up the installation
+        # --loglevel error ensures we only see important messages
+        CI=true npm install -g $package --prefix "$APPS_DIR/$name" \
+            --no-audit --no-fund --loglevel error </dev/null
+        ln -sf "$APPS_DIR/$name/bin/$binary" "$LSP_BIN_DIR/$binary"
+    fi
+}
+
+echo "🛠️  Setting up additional LSP servers in $LSP_BIN_DIR..."
+
+# 1. Lua (LuaLS)
+if [ ! -f "$LSP_BIN_DIR/lua-language-server" ]; then
+    echo "  🌙 Installing LuaLS..."
+    if [[ "$OS_TYPE" == "Darwin" ]] && command -v brew &>/dev/null; then
+        brew install lua-language-server
+        ln -sf "$(which lua-language-server)" "$LSP_BIN_DIR/lua-language-server"
+    else
+        LUA_LS_DIR="$APPS_DIR/lua-language-server"
+        mkdir -p "$LUA_LS_DIR"
+        LUA_VER=$(curl -sI "https://github.com/LuaLS/lua-language-server/releases/latest" | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
+        PLATFORM="linux-x64"
+        [[ "$ARCH_TYPE" == "aarch64" ]] && PLATFORM="linux-arm64"
+
+        curl -LSs "https://github.com/LuaLS/lua-language-server/releases/download/${LUA_VER}/lua-language-server-${LUA_VER}-${PLATFORM}.tar.gz" | tar -xzC "$LUA_LS_DIR"
+        ln -sf "$LUA_LS_DIR/bin/lua-language-server" "$LSP_BIN_DIR/lua-language-server"
+    fi
+fi
+
+# 2. Python (Pyright + Formatters + pylsp)
+install_npm_lsp "pyright" "pyright" "pyright-langserver"
+
+if [[ "$OS_TYPE" == "Darwin" ]] && command -v brew &>/dev/null; then
+    command -v pipx &>/dev/null || brew install pipx
+    pipx ensurepath &>/dev/null
+    command -v black &>/dev/null || pipx install black
+    command -v isort &>/dev/null || pipx install isort
+    if ! command -v pylsp &>/dev/null; then
+        pipx install 'python-lsp-server[rope]'
+    fi
+    pipx inject python-lsp-server pyflakes pycodestyle 2>/dev/null || true
+else
+    if ! command -v black &>/dev/null || ! command -v isort &>/dev/null; then
+        echo "  🐍 Installing Python formatters (black, isort)..."
+        if command -v pip3 &>/dev/null; then
+            pip3 install --user black isort
+        elif command -v pip &>/dev/null; then
+            pip install --user black isort
+        else
+            echo "  ⚠️  pip not found, skipping Python formatters."
+        fi
+    fi
+    if ! command -v pylsp &>/dev/null; then
+        echo "  🐍 Installing pylsp with rope support..."
+        if command -v pip3 &>/dev/null; then
+            pip3 install --user 'python-lsp-server[rope]' pyflakes pycodestyle
+        elif command -v pip &>/dev/null; then
+            pip install --user 'python-lsp-server[rope]' pyflakes pycodestyle
+        else
+            echo "  ⚠️  pip not found, skipping pylsp."
+        fi
+    else
+        if command -v pip3 &>/dev/null; then
+            pip3 install --user pyflakes pycodestyle 2>/dev/null || true
+        elif command -v pip &>/dev/null; then
+            pip install --user pyflakes pycodestyle 2>/dev/null || true
+        fi
+    fi
+fi
+
+# 3. JavaScript / TypeScript
+install_npm_lsp "typescript-lsp" "typescript typescript-language-server" "typescript-language-server"
+
+# 9. Shell (Bash + ShellCheck + shfmt)
+install_npm_lsp "bash-lsp" "bash-language-server" "bash-language-server"
+
+if [ ! -f "$LSP_BIN_DIR/shellcheck" ]; then
+    echo "  🔍 Installing ShellCheck..."
+    if [[ "$OS_TYPE" == "Darwin" ]] && command -v brew &>/dev/null; then
+        brew install shellcheck
+        ln -sf "$(which shellcheck)" "$LSP_BIN_DIR/shellcheck"
+    else
+        SC_VER="v0.11.0"
+        curl -LSs "https://github.com/koalaman/shellcheck/releases/download/${SC_VER}/shellcheck-${SC_VER}.linux.x86_64.tar.xz" | tar -xJ -C /tmp
+        cp "/tmp/shellcheck-${SC_VER}/shellcheck" "$LSP_BIN_DIR/"
+        chmod +x "$LSP_BIN_DIR/shellcheck"
+    fi
+fi
+
+if [ ! -f "$LSP_BIN_DIR/shfmt" ]; then
+    echo "  🧹 Installing shfmt..."
+    if [[ "$OS_TYPE" == "Darwin" ]] && command -v brew &>/dev/null; then
+        brew install shfmt
+        ln -sf "$(which shfmt)" "$LSP_BIN_DIR/shfmt"
+    else
+        SHFMT_VER="v3.12.0"
+        curl -LSs "https://github.com/mvdan/sh/releases/download/${SHFMT_VER}/shfmt_${SHFMT_VER}_linux_amd64" -o "$LSP_BIN_DIR/shfmt"
+        chmod +x "$LSP_BIN_DIR/shfmt"
+    fi
+fi
+
+
+
+# 5. Dotenv
+install_npm_lsp "dotenv-lsp" "dot-language-server" "dot-language-server"
+
+# 6. C / C++ (clangd)
+if [ ! -f "$LSP_BIN_DIR/clangd" ]; then
+    echo "  ⚙️  Installing clangd..."
+    if [[ "$OS_TYPE" == "Darwin" ]]; then
+        brew install llvm && ln -sf "$(brew --prefix llvm)/bin/clangd" "$LSP_BIN_DIR/clangd"
+    else
+        CLANGD_DIR="$APPS_DIR/clangd"
+        mkdir -p "$CLANGD_DIR"
+        curl -L -s https://github.com/clangd/clangd/releases/download/17.0.3/clangd-linux-17.0.3.zip -o /tmp/clangd.zip
+        unzip -q /tmp/clangd.zip -d "$CLANGD_DIR"
+        ln -sf "$CLANGD_DIR/clangd_17.0.3/bin/clangd" "$LSP_BIN_DIR/clangd"
+        rm /tmp/clangd.zip
+    fi
+fi
+
+# 7. C# (OmniSharp)
+if [ ! -f "$LSP_BIN_DIR/omnisharp" ]; then
+    echo "  🎯 Installing OmniSharp..."
+    OMNISHARP_DIR="$APPS_DIR/omnisharp"
+    mkdir -p "$OMNISHARP_DIR"
+    OS_SUFFIX="linux-x64"
+    [[ "$OS_TYPE" == "Darwin" ]] && OS_SUFFIX="osx-arm64-net6.0"
+
+    curl -L -s "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-${OS_SUFFIX}.tar.gz" | tar -xzC "$OMNISHARP_DIR"
+    ln -sf "$OMNISHARP_DIR/OmniSharp" "$LSP_BIN_DIR/omnisharp"
+fi
+
+# 8. Rust (rust-analyzer)
+if [ ! -f "$LSP_BIN_DIR/rust-analyzer" ]; then
+    echo "  🦀 Installing rust-analyzer..."
+    if [[ "$OS_TYPE" == "Darwin" ]] && command -v brew &>/dev/null; then
+        brew install rust-analyzer
+        ln -sf "$(which rust-analyzer)" "$LSP_BIN_DIR/rust-analyzer"
+    else
+        RA_ARCH="x86_64"
+        [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && RA_ARCH="aarch64"
+
+        RA_OS="unknown-linux-gnu"
+        [[ "$OS_TYPE" == "Darwin" ]] && RA_OS="apple-darwin"
+
+        curl -L "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-${RA_ARCH}-${RA_OS}.gz" | gunzip > "$LSP_BIN_DIR/rust-analyzer"
+        chmod +x "$LSP_BIN_DIR/rust-analyzer"
+    fi
+    # Ensure it's also in the main bin directory for convenience
+    ln -sf "$LSP_BIN_DIR/rust-analyzer" "$BIN_DIR/rust-analyzer"
+fi
+
+# --- EDITOR INSTALLATIONS ---
+
+echo "📝 Installing editors..."
+
+# 1. Zed Editor
+if [ ! -f "$BIN_DIR/zed" ]; then
+    echo "  🔷 Installing Zed editor..."
+    ZED_DIR="$APPS_DIR/zed"
+    mkdir -p "$ZED_DIR"
+
+    ZED_ARCH="x86_64"
+    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZED_ARCH="aarch64"
+
+    if [[ "$OS_TYPE" == "Darwin" ]]; then
+        curl -f https://zed.dev/install.sh | sh
+        ln -sf "$HOME/.local/bin/zed" "$BIN_DIR/zed"
+    else
+        curl -LSs "https://cloud.zed.dev/releases/stable/latest/download?asset=zed&arch=${ZED_ARCH}&os=linux&source=docs" -o /tmp/zed.tar.gz
+        tar -xzf /tmp/zed.tar.gz -C "$ZED_DIR" --strip-components=1
+        ln -sf "$ZED_DIR/bin/zed" "$BIN_DIR/zed"
+        rm -f /tmp/zed.tar.gz
+    fi
+fi
+
+# 2. Helix Editor (hx)
+if [ ! -f "$BIN_DIR/hx" ]; then
+    echo "  🌀 Installing Helix editor..."
+    HELIX_DIR="$APPS_DIR/helix"
+    mkdir -p "$HELIX_DIR/runtime"
+
+    HELIX_ARCH="x86_64"
+    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && HELIX_ARCH="aarch64"
+
+    HELIX_OS="linux"
+    if [[ "$OS_TYPE" == "Darwin" ]]; then
+        HELIX_OS="macos"
+    fi
+
+    curl -L -LSs "https://github.com/helix-editor/helix/releases/download/25.07.1/helix-25.07.1-${HELIX_ARCH}-${HELIX_OS}.tar.xz" -o /tmp/helix.tar.xz
+    xz -d /tmp/helix.tar.xz
+    tar -xf /tmp/helix.tar -C "$HELIX_DIR" --strip-components=1
+    ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
+    rm -f /tmp/helix.tar*
+fi
+
+# 3. VSCode (if not installed)
+if ! command -v code &>/dev/null && [ ! -f "$BIN_DIR/code" ]; then
+    echo "  💜 Installing VSCode..."
+    VSCODE_DIR="$APPS_DIR/vscode"
+    mkdir -p "$VSCODE_DIR"
+
+    VSCODE_ARCH="x64"
+    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && VSCODE_ARCH="arm64"
+
+    if [[ "$OS_TYPE" == "Darwin" ]]; then
+        if [[ "$VSCODE_ARCH" == "arm64" ]]; then
+            curl -LSs "https://update.code.visualstudio.com/latest/darwin-arm64/stable" -o /tmp/VSCode-darwin-arm64.zip
+        else
+            curl -LSs "https://update.code.visualstudio.com/latest/darwin-x64/stable" -o /tmp/VSCode-darwin-x64.zip
+        fi
+        unzip -q /tmp/VSCode-*.zip -d "$VSCODE_DIR"
+        ln -sf "$VSCODE_DIR/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code" "$BIN_DIR/code"
+        rm -f /tmp/VSCode-*.zip
+    else
+        curl -LSs "https://update.code.visualstudio.com/latest/linux-${VSCODE_ARCH}/stable" -o /tmp/vscode.tar.gz
+        tar -xzf /tmp/vscode.tar.gz -C "$VSCODE_DIR" --strip-components=1
+        ln -sf "$VSCODE_DIR/bin/code" "$BIN_DIR/code"
+        rm -f /tmp/vscode.tar.gz
+    fi
+fi

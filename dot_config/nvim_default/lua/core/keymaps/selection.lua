@@ -98,7 +98,7 @@ local function jump_to_bracket(target)
             vim.cmd("silent! normal! [(")
         else
             vim.cmd("silent! normal! ]}")
-            vim.cmd("silent! normal! ])")
+            vim.cmdsilent! normal! ])")
         end
         local unmatched_pos = vim.api.nvim_win_get_cursor(0)
 
