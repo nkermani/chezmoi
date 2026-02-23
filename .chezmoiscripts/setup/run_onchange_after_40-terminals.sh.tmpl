@@ -57,6 +57,51 @@ EOF
     fi
 fi
 
+# Kitty
+# if [[ "$OS_TYPE" != "windows" && "$OS_TYPE" != "wsl2" ]]; then
+#     if ! command -v kitty &>/dev/null; then
+#         if [[ "$OS_TYPE" == "Darwin" ]]; then
+#             echo "  📦 Installing Kitty via Homebrew..."
+#             brew install --cask kitty
+#         else
+#             echo "  📦 Installing Kitty (installer)..."
+#             curl -L "https://sw.kovidgoyal.net/kitty/installer.sh" -o /tmp/kitty-installer.sh
+#             bash /tmp/kitty-installer.sh launch=n
+#             rm -f /tmp/kitty-installer.sh
+            
+#             ln -sf "$HOME/.local/kitty.app/bin/kitty" "$BIN_DIR/kitty"
+#             ln -sf "$HOME/.local/kitty.app/bin/kitten" "$BIN_DIR/kitten"
+            
+#             echo "  🎨 Setting up Kitty desktop integration..."
+#             ICON_DIR="$HOME/.local/share/icons"
+#             APP_DIR="$HOME/.local/share/applications"
+#             mkdir -p "$ICON_DIR" "$APP_DIR"
+            
+#             curl -LSs "https://raw.githubusercontent.com/kovidgoyal/kitty/master/kitty/icon.svg" -o "$ICON_DIR/kitty.svg"
+            
+#             cat <<EOF > "$APP_DIR/kitty.desktop"
+# [Desktop Entry]
+# Type=Application
+# TryExec=$BIN_DIR/kitty
+# Exec=$BIN_DIR/kitty
+# Icon=$HOME/.local/share/icons/kitty.svg
+# Terminal=false
+# Categories=System;TerminalEmulator;
+
+# Name=Kitty
+# GenericName=Terminal
+# Comment=A cross-platform, GPU-accelerated terminal emulator
+# StartupWMClass=kitty
+# Actions=New;
+
+# [Desktop Action New]
+# Name=New Terminal
+# Exec=$BIN_DIR/kitty
+# EOF
+#         fi
+#     fi
+# fi
+
 # WezTerm
 #if [[ "$OS_TYPE" == "Darwin" ]]; then
 #    if ! command -v wezterm &>/dev/null; then

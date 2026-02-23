@@ -52,24 +52,24 @@ install_npm_lsp "dotenv-lsp" "dot-language-server" "dot-language-server"
 echo "📝 Installing editors..."
 
 # 1. Zed Editor
-if [ ! -f "$BIN_DIR/zed" ]; then
-    echo "  🔷 Installing Zed editor..."
-    ZED_DIR="$APPS_DIR/zed"
-    mkdir -p "$ZED_DIR"
+# if [ ! -f "$BIN_DIR/zed" ]; then
+#     echo "  🔷 Installing Zed editor..."
+#     ZED_DIR="$APPS_DIR/zed"
+#     mkdir -p "$ZED_DIR"
 
-    ZED_ARCH="x86_64"
-    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZED_ARCH="aarch64"
+#     ZED_ARCH="x86_64"
+#     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZED_ARCH="aarch64"
 
-    if [[ "$OS_TYPE" == "Darwin" ]]; then
-        curl -f https://zed.dev/install.sh | sh
-        ln -sf "$HOME/.local/bin/zed" "$BIN_DIR/zed"
-    else
-        curl -LSs "https://cloud.zed.dev/releases/stable/latest/download?asset=zed&arch=${ZED_ARCH}&os=linux&source=docs" -o /tmp/zed.tar.gz
-        tar -xzf /tmp/zed.tar.gz -C "$ZED_DIR" --strip-components=1
-        ln -sf "$ZED_DIR/bin/zed" "$BIN_DIR/zed"
-        rm -f /tmp/zed.tar.gz
-    fi
-fi
+#     if [[ "$OS_TYPE" == "Darwin" ]]; then
+#         curl -f https://zed.dev/install.sh | sh
+#         ln -sf "$HOME/.local/bin/zed" "$BIN_DIR/zed"
+#     else
+#         curl -LSs "https://cloud.zed.dev/releases/stable/latest/download?asset=zed&arch=${ZED_ARCH}&os=linux&source=docs" -o /tmp/zed.tar.gz
+#         tar -xzf /tmp/zed.tar.gz -C "$ZED_DIR" --strip-components=1
+#         ln -sf "$ZED_DIR/bin/zed" "$BIN_DIR/zed"
+#         rm -f /tmp/zed.tar.gz
+#     fi
+# fi
 
 # 2. Helix Editor (hx)
 if [ ! -f "$BIN_DIR/hx" ]; then
@@ -92,7 +92,7 @@ if [ ! -f "$BIN_DIR/hx" ]; then
     rm -f /tmp/helix.tar*
 fi
 
-# 3. VSCode (if not installed)
+# 3. VSCode
 if ! command -v code &>/dev/null && [ ! -f "$BIN_DIR/code" ]; then
     echo "  💜 Installing VSCode..."
     VSCODE_DIR="$APPS_DIR/vscode"
@@ -119,36 +119,55 @@ if ! command -v code &>/dev/null && [ ! -f "$BIN_DIR/code" ]; then
 fi
 
 # 4. Emacs + Doom Emacs (prefer Windows GUI Emacs on WSL)
-if [ ! -f "$BIN_DIR/emacs" ]; then
-    echo "  📓 Setting up Emacs + Doom Emacs..."
-
-    WINDOWS_EMACS_PATHS=(
-        "/mnt/c/Program Files/Emacs/emacs-29/bin/emacs.exe"
-        "/mnt/c/Program Files (x86)/Emacs/emacs-29/bin/emacs.exe"
-        "/mnt/c/Users/kerma/AppData/Local/Programs/Emacs/emacs-29/bin/emacs.exe"
-    )
-
-    WINDOWS_EMACS_FOUND=false
-    for emacs_path in "${WINDOWS_EMACS_PATHS[@]}"; do
-        if [ -f "$emacs_path" ]; then
-            echo "    ✅ Found Windows Emacs: $emacs_path"
-            ln -sf "$emacs_path" "$BIN_DIR/emacs"
-            WINDOWS_EMACS_FOUND=true
-            break
-        fi
-    done
-
-    if [ "$WINDOWS_EMACS_FOUND" = false ]; then
-        echo "    ⚠️  Windows Emacs not found. Please install Emacs for Windows from"
-        echo "       https://www.gnu.org/software/emacs/download.html#windows"
-        echo "       or run: winget install GNU.Emacs"
-    fi
-fi
+#if [ ! -f "$BIN_DIR/emacs" ]; then
+#    echo "  📓 Setting up Emacs + Doom Emacs..."
+#
+#   WINDOWS_EMACS_PATHS=(
+#        "/mnt/c/Program Files/Emacs/emacs-29/bin/emacs.exe"
+#        "/mnt/c/Program Files (x86)/Emacs/emacs-29/bin/emacs.exe"
+#        "/mnt/c/Users/kerma/AppData/Local/Programs/Emacs/emacs-29/bin/emacs.exe"
+#    )
+#
+#    WINDOWS_EMACS_FOUND=false
+#    for emacs_path in "${WINDOWS_EMACS_PATHS[@]}"; do
+#        if [ -f "$emacs_path" ]; then
+#            echo "    ✅ Found Windows Emacs: $emacs_path"
+#            ln -sf "$emacs_path" "$BIN_DIR/emacs"
+#            WINDOWS_EMACS_FOUND=true
+#            break
+#        fi
+#    done
+#
+#    if [ "$WINDOWS_EMACS_FOUND" = false ]; then
+#        echo "    ⚠️  Windows Emacs not found. Please install Emacs for Windows from"
+#        echo "       https://www.gnu.org/software/emacs/download.html#windows"
+#        echo "       or run: winget install GNU.Emacs"
+#    fi
+#fi
 
 # Doom Emacs configuration
-DOOM_DIR="$HOME/.doom.d"
-if [ ! -d "$DOOM_DIR" ]; then
-    echo "  🔥 Installing Doom Emacs configuration..."
-    git clone --depth 1 https://github.com/doomemacs/doomemacs "$HOME/.emacs.d"
-    "$HOME/.emacs.d/bin/doom" install
-fi
+#DOOM_DIR="$HOME/.doom.d"
+#if [ ! -d "$DOOM_DIR" ]; then
+#    echo "  🔥 Installing Doom Emacs configuration..."
+#    git clone --depth 1 https://github.com/doomemacs/doomemacs "$HOME/.emacs.d"
+#    "$HOME/.emacs.d/bin/doom" install
+#fi
+
+# Flow Control (flow) - terminal-based text editor
+# if [ ! -f "$BIN_DIR/flow" ]; then
+#     echo "  🌊 Installing Flow Control editor..."
+
+#     if [[ "$OS_TYPE" == "Darwin" ]]; then
+#         brew install flow-control
+#         ln -sf "$(which flow)" "$BIN_DIR/flow"
+#     else
+#         curl -fsSL https://flow-control.dev/install 2>/dev/null | sh -s -- -d "$BIN_DIR" 2>/dev/null || \
+#         (curl -fsSL "https://github.com/neurocyte/flow/releases/download/v0.7.2/flow-v0.7.2-linux-aarch64.tar.gz" -o /tmp/flow.tar.gz && \
+#          mkdir -p "$APPS_DIR/flow" && \
+#          tar -xzf /tmp/flow.tar.gz -C "$APPS_DIR/flow" --strip-components=1 && \
+#          rm -f /tmp/flow.tar.gz && \
+#          ln -sf "$APPS_DIR/flow/flow" "$BIN_DIR/flow") 2>/dev/null || \
+#         echo "  ⚠️  Flow Control: curl -fsSL https://flow-control.dev/install | sh"
+#     fi
+# fi
+
