@@ -9,3 +9,8 @@
 {{ end }}
 
 .chezmoitemplates
+
+
+.dot_emacs.d/.local
+.dot_emacs.d/.git
+.dot_doom.d

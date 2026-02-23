@@ -1,0 +1,33 @@
+{{- if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+#!/bin/bash
+
+# Doom Emacs config + framework sync to Windows
+# Hash: {{ include "dot_doom.d/init.el" | sha256sum }}
+
+WIN_DOOM_DIR="/mnt/c/Users/kerma/AppData/Roaming/.doom.d"
+WIN_EMACS_DIR="/mnt/c/Users/kerma/AppData/Roaming/.emacs.d"
+
+echo "🪟 Syncing Doom Emacs to Windows..."
+
+if [ -d "$HOME/.emacs.d" ]; then
+    mkdir -p "$WIN_EMACS_DIR"
+    cp -r "$HOME/.emacs.d/"* "$WIN_EMACS_DIR/"
+    echo "    ✅ Doom framework synced"
+fi
+
+if [ -d "$HOME/.doom.d" ]; then
+    mkdir -p "$WIN_DOOM_DIR"
+    cp -r "$HOME/.doom.d/"* "$WIN_DOOM_DIR/"
+    echo "    ✅ Doom config synced"
+fi
+
+echo "    ⏭️  Skipping .local (Doom will rebuild packages on Windows)"
+
+if [ -f "/mnt/c/Users/kerma/AppData/Roaming/.emacs.d/bin/doom.ps1" ]; then
+    echo "    🔧 Running doom install on Windows..."
+    powershell.exe -ExecutionPolicy Bypass -File "C:\\Users\\kerma\\AppData\\Roaming\\.emacs.d\\bin\\doom.ps1" install
+    echo "    ✅ Doom initialized on Windows"
+fi
+
+echo "    🎯 Doom Emacs ready on Windows"
+{{- end }}
