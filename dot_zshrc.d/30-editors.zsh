@@ -19,10 +19,6 @@ cat << 'EOF' > "$NK_BIN/smart-editor"
 
 W_CODE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
 
-if command -v nvim >/dev/null 2>&1; then
-    exec nvim "$@"
-fi
-
 if grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then
     if [[ -f "$W_CODE" ]]; then
         "$W_CODE" --remote wsl+Ubuntu-22.04 "$@" &> /dev/null &
@@ -39,6 +35,10 @@ fi
 
 if command -v code >/dev/null 2>&1; then
     exec code "$@"
+elif command -v nvim >/dev/null 2>&1; then
+    exec nvim "$@"
+elif command -v vim >/dev/null 2>&1; then
+    exec vim "$@"
 else
     exec vi "$@"
 fi
@@ -51,6 +51,6 @@ export VISUAL="smart-editor"
 alias edit='smart-editor'
 alias e='smart-editor'
 alias c='code'
-alias v='vim'
 alias n='nvim'
+alias v='vim'
 

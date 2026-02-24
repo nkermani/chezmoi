@@ -5,8 +5,6 @@
     "oh-my-opencode@latest"
   ],
   "default_agent": "42-NK",
-  // "theme": "cyberpunk-nk",
-  // "theme": "everforest",
   "provider": {
     "google": {
       "options": {
