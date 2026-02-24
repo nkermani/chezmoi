@@ -5,7 +5,7 @@ for i in {1..9}; do
 done
 
 SHORTCUTS=(
-	"Alacritty|/home/nkermani/.nkermani/bin/42/focus_alacritty.sh|<Super>1"
+	"Kitty|/home/nkermani/.nkermani/bin/42/focus_kitty.sh|<Super>1"
 	"Browser|/home/nkermani/.nkermani/bin/42/focus_browser.sh|<Super>2"
 	"VSCode|/home/nkermani/.nkermani/bin/42/focus_vscode.sh|<Super>3"
 	"Finder|/home/nkermani/.nkermani/bin/42/focus_finder.sh|<Super>4"

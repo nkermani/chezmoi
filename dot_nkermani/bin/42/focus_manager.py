@@ -60,6 +60,18 @@ def focus_app(desktop_file):
         subprocess.Popen(["discord"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
         return
 
+    if "brave" in desktop_file:
+        subprocess.Popen(["brave-browser"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        return
+
+    if "Nautilus" in desktop_file:
+        subprocess.Popen(["nautilus"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        return
+
+    if "Evince" in desktop_file or "pdf" in desktop_file:
+        subprocess.Popen(["evince"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        return
+
     paths = [
         f"/home/nkermani/.nkermani/bin/42/{desktop_file}",
         f"/home/nkermani/.local/share/applications/{desktop_file}",
