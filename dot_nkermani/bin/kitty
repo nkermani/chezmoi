@@ -1,0 +1,6 @@
+#!/bin/bash
+unset LIBGL_DRIVERS_PATH
+unset GBM_BACKENDS_PATH
+unset LIBVA_DRIVERS_PATH
+unset MESA_LOADER_DRIVER_OVERRIDE
+exec /home/nkermani/.local/kitty.app/bin/kitty "$@"
