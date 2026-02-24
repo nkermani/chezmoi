@@ -1,15 +1,15 @@
 # JetBrains Cyberpunk Palette
 # Red: #f3505c, Green: #51f66f, Yellow: #eedb85, Blue: #368aec, Magenta: #d867c6, Cyan: #00f0ff
 
-# Single line format
-format = """[ $os$username ](bg:#00f0ff fg:#212121 bold)[$directory ](bg:#f3505c fg:#ffffff bold)([$git_branch$git_status ](bg:#eedb85 fg:#212121 bold))$character"""
+format = """[┌─>](bold #f3505c) [ $os$username ](bg:#00f0ff fg:#212121 bold)[ $directory ](bg:#f3505c fg:#ffffff bold)[$python$nodejs$rust$golang](bg:#368aec fg:#ffffff bold)[ $git_branch$git_status ](bg:#eedb85 fg:#212121 bold)
+[│](bold #f3505c)
+[└─>](bold #f3505c) """
 
-# Disable the blank line at the start of the prompt
 add_newline = false
 
 [os]
 format = " $symbol "
-style = "bg:#00f0ff fg:#212121"
+style = "bg:#00f0ff fg:#212121 bold"
 disabled = false
 
 [os.symbols]
@@ -28,26 +28,41 @@ format = "$user "
 
 [directory]
 style = "bg:#f3505c fg:#ffffff bold"
-format = " 󰉋 $path$read_only "
-truncation_length = 3
-truncation_symbol = "…/"
+format = " $path "
+
+[python]
+symbol = "󰌞 "
+style = "bg:#368aec fg:#ffffff bold"
+format = ' $symbol($version) '
+disabled = false
+
+[nodejs]
+symbol = "󰌞 "
+style = "bg:#368aec fg:#ffffff bold"
+format = ' $symbol($version) '
+disabled = false
+
+[rust]
+symbol = "󰘗 "
+style = "bg:#368aec fg:#ffffff bold"
+format = ' $symbol($version) '
+disabled = false
+
+[golang]
+symbol = "󰟓 "
+style = "bg:#368aec fg:#ffffff bold"
+format = ' $symbol($version) '
+disabled = false
 
 [git_branch]
 symbol = ""
 style = "bg:#eedb85 fg:#212121 bold"
-format = ' $symbol $branch'
+format = ' $symbol$branch'
 
 [git_status]
 style = "bg:#eedb85 fg:#212121 bold"
 format = '([\[$all_status$ahead_behind\]]($style))'
 
 [character]
-success_symbol = " [➜](bold #51f66f) "
-error_symbol = " [➜](bold #f3505c) "
-
-[nodejs]
-disabled = true
-[rust]
-disabled = true
-[golang]
-disabled = true
+success_symbol = " "
+error_symbol = " "
