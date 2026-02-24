@@ -1,21 +1,48 @@
 #!/bin/bash
 {{ include ".chezmoitemplates/env.sh.tmpl" }}
 
+NERD_FONTS_VERSION="v3.4.0"
+FONT_DIR="$HOME/.local/share/fonts"
+
+install_nerd_font() {
+    local font_name=$1
+    local font_url=$2
+    
+    if [ ! -d "$FONT_DIR/$font_name" ] && ! fc-list | grep -qi "$font_name"; then
+        echo "🔡 Installing $font_name Nerd Font..."
+        mkdir -p "$FONT_DIR/$font_name"
+        curl -L -o /tmp/${font_name}.zip "$font_url"
+        unzip -o /tmp/${font_name}.zip -d "$FONT_DIR/$font_name" && rm /tmp/${font_name}.zip
+        fc-cache -f
+    else
+        echo "✓ $font_name already installed"
+    fi
+}
+
 if [[ "$OS_TYPE" == "Darwin" ]]; then
     if command -v brew &>/dev/null; then
-        # Check if font is already installed to avoid unnecessary brew calls
-        if ! brew list --cask font-jetbrains-mono-nerd-font &>/dev/null; then
-            echo "🔡 Installing JetBrainsMono Nerd Font via Homebrew..."
-            brew install --cask font-jetbrains-mono-nerd-font
-        fi
+        FONTS=(
+            "font-jetbrains-mono-nerd-font"
+            "font-iosevka-nerd-font"
+            "font-sf-mono"
+        )
+        for font in "${FONTS[@]}"; do
+            if ! brew list --cask "$font" &>/dev/null; then
+                echo "🔡 Installing $font via Homebrew..."
+                brew install --cask "$font"
+            else
+                echo "✓ $font already installed"
+            fi
+        done
     fi
 elif [[ "$OS_TYPE" == "Linux" ]]; then
     echo "🔡 Checking Fonts..."
-    FONT_DIR="$HOME/.local/share/fonts"
-    if [ ! -d "$FONT_DIR/JetBrainsMono" ] && ! fc-list | grep -qi "JetBrainsMono"; then
-        mkdir -p "$FONT_DIR/JetBrainsMono"
-        curl -L -o /tmp/jb.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
-        unzip -o /tmp/jb.zip -d "$FONT_DIR/JetBrainsMono" && rm /tmp/jb.zip
-        fc-cache -f
-    fi
+    
+    install_nerd_font "JetBrainsMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/JetBrainsMono.zip"
+    install_nerd_font "OpenDyslexic" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/OpenDyslexic.zip"
+    install_nerd_font "MartianMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/MartianMono.zip"
+    install_nerd_font "Iosevka" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/Iosevka.zip"
+    install_nerd_font "ZedMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/ZedMono.zip"
+    
+    echo "✅ All fonts installed!"
 fi

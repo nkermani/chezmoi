@@ -31,17 +31,17 @@ safe_rm "$HOME/.config/zellij"
 safe_rm "$CHEZMOI_SOURCE/dot_config/zellij"
 
 # 2. Kitty
-echo "Cleaning up Kitty..."
-remove_tool "kitty"
-if [[ "$OS_TYPE" == "Darwin" ]]; then
-    if command -v brew &>/dev/null; then
-        brew uninstall --cask kitty 2>/dev/null
-    fi
-else
-    safe_rm "$APPS_DIR/kitty.app"
-fi
-safe_rm "$HOME/.config/kitty"
-safe_rm "$CHEZMOI_SOURCE/dot_config/kitty"
+# echo "Cleaning up Kitty..."
+# remove_tool "kitty"
+# if [[ "$OS_TYPE" == "Darwin" ]]; then
+#     if command -v brew &>/dev/null; then
+#         brew uninstall --cask kitty 2>/dev/null
+#     fi
+# else
+#     safe_rm "$APPS_DIR/kitty.app"
+# fi
+# safe_rm "$HOME/.config/kitty"
+# safe_rm "$CHEZMOI_SOURCE/dot_config/kitty"
 
 # 3. WezTerm
 echo "Cleaning up WezTerm..."
@@ -70,6 +70,12 @@ if [[ "$OS_TYPE" == "Darwin" ]]; then
     fi
 fi
 safe_rm "$HOME/.config/zed"
+
+
+# 6. Emacs + Doom Emacs
+
+# 7. 
+
 
 echo "Cleanup complete! Only Neovim and core tools remain."
 echo "Don't forget to run 'chezmoi apply' to sync the state."
