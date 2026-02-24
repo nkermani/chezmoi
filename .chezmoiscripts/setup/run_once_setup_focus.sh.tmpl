@@ -1,21 +1,28 @@
 {{- if .is_42 -}}
 #!/bin/bash
-echo "Configuration 42 détectée : Installation du Focus Manager..."
-# 1. S'assurer que le binaire focus existe (déjà compilé dans ~/.nkermani/bin/42/)
+echo "Configuration 42 detectee : Installation du Focus Manager..."
+# 1. S'assurer que le binaire focus existe (deja compile dans ~/.nkermani/bin/42/)
 if [ ! -f {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus ]; then
     mkdir -p {{ .chezmoi.homeDir }}/.nkermani/bin/42
     gcc {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus.c -o {{ .chezmoi.homeDir }}/.nkermani/bin/42/simple_focus -lX11
 fi
-# 2. Raccourcis Dock (1-9) : Alacritty, Browser, VSCode, Finder, PDF, Discord, GeForceNOW
+# 2. Raccourcis Dock (1-9) : Kitty, Browser, VSCode, Finder, PDF, Discord, GeForceNOW
 for i in {1..9}; do
     gsettings set org.gnome.shell.keybindings switch-to-application-$i "[]"
 done
-# 3. Raccourci Bureau natif sur Super+7, Super+9 et Super+D
+# 3. Definir les raccourcis : SUPER+1 = Kitty, SUPER+2 = Browser, SUPER+3 = VSCode, etc.
+gsettings set org.gnome.shell.keybindings switch-to-application-1 "['42-kitty.desktop']"
+gsettings set org.gnome.shell.keybindings switch-to-application-2 "['42-browser.desktop']"
+gsettings set org.gnome.shell.keybindings switch-to-application-3 "['42-vscode.desktop']"
+gsettings set org.gnome.shell.keybindings switch-to-application-4 "['42-finder.desktop']"
+gsettings set org.gnome.shell.keybindings switch-to-application-5 "['42-pdf.desktop']"
+gsettings set org.gnome.shell.keybindings switch-to-application-6 "['42-discord.desktop']"
+gsettings set org.gnome.shell.keybindings switch-to-application-7 "['42-geforcenow.desktop']"
+# 4. Raccourci Bureau natif sur Super+7, Super+9 et Super+D
 gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>7', '<Super>9', '<Super>d']"
-# 4. Désactiver les animations pour l'instantanéité
+# 5. Desactiver les animations pour l'instananeite
 gsettings set org.gnome.desktop.interface enable-animations false
-# 5. Mise à jour des Favoris
-gsettings set org.gnome.shell favorite-apps "['42-alacritty.desktop', '42-browser.desktop', 'code.desktop', '42-finder.desktop', '42-pdf.desktop', '42-discord.desktop', '42-geforcenow.desktop']"
-echo "Setup 42 terminé."
+# 6. Mise a jour des Favoris
+gsettings set org.gnome.shell favorite-apps "['42-kitty.desktop', '42-browser.desktop', 'code.desktop', '42-finder.desktop', '42-pdf.desktop', '42-discord.desktop', '42-geforcenow.desktop']"
+echo "Setup 42 termine."
 {{- end -}}
-

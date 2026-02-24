@@ -51,48 +51,7 @@ install_npm_lsp "dotenv-lsp" "dot-language-server" "dot-language-server"
 
 echo "📝 Installing editors..."
 
-# 1. Zed Editor
-# if [ ! -f "$BIN_DIR/zed" ]; then
-#     echo "  🔷 Installing Zed editor..."
-#     ZED_DIR="$APPS_DIR/zed"
-#     mkdir -p "$ZED_DIR"
-
-#     ZED_ARCH="x86_64"
-#     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZED_ARCH="aarch64"
-
-#     if [[ "$OS_TYPE" == "Darwin" ]]; then
-#         curl -f https://zed.dev/install.sh | sh
-#         ln -sf "$HOME/.local/bin/zed" "$BIN_DIR/zed"
-#     else
-#         curl -LSs "https://cloud.zed.dev/releases/stable/latest/download?asset=zed&arch=${ZED_ARCH}&os=linux&source=docs" -o /tmp/zed.tar.gz
-#         tar -xzf /tmp/zed.tar.gz -C "$ZED_DIR" --strip-components=1
-#         ln -sf "$ZED_DIR/bin/zed" "$BIN_DIR/zed"
-#         rm -f /tmp/zed.tar.gz
-#     fi
-# fi
-
-# 2. Helix Editor (hx)
-if [ ! -f "$BIN_DIR/hx" ]; then
-    echo "  🌀 Installing Helix editor..."
-    HELIX_DIR="$APPS_DIR/helix"
-    mkdir -p "$HELIX_DIR/runtime"
-
-    HELIX_ARCH="x86_64"
-    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && HELIX_ARCH="aarch64"
-
-    HELIX_OS="linux"
-    if [[ "$OS_TYPE" == "Darwin" ]]; then
-        HELIX_OS="macos"
-    fi
-
-    curl -L -LSs "https://github.com/helix-editor/helix/releases/download/25.07.1/helix-25.07.1-${HELIX_ARCH}-${HELIX_OS}.tar.xz" -o /tmp/helix.tar.xz
-    xz -d /tmp/helix.tar.xz
-    tar -xf /tmp/helix.tar -C "$HELIX_DIR" --strip-components=1
-    ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
-    rm -f /tmp/helix.tar*
-fi
-
-# 3. VSCode
+# 1. VSCode
 if ! command -v code &>/dev/null && [ ! -f "$BIN_DIR/code" ]; then
     echo "  💜 Installing VSCode..."
     VSCODE_DIR="$APPS_DIR/vscode"
@@ -117,6 +76,49 @@ if ! command -v code &>/dev/null && [ ! -f "$BIN_DIR/code" ]; then
         rm -f /tmp/vscode.tar.gz
     fi
 fi
+
+# 2. Helix Editor (hx)
+if [ ! -f "$BIN_DIR/hx" ]; then
+    echo "  🌀 Installing Helix editor..."
+    HELIX_DIR="$APPS_DIR/helix"
+    mkdir -p "$HELIX_DIR/runtime"
+
+    HELIX_ARCH="x86_64"
+    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && HELIX_ARCH="aarch64"
+
+    HELIX_OS="linux"
+    if [[ "$OS_TYPE" == "Darwin" ]]; then
+        HELIX_OS="macos"
+    fi
+
+    curl -L -LSs "https://github.com/helix-editor/helix/releases/download/25.07.1/helix-25.07.1-${HELIX_ARCH}-${HELIX_OS}.tar.xz" -o /tmp/helix.tar.xz
+    xz -d /tmp/helix.tar.xz
+    tar -xf /tmp/helix.tar -C "$HELIX_DIR" --strip-components=1
+    ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
+    rm -f /tmp/helix.tar*
+fi
+
+
+
+# 3. Zed Editor
+# if [ ! -f "$BIN_DIR/zed" ]; then
+#     echo "  🔷 Installing Zed editor..."
+#     ZED_DIR="$APPS_DIR/zed"
+#     mkdir -p "$ZED_DIR"
+
+#     ZED_ARCH="x86_64"
+#     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZED_ARCH="aarch64"
+
+#     if [[ "$OS_TYPE" == "Darwin" ]]; then
+#         curl -f https://zed.dev/install.sh | sh
+#         ln -sf "$HOME/.local/bin/zed" "$BIN_DIR/zed"
+#     else
+#         curl -LSs "https://cloud.zed.dev/releases/stable/latest/download?asset=zed&arch=${ZED_ARCH}&os=linux&source=docs" -o /tmp/zed.tar.gz
+#         tar -xzf /tmp/zed.tar.gz -C "$ZED_DIR" --strip-components=1
+#         ln -sf "$ZED_DIR/bin/zed" "$BIN_DIR/zed"
+#         rm -f /tmp/zed.tar.gz
+#     fi
+# fi
 
 # 4. Emacs + Doom Emacs (prefer Windows GUI Emacs on WSL)
 #if [ ! -f "$BIN_DIR/emacs" ]; then

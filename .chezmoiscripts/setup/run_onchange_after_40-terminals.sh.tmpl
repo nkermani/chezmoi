@@ -62,31 +62,42 @@ if [[ "$OS_TYPE" == "Darwin" ]]; then
     if ! command -v kitty &>/dev/null; then
         echo "  📦 Installing Kitty via Homebrew..."
         brew install --cask kitty
-    else
-        if ! command -v kitty &>/dev/null; then
-            echo "  📦 Installing Kitty (installer)..."
-            curl -L "https://sw.kovidgoyal.net/kitty/installer.sh" -o /tmp/kitty-installer.sh
-            bash /tmp/kitty-installer.sh launch=n
-            rm -f /tmp/kitty-installer.sh
-            
-            ln -sf "$HOME/.local/kitty.app/bin/kitty" "$BIN_DIR/kitty"
-            ln -sf "$HOME/.local/kitty.app/bin/kitten" "$BIN_DIR/kitten"
-            
-            echo "  🎨 Setting up Kitty desktop integration..."
-            ICON_DIR="$HOME/.local/share/icons"
-            APP_DIR="$HOME/.local/share/applications"
-            mkdir -p "$ICON_DIR" "$APP_DIR"
-            
-            # curl -LSs "https://raw.githubusercontent.com/kovidgoyal/kitty/master/kitty/icon.svg" -o "$ICON_DIR/kitty.svg"
-            if [ -f "$HOME/.local/kitty.app/icons/kitty.png" ]; then
-                cp "$HOME/.local/kitty.app/icons/kitty.png" "$ICON_DIR/kitty.png"
-            fi
-            cat <<EOF > "$APP_DIR/kitty.desktop"
+    fi
+else
+    if ! command -v kitty &>/dev/null; then
+        echo "  📦 Installing Kitty (installer)..."
+        curl -L "https://sw.kovidgoyal.net/kitty/installer.sh" -o /tmp/kitty-installer.sh
+        bash /tmp/kitty-installer.sh launch=n
+        rm -f /tmp/kitty-installer.sh
+        
+        ln -sf "$HOME/.local/kitty.app/bin/kitty" "$BIN_DIR/kitty"
+        ln -sf "$HOME/.local/kitty.app/bin/kitten" "$BIN_DIR/kitten"
+    fi
+    
+    if command -v kitty &>/dev/null; then
+        echo "  🎨 Setting up Kitty desktop integration..."
+        ICON_DIR="$HOME/.local/share/icons"
+        APP_DIR="$HOME/.local/share/applications"
+        mkdir -p "$ICON_DIR" "$APP_DIR"
+        
+        if [ -f "$HOME/.local/kitty.app/icons/kitty.png" ]; then
+            cp "$HOME/.local/kitty.app/icons/kitty.png" "$ICON_DIR/kitty.png"
+        fi
+        
+        if [ -f "$HOME/.local/kitty.app/icons/kitty.ico" ]; then
+            cp "$HOME/.local/kitty.app/icons/kitty.ico" "$ICON_DIR/kitty.ico"
+        fi
+        
+        if [ -f "$HOME/.local/kitty.app/icons/kitty.svg" ]; then
+            cp "$HOME/.local/kitty.app/icons/kitty.svg" "$ICON_DIR/kitty.svg"
+        fi
+        
+        cat <<EOF > "$APP_DIR/kitty.desktop"
 [Desktop Entry]
 Type=Application
 TryExec=$BIN_DIR/kitty
-Exec=$BIN_DIR/kitty
-Icon=$HOME/.local/share/icons/kitty.png
+exec=$BIN_DIR/kitty
+Icon=$HOME/.local/share/icons/kitty
 Terminal=false
 Categories=System;TerminalEmulator;
 
@@ -98,9 +109,8 @@ Actions=New;
 
 [Desktop Action New]
 Name=New Terminal
-Exec=$BIN_DIR/kitty
+exec=$BIN_DIR/kitty
 EOF
-        fi
     fi
 fi
 

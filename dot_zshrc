@@ -4,4 +4,4 @@
 for f in "$HOME/.local/share/chezmoi/dot_zshrc.d/"*.zsh; do
     source "$f"
 done
-
+                                                                                                       
