@@ -59,7 +59,14 @@ fi
 
 # Kitty
 if [[ "$OS_TYPE" == "Darwin" ]]; then
-    if ! command -v kitty &>/dev/null; then
+    # Add Homebrew bin to PATH if it exists (for macOS) - needed for finding kitty
+    if [[ -d "/opt/homebrew/bin" ]]; then
+        export PATH="/opt/homebrew/bin:$PATH"
+    elif [[ -d "/usr/local/bin" ]]; then
+        export PATH="/usr/local/bin:$PATH"
+    fi
+    
+    if [[ ! -d "/Applications/kitty.app" ]]; then
         echo "  📦 Installing Kitty via Homebrew..."
         brew install --cask kitty
     fi

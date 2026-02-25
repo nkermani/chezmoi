@@ -23,8 +23,8 @@ if [[ "$OS_TYPE" == "Darwin" ]]; then
     if command -v brew &>/dev/null; then
         FONTS=(
             "font-jetbrains-mono-nerd-font"
-            "font-iosevka-nerd-font"
-            "font-sf-mono"
+            # "font-iosevka-nerd-font"
+            # "font-sf-mono"
         )
         for font in "${FONTS[@]}"; do
             if ! brew list --cask "$font" &>/dev/null; then
@@ -39,10 +39,10 @@ elif [[ "$OS_TYPE" == "Linux" ]]; then
     echo "🔡 Checking Fonts..."
     
     install_nerd_font "JetBrainsMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/JetBrainsMono.zip"
-    install_nerd_font "OpenDyslexic" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/OpenDyslexic.zip"
-    install_nerd_font "MartianMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/MartianMono.zip"
-    install_nerd_font "Iosevka" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/Iosevka.zip"
-    install_nerd_font "ZedMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/ZedMono.zip"
+    # install_nerd_font "OpenDyslexic" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/OpenDyslexic.zip"
+    # install_nerd_font "MartianMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/MartianMono.zip"
+    # install_nerd_font "Iosevka" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/Iosevka.zip"
+    # install_nerd_font "ZedMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/ZedMono.zip"
     
     echo "✅ All fonts installed!"
 fi

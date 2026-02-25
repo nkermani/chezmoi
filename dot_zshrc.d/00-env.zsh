@@ -36,17 +36,37 @@ if [[ "$OS_TYPE" == "wsl2" ]]; then
     fi
 fi
 
-# Fallback si TERM est inconnu ou absent
-if ! tput colors >/dev/null 2>&1; then
+# Ancienne approche avec terminfo (gardé pour référence):
+# - Nécessitait d'installer kitty-terminfo sur macOS
+# - Problème: "tput: unknown terminal" si terminfo absent
+# - Solution: kitty et alacritty gèrent nativement TERM=kitty/alacritty
+# if [[ "$_IS_KITTY" -eq 1 ]] && [[ "$OS_TYPE" == "macos" ]]; then
+#     local _KITTY_PATHS=(
+#         "$HOME/.local/kitty.app/share/kitty/terminfo"
+#         "/Applications/kitty.app/Contents/SharedSupport/terminfo"
+#         "/usr/local/opt/kitty/share/kitty/terminfo"
+#         "/opt/homebrew/opt/kitty/share/kitty/terminfo"
+#     )
+#     for _p in "${_KITTY_PATHS[@]}"; do
+#         if [[ -d "$_p" ]]; then
+#             export TERMINFO="$_p"
+#             break
+#         fi
+#     done
+# fi
+
+# Fallback si TERM est vide (pas de vérification tput - voir note ci-dessus)
+if [[ -z "$TERM" ]]; then
     export TERM="xterm-256color"
 fi
 
 # Application du TERM approprié selon le terminal
+# Note: xterm-256color pour compatibilité (autres programmes comme less/vim besoin terminfo)
 if [[ -z "$TMUX" ]]; then
     if [[ "$_IS_KITTY" -eq 1 ]]; then
-        tput colors >/dev/null 2>&1 && export TERM="kitty"
+        export TERM="xterm-256color"
     elif [[ "$_IS_ALACRITTY" -eq 1 ]]; then
-        tput colors >/dev/null 2>&1 && export TERM="alacritty"
+        export TERM="xterm-256color"
     elif [[ "$_IS_WINDOWS_TERM" -eq 1 ]]; then
         export TERM="xterm-256color"
     fi

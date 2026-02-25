@@ -8,6 +8,12 @@
 .local/share/applications/42-*.desktop
 {{ end }}
 
+# Kitty/Kitten wrappers are for Linux only
+{{ if eq .chezmoi.os "darwin" }}
+.nkermani/bin/kitty
+.nkermani/bin/kitten
+{{ end }}
+
 .chezmoitemplates
 
 .dot_emacs.d/.local
