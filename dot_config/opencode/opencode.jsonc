@@ -12,10 +12,6 @@
         "timeout": 600000
       }
     }
-  },
-  "theme": "system",
-  "tui": {
-    "diff_style": "auto"
   }
 }
 
