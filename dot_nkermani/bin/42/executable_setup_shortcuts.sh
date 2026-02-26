@@ -8,13 +8,15 @@ SHORTCUTS=(
 	"Kitty|/home/nkermani/.nkermani/bin/42/focus_kitty.sh|<Super>1"
 	"Browser|/home/nkermani/.nkermani/bin/42/focus_browser.sh|<Super>2"
 	"VSCode|/home/nkermani/.nkermani/bin/42/focus_vscode.sh|<Super>3"
-	"Finder|/home/nkermani/.nkermani/bin/42/focus_finder.sh|<Super>4"
-	"PDF|/home/nkermani/.nkermani/bin/42/focus_pdf.sh|<Super>5"
-	"Discord|/home/nkermani/.nkermani/bin/42/focus_discord.sh|<Super>6"
-	"GeForceNOW|/home/nkermani/.nkermani/bin/42/focus_geforcenow.sh|<Super>8"
+	"Obsidian|/home/nkermani/.nkermani/bin/42/focus_obsidian.sh|<Super>4"
+	"Desktop|/home/nkermani/.nkermani/bin/42/focus_desktop.sh|<Super>5"
+	"Files|/home/nkermani/.nkermani/bin/42/focus_finder.sh|<Super>6"
+	"PDF|/home/nkermani/.nkermani/bin/42/focus_pdf.sh|<Super>7"
+	"Discord|/home/nkermani/.nkermani/bin/42/focus_discord.sh|<Super>8"
+	"GeForceNOW|/home/nkermani/.nkermani/bin/42/focus_geforcenow.sh|<Super>9"
 )
 
-gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>7', '<Super>9', '<Super>d']"
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d', '<Super>5', '<Super>0']"
 
 BASE="org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
 LIST="["
@@ -30,6 +32,8 @@ for entry in "${SHORTCUTS[@]}"; do
 	LIST+="'$PATH_ID',"
 	((i++))
 done
+
+gsettings set "$BASE:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/" binding "<Super>0"
 
 LIST="${LIST%,}]"
 gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "$LIST"

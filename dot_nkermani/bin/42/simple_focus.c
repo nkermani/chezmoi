@@ -28,7 +28,6 @@ char* get_string_property(Display* display, Window window, Atom property) {
     return NULL;
 }
 
-// Case insensitive string search
 int contains_ignore_case(const char* haystack, const char* needle) {
     if (!haystack || !needle) return 0;
     
@@ -46,6 +45,9 @@ int contains_ignore_case(const char* haystack, const char* needle) {
 }
 
 void focus_window(Display* display, Window window) {
+    XRaiseWindow(display, window);
+    XSetInputFocus(display, window, RevertToPointerRoot, CurrentTime);
+    
     XEvent event;
     long mask = SubstructureRedirectMask | SubstructureNotifyMask;
     
@@ -55,7 +57,7 @@ void focus_window(Display* display, Window window) {
     event.xclient.message_type = XInternAtom(display, "_NET_ACTIVE_WINDOW", False);
     event.xclient.window = window;
     event.xclient.format = 32;
-    event.xclient.data.l[0] = 2; // Source indication (2 = pager)
+    event.xclient.data.l[0] = 1;
     event.xclient.data.l[1] = CurrentTime;
     event.xclient.data.l[2] = 0;
     event.xclient.data.l[3] = 0;
@@ -89,7 +91,6 @@ int main(int argc, char** argv) {
     unsigned long bytes_after;
     unsigned char* prop = NULL;
 
-    // Get list of all windows
     if (XGetWindowProperty(display, DefaultRootWindow(display), net_client_list, 0, 1024, False, AnyPropertyType,
                            &actual_type, &actual_format, &nitems, &bytes_after, &prop) != Success) {
         fprintf(stderr, "Cannot get client list\n");
