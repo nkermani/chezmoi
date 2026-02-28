@@ -20,10 +20,15 @@ def focus_app(desktop_file):
         app_name = "Visual Studio Code"
     elif "Evince" in desktop_file:
         app_name = "evince"
+    elif "pdf" in desktop_file:
+        app_name = "evince"
+        app_name = "evince"
     elif "Nautilus" in desktop_file:
         app_name = "nautilus"
     elif "geforcenow" in desktop_file:
         app_name = "GeForce NOW"
+    elif "obsidian" in desktop_file:
+        app_name = "obsidian"
         
     if app_name:
         res = subprocess.run(["/home/nkermani/.nkermani/bin/42/simple_focus", app_name], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
@@ -70,6 +75,14 @@ def focus_app(desktop_file):
 
     if "Evince" in desktop_file or "pdf" in desktop_file:
         subprocess.Popen(["evince"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        return
+
+    if "obsidian" in desktop_file:
+        subprocess.Popen(["obsidian"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        return
+
+    if "files" in desktop_file:
+        subprocess.Popen(["nautilus"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
         return
 
     paths = [

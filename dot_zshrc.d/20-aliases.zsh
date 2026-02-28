@@ -5,6 +5,7 @@ if [[ "$OS_TYPE" == "linux" ]]; then
     alias gfn='junest geforcenow --no-sandbox"'
     export PATH="$PATH:~/.junest/usr/bin_wrappers"
     export PATH=~/.local/share/junest/bin:$PATH
+    alias std='/sgoinfre/stdgames/launcher'
 fi
 
 if [[ "$OS_TYPE" == "macos" ]]; then

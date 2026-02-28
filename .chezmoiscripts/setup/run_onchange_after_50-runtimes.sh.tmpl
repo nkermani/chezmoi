@@ -25,9 +25,31 @@ fi
 if [[ "$IS_42" == "true" ]]; then
     export RUSTUP_HOME="/goinfre/$USER/.rustup"
     export CARGO_HOME="/goinfre/$USER/.cargo"
+    export PATH="$CARGO_HOME/bin:$PATH"
+    mkdir -p "$RUSTUP_HOME" "$CARGO_HOME" "$RUSTUP_HOME/tmp" "$RUSTUP_HOME/dl"
+    export RUSTUP_DL_DIR="$RUSTUP_HOME/dl"
+    export TMPDIR="$RUSTUP_HOME/tmp"
 fi
 
 if ! command -v cargo &>/dev/null; then
     echo "  🦀 Installing Rust..."
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+fi
+
+# Ensure default toolchain is set and rust-src is installed for rust-analyzer
+if [[ "$IS_42" == "true" ]]; then
+    export RUSTUP_HOME="/goinfre/$USER/.rustup"
+    export CARGO_HOME="/goinfre/$USER/.cargo"
+    mkdir -p "$RUSTUP_HOME" "$CARGO_HOME" "$RUSTUP_HOME/tmp" "$RUSTUP_HOME/dl" 2>/dev/null
+    export RUSTUP_DL_DIR="$RUSTUP_HOME/dl"
+    export TMPDIR="$RUSTUP_HOME/tmp"
+fi
+echo "  🦀 Checking toolchain..."
+if command -v rustup &>/dev/null; then
+    if ! rustup show active-toolchain &>/dev/null; then
+        echo "  🦀 Setting default toolchain..."
+        rustup default stable 2>/dev/null || true
+    fi
+    echo "  🦀 Adding rust-src component..."
+    rustup component add rust-src 2>/dev/null || echo "  ⚠️ rust-src failed, continuing..."
 fi
