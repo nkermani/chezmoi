@@ -71,12 +71,27 @@ if [[ "$OS_TYPE" == "Darwin" ]]; then
         brew install --cask kitty
     fi
 else
-    if ! command -v kitty &>/dev/null; then
+    # if kitty exists, check version; reinstall if too old
+    if command -v kitty &>/dev/null; then
+        ver=$(kitty -v 2>&1 | awk '{print $2}')
+        # require at least 0.99 for session directives
+        if [[ "$(printf '%s\n%s' "$ver" "0.99" | sort -V | head -n1)" != "0.99" ]]; then
+            echo "  ⚠️  kitty version $ver is too old, upgrading..."
+            # remove old installation directory so installer fetches fresh copy
+            rm -rf "$HOME/.local/kitty.app" 2>/dev/null || true
+            rm -f "$BIN_DIR/kitty" "$BIN_DIR/kitten" 2>/dev/null || true
+            curl -L "https://sw.kovidgoyal.net/kitty/installer.sh" -o /tmp/kitty-installer.sh
+            bash /tmp/kitty-installer.sh launch=n
+            rm -f /tmp/kitty-installer.sh
+            ln -sf "$HOME/.local/kitty.app/bin/kitty" "$BIN_DIR/kitty"
+            ln -sf "$HOME/.local/kitty.app/bin/kitten" "$BIN_DIR/kitten"
+        fi
+    else
         echo "  📦 Installing Kitty (installer)..."
         curl -L "https://sw.kovidgoyal.net/kitty/installer.sh" -o /tmp/kitty-installer.sh
         bash /tmp/kitty-installer.sh launch=n
         rm -f /tmp/kitty-installer.sh
-        
+
         ln -sf "$HOME/.local/kitty.app/bin/kitty" "$BIN_DIR/kitty"
         ln -sf "$HOME/.local/kitty.app/bin/kitten" "$BIN_DIR/kitten"
     fi

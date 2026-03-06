@@ -84,3 +84,8 @@ map cmd+9 goto_tab 9
 
 # END_KITTY_THEME
 
+
+# automatically load the saved session (tab layout, commands, etc.)
+# session.conf contains `new_tab` and launch directives which kitty
+# will process when included here.
+startup_session /home/nkermani/.config/kitty/session.conf
