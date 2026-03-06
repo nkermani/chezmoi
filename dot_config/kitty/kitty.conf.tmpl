@@ -1,7 +1,12 @@
 # kitty.conf
 
 font_family      JetBrainsMonoNL Nerd Font Mono
+
+{{- if eq .chezmoi.os "darwin" }}
 font_size 11
+{{- else }}
+font_size 10
+{{- end }}
 
 modify_font cell_width -1px
 modify_font cell_height -1px
