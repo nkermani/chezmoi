@@ -18,7 +18,9 @@ tab_width    = 1
 border_symbol = "│"
 border_style  = { fg = "#00f0ff" }
 
-syntect_theme = "~/.config/bat/themes/CyberpunkNK.tmTheme"
+# tilde isn't expanded by Yazi; use absolute path so the file
+# actually loads and the preview matches bat's theme
+syntect_theme = "/home/nkermani/.config/bat/themes/CyberpunkNK.tmTheme"
 
 [status]
 separator_open  = ""

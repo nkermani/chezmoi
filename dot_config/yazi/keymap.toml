@@ -1,8 +1,12 @@
 [manager]
 prepend_keymap = [
-	{ on = [ "<LeftMouse>" ], run = "click", desc = "Click to select" },
-	{ on = [ "<DoubleClick>" ], run = "open", desc = "Double-click to open file" },
-	{ on = [ "<Enter>" ], run = "open", desc = "Open file" },
+	# open hovered/selected entry(s) in Visual Studio Code
+	# use %s so folders work whether hovered or selected, add quotes
+	{ on = [ "<C-o>" ],    run = "shell code \"%s\"", desc = "VSCode open selected/hovered entry(s)" },
+
+	{ on = [ "<LeftMouse>" ],         run = "click", desc = "Click to select" },
+	{ on = [ "<DoubleClick>" ],       run = "shell code \"%h\"", desc = "Double-click to open file/folder in VSCode" },
+	{ on = [ "<Enter>" ],             run = "shell code \"%h\"", desc = "Open hovered entry in VSCode" },
 	{ on = [ "<ScrollWheelUp>" ], run = "scroll -1", desc = "Scroll up" },
 	{ on = [ "<ScrollWheelDown>" ], run = "scroll 1", desc = "Scroll down" },
 ]

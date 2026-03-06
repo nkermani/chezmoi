@@ -1,6 +1,8 @@
 [open]
+# use a custom vscode opener defined below; the `use` field is required
+# match every path with url = "*" rather than the invalid name field
 rules = [
-	{ name = "*", use = "smart-editor" },
+	{ url = "*", use = "vscode" },
 ]
 
 [manager]
@@ -15,4 +17,10 @@ cwd = "~/.config/yazi/last-cwd"
 
 [theme]
 use = "cyberpunk_nk"
+
+[opener]
+# open anything with Visual Studio Code, detaching so Yazi doesn't wait
+vscode = [
+    { run = "code %s", orphan = true },
+]
 
