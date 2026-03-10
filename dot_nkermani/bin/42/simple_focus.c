@@ -1,4 +1,5 @@
 /*
+/*
  * simple_focus.c
  * A minimal X11 window focuser to replace wmctrl at 42.
  * Compiles with: gcc simple_focus.c -o simple_focus -lX11
@@ -176,3 +177,4 @@ int main(int argc, char** argv) {
     
     return found ? 0 : 1;
 }
+ */

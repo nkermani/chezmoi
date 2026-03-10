@@ -13,6 +13,23 @@ export NK_DIR="$HOME/.nkermani"
 export NK_APPS="$NK_DIR/apps"
 export NK_BIN="$NK_DIR/bin"
 
+# 1.1 DÉTECTION 42 & ANDROID
+if [[ -d /goinfre ]]; then
+    export ANDROID_HOME="/goinfre/$USER/android-sdk"
+    export FLUTTER_ROOT="/goinfre/$USER/flutter"
+else
+    export ANDROID_HOME="$NK_DIR/android-sdk"
+    export FLUTTER_ROOT="$NK_APPS/flutter"
+fi
+export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+
+# 1.2 LLVM FAKE BIN (For Flutter Linux Build)
+if [[ -d "$NK_BIN/llvm-fake/bin" ]]; then
+    export PATH="$NK_BIN/llvm-fake/bin:$PATH"
+    export CC="$NK_BIN/llvm-fake/bin/clang"
+    export CXX="$NK_BIN/llvm-fake/bin/clang++"
+fi
+
 # 2. TERM HANDLING - Détection du terminal
 _IS_ALACRITTY=0
 _IS_KITTY=0

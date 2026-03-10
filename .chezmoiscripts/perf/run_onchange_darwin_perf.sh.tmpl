@@ -7,8 +7,10 @@
 echo "🚀 Optimisation macOS (Keyboard & Mouse)..."
 
 # Clavier : Répétition ultra-rapide
-defaults write -g InitialKeyRepeat -int 10 # 150ms
-defaults write -g KeyRepeat -int 1        # 15ms
+# defaults write -g InitialKeyRepeat -int 10 # stored: fast (150ms)
+# defaults write -g KeyRepeat -int 1        # stored: fast (15ms)
+defaults write -g InitialKeyRepeat -int 25  # default (375ms)
+defaults write -g KeyRepeat -int 6          # default (83ms)
 
 # Désactiver le "Press and Hold" pour les accents (crucial pour Vim)
 defaults write -g ApplePressAndHoldEnabled -bool false
@@ -18,4 +20,3 @@ defaults write .GlobalPreferences com.apple.mouse.scaling -1
 
 echo "✅ macOS optimisé. (Relancez la session pour appliquer)"
 {{- end }}
-

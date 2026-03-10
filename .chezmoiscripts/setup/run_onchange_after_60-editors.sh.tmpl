@@ -78,24 +78,46 @@ if ! command -v code &>/dev/null && [ ! -f "$BIN_DIR/code" ]; then
 fi
 
 # 2. Helix Editor (hx)
-if [ ! -f "$BIN_DIR/hx" ]; then
-    echo "  🌀 Installing Helix editor..."
-    HELIX_DIR="$APPS_DIR/helix"
-    mkdir -p "$HELIX_DIR/runtime"
+# if [ ! -f "$BIN_DIR/hx" ]; then
+#     echo "  🌀 Installing Helix editor..."
+#     HELIX_DIR="$APPS_DIR/helix"
+#     mkdir -p "$HELIX_DIR/runtime"
+# 
+#     HELIX_ARCH="x86_64"
+#     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && HELIX_ARCH="aarch64"
+# 
+#     HELIX_OS="linux"
+#     if [[ "$OS_TYPE" == "Darwin" ]]; then
+#         HELIX_OS="macos"
+#     fi
+# 
+#     curl -L -LSs "https://github.com/helix-editor/helix/releases/download/25.07.1/helix-25.07.1-${HELIX_ARCH}-${HELIX_OS}.tar.xz" -o /tmp/helix.tar.xz
+#     xz -d /tmp/helix.tar.xz
+#     tar -xf /tmp/helix.tar -C "$HELIX_DIR" --strip-components=1
+#     ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
+#     rm -f /tmp/helix.tar*
+# fi
 
-    HELIX_ARCH="x86_64"
-    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && HELIX_ARCH="aarch64"
+# 3. OpenCode.ai & Oh My OpenCode
+if [ ! -d "$APPS_DIR/opencode" ]; then
+    echo "  🤖 Installing OpenCode.ai (Local installation)..."
+    mkdir -p "$APPS_DIR/opencode"
+    # Run the official installer within the apps directory to keep it portable
+    (cd "$APPS_DIR" && curl -fsSL https://opencode.ai/install | bash)
+    # Create symlinks in your personal bin directory
+    ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/opencode"
+    echo "  ✅ OpenCode.ai installed"
+fi
 
-    HELIX_OS="linux"
-    if [[ "$OS_TYPE" == "Darwin" ]]; then
-        HELIX_OS="macos"
+if command -v opencode &>/dev/null; then
+    if ! opencode --version 2>&1 | grep -q "oh-my-opencode"; then
+        echo "  ✨ Installing Oh My OpenCode..."
+        if command -v bunx &>/dev/null; then
+            bunx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
+        elif command -v npx &>/dev/null; then
+            npx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
+        fi
     fi
-
-    curl -L -LSs "https://github.com/helix-editor/helix/releases/download/25.07.1/helix-25.07.1-${HELIX_ARCH}-${HELIX_OS}.tar.xz" -o /tmp/helix.tar.xz
-    xz -d /tmp/helix.tar.xz
-    tar -xf /tmp/helix.tar -C "$HELIX_DIR" --strip-components=1
-    ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
-    rm -f /tmp/helix.tar*
 fi
 
 

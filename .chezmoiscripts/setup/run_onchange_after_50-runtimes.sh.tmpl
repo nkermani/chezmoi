@@ -53,3 +53,56 @@ if command -v rustup &>/dev/null; then
     echo "  🦀 Adding rust-src component..."
     rustup component add rust-src 2>/dev/null || echo "  ⚠️ rust-src failed, continuing..."
 fi
+
+# Flutter & Dart
+if [ ! -L "$BIN_DIR/flutter" ]; then
+    echo "  🐦 Installing Flutter..."
+    FLUTTER_VER="3.41.4"
+    FLUTTER_ARCHIVE="flutter_linux_${FLUTTER_VER}-stable.tar.xz"
+    
+    # Use goinfre for 42 to avoid quota issues
+    if [[ "$IS_42" == "true" ]]; then
+        FLUTTER_ROOT="/goinfre/$USER/flutter"
+    else
+        FLUTTER_ROOT="$APPS_DIR/flutter"
+    fi
+    
+    # Clean up if it was accidentally installed in bin
+    [ -d "$BIN_DIR/flutter" ] && rm -rf "$BIN_DIR/flutter"
+    
+    if [ ! -d "$FLUTTER_ROOT" ]; then
+        curl -LSs "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/${FLUTTER_ARCHIVE}" -o /tmp/flutter.tar.xz
+        mkdir -p "$(dirname "$FLUTTER_ROOT")"
+        tar -xf /tmp/flutter.tar.xz -C "$(dirname "$FLUTTER_ROOT")"
+        rm /tmp/flutter.tar.xz
+    fi
+    
+    ln -sf "$FLUTTER_ROOT/bin/flutter" "$BIN_DIR/flutter"
+    ln -sf "$FLUTTER_ROOT/bin/dart" "$BIN_DIR/dart"
+fi
+
+# Android SDK (Command Line Tools)
+if [ ! -d "$NK_DIR/android-sdk" ] && [ ! -d "/goinfre/$USER/android-sdk" ]; then
+    echo "  🤖 Installing Android SDK (cmdline-tools)..."
+    CMDLINE_VER="14742923"
+    
+    if [[ "$IS_42" == "true" ]]; then
+        ANDROID_HOME="/goinfre/$USER/android-sdk"
+    else
+        ANDROID_HOME="$NK_DIR/android-sdk"
+    fi
+    
+    if [ ! -d "$ANDROID_HOME" ]; then
+        mkdir -p "$ANDROID_HOME/cmdline-tools"
+        curl -LSs "https://dl.google.com/android/repository/commandlinetools-linux-${CMDLINE_VER}_latest.zip" -o /tmp/cmdline.zip
+        unzip -o /tmp/cmdline.zip -d "/tmp/android-cmdline"
+        mv "/tmp/android-cmdline/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest"
+        rm -rf /tmp/cmdline.zip /tmp/android-cmdline
+        
+        # Initial SDK setup (Platform 36, Build-tools 36.0.0)
+        yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$ANDROID_HOME" "platform-tools" "build-tools;36.0.0" "platforms;android-36"
+    fi
+    
+    # Link adb to bin
+    [ -f "$ANDROID_HOME/platform-tools/adb" ] && ln -sf "$ANDROID_HOME/platform-tools/adb" "$BIN_DIR/adb"
+fi

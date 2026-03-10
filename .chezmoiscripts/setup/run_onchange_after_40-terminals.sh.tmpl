@@ -71,68 +71,26 @@ if [[ "$OS_TYPE" == "Darwin" ]]; then
         brew install --cask kitty
     fi
 else
-    # if kitty exists, check version; reinstall if too old
-    if command -v kitty &>/dev/null; then
-        ver=$(kitty -v 2>&1 | awk '{print $2}')
-        # require at least 0.99 for session directives
-        if [[ "$(printf '%s\n%s' "$ver" "0.99" | sort -V | head -n1)" != "0.99" ]]; then
-            echo "  ⚠️  kitty version $ver is too old, upgrading..."
-            # remove old installation directory so installer fetches fresh copy
-            rm -rf "$HOME/.local/kitty.app" 2>/dev/null || true
-            rm -f "$BIN_DIR/kitty" "$BIN_DIR/kitten" 2>/dev/null || true
-            curl -L "https://sw.kovidgoyal.net/kitty/installer.sh" -o /tmp/kitty-installer.sh
-            bash /tmp/kitty-installer.sh launch=n
-            rm -f /tmp/kitty-installer.sh
-            ln -sf "$HOME/.local/kitty.app/bin/kitty" "$BIN_DIR/kitty"
-            ln -sf "$HOME/.local/kitty.app/bin/kitten" "$BIN_DIR/kitten"
-        fi
-    else
-        echo "  📦 Installing Kitty (installer)..."
-        curl -L "https://sw.kovidgoyal.net/kitty/installer.sh" -o /tmp/kitty-installer.sh
-        bash /tmp/kitty-installer.sh launch=n
-        rm -f /tmp/kitty-installer.sh
-
+    # Linux installation
+    if ! command -v kitty &>/dev/null; then
+        echo "  📦 Installing Kitty (official installer)..."
+        curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
+        
+        # Create symbolic links
         ln -sf "$HOME/.local/kitty.app/bin/kitty" "$BIN_DIR/kitty"
         ln -sf "$HOME/.local/kitty.app/bin/kitten" "$BIN_DIR/kitten"
-    fi
-    
-    if command -v kitty &>/dev/null; then
+        
+        # Desktop integration
         echo "  🎨 Setting up Kitty desktop integration..."
-        ICON_DIR="$HOME/.local/share/icons"
         APP_DIR="$HOME/.local/share/applications"
-        mkdir -p "$ICON_DIR" "$APP_DIR"
+        mkdir -p "$APP_DIR"
         
-        if [ -f "$HOME/.local/kitty.app/icons/kitty.png" ]; then
-            cp "$HOME/.local/kitty.app/icons/kitty.png" "$ICON_DIR/kitty.png"
-        fi
+        cp "$HOME/.local/kitty.app/share/applications/kitty.desktop" "$APP_DIR/"
+        cp "$HOME/.local/kitty.app/share/applications/kitty-open.desktop" "$APP_DIR/"
         
-        if [ -f "$HOME/.local/kitty.app/icons/kitty.ico" ]; then
-            cp "$HOME/.local/kitty.app/icons/kitty.ico" "$ICON_DIR/kitty.ico"
-        fi
-        
-        if [ -f "$HOME/.local/kitty.app/icons/kitty.svg" ]; then
-            cp "$HOME/.local/kitty.app/icons/kitty.svg" "$ICON_DIR/kitty.svg"
-        fi
-        
-        cat <<EOF > "$APP_DIR/kitty.desktop"
-[Desktop Entry]
-Type=Application
-TryExec=$BIN_DIR/kitty
-exec=$BIN_DIR/kitty
-Icon=$HOME/.local/share/icons/kitty
-Terminal=false
-Categories=System;TerminalEmulator;
-
-Name=Kitty
-GenericName=Terminal
-Comment=A cross-platform, GPU-accelerated terminal emulator
-StartupWMClass=kitty
-Actions=New;
-
-[Desktop Action New]
-Name=New Terminal
-exec=$BIN_DIR/kitty
-EOF
+        # Update paths in desktop files
+        sed -i "s|Icon=kitty|Icon=$HOME/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" "$APP_DIR"/kitty*.desktop
+        sed -i "s|Exec=kitty|Exec=$HOME/.local/kitty.app/bin/kitty|g" "$APP_DIR"/kitty*.desktop
     fi
 fi
 

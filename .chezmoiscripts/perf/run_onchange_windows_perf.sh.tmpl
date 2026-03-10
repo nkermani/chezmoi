@@ -10,8 +10,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -Command '
     # 1. Keyboard Tweaks (Registry) - Mode Haute Performance
     $kbdPath = "HKCU:\Control Panel\Accessibility\Keyboard Response"
     Write-Host "Updating Keyboard Response Registry..." -ForegroundColor Cyan
-    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 200
-    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 10
+    # Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 200      # stored: fast
+    # Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 10        # stored: fast
+    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 1000     # default
+    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 500       # default
     # Flags 59 : Active FilterKeys + Désactive les sons/notifications pour éviter les blocages
     Set-ItemProperty -Path $kbdPath -Name "Flags" -Value 59
 
