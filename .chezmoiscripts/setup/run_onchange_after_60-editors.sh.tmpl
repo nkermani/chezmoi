@@ -48,7 +48,6 @@ install_npm_lsp "bash-lsp" "bash-language-server" "bash-language-server"
 install_npm_lsp "dotenv-lsp" "dot-language-server" "dot-language-server"
 
 # --- EDITOR INSTALLATIONS ---
-
 echo "📝 Installing editors..."
 
 # 1. VSCode
@@ -77,7 +76,38 @@ if ! command -v code &>/dev/null && [ ! -f "$BIN_DIR/code" ]; then
     fi
 fi
 
-# 2. Helix Editor (hx)
+# OpenCode.ai & Oh My OpenCode
+if [ ! -d "$APPS_DIR/opencode" ]; then
+    echo "  🤖 Installing OpenCode.ai (Local installation)..."
+    mkdir -p "$APPS_DIR/opencode"
+    # Run the official installer within the apps directory to keep it portable
+    (cd "$APPS_DIR" && curl -fsSL https://opencode.ai/install | bash)
+    # Create symlinks in your personal bin directory
+    ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/opencode"
+    echo "  ✅ OpenCode.ai installed"
+fi
+
+# Bun (for oh-my-opencode)
+if ! command -v bun &>/dev/null; then
+    echo "  🍞 Installing Bun..."
+    export BUN_INSTALL="$APPS_DIR/bun"
+    curl -fsSL https://bun.sh/install | bash
+    ln -sf "$BUN_INSTALL/bin/bun" "$BIN_DIR/bun"
+    ln -sf "$BUN_INSTALL/bin/bunx" "$BIN_DIR/bunx"
+fi
+
+if command -v opencode &>/dev/null; then
+    if ! opencode --version 2>&1 | grep -q "oh-my-opencode"; then
+        echo "  ✨ Installing Oh My OpenCode..."
+        if command -v bunx &>/dev/null; then
+            bunx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
+        elif command -v npx &>/dev/null; then
+            npx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
+        fi
+    fi
+fi
+
+# Helix Editor (hx)
 # if [ ! -f "$BIN_DIR/hx" ]; then
 #     echo "  🌀 Installing Helix editor..."
 #     HELIX_DIR="$APPS_DIR/helix"
@@ -97,29 +127,6 @@ fi
 #     ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
 #     rm -f /tmp/helix.tar*
 # fi
-
-# 3. OpenCode.ai & Oh My OpenCode
-if [ ! -d "$APPS_DIR/opencode" ]; then
-    echo "  🤖 Installing OpenCode.ai (Local installation)..."
-    mkdir -p "$APPS_DIR/opencode"
-    # Run the official installer within the apps directory to keep it portable
-    (cd "$APPS_DIR" && curl -fsSL https://opencode.ai/install | bash)
-    # Create symlinks in your personal bin directory
-    ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/opencode"
-    echo "  ✅ OpenCode.ai installed"
-fi
-
-if command -v opencode &>/dev/null; then
-    if ! opencode --version 2>&1 | grep -q "oh-my-opencode"; then
-        echo "  ✨ Installing Oh My OpenCode..."
-        if command -v bunx &>/dev/null; then
-            bunx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
-        elif command -v npx &>/dev/null; then
-            npx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
-        fi
-    fi
-fi
-
 
 
 # 3. Zed Editor

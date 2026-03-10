@@ -8,44 +8,7 @@ if [ ! -d "$NOTES_DIR/.git" ]; then
     git clone "git@github.com:nkermani/notes.git" "$NOTES_DIR" || echo "  ⚠️  Notes clone failed. Check SSH keys."
 fi
 
-# --- OPTIONAL TOOLS (OpenCode AI, Bun, Yazi) ---
-
-# 1. OPENCODE.AI
-if [ ! -d "$APPS_DIR/opencode" ]; then
-    echo "  🤖 Installing OpenCode.ai (Local installation)..."
-    mkdir -p "$APPS_DIR/opencode"
-    # Run the official installer within the apps directory to keep it portable
-    (cd "$APPS_DIR" && curl -fsSL https://opencode.ai/install | bash)
-    # Create symlinks in your personal bin directory
-    ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/opencode"
-    ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/code"
-    echo "  ✅ OpenCode.ai installed"
-fi
-
-# 2. BUN (for oh-my-opencode)
-if ! command -v bun &>/dev/null; then
-    echo "  🍞 Installing Bun..."
-    export BUN_INSTALL="$APPS_DIR/bun"
-    curl -fsSL https://bun.sh/install | bash
-    ln -sf "$BUN_INSTALL/bin/bun" "$BIN_DIR/bun"
-    ln -sf "$BUN_INSTALL/bin/bunx" "$BIN_DIR/bunx"
-fi
-
-# 3. OH-MY-OPENCODE (Plugin)
-if command -v opencode &>/dev/null; then
-    if ! opencode --version 2>&1 | grep -q "oh-my-opencode"; then
-        echo "  ✨ Installing Oh My OpenCode..."
-        if command -v bunx &>/dev/null; then
-            bunx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
-        elif command -v npx &>/dev/null; then
-            npx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
-        else
-            echo "  ⚠️  bunx/npx not found. Please install Bun or Node.js to install oh-my-opencode."
-        fi
-    else
-        echo "  ✅ Oh My OpenCode is already installed."
-    fi
-fi
+# --- OPTIONAL TOOLS (Yazi) ---
 
 # 4. Yazi File Manager
 echo "📂 Checking Yazi..."
