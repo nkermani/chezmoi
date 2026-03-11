@@ -10,10 +10,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -Command '
     # 1. Keyboard Tweaks (Registry) - Mode Haute Performance
     $kbdPath = "HKCU:\Control Panel\Accessibility\Keyboard Response"
     Write-Host "Updating Keyboard Response Registry..." -ForegroundColor Cyan
-    # Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 200      # stored: fast
-    # Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 10        # stored: fast
-    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 1000     # default
-    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 500       # default
+    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 200      # stored: fast
+    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 10        # stored: fast
+    # Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 500     # default
+    # Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 25       # default
     # Flags 59 : Active FilterKeys + Désactive les sons/notifications pour éviter les blocages
     Set-ItemProperty -Path $kbdPath -Name "Flags" -Value 59
 
@@ -22,7 +22,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -Command '
     Write-Host "Disabling Accessibility Shortcuts (Sticky/FilterKeys)..." -ForegroundColor Cyan
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Value 506
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\Keyboard Response" -Name "Flags" -Value 59
-    Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\ToggleKeys" -Name "Flags" -Value 58
+    Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\ToggleKeys" -Name "Flags" -Value 59
 
     # 3. Disable Mouse Acceleration & Set Sensitivity (6th Notch = 10)
     Write-Host "Disabling Mouse Acceleration..." -ForegroundColor Cyan
