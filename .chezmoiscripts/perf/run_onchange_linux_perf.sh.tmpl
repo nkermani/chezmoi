@@ -15,11 +15,16 @@ fi
 # 2. GNOME (gsettings - pas besoin de sudo)
 if command -v gsettings >/dev/null; then
     # Clavier
-    # gsettings set org.gnome.desktop.peripherals.keyboard delay 200      # stored: fast
-    # gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 10  # stored: fast
+    gsettings set org.gnome.desktop.peripherals.keyboard delay 200      # stored: fast
+    gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 10  # stored: fast
     # gsettings set org.gnome.desktop.peripherals.keyboard delay 500       # default
     # gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 50  # default
 
+    # Souris : Profil "Flat" pour supprimer l'accélération
+    gsettings set org.gnome.desktop.peripherals.mouse acceleration-profile 'flat'
+    gsettings set org.gnome.desktop.peripherals.mouse speed 0
+
+    # For fast shortcuts with apps if using other scripts, might delete this later on.
     # for i in {1..9}; do
     #     gsettings set org.gnome.shell.keybindings switch-to-application-$i "[]"
     # done
@@ -50,10 +55,6 @@ if command -v gsettings >/dev/null; then
     
     # LIST="${LIST%,}]"
     # gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "$LIST"
-
-    # Souris : Profil "Flat" pour supprimer l'accélération
-    gsettings set org.gnome.desktop.peripherals.mouse acceleration-profile 'flat'
-    gsettings set org.gnome.desktop.peripherals.mouse speed 0
 
     # Compilation de simple_focus
     # if [ -f "/home/nkermani/.nkermani/bin/42/simple_focus.c" ]; then
