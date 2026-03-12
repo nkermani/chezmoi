@@ -1,4 +1,10 @@
 #!/bin/bash
+
+# Set template variables directly
+IS_42="{{ .is_42 }}"
+HAS_SUDO="{{ .has_sudo }}"
+
+# Include env.sh.tmpl for other variables
 {{ include ".chezmoitemplates/env.sh.tmpl" }}
 
 echo "🌙 Configuring Neovim..."
@@ -50,8 +56,8 @@ install_npm_lsp "dotenv-lsp" "dot-language-server" "dot-language-server"
 # --- EDITOR INSTALLATIONS ---
 echo "📝 Installing editors..."
 
-# 1. VSCode
-if ! command -v code &>/dev/null && [ ! -f "$BIN_DIR/code" ]; then
+# 1. VSCode (only install if not already in custom location)
+if [ ! -f "$BIN_DIR/code" ]; then
     echo "  💜 Installing VSCode..."
     VSCODE_DIR="$APPS_DIR/vscode"
     mkdir -p "$VSCODE_DIR"
@@ -74,6 +80,79 @@ if ! command -v code &>/dev/null && [ ! -f "$BIN_DIR/code" ]; then
         ln -sf "$VSCODE_DIR/bin/code" "$BIN_DIR/code"
         rm -f /tmp/vscode.tar.gz
     fi
+fi
+
+# VSCode Desktop Entry & Default Apps (Linux 42 only)
+if [[ "$IS_42" == "true" && "$OS_TYPE" == "Linux" && "$IS_WSL" != "true" && -d "$APPS_DIR/vscode" ]]; then
+    echo "  📱 Setting up VSCode desktop entry for Linux 42..."
+
+    # Create desktop entry
+    mkdir -p "$HOME/.local/share/applications"
+    cat > "$HOME/.local/share/applications/code.desktop" << EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Visual Studio Code
+Comment=Code Editing. Redefined.
+GenericName=Text Editor
+Exec=$HOME/.nkermani/apps/vscode/bin/code
+Icon=$HOME/.nkermani/apps/vscode/resources/app/resources/linux/code.png
+Terminal=false
+StartupNotify=false
+StartupWMClass=Code
+Categories=TextEditor;Development;IDE;
+MimeType=application/x-code-workspace;
+Keywords=vscode;code;editor;
+EOF
+
+    # Set as default for text files and code
+    mkdir -p "$HOME/.config"
+    cat > "$HOME/.config/mimeapps.list" << 'EOF'
+[Default Applications]
+text/html=firefox_firefox.desktop
+x-scheme-handler/http=firefox_firefox.desktop
+x-scheme-handler/https=firefox_firefox.desktop
+x-scheme-handler/about=firefox_firefox.desktop
+x-scheme-handler/unknown=firefox_firefox.desktop
+text/plain=code.desktop
+text/x-python=code.desktop
+text/x-c=code.desktop
+text/x-c++src=code.desktop
+text/x-c++hdr=code.desktop
+text/x-java=code.desktop
+text/x-js=code.desktop
+text/x-typescript=code.desktop
+text/x-shellscript=code.desktop
+text/x-php=code.desktop
+text/x-ruby=code.desktop
+text/x-go=code.desktop
+text/x-rustsrc=code.desktop
+application/x-python=code.desktop
+application/json=code.desktop
+application/xml=code.desktop
+
+[Added Associations]
+image/jpeg=gimp.desktop;
+text/plain=code.desktop;
+text/x-python=code.desktop;
+text/x-c=code.desktop;
+text/x-c++src=code.desktop;
+text/x-java=code.desktop;
+text/x-js=code.desktop;
+text/x-typescript=code.desktop;
+text/x-shellscript=code.desktop;
+application/json=code.desktop;
+EOF
+
+    # Update desktop database
+    update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
+
+    # Update GNOME favorites
+    if command -v gsettings &>/dev/null; then
+        gsettings set org.gnome.shell favorite-apps "['kitty.desktop', 'firefox_firefox.desktop', 'code.desktop', 'discord.desktop']" 2>/dev/null || true
+    fi
+
+    echo "  ✅ VSCode desktop entry configured"
 fi
 
 # OpenCode.ai & Oh My OpenCode
