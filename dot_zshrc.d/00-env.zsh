@@ -12,6 +12,7 @@ fi
 export NK_DIR="$HOME/.nkermani"
 export NK_APPS="$NK_DIR/apps"
 export NK_BIN="$NK_DIR/bin"
+export OBSIDIAN_VAULT="$NK_DIR/notes"
 
 # 1.1 DÉTECTION 42 & ANDROID
 if [[ -d /goinfre ]]; then
