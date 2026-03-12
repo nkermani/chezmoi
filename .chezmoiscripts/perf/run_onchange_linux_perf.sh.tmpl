@@ -15,13 +15,13 @@ fi
 # 2. GNOME (gsettings - pas besoin de sudo)
 if command -v gsettings >/dev/null; then
     # Clavier
-    gsettings set org.gnome.desktop.peripherals.keyboard delay 200      # stored: fast
-    gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 10  # stored: fast
     # gsettings set org.gnome.desktop.peripherals.keyboard delay 500       # default
     # gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 50  # default
+    gsettings set org.gnome.desktop.peripherals.keyboard delay 200      # stored: fast
+    gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 10  # stored: fast
 
     # Souris : Profil "Flat" pour supprimer l'accélération
-    gsettings set org.gnome.desktop.peripherals.mouse acceleration-profile 'flat'
+    gsettings set org.gnome.desktop.peripherals.mouse accel-profile 'flat'
     gsettings set org.gnome.desktop.peripherals.mouse speed 0
 
     # For fast shortcuts with apps if using other scripts, might delete this later on.
