@@ -82,6 +82,80 @@ if [ ! -f "$BIN_DIR/code" ]; then
     fi
 fi
 
+# Affine (stable channel)
+# Uses a fixed GitHub release artifact (Linux x64 ZIP). Replace the URL if you want a newer version.
+if [ ! -f "$BIN_DIR/affine" ]; then
+    echo "  🎨 Installing Affine..."
+    AFFINE_DIR="$APPS_DIR/affine"
+    mkdir -p "$AFFINE_DIR"
+
+    AFFINE_URL="https://github.com/toeverything/AFFiNE/releases/download/v0.26.3/affine-0.26.3-stable-linux-x64.zip"
+    AFFINE_ARCHIVE="/tmp/affine-stable.zip"
+
+    curl -fsSL "$AFFINE_URL" -o "$AFFINE_ARCHIVE"
+
+    # Extract into the app dir (overwrite any previous content)
+    rm -rf "$AFFINE_DIR"/*
+    unzip -oq "$AFFINE_ARCHIVE" -d "$AFFINE_DIR"
+
+    # Symlink the executable
+    if [[ -x "$AFFINE_DIR/AFFiNE-linux-x64/AFFiNE" ]]; then
+        ln -sf "$AFFINE_DIR/AFFiNE-linux-x64/AFFiNE" "$BIN_DIR/affine"
+        echo "  ✅ Affine installed to $BIN_DIR/affine"
+
+        # Create a desktop entry for Linux (and install the official icon)
+        if [[ "$OS_TYPE" == "Linux" ]]; then
+            mkdir -p "$HOME/.local/share/applications"
+
+            ICON_THEME_DIR="$HOME/.local/share/icons/hicolor"
+            mkdir -p "$ICON_THEME_DIR/64x64/apps" "$ICON_THEME_DIR/512x512/apps"
+
+            # Prefer the official icon shipped inside the AFFiNE package.
+            # If it can't be extracted (missing npx/asar), fall back to a placeholder.
+            ASAR_PATH="$AFFINE_DIR/AFFiNE-linux-x64/resources/app.asar"
+            if command -v npx &>/dev/null && [ -f "$ASAR_PATH" ]; then
+                npx --yes asar extract-file "$ASAR_PATH" resources/icons/icon_stable_512x512.png "$ICON_THEME_DIR/512x512/apps/affine.png" 2>/dev/null || true
+                npx --yes asar extract-file "$ASAR_PATH" resources/icons/icon_stable_64x64.png "$ICON_THEME_DIR/64x64/apps/affine.png" 2>/dev/null || true
+            fi
+
+            # Fallback placeholder (won't overwrite an existing official icon)
+            if [ ! -f "$ICON_THEME_DIR/512x512/apps/affine.png" ]; then
+                cat > "$ICON_THEME_DIR/512x512/apps/affine.png" <<'PNG'
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <rect width="256" height="256" rx="48" ry="48" fill="#2d2f36" />
+  <text x="50%" y="52%" font-family="sans-serif" font-weight="700" font-size="140" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">A</text>
+</svg>
+PNG
+            fi
+
+            cat > "$HOME/.local/share/applications/affine.desktop" << EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=AFFiNE
+Comment=Universal editor for work and creation
+Exec=$HOME/.nkermani/bin/affine --kiosk %U
+Icon=affine
+Terminal=false
+StartupNotify=true
+Categories=Utility;Development
+MimeType=text/plain;application/json;
+EOF
+            echo "  ✅ Created desktop entry for AFFiNE"
+
+            # Update icon cache so the new icon appears in launchers
+            if command -v gtk-update-icon-cache &>/dev/null; then
+                gtk-update-icon-cache -q -t -f "$ICON_THEME_DIR" || true
+            fi
+        fi
+    else
+        echo "  ⚠️  Affine binary not found after extraction:" >&2
+        ls -la "$AFFINE_DIR" >&2
+    fi
+
+    rm -f "$AFFINE_ARCHIVE"
+fi
+
 # VSCode Desktop Entry & Default Apps (Linux 42 only)
 if [[ "$IS_42" == "true" && "$OS_TYPE" == "Linux" && "$IS_WSL" != "true" && -d "$APPS_DIR/vscode" ]]; then
     echo "  📱 Setting up VSCode desktop entry for Linux 42..."

@@ -33,3 +33,134 @@ else
         fi
     fi
 fi
+
+# --- OPTIONAL TOOLS (Browsers) ---
+echo "🌐 Checking browsers..."
+
+# Firefox
+if ! command -v firefox &>/dev/null; then
+    echo "  🌍 Installing Firefox..."
+    if [[ "$HAS_SUDO" == "true" ]]; then
+        if command -v apt-get &>/dev/null; then
+            sudo apt-get update -y
+            sudo apt-get install -y firefox
+        elif command -v dnf &>/dev/null; then
+            sudo dnf install -y firefox
+        elif command -v pacman &>/dev/null; then
+            sudo pacman -Sy --noconfirm firefox
+        elif command -v zypper &>/dev/null; then
+            sudo zypper install -y firefox
+        else
+            echo "  ⚠️  Could not find a supported package manager to install Firefox."
+        fi
+    else
+        echo "  ⚠️  firefox is not installed and sudo is unavailable."
+    fi
+fi
+
+# Zen Browser (snap, extracted to user dir)
+if ! command -v zen &>/dev/null; then
+    echo "  🌿 Installing Zen Browser..."
+
+    if ! command -v snap &>/dev/null; then
+        echo "  ⚠️  snap is not available; cannot install Zen Browser." 
+    else
+        ZEN_CACHE="$HOME/.cache/zen-browser"
+        mkdir -p "$ZEN_CACHE"
+
+        # Download the snap package if not already present
+        if [ -z "$(ls -1 "$ZEN_CACHE"/zen-browser-snap_*.snap 2>/dev/null | head -n 1)" ]; then
+            echo "  ⬇️  Downloading zen-browser-snap..."
+            snap download zen-browser-snap --channel=latest/candidate --target-directory="$ZEN_CACHE" 2>/dev/null || true
+            # snap download creates two files: .snap and .assert
+        fi
+
+        # Find the downloaded snap (name includes revision suffix)
+        ZEN_SNAP="$(ls -1t "$ZEN_CACHE"/zen-browser-snap_*.snap 2>/dev/null | head -n 1)"
+
+        # Extract the snap to a user directory so we can run the binary directly
+        if [ -n "$ZEN_SNAP" ] && [ -f "$ZEN_SNAP" ]; then
+            ZEN_EXTRACT="$ZEN_CACHE/extracted"
+            rm -rf "$ZEN_EXTRACT"
+            # Let unsquashfs create the directory itself
+            if command -v unsquashfs &>/dev/null; then
+                unsquashfs -d "$ZEN_EXTRACT" "$ZEN_SNAP" 2>/dev/null || true
+            fi
+
+            # Create a launcher wrapper that runs the extracted binary from its extracted root.
+            if [ -x "$ZEN_EXTRACT/zen" ] || [ -x "$ZEN_EXTRACT/zen-bin" ]; then
+                cat > "$BIN_DIR/zen" <<'EOF'
+#!/usr/bin/env bash
+ZEN_ROOT="$ZEN_EXTRACT"
+cd "$ZEN_ROOT" || exit 1
+if [ -x "$ZEN_ROOT/zen" ]; then
+  exec "$ZEN_ROOT/zen" "$@"
+elif [ -x "$ZEN_ROOT/zen-bin" ]; then
+  exec "$ZEN_ROOT/zen-bin" "$@"
+else
+  echo "Zen Browser binary not found in $ZEN_ROOT" >&2
+  exit 1
+fi
+EOF
+                chmod +x "$BIN_DIR/zen"
+            fi
+
+            # Create a desktop entry and install the icon (even if zen isn't yet on PATH)
+            mkdir -p "$HOME/.local/share/applications"
+
+            # Install the icon from the snap if available
+            ICON_SRC="$(find "$ZEN_CACHE" -type f -iname 'zen-browser.svg' | head -n 1)"
+            if [ -n "$ICON_SRC" ]; then
+                mkdir -p "$HOME/.local/share/icons/hicolor/256x256/apps"
+                cp "$ICON_SRC" "$HOME/.local/share/icons/hicolor/256x256/apps/zen-browser.svg"
+                if command -v gtk-update-icon-cache &>/dev/null; then
+                    gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" || true
+                fi
+            fi
+
+            cat > "$HOME/.local/share/applications/zen-browser.desktop" <<'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Zen Browser
+Comment=Zen Browser (Firefox-based)
+Exec=$HOME/.local/bin/zen %U
+Icon=zen-browser
+Terminal=false
+StartupNotify=true
+Categories=Network;WebBrowser;
+EOF
+        else
+            echo "  ⚠️  Could not download zen-browser-snap; cannot install Zen Browser."
+        fi
+    fi
+fi
+
+# Ensure Zen Browser icon is installed even if zen is already present
+if [ ! -f "$HOME/.local/share/icons/hicolor/256x256/apps/zen-browser.svg" ]; then
+    ZEN_CACHE="$HOME/.cache/zen-browser"
+    mkdir -p "$ZEN_CACHE"
+
+    # Ensure the snap is downloaded
+    if [ -z "$(ls -1 "$ZEN_CACHE"/zen-browser-snap_*.snap 2>/dev/null | head -n 1)" ]; then
+        snap download zen-browser-snap --channel=latest/candidate --target-directory="$ZEN_CACHE" 2>/dev/null || true
+    fi
+
+    ZEN_SNAP="$(ls -1t "$ZEN_CACHE"/zen-browser-snap_*.snap 2>/dev/null | head -n 1)"
+    if [ -n "$ZEN_SNAP" ] && [ -f "$ZEN_SNAP" ]; then
+        ZEN_EXTRACT="$ZEN_CACHE/extracted"
+        rm -rf "$ZEN_EXTRACT"
+        if command -v unsquashfs &>/dev/null; then
+            unsquashfs -d "$ZEN_EXTRACT" "$ZEN_SNAP" 2>/dev/null || true
+        fi
+
+        ICON_SRC="$(find "$ZEN_EXTRACT" -type f -iname 'zen-browser.svg' | head -n 1)"
+        if [ -n "$ICON_SRC" ]; then
+            mkdir -p "$HOME/.local/share/icons/hicolor/256x256/apps"
+            cp "$ICON_SRC" "$HOME/.local/share/icons/hicolor/256x256/apps/zen-browser.svg"
+            if command -v gtk-update-icon-cache &>/dev/null; then
+                gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" || true
+            fi
+        fi
+    fi
+fi

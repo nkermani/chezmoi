@@ -1,4 +1,6 @@
 # --- Section Notes ---
+
+
 export NOTES_DIR="$NK_DIR/notes"
 
 if [ -d "$NOTES_DIR/.git" ]; then
