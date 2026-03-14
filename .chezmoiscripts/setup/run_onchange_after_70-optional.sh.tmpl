@@ -37,58 +37,6 @@ fi
 # --- OPTIONAL TOOLS (Browsers) ---
 echo "🌐 Checking browsers..."
 
-# Logseq (desktop)
-if [ ! -f "$BIN_DIR/logseq" ]; then
-    echo "  🗒️ Installing Logseq..."
-    LOGSEQ_DIR="$APPS_DIR/logseq"
-    mkdir -p "$LOGSEQ_DIR"
-
-    # Resolve the latest Logseq download URL using the GitHub API
-    if [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]]; then
-        LOGSEQ_URL=$(curl -fsSL "https://api.github.com/repos/logseq/logseq/releases/latest" \
-            | grep -E '"browser_download_url"' \
-            | grep -i 'Logseq-linux-arm64.*\.zip' \
-            | head -n 1 \
-            | cut -d '"' -f 4)
-    else
-        LOGSEQ_URL=$(curl -fsSL "https://api.github.com/repos/logseq/logseq/releases/latest" \
-            | grep -E '"browser_download_url"' \
-            | grep -i 'Logseq-linux-x64.*\.zip' \
-            | head -n 1 \
-            | cut -d '"' -f 4)
-    fi
-
-    if [ -z "$LOGSEQ_URL" ]; then
-        echo "  ⚠️  Could not determine latest Logseq download URL."
-        LOGSEQ_URL=""
-    fi
-
-    LOGSEQ_ARCHIVE="/tmp/logseq.zip"
-    if [ -n "$LOGSEQ_URL" ]; then
-        curl -fsSL "$LOGSEQ_URL" -o "$LOGSEQ_ARCHIVE" || {
-            echo "  ⚠️  Failed to download Logseq from $LOGSEQ_URL"
-            LOGSEQ_ARCHIVE=""
-        }
-    fi
-
-    if [ -f "$LOGSEQ_ARCHIVE" ]; then
-        rm -rf "$LOGSEQ_DIR"/*
-        unzip -oq "$LOGSEQ_ARCHIVE" -d "$LOGSEQ_DIR"
-
-        # Attempt to locate the binary and symlink it
-        LOGSEQ_BIN=$(find "$LOGSEQ_DIR" -maxdepth 3 -type f -iname 'logseq' | head -n 1)
-        if [ -n "$LOGSEQ_BIN" ]; then
-            ln -sf "$LOGSEQ_BIN" "$BIN_DIR/logseq"
-            chmod +x "$BIN_DIR/logseq"
-            echo "  ✅ Logseq installed to $BIN_DIR/logseq"
-        else
-            echo "  ⚠️  Could not find Logseq binary after extraction."
-        fi
-
-        rm -f "$LOGSEQ_ARCHIVE"
-    fi
-fi
-
 # Firefox
 if ! command -v firefox &>/dev/null; then
     echo "  🌍 Installing Firefox..."
@@ -110,6 +58,57 @@ if ! command -v firefox &>/dev/null; then
     fi
 fi
 
+# # Logseq (desktop)
+# if [ ! -f "$BIN_DIR/logseq" ]; then
+#     echo "  🗒️ Installing Logseq..."
+#     LOGSEQ_DIR="$APPS_DIR/logseq"
+#     mkdir -p "$LOGSEQ_DIR"
+
+#     # Resolve the latest Logseq download URL using the GitHub API
+#     if [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]]; then
+#         LOGSEQ_URL=$(curl -fsSL "https://api.github.com/repos/logseq/logseq/releases/latest" \
+#             | grep -E '"browser_download_url"' \
+#             | grep -i 'Logseq-linux-arm64.*\.zip' \
+#             | head -n 1 \
+#             | cut -d '"' -f 4)
+#     else
+#         LOGSEQ_URL=$(curl -fsSL "https://api.github.com/repos/logseq/logseq/releases/latest" \
+#             | grep -E '"browser_download_url"' \
+#             | grep -i 'Logseq-linux-x64.*\.zip' \
+#             | head -n 1 \
+#             | cut -d '"' -f 4)
+#     fi
+
+#     if [ -z "$LOGSEQ_URL" ]; then
+#         echo "  ⚠️  Could not determine latest Logseq download URL."
+#         LOGSEQ_URL=""
+#     fi
+
+#     LOGSEQ_ARCHIVE="/tmp/logseq.zip"
+#     if [ -n "$LOGSEQ_URL" ]; then
+#         curl -fsSL "$LOGSEQ_URL" -o "$LOGSEQ_ARCHIVE" || {
+#             echo "  ⚠️  Failed to download Logseq from $LOGSEQ_URL"
+#             LOGSEQ_ARCHIVE=""
+#         }
+#     fi
+
+#     if [ -f "$LOGSEQ_ARCHIVE" ]; then
+#         rm -rf "$LOGSEQ_DIR"/*
+#         unzip -oq "$LOGSEQ_ARCHIVE" -d "$LOGSEQ_DIR"
+
+#         # Attempt to locate the binary and symlink it
+#         LOGSEQ_BIN=$(find "$LOGSEQ_DIR" -maxdepth 3 -type f -iname 'logseq' | head -n 1)
+#         if [ -n "$LOGSEQ_BIN" ]; then
+#             ln -sf "$LOGSEQ_BIN" "$BIN_DIR/logseq"
+#             chmod +x "$BIN_DIR/logseq"
+#             echo "  ✅ Logseq installed to $BIN_DIR/logseq"
+#         else
+#             echo "  ⚠️  Could not find Logseq binary after extraction."
+#         fi
+
+#         rm -f "$LOGSEQ_ARCHIVE"
+#     fi
+# fi
 
 # # --- Cloud mounts via rclone (Linux, sudoless) ---
 # if [[ "$OS_TYPE" == "Linux" ]]; then
@@ -174,8 +173,14 @@ fi
 
 #         systemctl --user daemon-reload 2>/dev/null || true
 
+#         # Detect if we need to reconnect the iCloud remote (missing trust token, etc.)
+#         REMOTES_OUT=$(rclone listremotes 2>&1) || true
+#         if printf '%s' "$REMOTES_OUT" | grep -q "missing icloud trust token"; then
+#             echo "  ⚠️  iCloud remote needs reconnecting. Run: rclone config reconnect icloud:"
+#         fi
+
 #         for remote in gdrive onedrive icloud; do
-#             if rclone listremotes 2>/dev/null | grep -q "^${remote}:"; then
+#             if printf '%s' "$REMOTES_OUT" | grep -q "^${remote}:"; then
 #                 systemctl --user enable --now "rclone-mount@${remote}.service" 2>/dev/null || true
 #             fi
 #         done

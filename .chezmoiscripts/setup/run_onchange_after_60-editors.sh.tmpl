@@ -82,6 +82,11 @@ if [ ! -f "$BIN_DIR/code" ]; then
     fi
 fi
 
+# Okular (PDF/EPUB reader)
+#    Linux: evince fallback (no sudo) or flatpak
+#    macOS: Homebrew
+#    Windows/WSL: Use Windows Okular from Microsoft Store or winget
+
 # Affine (stable channel) - Disabled (commented out)
 # To re-enable, remove the surrounding `if false; then` / `fi` lines.
 # if false; then
