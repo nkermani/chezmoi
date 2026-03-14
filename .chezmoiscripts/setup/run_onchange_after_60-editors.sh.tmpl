@@ -82,276 +82,279 @@ if [ ! -f "$BIN_DIR/code" ]; then
     fi
 fi
 
-# Affine (stable channel)
-# Uses a fixed GitHub release artifact (Linux x64 ZIP). Replace the URL if you want a newer version.
-if [ ! -f "$BIN_DIR/affine" ]; then
-    echo "  🎨 Installing Affine..."
-    AFFINE_DIR="$APPS_DIR/affine"
-    mkdir -p "$AFFINE_DIR"
+# Affine (stable channel) - Disabled (commented out)
+# To re-enable, remove the surrounding `if false; then` / `fi` lines.
+# if false; then
+#     # Affine (stable channel)
+#     # Uses a fixed GitHub release artifact (Linux x64 ZIP). Replace the URL if you want a newer version.
+#     if [ ! -f "$BIN_DIR/affine" ]; then
+#         echo "  🎨 Installing Affine..."
+#         AFFINE_DIR="$APPS_DIR/affine"
+#         mkdir -p "$AFFINE_DIR"
 
-    AFFINE_URL="https://github.com/toeverything/AFFiNE/releases/download/v0.26.3/affine-0.26.3-stable-linux-x64.zip"
-    AFFINE_ARCHIVE="/tmp/affine-stable.zip"
+#         AFFINE_URL="https://github.com/toeverything/AFFiNE/releases/download/v0.26.3/affine-0.26.3-stable-linux-x64.zip"
+#         AFFINE_ARCHIVE="/tmp/affine-stable.zip"
 
-    curl -fsSL "$AFFINE_URL" -o "$AFFINE_ARCHIVE"
+#         curl -fsSL "$AFFINE_URL" -o "$AFFINE_ARCHIVE"
 
-    # Extract into the app dir (overwrite any previous content)
-    rm -rf "$AFFINE_DIR"/*
-    unzip -oq "$AFFINE_ARCHIVE" -d "$AFFINE_DIR"
+#         # Extract into the app dir (overwrite any previous content)
+#         rm -rf "$AFFINE_DIR"/*
+#         unzip -oq "$AFFINE_ARCHIVE" -d "$AFFINE_DIR"
 
-    # Symlink the executable
-    if [[ -x "$AFFINE_DIR/AFFiNE-linux-x64/AFFiNE" ]]; then
-        ln -sf "$AFFINE_DIR/AFFiNE-linux-x64/AFFiNE" "$BIN_DIR/affine"
-        echo "  ✅ Affine installed to $BIN_DIR/affine"
+#         # Symlink the executable
+#         if [[ -x "$AFFINE_DIR/AFFiNE-linux-x64/AFFiNE" ]]; then
+#             ln -sf "$AFFINE_DIR/AFFiNE-linux-x64/AFFiNE" "$BIN_DIR/affine"
+#             echo "  ✅ Affine installed to $BIN_DIR/affine"
 
-        # Create a desktop entry for Linux (and install the official icon)
-        if [[ "$OS_TYPE" == "Linux" ]]; then
-            mkdir -p "$HOME/.local/share/applications"
+#             # Create a desktop entry for Linux (and install the official icon)
+#             if [[ "$OS_TYPE" == "Linux" ]]; then
+#                 mkdir -p "$HOME/.local/share/applications"
 
-            ICON_THEME_DIR="$HOME/.local/share/icons/hicolor"
-            mkdir -p "$ICON_THEME_DIR/64x64/apps" "$ICON_THEME_DIR/512x512/apps"
+#                 ICON_THEME_DIR="$HOME/.local/share/icons/hicolor"
+#                 mkdir -p "$ICON_THEME_DIR/64x64/apps" "$ICON_THEME_DIR/512x512/apps"
 
-            # Prefer the official icon shipped inside the AFFiNE package.
-            # If it can't be extracted (missing npx/asar), fall back to a placeholder.
-            ASAR_PATH="$AFFINE_DIR/AFFiNE-linux-x64/resources/app.asar"
-            if command -v npx &>/dev/null && [ -f "$ASAR_PATH" ]; then
-                npx --yes asar extract-file "$ASAR_PATH" resources/icons/icon_stable_512x512.png "$ICON_THEME_DIR/512x512/apps/affine.png" 2>/dev/null || true
-                npx --yes asar extract-file "$ASAR_PATH" resources/icons/icon_stable_64x64.png "$ICON_THEME_DIR/64x64/apps/affine.png" 2>/dev/null || true
-            fi
+#                 # Prefer the official icon shipped inside the AFFiNE package.
+#                 # If it can't be extracted (missing npx/asar), fall back to a placeholder.
+#                 ASAR_PATH="$AFFINE_DIR/AFFiNE-linux-x64/resources/app.asar"
+#                 if command -v npx &>/dev/null && [ -f "$ASAR_PATH" ]; then
+#                     npx --yes asar extract-file "$ASAR_PATH" resources/icons/icon_stable_512x512.png "$ICON_THEME_DIR/512x512/apps/affine.png" 2>/dev/null || true
+#                     npx --yes asar extract-file "$ASAR_PATH" resources/icons/icon_stable_64x64.png "$ICON_THEME_DIR/64x64/apps/affine.png" 2>/dev/null || true
+#                 fi
 
-            # Fallback placeholder (won't overwrite an existing official icon)
-            if [ ! -f "$ICON_THEME_DIR/512x512/apps/affine.png" ]; then
-                cat > "$ICON_THEME_DIR/512x512/apps/affine.png" <<'PNG'
-<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <rect width="256" height="256" rx="48" ry="48" fill="#2d2f36" />
-  <text x="50%" y="52%" font-family="sans-serif" font-weight="700" font-size="140" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">A</text>
-</svg>
-PNG
-            fi
+#                 # Fallback placeholder (won't overwrite an existing official icon)
+#                 if [ ! -f "$ICON_THEME_DIR/512x512/apps/affine.png" ]; then
+#                     cat > "$ICON_THEME_DIR/512x512/apps/affine.png" <<'PNG'
+#     <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+#     <rect width="256" height="256" rx="48" ry="48" fill="#2d2f36" />
+#     <text x="50%" y="52%" font-family="sans-serif" font-weight="700" font-size="140" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">A</text>
+#     </svg>
+#     PNG
+#                 fi
 
-            cat > "$HOME/.local/share/applications/affine.desktop" << EOF
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=AFFiNE
-Comment=Universal editor for work and creation
-Exec=$HOME/.nkermani/bin/affine --kiosk %U
-Icon=affine
-Terminal=false
-StartupNotify=true
-Categories=Utility;Development
-MimeType=text/plain;application/json;
-EOF
-            echo "  ✅ Created desktop entry for AFFiNE"
+#                 cat > "$HOME/.local/share/applications/affine.desktop" << EOF
+#     [Desktop Entry]
+#     Version=1.0
+#     Type=Application
+#     Name=AFFiNE
+#     Comment=Universal editor for work and creation
+#     Exec=$HOME/.nkermani/bin/affine --kiosk %U
+#     Icon=affine
+#     Terminal=false
+#     StartupNotify=true
+#     Categories=Utility;Development
+#     MimeType=text/plain;application/json;
+#     EOF
+#                 echo "  ✅ Created desktop entry for AFFiNE"
 
-            # Update icon cache so the new icon appears in launchers
-            if command -v gtk-update-icon-cache &>/dev/null; then
-                gtk-update-icon-cache -q -t -f "$ICON_THEME_DIR" || true
-            fi
-        fi
-    else
-        echo "  ⚠️  Affine binary not found after extraction:" >&2
-        ls -la "$AFFINE_DIR" >&2
-    fi
+#                 # Update icon cache so the new icon appears in launchers
+#                 if command -v gtk-update-icon-cache &>/dev/null; then
+#                     gtk-update-icon-cache -q -t -f "$ICON_THEME_DIR" || true
+#                 fi
+#             fi
+#         else
+#             echo "  ⚠️  Affine binary not found after extraction:" >&2
+#             ls -la "$AFFINE_DIR" >&2
+#         fi
 
-    rm -f "$AFFINE_ARCHIVE"
-fi
-
-# VSCode Desktop Entry & Default Apps (Linux 42 only)
-if [[ "$IS_42" == "true" && "$OS_TYPE" == "Linux" && "$IS_WSL" != "true" && -d "$APPS_DIR/vscode" ]]; then
-    echo "  📱 Setting up VSCode desktop entry for Linux 42..."
-
-    # Create desktop entry
-    mkdir -p "$HOME/.local/share/applications"
-    cat > "$HOME/.local/share/applications/code.desktop" << EOF
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Visual Studio Code
-Comment=Code Editing. Redefined.
-GenericName=Text Editor
-Exec=$HOME/.nkermani/apps/vscode/bin/code
-Icon=$HOME/.nkermani/apps/vscode/resources/app/resources/linux/code.png
-Terminal=false
-StartupNotify=false
-StartupWMClass=Code
-Categories=TextEditor;Development;IDE;
-MimeType=application/x-code-workspace;
-Keywords=vscode;code;editor;
-EOF
-
-    # Set as default for text files and code
-    mkdir -p "$HOME/.config"
-    cat > "$HOME/.config/mimeapps.list" << 'EOF'
-[Default Applications]
-text/html=firefox_firefox.desktop
-x-scheme-handler/http=firefox_firefox.desktop
-x-scheme-handler/https=firefox_firefox.desktop
-x-scheme-handler/about=firefox_firefox.desktop
-x-scheme-handler/unknown=firefox_firefox.desktop
-text/plain=code.desktop
-text/x-python=code.desktop
-text/x-c=code.desktop
-text/x-c++src=code.desktop
-text/x-c++hdr=code.desktop
-text/x-java=code.desktop
-text/x-js=code.desktop
-text/x-typescript=code.desktop
-text/x-shellscript=code.desktop
-text/x-php=code.desktop
-text/x-ruby=code.desktop
-text/x-go=code.desktop
-text/x-rustsrc=code.desktop
-application/x-python=code.desktop
-application/json=code.desktop
-application/xml=code.desktop
-
-[Added Associations]
-image/jpeg=gimp.desktop;
-text/plain=code.desktop;
-text/x-python=code.desktop;
-text/x-c=code.desktop;
-text/x-c++src=code.desktop;
-text/x-java=code.desktop;
-text/x-js=code.desktop;
-text/x-typescript=code.desktop;
-text/x-shellscript=code.desktop;
-application/json=code.desktop;
-EOF
-
-    # Update desktop database
-    update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
-
-    # Update GNOME favorites
-    if command -v gsettings &>/dev/null; then
-        gsettings set org.gnome.shell favorite-apps "['kitty.desktop', 'firefox_firefox.desktop', 'code.desktop', 'discord.desktop']" 2>/dev/null || true
-    fi
-
-    echo "  ✅ VSCode desktop entry configured"
-fi
-
-# OpenCode.ai & Oh My OpenCode
-if [ ! -d "$APPS_DIR/opencode" ]; then
-    echo "  🤖 Installing OpenCode.ai (Local installation)..."
-    mkdir -p "$APPS_DIR/opencode"
-    # Run the official installer within the apps directory to keep it portable
-    (cd "$APPS_DIR" && curl -fsSL https://opencode.ai/install | bash)
-    # Create symlinks in your personal bin directory
-    ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/opencode"
-    echo "  ✅ OpenCode.ai installed"
-fi
-
-# Bun (for oh-my-opencode)
-if ! command -v bun &>/dev/null; then
-    echo "  🍞 Installing Bun..."
-    export BUN_INSTALL="$APPS_DIR/bun"
-    curl -fsSL https://bun.sh/install | bash
-    ln -sf "$BUN_INSTALL/bin/bun" "$BIN_DIR/bun"
-    ln -sf "$BUN_INSTALL/bin/bunx" "$BIN_DIR/bunx"
-fi
-
-if command -v opencode &>/dev/null; then
-    if ! opencode --version 2>&1 | grep -q "oh-my-opencode"; then
-        echo "  ✨ Installing Oh My OpenCode..."
-        if command -v bunx &>/dev/null; then
-            bunx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
-        elif command -v npx &>/dev/null; then
-            npx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
-        fi
-    fi
-fi
-
-# Helix Editor (hx)
-# if [ ! -f "$BIN_DIR/hx" ]; then
-#     echo "  🌀 Installing Helix editor..."
-#     HELIX_DIR="$APPS_DIR/helix"
-#     mkdir -p "$HELIX_DIR/runtime"
-# 
-#     HELIX_ARCH="x86_64"
-#     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && HELIX_ARCH="aarch64"
-# 
-#     HELIX_OS="linux"
-#     if [[ "$OS_TYPE" == "Darwin" ]]; then
-#         HELIX_OS="macos"
-#     fi
-# 
-#     curl -L -LSs "https://github.com/helix-editor/helix/releases/download/25.07.1/helix-25.07.1-${HELIX_ARCH}-${HELIX_OS}.tar.xz" -o /tmp/helix.tar.xz
-#     xz -d /tmp/helix.tar.xz
-#     tar -xf /tmp/helix.tar -C "$HELIX_DIR" --strip-components=1
-#     ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
-#     rm -f /tmp/helix.tar*
-# fi
-
-
-# 3. Zed Editor
-# if [ ! -f "$BIN_DIR/zed" ]; then
-#     echo "  🔷 Installing Zed editor..."
-#     ZED_DIR="$APPS_DIR/zed"
-#     mkdir -p "$ZED_DIR"
-
-#     ZED_ARCH="x86_64"
-#     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZED_ARCH="aarch64"
-
-#     if [[ "$OS_TYPE" == "Darwin" ]]; then
-#         curl -f https://zed.dev/install.sh | sh
-#         ln -sf "$HOME/.local/bin/zed" "$BIN_DIR/zed"
-#     else
-#         curl -LSs "https://cloud.zed.dev/releases/stable/latest/download?asset=zed&arch=${ZED_ARCH}&os=linux&source=docs" -o /tmp/zed.tar.gz
-#         tar -xzf /tmp/zed.tar.gz -C "$ZED_DIR" --strip-components=1
-#         ln -sf "$ZED_DIR/bin/zed" "$BIN_DIR/zed"
-#         rm -f /tmp/zed.tar.gz
+#         rm -f "$AFFINE_ARCHIVE"
 #     fi
 # fi
 
-# 4. Emacs + Doom Emacs (prefer Windows GUI Emacs on WSL)
-#if [ ! -f "$BIN_DIR/emacs" ]; then
-#    echo "  📓 Setting up Emacs + Doom Emacs..."
-#
-#   WINDOWS_EMACS_PATHS=(
-#        "/mnt/c/Program Files/Emacs/emacs-29/bin/emacs.exe"
-#        "/mnt/c/Program Files (x86)/Emacs/emacs-29/bin/emacs.exe"
-#        "/mnt/c/Users/kerma/AppData/Local/Programs/Emacs/emacs-29/bin/emacs.exe"
-#    )
-#
-#    WINDOWS_EMACS_FOUND=false
-#    for emacs_path in "${WINDOWS_EMACS_PATHS[@]}"; do
-#        if [ -f "$emacs_path" ]; then
-#            echo "    ✅ Found Windows Emacs: $emacs_path"
-#            ln -sf "$emacs_path" "$BIN_DIR/emacs"
-#            WINDOWS_EMACS_FOUND=true
-#            break
-#        fi
-#    done
-#
-#    if [ "$WINDOWS_EMACS_FOUND" = false ]; then
-#        echo "    ⚠️  Windows Emacs not found. Please install Emacs for Windows from"
-#        echo "       https://www.gnu.org/software/emacs/download.html#windows"
-#        echo "       or run: winget install GNU.Emacs"
-#    fi
-#fi
+# # VSCode Desktop Entry & Default Apps (Linux 42 only)
+# if [[ "$IS_42" == "true" && "$OS_TYPE" == "Linux" && "$IS_WSL" != "true" && -d "$APPS_DIR/vscode" ]]; then
+#     echo "  📱 Setting up VSCode desktop entry for Linux 42..."
 
-# Doom Emacs configuration
-#DOOM_DIR="$HOME/.doom.d"
-#if [ ! -d "$DOOM_DIR" ]; then
-#    echo "  🔥 Installing Doom Emacs configuration..."
-#    git clone --depth 1 https://github.com/doomemacs/doomemacs "$HOME/.emacs.d"
-#    "$HOME/.emacs.d/bin/doom" install
-#fi
+#     # Create desktop entry
+#     mkdir -p "$HOME/.local/share/applications"
+#     cat > "$HOME/.local/share/applications/code.desktop" << EOF
+# [Desktop Entry]
+# Version=1.0
+# Type=Application
+# Name=Visual Studio Code
+# Comment=Code Editing. Redefined.
+# GenericName=Text Editor
+# Exec=$HOME/.nkermani/apps/vscode/bin/code
+# Icon=$HOME/.nkermani/apps/vscode/resources/app/resources/linux/code.png
+# Terminal=false
+# StartupNotify=false
+# StartupWMClass=Code
+# Categories=TextEditor;Development;IDE;
+# MimeType=application/x-code-workspace;
+# Keywords=vscode;code;editor;
+# EOF
 
-# Flow Control (flow) - terminal-based text editor
-# if [ ! -f "$BIN_DIR/flow" ]; then
-#     echo "  🌊 Installing Flow Control editor..."
+#     # Set as default for text files and code
+#     mkdir -p "$HOME/.config"
+#     cat > "$HOME/.config/mimeapps.list" << 'EOF'
+# [Default Applications]
+# text/html=firefox_firefox.desktop
+# x-scheme-handler/http=firefox_firefox.desktop
+# x-scheme-handler/https=firefox_firefox.desktop
+# x-scheme-handler/about=firefox_firefox.desktop
+# x-scheme-handler/unknown=firefox_firefox.desktop
+# text/plain=code.desktop
+# text/x-python=code.desktop
+# text/x-c=code.desktop
+# text/x-c++src=code.desktop
+# text/x-c++hdr=code.desktop
+# text/x-java=code.desktop
+# text/x-js=code.desktop
+# text/x-typescript=code.desktop
+# text/x-shellscript=code.desktop
+# text/x-php=code.desktop
+# text/x-ruby=code.desktop
+# text/x-go=code.desktop
+# text/x-rustsrc=code.desktop
+# application/x-python=code.desktop
+# application/json=code.desktop
+# application/xml=code.desktop
 
-#     if [[ "$OS_TYPE" == "Darwin" ]]; then
-#         brew install flow-control
-#         ln -sf "$(which flow)" "$BIN_DIR/flow"
-#     else
-#         curl -fsSL https://flow-control.dev/install 2>/dev/null | sh -s -- -d "$BIN_DIR" 2>/dev/null || \
-#         (curl -fsSL "https://github.com/neurocyte/flow/releases/download/v0.7.2/flow-v0.7.2-linux-aarch64.tar.gz" -o /tmp/flow.tar.gz && \
-#          mkdir -p "$APPS_DIR/flow" && \
-#          tar -xzf /tmp/flow.tar.gz -C "$APPS_DIR/flow" --strip-components=1 && \
-#          rm -f /tmp/flow.tar.gz && \
-#          ln -sf "$APPS_DIR/flow/flow" "$BIN_DIR/flow") 2>/dev/null || \
-#         echo "  ⚠️  Flow Control: curl -fsSL https://flow-control.dev/install | sh"
+# [Added Associations]
+# image/jpeg=gimp.desktop;
+# text/plain=code.desktop;
+# text/x-python=code.desktop;
+# text/x-c=code.desktop;
+# text/x-c++src=code.desktop;
+# text/x-java=code.desktop;
+# text/x-js=code.desktop;
+# text/x-typescript=code.desktop;
+# text/x-shellscript=code.desktop;
+# application/json=code.desktop;
+# EOF
+
+#     # Update desktop database
+#     update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
+
+#     # Update GNOME favorites
+#     if command -v gsettings &>/dev/null; then
+#         gsettings set org.gnome.shell favorite-apps "['kitty.desktop', 'firefox_firefox.desktop', 'code.desktop', 'discord.desktop']" 2>/dev/null || true
+#     fi
+
+#     echo "  ✅ VSCode desktop entry configured"
+# fi
+
+# # OpenCode.ai & Oh My OpenCode
+# if [ ! -d "$APPS_DIR/opencode" ]; then
+#     echo "  🤖 Installing OpenCode.ai (Local installation)..."
+#     mkdir -p "$APPS_DIR/opencode"
+#     # Run the official installer within the apps directory to keep it portable
+#     (cd "$APPS_DIR" && curl -fsSL https://opencode.ai/install | bash)
+#     # Create symlinks in your personal bin directory
+#     ln -sf "$APPS_DIR/opencode/bin/opencode" "$BIN_DIR/opencode"
+#     echo "  ✅ OpenCode.ai installed"
+# fi
+
+# # Bun (for oh-my-opencode)
+# if ! command -v bun &>/dev/null; then
+#     echo "  🍞 Installing Bun..."
+#     export BUN_INSTALL="$APPS_DIR/bun"
+#     curl -fsSL https://bun.sh/install | bash
+#     ln -sf "$BUN_INSTALL/bin/bun" "$BIN_DIR/bun"
+#     ln -sf "$BUN_INSTALL/bin/bunx" "$BIN_DIR/bunx"
+# fi
+
+# if command -v opencode &>/dev/null; then
+#     if ! opencode --version 2>&1 | grep -q "oh-my-opencode"; then
+#         echo "  ✨ Installing Oh My OpenCode..."
+#         if command -v bunx &>/dev/null; then
+#             bunx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
+#         elif command -v npx &>/dev/null; then
+#             npx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
+#         fi
 #     fi
 # fi
 
+# # Helix Editor (hx)
+# # if [ ! -f "$BIN_DIR/hx" ]; then
+# #     echo "  🌀 Installing Helix editor..."
+# #     HELIX_DIR="$APPS_DIR/helix"
+# #     mkdir -p "$HELIX_DIR/runtime"
+# # 
+# #     HELIX_ARCH="x86_64"
+# #     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && HELIX_ARCH="aarch64"
+# # 
+# #     HELIX_OS="linux"
+# #     if [[ "$OS_TYPE" == "Darwin" ]]; then
+# #         HELIX_OS="macos"
+# #     fi
+# # 
+# #     curl -L -LSs "https://github.com/helix-editor/helix/releases/download/25.07.1/helix-25.07.1-${HELIX_ARCH}-${HELIX_OS}.tar.xz" -o /tmp/helix.tar.xz
+# #     xz -d /tmp/helix.tar.xz
+# #     tar -xf /tmp/helix.tar -C "$HELIX_DIR" --strip-components=1
+# #     ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
+# #     rm -f /tmp/helix.tar*
+# # fi
+
+
+# # 3. Zed Editor
+# # if [ ! -f "$BIN_DIR/zed" ]; then
+# #     echo "  🔷 Installing Zed editor..."
+# #     ZED_DIR="$APPS_DIR/zed"
+# #     mkdir -p "$ZED_DIR"
+
+# #     ZED_ARCH="x86_64"
+# #     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZED_ARCH="aarch64"
+
+# #     if [[ "$OS_TYPE" == "Darwin" ]]; then
+# #         curl -f https://zed.dev/install.sh | sh
+# #         ln -sf "$HOME/.local/bin/zed" "$BIN_DIR/zed"
+# #     else
+# #         curl -LSs "https://cloud.zed.dev/releases/stable/latest/download?asset=zed&arch=${ZED_ARCH}&os=linux&source=docs" -o /tmp/zed.tar.gz
+# #         tar -xzf /tmp/zed.tar.gz -C "$ZED_DIR" --strip-components=1
+# #         ln -sf "$ZED_DIR/bin/zed" "$BIN_DIR/zed"
+# #         rm -f /tmp/zed.tar.gz
+# #     fi
+# # fi
+
+# # 4. Emacs + Doom Emacs (prefer Windows GUI Emacs on WSL)
+# #if [ ! -f "$BIN_DIR/emacs" ]; then
+# #    echo "  📓 Setting up Emacs + Doom Emacs..."
+# #
+# #   WINDOWS_EMACS_PATHS=(
+# #        "/mnt/c/Program Files/Emacs/emacs-29/bin/emacs.exe"
+# #        "/mnt/c/Program Files (x86)/Emacs/emacs-29/bin/emacs.exe"
+# #        "/mnt/c/Users/kerma/AppData/Local/Programs/Emacs/emacs-29/bin/emacs.exe"
+# #    )
+# #
+# #    WINDOWS_EMACS_FOUND=false
+# #    for emacs_path in "${WINDOWS_EMACS_PATHS[@]}"; do
+# #        if [ -f "$emacs_path" ]; then
+# #            echo "    ✅ Found Windows Emacs: $emacs_path"
+# #            ln -sf "$emacs_path" "$BIN_DIR/emacs"
+# #            WINDOWS_EMACS_FOUND=true
+# #            break
+# #        fi
+# #    done
+# #
+# #    if [ "$WINDOWS_EMACS_FOUND" = false ]; then
+# #        echo "    ⚠️  Windows Emacs not found. Please install Emacs for Windows from"
+# #        echo "       https://www.gnu.org/software/emacs/download.html#windows"
+# #        echo "       or run: winget install GNU.Emacs"
+# #    fi
+# #fi
+
+# # Doom Emacs configuration
+# #DOOM_DIR="$HOME/.doom.d"
+# #if [ ! -d "$DOOM_DIR" ]; then
+# #    echo "  🔥 Installing Doom Emacs configuration..."
+# #    git clone --depth 1 https://github.com/doomemacs/doomemacs "$HOME/.emacs.d"
+# #    "$HOME/.emacs.d/bin/doom" install
+# #fi
+
+# # Flow Control (flow) - terminal-based text editor
+# # if [ ! -f "$BIN_DIR/flow" ]; then
+# #     echo "  🌊 Installing Flow Control editor..."
+
+# #     if [[ "$OS_TYPE" == "Darwin" ]]; then
+# #         brew install flow-control
+# #         ln -sf "$(which flow)" "$BIN_DIR/flow"
+# #     else
+# #         curl -fsSL https://flow-control.dev/install 2>/dev/null | sh -s -- -d "$BIN_DIR" 2>/dev/null || \
+# #         (curl -fsSL "https://github.com/neurocyte/flow/releases/download/v0.7.2/flow-v0.7.2-linux-aarch64.tar.gz" -o /tmp/flow.tar.gz && \
+# #          mkdir -p "$APPS_DIR/flow" && \
+# #          tar -xzf /tmp/flow.tar.gz -C "$APPS_DIR/flow" --strip-components=1 && \
+# #          rm -f /tmp/flow.tar.gz && \
+# #          ln -sf "$APPS_DIR/flow/flow" "$BIN_DIR/flow") 2>/dev/null || \
+# #         echo "  ⚠️  Flow Control: curl -fsSL https://flow-control.dev/install | sh"
+# #     fi
+# # fi
