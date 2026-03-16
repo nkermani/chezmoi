@@ -4,7 +4,7 @@
     "opencode-gemini-auth@latest",
     "oh-my-opencode@latest"
   ],
-  "default_agent": "42-NK",
+  "default_agent": "Teacher",
   "provider": {
     "google": {
       "options": {
