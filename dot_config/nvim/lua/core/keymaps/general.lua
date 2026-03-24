@@ -48,6 +48,9 @@ keymap('n', '<leader>v', '<C-v>', { desc = "Visual Block Mode" })
 -- Force Quit
 keymap({ 'n', 'i', 'v' }, '<C-S-q>', ':q!<CR>', { desc = "Force Quit" })
 
+-- Write and close buffer (instead of quit)
+keymap("n", "wq", ":update<CR>:bdelete!<CR>", { desc = "Write and close buffer" })
+
 -- Plugin Management
 keymap('n', '<leader>pi', function()
     dofile(vim.fn.stdpath("config") .. "/lua/plugins.lua")

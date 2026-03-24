@@ -56,6 +56,8 @@ _G.smart_close = function()
     end
 end
 
+
+
 vim.opt.winbar = "%=%#WinBar#%@v:lua.smart_close@ 󰅖 %*"
 
 vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
