@@ -34,6 +34,7 @@ require("config.smear_cursor")
 require("config.codediff")
 require("config.btw")
 require("config.spectre")
+require("config.obsidian")
 
 -- LSP (Local & Fast)
 require("lsp").setup({})

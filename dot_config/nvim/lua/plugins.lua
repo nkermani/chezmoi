@@ -73,4 +73,7 @@ pack.add({
     { src = 'https://github.com/tris203/precognition.nvim' },
     { src = 'https://github.com/s1n7ax/nvim-window-picker' },
     { src = 'https://github.com/petertriho/nvim-scrollbar' },
+
+    -- Obsidian / Note-taking / Prise de notes
+    { src = 'https://github.com/epwalsh/obsidian.nvim' },
 })
