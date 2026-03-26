@@ -45,11 +45,18 @@ keymap({ 'n', 'i', 'v' }, '<S-ScrollWheelUp>', '5zl', opts)
 -- VISUAL BLOCK MODE
 keymap('n', '<leader>v', '<C-v>', { desc = "Visual Block Mode" })
 
--- Force Quit
-keymap({ 'n', 'i', 'v' }, '<C-S-q>', ':q!<CR>', { desc = "Force Quit" })
+-- Quit
+keymap({ 'n', 'i', 'v' }, '<C-q>', function()
+    local bufs = vim.fn.filter(range(1, bufnr('$')), 'bufexists(v:val) && buflisted(v:val)')
+    if #bufs > 1 then
+        vim.cmd("bd!")
+    else
+        vim.cmd("qa")
+    end
+end, { desc = "Smart Quit" })
 
--- Write and close buffer (instead of quit)
-keymap("n", "wq", ":update<CR>:bdelete!<CR>", { desc = "Write and close buffer" })
+-- Force Quit
+keymap({ 'n', 'i', 'v' }, '<C-S-q>', ':qa!<CR>', { desc = "Force Quit All" })
 
 -- Plugin Management
 keymap('n', '<leader>pi', function()

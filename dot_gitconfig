@@ -44,3 +44,4 @@
 	pusho = "!git push -u origin $(git rev-parse --abbrev-ref HEAD)"
 	pushf = push --force
 	recent = "branch --sort=-committerdate"
+

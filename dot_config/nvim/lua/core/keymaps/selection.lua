@@ -35,7 +35,7 @@ keymap("i", "<M-S-Left>", "<Esc>v^", { desc = "Select to Start of Line" })
 keymap("i", "<M-S-Right>", "<Esc>v$", { desc = "Select to End of Line" })
 
 -- SÉLECTION TOTALE (CTRL + A)
-keymap({ 'n', 'i', 'v' }, '<C-a>', 'ggVG', { desc = "Select All" })
+keymap({ 'n', 'i', 'v' }, '<C-a>', 'ggVG', { desc = "Select All", noremap = true })
 
 -- SÉLECTION DE LIGNE (CTRL + L)
 keymap('n', '<C-l>', 'V', { desc = "Select line" })
