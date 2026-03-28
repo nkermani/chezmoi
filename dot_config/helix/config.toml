@@ -1,4 +1,4 @@
-theme = "seoul256-dark-soft"
+theme = "gruvbox-material"
 
 [editor.cursor-shape]
 insert = "bar"

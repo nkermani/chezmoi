@@ -4,6 +4,13 @@ export NK_APPS="$NK_DIR/apps"
 export NK_BIN="$NK_DIR/bin"
 export PATH="$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH"
 
+# Set default shell to user-installed bash if available
+if [ -x "$NK_BIN/bash" ]; then
+    export SHELL="$NK_BIN/bash"
+else
+    export SHELL="$(command -v bash 2>/dev/null || echo /bin/bash)"
+fi
+
 # OSX / Linux path helpers
 if [ "$(uname -s)" = "Darwin" ]; then
     export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
