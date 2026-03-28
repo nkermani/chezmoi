@@ -1,0 +1,88 @@
+{{- if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+#!/bin/bash
+
+echo "🚀 Windows performance configuration (Keyboard, Mouse & Snappy UI)..."
+
+# Define the PowerShell script in a Bash variable (HEREDOC)
+# This preserves your comments and avoids quote conflicts
+PS_SCRIPT=$(cat <<'PS_HEREDOC'
+    # 1. Keyboard Tweaks (Registry) - High Performance Mode
+    $kbdPath = "HKCU:\Control Panel\Accessibility\Keyboard Response"
+    Write-Host "Updating Keyboard Response Registry..." -ForegroundColor Cyan
+    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 200      # stored: fast
+    Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 10       # stored: fast
+    
+    # Default values:
+    # Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 500     # default
+    # Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 25        # default
+    
+    Set-ItemProperty -Path $kbdPath -Name "Flags" -Value 59
+    # Reduce the delay for key error reports (more responsiveness)
+    Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\Keyboard Response" -Name "Last BounceKeys Setting" -Value 0
+    Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\Keyboard Response" -Name "Last FilterKeys Setting" -Value 0
+
+
+    Write-Host "Disabling unnecessary input services..." -ForegroundColor Cyan
+    # Disable tablet input and handwriting panel services
+    Stop-Service -Name "TabletInputService" -ErrorAction SilentlyContinue
+    Set-Service -Name "TabletInputService" -StartupType Disabled -ErrorAction SilentlyContinue
+
+    # 2. Security: Disable Accessibility shortcuts
+    Write-Host "Disabling Accessibility Shortcuts..." -ForegroundColor Cyan
+    Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Value 506
+    Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\Keyboard Response" -Name "Flags" -Value 59
+    Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\ToggleKeys" -Name "Flags" -Value 59
+
+    # 3. Disable Mouse Acceleration & Set Sensitivity
+    Write-Host "Disabling Mouse Acceleration..." -ForegroundColor Cyan
+    $mousePath = "HKCU:\Control Panel\Mouse"
+    Set-ItemProperty -Path $mousePath -Name "MouseSpeed" -Value 0
+    Set-ItemProperty -Path $mousePath -Name "MouseThreshold1" -Value 0
+    Set-ItemProperty -Path $mousePath -Name "MouseThreshold2" -Value 0
+    Set-ItemProperty -Path $mousePath -Name "MouseSensitivity" -Value 10
+
+    # 4. Snappy UI (Disable Animations & Menu Delays)
+    Write-Host "Disabling Windows Animations..." -ForegroundColor Cyan
+    $desktopPath = "HKCU:\Control Panel\Desktop"
+    Set-ItemProperty -Path $desktopPath -Name "MenuShowDelay" -Value 0
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate" -Value 0
+    Set-ItemProperty -Path $desktopPath -Name "UserPreferencesMask" -Value ([byte[]](0x90,0x12,0x03,0x80,0x10,0x00,0x00,0x00))
+
+    # 5. RAFRAÎCHISSEMENT INSTANTANÉ via API C#
+    Write-Host "Refreshing System Settings via User32.dll..." -ForegroundColor Magenta
+    $code = @'
+    using System;
+    using System.Runtime.InteropServices;
+    public class Win32 {
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SystemParametersInfo(uint uiAction, uint uiParam, uint pvParam, uint fWinIni);
+    }
+'@
+    Add-Type -TypeDefinition $code
+    
+    # Appliquer (Delay, Speed, Mouse)
+    [Win32]::SystemParametersInfo(0x0017, 200, 0, 0x03)
+    [Win32]::SystemParametersInfo(0x000B, 10, 0, 0x03)
+    [Win32]::SystemParametersInfo(0x0071, 0, 10, 0x03)
+    
+    # 5. Optimisation du CPU (Win32PrioritySeparation)
+    Write-Host "Optimizing CPU Priority Separation..." -ForegroundColor Cyan
+    try {
+        $priorityPath = "HKLM:\System\CurrentControlSet\Control\PriorityControl"
+        Set-ItemProperty -Path $priorityPath -Name "Win32PrioritySeparation" -Value 26 -ErrorAction Stop
+        Write-Host "✅ Priority Separation optimisée." -ForegroundColor Green
+    } catch {
+        Write-Host "⚠️  Note: Impossible de modifier HKLM (Droit Admin requis). Passez cette étape ou lancez en Admin." -ForegroundColor Yellow
+    }
+
+    Write-Host "✅ Terminé avec succès !" -ForegroundColor Green
+PS_HEREDOC
+)
+
+# Conversion du script en UTF-16LE puis Base64 pour l'envoyer proprement à Windows
+ENCODED_SCRIPT=$(echo "$PS_SCRIPT" | iconv -t UTF-16LE | base64 -w 0)
+
+# Exécution par PowerShell via l'argument -EncodedCommand
+powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand "$ENCODED_SCRIPT"
+
+{{- end }}

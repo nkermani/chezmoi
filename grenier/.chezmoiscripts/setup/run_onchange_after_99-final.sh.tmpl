@@ -7,6 +7,16 @@ if [[ "$SHELL" != */bash ]]; then
     chsh -s $(which bash)
 fi
 
+# --- TERMINFO FALLBACKS (optional: only for Alacritty)
+# echo "🖥️  Setting up terminfo fallbacks..."
+# mkdir -p "$HOME/.terminfo"
+# if ! tput -T alacritty colors &>/dev/null; then
+#     echo "  🚀 Adding alacritty fallback..."
+#     infocmp xterm-256color | sed 's/xterm-256color/alacritty/' | tic -o "$HOME/.terminfo" -
+# fi
+#
+# echo "-------------------------------------------------------"
+
 echo "-------------------------------------------------------"
 echo "✅ Deployment Successful!"
 echo "✨ Restart your terminal or run 'source ~/.zshrc'"
