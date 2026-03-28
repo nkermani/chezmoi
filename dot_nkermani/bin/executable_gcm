@@ -43,7 +43,7 @@ Output ONLY the commit message, nothing else.
 Changes:
 $full_diff"
 
-msg=$(opencode run --model=opencode/minimax-m2.5-free "$prompt" 2>/dev/null)
+msg=$(opencode run --model=opencode/minimax-m2.5-free --variant=minimal "$prompt" 2>/dev/null)
 
 if [[ -n "$msg" ]]; then
     echo "$msg"
