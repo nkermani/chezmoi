@@ -1,22 +1,30 @@
 #!/bin/bash
-# gcm - Version Ollama (Locale, Gratuite & Ultra-Rapide)
+# gcm - Version Turbo Locale (Ollama)
 
-# 1. Récupérer le diff
-full_diff=$(git diff --cached 2>/dev/null | head -n 50)
+# 1. Préparation du contexte (très court pour la vitesse)
+# On ne prend que les noms de fichiers et les 30 premières lignes
+diff_context=$(git diff --cached --stat ; git diff --cached | head -n 30)
 
-if [[ -z "$full_diff" ]]; then
-    echo "❌ Aucun changement indexé."
+if [[ -z "$diff_context" ]]; then
+    echo "❌ Aucun changement indexé (staged). Faites 'git add' d'abord."
     exit 1
 fi
 
-# 2. Appel local à Ollama (Llama 3.2 1B)
-# On demande un message de commit direct sans fioritures
-msg=$(ollama run llama3.2:1b "Write a conventional commit message (type(scope): description) for: $full_diff. Output ONLY the message, no quotes, no period." 2>/dev/null | tr -d '"')
+echo "⚡ Génération..."
 
-if [[ -n "$msg" ]]; then
-    echo -e "\n📝 Message (Ollama) : $msg"
-    git commit -m "$msg"
+# 2. Appel Ollama optimisé
+# --format json n'est pas utilisé ici pour rester sur du texte brut plus rapide à parser
+# On utilise un "System Prompt" intégré pour tuer le blabla
+msg=$(ollama run llama3.2:1b "Summarize this diff as a 1-line conventional commit message (type: description). Rules: No intro, no quotes, no period, no markdown, max 50 chars. Diff: $diff_context" 2>/dev/null | head -n 1 | sed 's/^["'\'']//;s/["'\'']$//' | xargs)
+
+# 3. Validation et Commit
+if [[ -n "$msg" && ${#msg} -gt 5 ]]; then
+    # Nettoyage final pour enlever les préfixes type "Here is..." si l'IA insiste
+    clean_msg=$(echo "$msg" | sed 's/^.*message: //I;s/^.*is: //I')
+    
+    echo -e "\n📝 $clean_msg"
+    git commit -m "$clean_msg"
 else
-    echo "❌ Erreur : Vérifiez que Ollama est bien lancé (ollama serve)."
+    echo "❌ Échec de la génération (Vérifiez 'ollama serve')."
     exit 1
 fi
