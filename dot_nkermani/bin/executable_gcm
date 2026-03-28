@@ -43,7 +43,7 @@ Output ONLY the commit message, nothing else.
 Changes:
 $full_diff"
 
-msg=$(opencode run --agent=oracle "$prompt" 2>/dev/null | tail -n +2)
+msg=$(opencode run --model=google/gemini-2.5-flash "$prompt" 2>/dev/null)
 
 if [[ -n "$msg" ]]; then
     echo "$msg"
