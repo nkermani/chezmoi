@@ -3,9 +3,11 @@
 # Set template variables directly
 IS_42="{{ .is_42 }}"
 HAS_SUDO="{{ .has_sudo }}"
-
 # Include env.sh.tmpl for other variables
 {{ include ".chezmoitemplates/env.sh.tmpl" }}
+
+# --- EDITOR INSTALLATIONS ---
+echo "📝 Installing editors..."
 # Helix Editor (hx)
 echo "Installing Helix editor..."
 if [ ! -f "$BIN_DIR/hx" ]; then
@@ -28,163 +30,90 @@ if [ ! -f "$BIN_DIR/hx" ]; then
     rm -f /tmp/helix.tar*
 fi
 
+
 # Vim
-echo "📗 Checking Vim..."
-if [ ! command -v vim &>/dev/null ]; then
-    echo "  📦 Installing Vim..."
-    if [[ "$OS_TYPE" == "Darwin" ]]; then
-        brew install vim
-    else
-        sudo apt-get update && sudo apt-get install -y vim
-    fi
-fi
+# echo "📗 Checking Vim..."
+# if [ ! command -v vim &>/dev/null ]; then
+#     echo "  📦 Installing Vim..."
+#     if [[ "$OS_TYPE" == "Darwin" ]]; then
+#         brew install vim
+#     else
+#         sudo apt-get update && sudo apt-get install -y vim
+#     fi
+# fi
 
-# Neovim
-echo "🌙 Configuring Neovim..."
-if [ ! -f "$BIN_DIR/nvim" ]; then
-    NVIM_INSTALL_DIR="$APPS_DIR/nvim-nightly"
-    mkdir -p "$NVIM_INSTALL_DIR"
-    if [[ "$OS_TYPE" == "Darwin" ]]; then
-        # Native Apple Silicon support
-        local MACOS_ARCH="x86_64"
-        [[ "$(uname -m)" == "arm64" ]] && MACOS_ARCH="arm64"
-        curl -LSs "https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-${MACOS_ARCH}.tar.gz" | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
-    else
-        local NVIM_ARCH="x86_64"
-        [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && NVIM_ARCH="arm64"
-        curl -LSs "https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-${NVIM_ARCH}.tar.gz" | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
-    fi
-    ln -sf "$NVIM_INSTALL_DIR/bin/nvim" "$BIN_DIR/nvim"
-fi
+# # 1. VSCode
+# if [ ! -f "$BIN_DIR/code" ]; then
+#     echo "  💜 Installing VSCode..."
+#     VSCODE_DIR="$APPS_DIR/vscode"
+#     mkdir -p "$VSCODE_DIR"
 
-# Plugin installation
-INSTALL_PLUGINS_SCRIPT="$HOME/.config/nvim_nkermani/scripts/install-nvim-plugins.sh"
-if [ -f "$INSTALL_PLUGINS_SCRIPT" ]; then
-    chmod +x "$INSTALL_PLUGINS_SCRIPT" && bash "$INSTALL_PLUGINS_SCRIPT"
-fi
+#     VSCODE_ARCH="x64"
+#     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && VSCODE_ARCH="arm64"
 
-echo "🛠️  Setting up LSP servers (sudoless via npm)..."
+#     if [[ "$OS_TYPE" == "Darwin" ]]; then
+#         if [[ "$VSCODE_ARCH" == "arm64" ]]; then
+#             curl -LSs "https://update.code.visualstudio.com/latest/darwin-arm64/stable" -o /tmp/VSCode-darwin-arm64.zip
+#         else
+#             curl -LSs "https://update.code.visualstudio.com/latest/darwin-x64/stable" -o /tmp/VSCode-darwin-x64.zip
+#         fi
+#         unzip -q /tmp/VSCode-*.zip -d "$VSCODE_DIR"
+#         ln -sf "$VSCODE_DIR/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code" "$BIN_DIR/code"
+#         rm -f /tmp/VSCode-*.zip
+#     else
+#         curl -LSs "https://update.code.visualstudio.com/latest/linux-${VSCODE_ARCH}/stable" -o /tmp/vscode.tar.gz
+#         tar -xzf /tmp/vscode.tar.gz -C "$VSCODE_DIR" --strip-components=1
+#         ln -sf "$VSCODE_DIR/bin/code" "$BIN_DIR/code"
+#         rm -f /tmp/vscode.tar.gz
+#     fi
+# fi
 
-install_npm_lsp() {
-    local name=$1
-    local package=$2
-    local binary=$3
-    if [ ! -f "$LSP_BIN_DIR/$binary" ]; then
-        if ! command -v npm &>/dev/null; then
-            echo "  ⚠️  npm not found, skipping $name."
-            return
-        fi
-        echo "  📦 Installing $name..."
-        CI=true npm install -g $package --prefix "$APPS_DIR/$name" \
-            --no-audit --no-fund --loglevel error </dev/null
-        ln -sf "$APPS_DIR/$name/bin/$binary" "$LSP_BIN_DIR/$binary"
-    fi
-}
+# # Neovim
+# echo "🌙 Configuring Neovim..."
+# if [ ! -f "$BIN_DIR/nvim" ]; then
+#     NVIM_INSTALL_DIR="$APPS_DIR/nvim-nightly"
+#     mkdir -p "$NVIM_INSTALL_DIR"
+#     if [[ "$OS_TYPE" == "Darwin" ]]; then
+#         # Native Apple Silicon support
+#         local MACOS_ARCH="x86_64"
+#         [[ "$(uname -m)" == "arm64" ]] && MACOS_ARCH="arm64"
+#         curl -LSs "https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-${MACOS_ARCH}.tar.gz" | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
+#     else
+#         local NVIM_ARCH="x86_64"
+#         [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && NVIM_ARCH="arm64"
+#         curl -LSs "https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-${NVIM_ARCH}.tar.gz" | tar -xzC "$NVIM_INSTALL_DIR" --strip-components=1
+#     fi
+#     ln -sf "$NVIM_INSTALL_DIR/bin/nvim" "$BIN_DIR/nvim"
+# fi
 
-install_npm_lsp "pyright" "pyright" "pyright-langserver"
-install_npm_lsp "typescript-lsp" "typescript typescript-language-server" "typescript-language-server"
-install_npm_lsp "bash-lsp" "bash-language-server" "bash-language-server"
-install_npm_lsp "dotenv-lsp" "dot-language-server" "dot-language-server"
+# # Plugin installation
+# INSTALL_PLUGINS_SCRIPT="$HOME/.config/nvim_nkermani/scripts/install-nvim-plugins.sh"
+# if [ -f "$INSTALL_PLUGINS_SCRIPT" ]; then
+#     chmod +x "$INSTALL_PLUGINS_SCRIPT" && bash "$INSTALL_PLUGINS_SCRIPT"
+# fi
 
-# --- EDITOR INSTALLATIONS ---
-echo "📝 Installing editors..."
+# echo "🛠️  Setting up LSP servers (sudoless via npm)..."
 
-# 1. VSCode (only install if not already in custom location)
-if [ ! -f "$BIN_DIR/code" ]; then
-    echo "  💜 Installing VSCode..."
-    VSCODE_DIR="$APPS_DIR/vscode"
-    mkdir -p "$VSCODE_DIR"
+# install_npm_lsp() {
+#     local name=$1
+#     local package=$2
+#     local binary=$3
+#     if [ ! -f "$LSP_BIN_DIR/$binary" ]; then
+#         if ! command -v npm &>/dev/null; then
+#             echo "  ⚠️  npm not found, skipping $name."
+#             return
+#         fi
+#         echo "  📦 Installing $name..."
+#         CI=true npm install -g $package --prefix "$APPS_DIR/$name" \
+#             --no-audit --no-fund --loglevel error </dev/null
+#         ln -sf "$APPS_DIR/$name/bin/$binary" "$LSP_BIN_DIR/$binary"
+#     fi
+# }
 
-    VSCODE_ARCH="x64"
-    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && VSCODE_ARCH="arm64"
-
-    if [[ "$OS_TYPE" == "Darwin" ]]; then
-        if [[ "$VSCODE_ARCH" == "arm64" ]]; then
-            curl -LSs "https://update.code.visualstudio.com/latest/darwin-arm64/stable" -o /tmp/VSCode-darwin-arm64.zip
-        else
-            curl -LSs "https://update.code.visualstudio.com/latest/darwin-x64/stable" -o /tmp/VSCode-darwin-x64.zip
-        fi
-        unzip -q /tmp/VSCode-*.zip -d "$VSCODE_DIR"
-        ln -sf "$VSCODE_DIR/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code" "$BIN_DIR/code"
-        rm -f /tmp/VSCode-*.zip
-    else
-        curl -LSs "https://update.code.visualstudio.com/latest/linux-${VSCODE_ARCH}/stable" -o /tmp/vscode.tar.gz
-        tar -xzf /tmp/vscode.tar.gz -C "$VSCODE_DIR" --strip-components=1
-        ln -sf "$VSCODE_DIR/bin/code" "$BIN_DIR/code"
-        rm -f /tmp/vscode.tar.gz
-    fi
-fi
+# install_npm_lsp "pyright" "pyright" "pyright-langserver"
+# install_npm_lsp "typescript-lsp" "typescript typescript-language-server" "typescript-language-server"
+# install_npm_lsp "bash-lsp" "bash-language-server" "bash-language-server"
+# install_npm_lsp "dotenv-lsp" "dot-language-server" "dot-language-server"
 
 
-# # 3. Zed Editor
-# # if [ ! -f "$BIN_DIR/zed" ]; then
-# #     echo "  🔷 Installing Zed editor..."
-# #     ZED_DIR="$APPS_DIR/zed"
-# #     mkdir -p "$ZED_DIR"
 
-# #     ZED_ARCH="x86_64"
-# #     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZED_ARCH="aarch64"
-
-# #     if [[ "$OS_TYPE" == "Darwin" ]]; then
-# #         curl -f https://zed.dev/install.sh | sh
-# #         ln -sf "$HOME/.local/bin/zed" "$BIN_DIR/zed"
-# #     else
-# #         curl -LSs "https://cloud.zed.dev/releases/stable/latest/download?asset=zed&arch=${ZED_ARCH}&os=linux&source=docs" -o /tmp/zed.tar.gz
-# #         tar -xzf /tmp/zed.tar.gz -C "$ZED_DIR" --strip-components=1
-# #         ln -sf "$ZED_DIR/bin/zed" "$BIN_DIR/zed"
-# #         rm -f /tmp/zed.tar.gz
-# #     fi
-# # fi
-
-# # 4. Emacs + Doom Emacs (prefer Windows GUI Emacs on WSL)
-# #if [ ! -f "$BIN_DIR/emacs" ]; then
-# #    echo "  📓 Setting up Emacs + Doom Emacs..."
-# #
-# #   WINDOWS_EMACS_PATHS=(
-# #        "/mnt/c/Program Files/Emacs/emacs-29/bin/emacs.exe"
-# #        "/mnt/c/Program Files (x86)/Emacs/emacs-29/bin/emacs.exe"
-# #        "/mnt/c/Users/kerma/AppData/Local/Programs/Emacs/emacs-29/bin/emacs.exe"
-# #    )
-# #
-# #    WINDOWS_EMACS_FOUND=false
-# #    for emacs_path in "${WINDOWS_EMACS_PATHS[@]}"; do
-# #        if [ -f "$emacs_path" ]; then
-# #            echo "    ✅ Found Windows Emacs: $emacs_path"
-# #            ln -sf "$emacs_path" "$BIN_DIR/emacs"
-# #            WINDOWS_EMACS_FOUND=true
-# #            break
-# #        fi
-# #    done
-# #
-# #    if [ "$WINDOWS_EMACS_FOUND" = false ]; then
-# #        echo "    ⚠️  Windows Emacs not found. Please install Emacs for Windows from"
-# #        echo "       https://www.gnu.org/software/emacs/download.html#windows"
-# #        echo "       or run: winget install GNU.Emacs"
-# #    fi
-# #fi
-
-# # Doom Emacs configuration
-# #DOOM_DIR="$HOME/.doom.d"
-# #if [ ! -d "$DOOM_DIR" ]; then
-# #    echo "  🔥 Installing Doom Emacs configuration..."
-# #    git clone --depth 1 https://github.com/doomemacs/doomemacs "$HOME/.emacs.d"
-# #    "$HOME/.emacs.d/bin/doom" install
-# #fi
-
-# # Flow Control (flow) - terminal-based text editor
-# # if [ ! -f "$BIN_DIR/flow" ]; then
-# #     echo "  🌊 Installing Flow Control editor..."
-
-# #     if [[ "$OS_TYPE" == "Darwin" ]]; then
-# #         brew install flow-control
-# #         ln -sf "$(which flow)" "$BIN_DIR/flow"
-# #     else
-# #         curl -fsSL https://flow-control.dev/install 2>/dev/null | sh -s -- -d "$BIN_DIR" 2>/dev/null || \
-# #         (curl -fsSL "https://github.com/neurocyte/flow/releases/download/v0.7.2/flow-v0.7.2-linux-aarch64.tar.gz" -o /tmp/flow.tar.gz && \
-# #          mkdir -p "$APPS_DIR/flow" && \
-# #          tar -xzf /tmp/flow.tar.gz -C "$APPS_DIR/flow" --strip-components=1 && \
-# #          rm -f /tmp/flow.tar.gz && \
-# #          ln -sf "$APPS_DIR/flow/flow" "$BIN_DIR/flow") 2>/dev/null || \
-# #         echo "  ⚠️  Flow Control: curl -fsSL https://flow-control.dev/install | sh"
-# #     fi
-# # fi

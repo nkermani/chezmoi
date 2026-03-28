@@ -1,22 +1,19 @@
 {{- if (eq .chezmoi.os "darwin") -}}
 #!/bin/bash
 
-# Configuration Performance macOS
 # Delay: 10 | Rate: 1 | Mouse Accel: OFF
 
-echo "🚀 Optimisation macOS (Keyboard & Mouse)..."
+echo "🚀 Tweaking macOS (Keyboard & Mouse)..."
 
-# Clavier : Répétition ultra-rapide
+# Keyboard setup
 defaults write -g InitialKeyRepeat -int 10 # stored: fast (150ms)
 defaults write -g KeyRepeat -int 1        # stored: fast (15ms)
 # defaults write -g InitialKeyRepeat -int 25  # default (375ms)
 # defaults write -g KeyRepeat -int 6          # default (83ms)
 
-# Désactiver le "Press and Hold" pour les accents (crucial pour Vim)
 defaults write -g ApplePressAndHoldEnabled -bool false
 
-# Souris : Désactiver l'accélération (linéaire)
 defaults write .GlobalPreferences com.apple.mouse.scaling -1
 
-echo "✅ macOS optimisé. (Relancez la session pour appliquer)"
+echo "✅ macOS tweaked!"
 {{- end }}

@@ -21,17 +21,9 @@ install_nerd_font() {
 
 if [[ "$OS_TYPE" == "Darwin" ]]; then
     if command -v brew &>/dev/null; then
-        FONTS=(
-            "font-jetbrains-mono-nerd-font"
-        )
-        for font in "${FONTS[@]}"; do
-            if ! brew list --cask "$font" &>/dev/null; then
-                echo "🔡 Installing $font via Homebrew..."
-                brew install --cask "$font"
-            else
-                echo "✓ $font already installed"
-            fi
-        done
+        brew install --cask font-jetbrains-mono-nerd-font
+    else
+        echo "✓ font-jetbrains-mono-nerd-font already installed"
     fi
 elif [[ "$OS_TYPE" == "Linux" ]]; then
     echo "🔡 Checking Fonts..."

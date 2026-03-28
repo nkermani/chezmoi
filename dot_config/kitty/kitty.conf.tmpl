@@ -3,21 +3,21 @@
 font_family      JetBrainsMonoNL Nerd Font Mono
 
 {{- if eq .chezmoi.os "darwin" }}
-font_size 11
+font_size 12
 {{- else }}
 font_size 10
 {{- end }}
 
-modify_font cell_width -1px
-modify_font cell_height -1px
+modify_font cell_width 0px
+modify_font cell_height 0px
 modify_font baseline 0
 
 remember_window_size  no
 initial_window_width  999c
 initial_window_height 999c
-window_padding_width 5
+window_padding_width 0
 window_margin_width 0
-window_border_width 2pt
+window_border_width 0pt
 active_border_color #e2c08d
 inactive_border_color #2c2e34
 draw_minimal_borders yes
@@ -38,9 +38,6 @@ placement_strategy center
 {{- else }}
 shell "/home/nkermani/.nkermani/bin/bash"
 {{- end }}
-
-
-
 
 # Cyberpunk NK
 include themes/CyberpunkNK.conf
@@ -70,30 +67,30 @@ map ctrl+shift+q no_op
 map ctrl+shift+left no_op
 map ctrl+shift+right no_op
 
-editor nvim
-map ctrl+shift+o kitten hints --type=regex --regex=(File[[:space:]]+[^,]+,[[:space:]]+line[[:space:]]+[0-9]+|[/.][^[:space:]:]+:[0-9]+:[0-9]+|[/.][^[:space:]:]+:[0-9]+) --program ~/.config/kitty/open_in_nvim.sh
-map ctrl+shift+g kitten hints --type=linenum --linenum-action=tab nvim +{line} {path}
+# editor nvim
+# map ctrl+shift+o kitten hints --type=regex --regex=(File[[:space:]]+[^,]+,[[:space:]]+line[[:space:]]+[0-9]+|[/.][^[:space:]:]+:[0-9]+:[0-9]+|[/.][^[:space:]:]+:[0-9]+) --program ~/.config/kitty/open_in_nvim.sh
+# map ctrl+shift+g kitten hints --type=linenum --linenum-action=tab nvim +{line} {path}
 
 # Tab management
-map alt+1 goto_tab 1
-map alt+2 goto_tab 2
-map alt+3 goto_tab 3
-map alt+4 goto_tab 4
-map alt+5 goto_tab 5
-map alt+6 goto_tab 6
-map alt+7 goto_tab 7
-map alt+8 goto_tab 8
-map alt+9 goto_tab 9
+# map alt+1 goto_tab 1
+# map alt+2 goto_tab 2
+# map alt+3 goto_tab 3
+# map alt+4 goto_tab 4
+# map alt+5 goto_tab 5
+# map alt+6 goto_tab 6
+# map alt+7 goto_tab 7
+# map alt+8 goto_tab 8
+# map alt+9 goto_tab 9
 
-map cmd+1 goto_tab 1
-map cmd+2 goto_tab 2
-map cmd+3 goto_tab 3
-map cmd+4 goto_tab 4
-map cmd+5 goto_tab 5
-map cmd+6 goto_tab 6
-map cmd+7 goto_tab 7
-map cmd+8 goto_tab 8
-map cmd+9 goto_tab 9
+# map cmd+1 goto_tab 1
+# map cmd+2 goto_tab 2
+# map cmd+3 goto_tab 3
+# map cmd+4 goto_tab 4
+# map cmd+5 goto_tab 5
+# map cmd+6 goto_tab 6
+# map cmd+7 goto_tab 7
+# map cmd+8 goto_tab 8
+# map cmd+9 goto_tab 9
 
 # END_KITTY_THEME
 

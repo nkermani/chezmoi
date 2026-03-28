@@ -5,17 +5,13 @@ HAS_SUDO="{{ .has_sudo }}"
 
 echo "🛠️  Installing CLI utilities..."
 if [[ "$OS_TYPE" == "Darwin" ]]; then
-    # Homebrew handles architecture automatically on macOS
     if command -v brew &>/dev/null; then
         brew install fzf ripgrep fd bat lazygit
     fi
 else
-    # Manual installation for Linux/42 (Portable Binaries)
     [ ! -f "$BIN_DIR/fzf" ] && {
         git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --bin && cp ~/.fzf/bin/fzf "$BIN_DIR/" && rm -rf ~/.fzf
     }
-
-    # Architecture detection for Linux binaries
     LINUX_ARCH="x86_64"
     [[ "$ARCH_TYPE" == "aarch64" ]] && LINUX_ARCH="aarch64"
 
@@ -37,109 +33,5 @@ else
             fi
         fi
     done
-
-    # # Starship installation
-    # if [ ! -f "$BIN_DIR/starship" ]; then
-    #     echo "  📦 Fetching Starship..."
-    #     curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$BIN_DIR"
-    # fi
-
-
-    # Bun installation (Portable Binary - with 42-specific paths)
-    if ! command -v bun &>/dev/null; then
-        echo "  🍞 Installing Bun..."
-        if [[ "$IS_42" == "true" ]]; then
-            # Use goinfre or sgoinfre on 42 machines to save space
-            if [[ -d "/sgoinfre" ]]; then
-                export BUN_INSTALL="/sgoinfre/$USER/.bun"
-            elif [[ -d "/goinfre" ]]; then
-                export BUN_INSTALL="/goinfre/$USER/.bun"
-            else
-                export BUN_INSTALL="/tmp/$USER/.bun"
-            fi
-        else
-            export BUN_INSTALL="$APPS_DIR/bun"
-        fi
-        mkdir -p "$BUN_INSTALL"
-        curl -fsSL https://bun.sh/install | bash
-        ln -sf "$BUN_INSTALL/bin/bun" "$BIN_DIR/bun"
-        ln -sf "$BUN_INSTALL/bin/bunx" "$BIN_DIR/bunx"
-    fi
-
-
-    # Tmux installation for Linux/42 (Static Binary)
-    # if [ ! -f "$BIN_DIR/tmux" ] || head -n 1 "$BIN_DIR/tmux" 2>/dev/null | grep -q "Not Found"; then
-    #     echo "  📦 Fetching Tmux (Static)..."
-    #     TMUX_VER="3.6a"
-    #     TMUX_ARCH="x86_64"
-    #     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && TMUX_ARCH="arm64"
-    #     curl -LSs "https://github.com/tmux/tmux-builds/releases/download/v${TMUX_VER}/tmux-${TMUX_VER}-linux-${TMUX_ARCH}.tar.gz" | tar -xzC "$BIN_DIR"
-    #     chmod +x "$BIN_DIR/tmux"
-    # fi
-
-    # CMake installation for Linux/42 (Portable Binary)
-    # if [ ! -f "$BIN_DIR/cmake" ]; then
-    #     echo "  📦 Fetching CMake..."
-    #     CMAKE_VER="3.31.5"
-    #     curl -LSs "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}.tar.gz" | tar -xzC "$APPS_DIR"
-    #     ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/cmake" "$BIN_DIR/cmake"
-    #     ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/ctest" "$BIN_DIR/ctest"
-    # fi
-
-    # Ninja installation (Portable Binary)
-    # if [ ! -f "$BIN_DIR/ninja" ]; then
-    #     echo "  📦 Fetching Ninja..."
-    #     NINJA_VER="1.13.2"
-    #     curl -LSs "https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}/ninja-linux.zip" -o /tmp/ninja.zip
-    #     unzip -o /tmp/ninja.zip -d "$BIN_DIR"
-    #     chmod +x "$BIN_DIR/ninja"
-    #     rm /tmp/ninja.zip
-    # fi
-
-    # LLVM Fake Bin for Flutter (Fixes missing ld/ar in LLVM dir)
-    # LLVM_FAKE_DIR="$BIN_DIR/llvm-fake/bin"
-    # if [ ! -d "$LLVM_FAKE_DIR" ]; then
-    #     echo "  🛠️  Setting up LLVM fake bin for Flutter..."
-    #     mkdir -p "$LLVM_FAKE_DIR"
-    #     
-    #     # Find system LLVM bin dir
-    #     SYS_LLVM_DIR=$(ls -d /usr/lib/llvm-*/bin 2>/dev/null | sort -V | tail -n 1)
-    #     if [ -n "$SYS_LLVM_DIR" ]; then
-    #         # Create wrappers for clang to avoid symlink resolution issues in Flutter build
-    #         cat <<EOF > "$LLVM_FAKE_DIR/clang"
-    # #!/bin/bash
-    # exec $SYS_LLVM_DIR/clang "\$@"
-    # EOF
-    #         cat <<EOF > "$LLVM_FAKE_DIR/clang++"
-    # #!/bin/bash
-    # exec $SYS_LLVM_DIR/clang++ "\$@"
-    # EOF
-    #         chmod +x "$LLVM_FAKE_DIR/clang" "$LLVM_FAKE_DIR/clang++"
-    #         
-    #         # Symlink other tools
-    #         ln -sf /usr/bin/ld "$LLVM_FAKE_DIR/ld"
-    #         ln -sf /usr/bin/ar "$LLVM_FAKE_DIR/ar"
-    #         ln -sf /usr/bin/nm "$LLVM_FAKE_DIR/nm"
-    #         ln -sf /usr/bin/objcopy "$LLVM_FAKE_DIR/objcopy"
-    #         ln -sf /usr/bin/ranlib "$LLVM_FAKE_DIR/ranlib"
-    #         ln -sf /usr/bin/strip "$LLVM_FAKE_DIR/strip"
-    #         ln -sf /usr/bin/readelf "$LLVM_FAKE_DIR/readelf"
-    #         
-    #         # LLVM specific names
-    #         ln -sf /usr/bin/llvm-ar-12 "$LLVM_FAKE_DIR/llvm-ar" 2>/dev/null || ln -sf /usr/bin/llvm-ar "$LLVM_FAKE_DIR/llvm-ar"
-    #         ln -sf /usr/bin/llvm-nm-12 "$LLVM_FAKE_DIR/llvm-nm" 2>/dev/null || ln -sf /usr/bin/llvm-nm "$LLVM_FAKE_DIR/llvm-nm"
-    #     fi
-    # fi
-
-    # Zig installation (Portable Binary)
-    # if [ ! -f "$BIN_DIR/zig" ]; then
-    #     echo "  📦 Fetching Zig..."
-    #     ZIG_VER="0.15.2"
-    #     ZIG_ARCH="x86_64"
-    #     [[ "$ARCH_TYPE" == "aarch64" ]] && ZIG_ARCH="aarch64"
-    #     curl -LSs "https://ziglang.org/download/${ZIG_VER}/zig-${ZIG_ARCH}-linux-${ZIG_VER}.tar.xz" | tar -xJ -C "$APPS_DIR"
-    #     ln -sf "$APPS_DIR/zig-${ZIG_ARCH}-linux-${ZIG_VER}/zig" "$BIN_DIR/zig"
-    #     ln -sf "$APPS_DIR/zig-${ZIG_ARCH}-linux-${ZIG_VER}/lib" "$APPS_DIR/zig-${ZIG_ARCH}-linux-${ZIG_VER}/lib64" 2>/dev/null || true
-    # fi
 fi
 

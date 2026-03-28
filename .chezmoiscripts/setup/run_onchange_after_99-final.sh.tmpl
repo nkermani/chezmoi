@@ -2,18 +2,20 @@
 {{ include ".chezmoitemplates/env.sh.tmpl" }}
 
 # --- FINALIZATION ---
-if [[ "$SHELL" != */zsh ]]; then
-    echo "🐚 Setting default shell to Zsh..."
-    chsh -s $(which zsh)
+if [[ "$SHELL" != */bash ]]; then
+    echo "🐚 Setting default shell to Bash..."
+    chsh -s $(which bash)
 fi
 
-# --- TERMINFO FALLBACKS ---
-echo "🖥️  Setting up terminfo fallbacks..."
-mkdir -p "$HOME/.terminfo"
-if ! tput -T alacritty colors &>/dev/null; then
-    echo "  🚀 Adding alacritty fallback..."
-    infocmp xterm-256color | sed 's/xterm-256color/alacritty/' | tic -o "$HOME/.terminfo" -
-fi
+# --- TERMINFO FALLBACKS (optional: only for Alacritty)
+# echo "🖥️  Setting up terminfo fallbacks..."
+# mkdir -p "$HOME/.terminfo"
+# if ! tput -T alacritty colors &>/dev/null; then
+#     echo "  🚀 Adding alacritty fallback..."
+#     infocmp xterm-256color | sed 's/xterm-256color/alacritty/' | tic -o "$HOME/.terminfo" -
+# fi
+#
+# echo "-------------------------------------------------------"
 
 echo "-------------------------------------------------------"
 echo "✅ Deployment Successful!"
@@ -22,6 +24,5 @@ echo "-------------------------------------------------------"
 
 chmod +x "$HOME/.nkermani/bin/kitty" "$HOME/.nkermani/bin/kitten" "$HOME/.nkermani/bin/42/"* 2>/dev/null
 echo "✅ Deployment Successful!"
-echo "✨ Restart your terminal or run 'source ~/.zshrc'"
 echo "-------------------------------------------------------"
 

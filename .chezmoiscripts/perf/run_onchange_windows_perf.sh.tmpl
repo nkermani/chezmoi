@@ -1,33 +1,33 @@
 {{- if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
 #!/bin/bash
 
-echo "🚀 Configuration des performances Windows (Keyboard, Mouse & Snappy UI)..."
+echo "🚀 Windows performance configuration (Keyboard, Mouse & Snappy UI)..."
 
-# On définit le script PowerShell dans une variable Bash (HEREDOC)
-# Cela préserve tes commentaires et évite les conflits de guillemets
+# Define the PowerShell script in a Bash variable (HEREDOC)
+# This preserves your comments and avoids quote conflicts
 PS_SCRIPT=$(cat <<'PS_HEREDOC'
-    # 1. Keyboard Tweaks (Registry) - Mode Haute Performance
+    # 1. Keyboard Tweaks (Registry) - High Performance Mode
     $kbdPath = "HKCU:\Control Panel\Accessibility\Keyboard Response"
     Write-Host "Updating Keyboard Response Registry..." -ForegroundColor Cyan
     Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 200      # stored: fast
     Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 10       # stored: fast
     
-    # Valeurs par défaut :
+    # Default values:
     # Set-ItemProperty -Path $kbdPath -Name "AutoRepeatDelay" -Value 500     # default
     # Set-ItemProperty -Path $kbdPath -Name "AutoRepeatRate" -Value 25        # default
     
     Set-ItemProperty -Path $kbdPath -Name "Flags" -Value 59
-    # Réduit le délai d'attente pour les rapports d'erreurs de frappe (plus de réactivité)
+    # Reduce the delay for key error reports (more responsiveness)
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\Keyboard Response" -Name "Last BounceKeys Setting" -Value 0
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\Keyboard Response" -Name "Last FilterKeys Setting" -Value 0
 
 
-    Write-Host "Désactivation des services de saisie inutiles..." -ForegroundColor Cyan
-    # Désactive le service de clavier tactile et de panneau d'écriture manuscrite
+    Write-Host "Disabling unnecessary input services..." -ForegroundColor Cyan
+    # Disable tablet input and handwriting panel services
     Stop-Service -Name "TabletInputService" -ErrorAction SilentlyContinue
     Set-Service -Name "TabletInputService" -StartupType Disabled -ErrorAction SilentlyContinue
 
-    # 2. Sécurité : Désactivation des raccourcis Accessibilité
+    # 2. Security: Disable Accessibility shortcuts
     Write-Host "Disabling Accessibility Shortcuts..." -ForegroundColor Cyan
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Value 506
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\Keyboard Response" -Name "Flags" -Value 59
