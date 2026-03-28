@@ -1,7 +1,7 @@
 #!/bin/bash
-# gcm - Version Turbo Locale (Conventional Commits)
+# gcm - Version Turbo Locale avec Respect Strict des Types
 
-# 1. Contexte réduit (30 lignes suffisent pour identifier le type)
+# 1. Préparation du contexte
 diff_context=$(git diff --cached --stat ; git diff --cached | head -n 30)
 
 if [[ -z "$diff_context" ]]; then
@@ -11,26 +11,27 @@ fi
 
 echo "⚡ Génération..."
 
-# 2. Le Prompt avec vos 11 TYPES (injecté directement dans Ollama)
-# On force l'IA à choisir UNIQUEMENT parmi vos mots-clés
-msg=$(ollama run llama3.2:1b "Task: 1-line conventional commit.
-TYPES: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.
-RULES: type(scope): description. Max 50 chars. Imperative mood. No period. No quotes. NO intro.
-DIFF: $diff_context" 2>/dev/null | head -n 1 | sed 's/^["'\'']//;s/["'\'']$//' | xargs)
+# 2. On sépare les types pour que l'IA ne puisse pas les rater
+TYPES="feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
 
-# 3. Nettoyage de sécurité (au cas où l'IA ajoute du blabla au début)
-clean_msg=$(echo "$msg" | sed -E 's/^(Here is|Commit|Message|Suggested).*[: ]//I')
+# 3. Appel Ollama avec un prompt ultra-directif
+# On force l'IA à commencer par un des types
+msg=$(ollama run llama3.2:1b "You are a git bot. Use ONLY these types: $TYPES.
+Format: type(scope): description.
+Rules: No intro, no quotes, no period.
+Diff: $diff_context" 2>/dev/null | head -n 1 | tr -d '"`')
+
+# 4. Nettoyage de sécurité pour garantir le format "type: description"
+# Cette ligne supprime tout ce qui précède le premier mot-clé valide s'il y a du blabla
+clean_msg=$(echo "$msg" | sed -E "s/^.*(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)/\1/")
 
 if [[ -n "$clean_msg" && "$clean_msg" == *:* ]]; then
     echo -e "\n📝 $clean_msg"
     git commit -m "$clean_msg"
 else
-    # Si l'IA a raté le format, on affiche quand même pour debug
-    if [[ -n "$clean_msg" ]]; then
-        echo -e "\n⚠️  Format imprécis : $clean_msg"
-        git commit -m "$clean_msg"
-    else
-        echo "❌ Échec Ollama. Vérifiez 'ollama serve'."
-        exit 1
-    fi
+    # Si l'IA a encore raté, on force un préfixe par défaut (chore) ou on demande une correction
+    echo -e "\n⚠️ Format invalide généré : $clean_msg"
+    echo "Essai de correction automatique..."
+    final_msg="chore: ${clean_msg#*: }"
+    git commit -m "$final_msg"
 fi
