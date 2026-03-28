@@ -1,7 +1,7 @@
 #!/bin/bash
-# gcm - Version Turbo Locale avec Respect Strict des Types
+# gcm - Version Turbo Locale (Strict Types)
 
-# 1. Préparation du contexte
+# 1. Préparation du contexte court
 diff_context=$(git diff --cached --stat ; git diff --cached | head -n 30)
 
 if [[ -z "$diff_context" ]]; then
@@ -11,27 +11,25 @@ fi
 
 echo "⚡ Génération..."
 
-# 2. On sépare les types pour que l'IA ne puisse pas les rater
-TYPES="feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+# 2. Appel Ollama avec une contrainte de début de phrase
+# On demande explicitement de NE PAS commencer par "Here is" ou "Added"
+raw_msg=$(ollama run llama3.2:1b "You are a git assistant. Write a 1-line conventional commit for this diff. 
+TYPES: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.
+RULE: Start IMMEDIATELY with the type. No intro. No quotes.
+Diff: $diff_context" 2>/dev/null | head -n 1)
 
-# 3. Appel Ollama avec un prompt ultra-directif
-# On force l'IA à commencer par un des types
-msg=$(ollama run llama3.2:1b "You are a git bot. Use ONLY these types: $TYPES.
-Format: type(scope): description.
-Rules: No intro, no quotes, no period.
-Diff: $diff_context" 2>/dev/null | head -n 1 | tr -d '"`')
+# 3. NETTOYAGE STRICT (Le secret)
+# On supprime tout ce qui précède le premier type valide rencontré
+clean_msg=$(echo "$raw_msg" | sed -E 's/^.*(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)/\1/' | tr -d '"`')
 
-# 4. Nettoyage de sécurité pour garantir le format "type: description"
-# Cette ligne supprime tout ce qui précède le premier mot-clé valide s'il y a du blabla
-clean_msg=$(echo "$msg" | sed -E "s/^.*(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)/\1/")
-
-if [[ -n "$clean_msg" && "$clean_msg" == *:* ]]; then
+# 4. Validation finale
+if [[ "$clean_msg" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert) ]]; then
     echo -e "\n📝 $clean_msg"
     git commit -m "$clean_msg"
 else
-    # Si l'IA a encore raté, on force un préfixe par défaut (chore) ou on demande une correction
-    echo -e "\n⚠️ Format invalide généré : $clean_msg"
-    echo "Essai de correction automatique..."
-    final_msg="chore: ${clean_msg#*: }"
-    git commit -m "$final_msg"
+    # Si l'IA a vraiment échoué, on force un type 'chore' sur son texte
+    # pour éviter un commit sans format.
+    final_fallback="chore: $(echo "$clean_msg" | sed 's/^[[:punct:][:space:]]*//')"
+    echo -e "\n⚠️ Correction auto : $final_fallback"
+    git commit -m "$final_fallback"
 fi
