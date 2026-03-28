@@ -1,0 +1,15 @@
+# ~/.bashrc (managed by chezmoi)
+# Load modular config from ~/.bashrc.d
+if [ -d "$HOME/.bashrc.d" ]; then
+  for f in "$HOME/.bashrc.d"/*.sh; do
+    if [ -r "$f" ] && [ -f "$f" ]; then
+      . "$f"
+    fi
+  done
+  unset f
+fi
+
+# Set default prompt if none already
+if [ -z "$PS1" ]; then
+  PS1='\u@\h:\w\$ '
+fi

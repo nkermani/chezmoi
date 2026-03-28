@@ -7,7 +7,7 @@ echo "🛠️  Installing CLI utilities..."
 if [[ "$OS_TYPE" == "Darwin" ]]; then
     # Homebrew handles architecture automatically on macOS
     if command -v brew &>/dev/null; then
-        brew install fzf ripgrep fd bat cmake lazygit starship clang-format zig
+        brew install fzf ripgrep fd bat lazygit
     fi
 else
     # Manual installation for Linux/42 (Portable Binaries)
@@ -20,7 +20,6 @@ else
     [[ "$ARCH_TYPE" == "aarch64" ]] && LINUX_ARCH="aarch64"
 
     for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat" "lazygit:lazygit:jesseduffield/lazygit"; do
-        # "zellij:zellij:zellij-org/zellij"
         IFS=":" read -r name bin repo <<< "$tool"
         if [ ! -f "$BIN_DIR/$bin" ]; then
             echo "  📦 Fetching $name..."
@@ -32,15 +31,6 @@ else
                 [[ "$ARCH_TYPE" == "aarch64" ]] && LG_ARCH="arm64"
                 curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}_${VER#v}_Linux_${LG_ARCH}.tar.gz" | tar -xzC /tmp
                 cp /tmp/lazygit "$BIN_DIR/"
-            # elif [[ "$name" == "zellij" ]]; then
-            #     # Zellij has a different naming convention (no version in filename)
-            #     ZJ_ARCH="x86_64"
-            #     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && ZJ_ARCH="aarch64"
-            #     curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}-${ZJ_ARCH}-unknown-linux-musl.tar.gz" -o /tmp/zellij.tar.gz
-            #     tar -xzf /tmp/zellij.tar.gz -C /tmp
-            #     rm /tmp/zellij.tar.gz
-            #     cp /tmp/zellij "$BIN_DIR/"
-            #     rm -rf /tmp/zellij
             else
                 curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}-${VER}-${LINUX_ARCH}-unknown-linux-musl.tar.gz" | tar -xzC /tmp
                 find /tmp/${name}-${VER}-${LINUX_ARCH}-unknown-linux-musl -name "$bin" -type f -exec cp {} "$BIN_DIR/" \;
@@ -48,11 +38,11 @@ else
         fi
     done
 
-    # Starship installation
-    if [ ! -f "$BIN_DIR/starship" ]; then
-        echo "  📦 Fetching Starship..."
-        curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$BIN_DIR"
-    fi
+    # # Starship installation
+    # if [ ! -f "$BIN_DIR/starship" ]; then
+    #     echo "  📦 Fetching Starship..."
+    #     curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$BIN_DIR"
+    # fi
 
 
     # Bun installation (Portable Binary - with 42-specific paths)
@@ -76,20 +66,6 @@ else
         ln -sf "$BUN_INSTALL/bin/bunx" "$BIN_DIR/bunx"
     fi
 
-    # Zoxide installation
-    # if [ ! -f "$BIN_DIR/zoxide" ]; then
-    #     echo "  📦 Fetching Zoxide..."
-    #     curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh -s -- --bin-dir "$BIN_DIR"
-    # fi
-
-    # CMake installation for Linux/42 (Portable Binary)
-    # if [ ! -f "$BIN_DIR/cmake" ]; then
-    #     echo "  📦 Fetching CMake..."
-    #     CMAKE_VER="3.31.5"
-    #     curl -LSs "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}.tar.gz" | tar -xzC "$APPS_DIR"
-    #     ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/cmake" "$BIN_DIR/cmake"
-    #     ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/ctest" "$BIN_DIR/ctest"
-    # fi
 
     # Tmux installation for Linux/42 (Static Binary)
     # if [ ! -f "$BIN_DIR/tmux" ] || head -n 1 "$BIN_DIR/tmux" 2>/dev/null | grep -q "Not Found"; then
@@ -99,6 +75,15 @@ else
     #     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && TMUX_ARCH="arm64"
     #     curl -LSs "https://github.com/tmux/tmux-builds/releases/download/v${TMUX_VER}/tmux-${TMUX_VER}-linux-${TMUX_ARCH}.tar.gz" | tar -xzC "$BIN_DIR"
     #     chmod +x "$BIN_DIR/tmux"
+    # fi
+
+    # CMake installation for Linux/42 (Portable Binary)
+    # if [ ! -f "$BIN_DIR/cmake" ]; then
+    #     echo "  📦 Fetching CMake..."
+    #     CMAKE_VER="3.31.5"
+    #     curl -LSs "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}.tar.gz" | tar -xzC "$APPS_DIR"
+    #     ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/cmake" "$BIN_DIR/cmake"
+    #     ln -sf "$APPS_DIR/cmake-${CMAKE_VER}-linux-${LINUX_ARCH}/bin/ctest" "$BIN_DIR/ctest"
     # fi
 
     # Ninja installation (Portable Binary)
