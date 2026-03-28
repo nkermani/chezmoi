@@ -1,7 +1,7 @@
 #!/bin/bash
-# gcm - Version Turbo Locale (Strict Types)
+# gcm - Version Ironclad (Vitesse vs Précision)
 
-# 1. Préparation du contexte court
+# 1. Récupération du contexte
 diff_context=$(git diff --cached --stat ; git diff --cached | head -n 30)
 
 if [[ -z "$diff_context" ]]; then
@@ -11,25 +11,37 @@ fi
 
 echo "⚡ Génération..."
 
-# 2. Appel Ollama avec une contrainte de début de phrase
-# On demande explicitement de NE PAS commencer par "Here is" ou "Added"
-raw_msg=$(ollama run llama3.2:1b "You are a git assistant. Write a 1-line conventional commit for this diff. 
-TYPES: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.
-RULE: Start IMMEDIATELY with the type. No intro. No quotes.
-Diff: $diff_context" 2>/dev/null | head -n 1)
+# 2. Prompt ultra-agressif
+# On utilise un format de réponse forcée "Output: type: description"
+msg=$(ollama run llama3.2:1b "Context: $diff_context
+Task: Write a git commit.
+Allowed Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.
+Format: type: description
+Constraint: Start with the type. No intro text. Max 50 chars." 2>/dev/null | head -n 1 | tr -d '"`')
 
-# 3. NETTOYAGE STRICT (Le secret)
-# On supprime tout ce qui précède le premier type valide rencontré
-clean_msg=$(echo "$raw_msg" | sed -E 's/^.*(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)/\1/' | tr -d '"`')
+# 3. LOGIQUE DE RÉPARATION (Si l'IA commence par "Added...", "Updated...", etc.)
+# On vérifie si la ligne commence par un de vos types + ":"
+if [[ ! "$msg" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert): ]]; then
+    
+    # Détection automatique simple du type si l'IA a oublié le préfixe
+    if [[ "$msg" =~ ^(Add|Create|New|Implement) ]]; then TYPE="feat";
+    elif [[ "$msg" =~ ^(Fix|Repair|Debug) ]]; then TYPE="fix";
+    elif [[ "$msg" =~ ^(Doc|Read|Wiki) ]]; then TYPE="docs";
+    elif [[ "$msg" =~ ^(Clean|Update|Refactor) ]]; then TYPE="refactor";
+    elif [[ "$msg" =~ ^(Test) ]]; then TYPE="test";
+    else TYPE="chore"; fi
+    
+    # On reconstruit le message proprement
+    # On enlève les mots parasites comme "Added", "Updated" au début
+    clean_desc=$(echo "$msg" | sed -E 's/^(Added|Updated|Fixed|Created|Implement|Improved|Changes|Modified) //I')
+    msg="$TYPE: ${clean_desc,,}" # En minuscule pour le style
+fi
 
-# 4. Validation finale
-if [[ "$clean_msg" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert) ]]; then
-    echo -e "\n📝 $clean_msg"
-    git commit -m "$clean_msg"
+# 4. Validation finale et Commit
+if [[ -n "$msg" ]]; then
+    echo -e "\n📝 $msg"
+    git commit -m "$msg"
 else
-    # Si l'IA a vraiment échoué, on force un type 'chore' sur son texte
-    # pour éviter un commit sans format.
-    final_fallback="chore: $(echo "$clean_msg" | sed 's/^[[:punct:][:space:]]*//')"
-    echo -e "\n⚠️ Correction auto : $final_fallback"
-    git commit -m "$final_fallback"
+    echo "❌ Erreur critique Ollama."
+    exit 1
 fi
