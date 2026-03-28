@@ -36,7 +36,7 @@ dynamic_background_opacity yes
 placement_strategy center
 
 {{- if eq .chezmoi.os "darwin" }}
-# need to add shell path for macOS here
+shell "/opt/homebrew/bin/bash"
 {{- else }}
 shell "/home/nkermani/.nkermani/bin/bash"
 {{- end }}

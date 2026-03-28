@@ -2,7 +2,7 @@
 # use a custom vscode opener defined below; the `use` field is required
 # match every path with url = "*" rather than the invalid name field
 rules = [
-	{ url = "*", use = "vscode" },
+	{ url = "*", use = "hx" },
 ]
 
 [manager]
@@ -19,8 +19,8 @@ cwd = "~/.config/yazi/last-cwd"
 use = "cyberpunk_nk"
 
 [opener]
-# open anything with Visual Studio Code, detaching so Yazi doesn't wait
-vscode = [
-    { run = "code %s", orphan = true },
+# open anything with helix, detaching so Yazi doesn't wait
+hx = [
+    { run = "hx %s", orphan = true },
 ]
 

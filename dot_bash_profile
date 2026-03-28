@@ -1,4 +1,8 @@
-# ~/.bash_profile (login shell) - source ~/.bashrc if available
+# ~/.bash_profile (login shell) - source ~/.profile and ~/.bashrc if available
+if [ -f "$HOME/.profile" ]; then
+  . "$HOME/.profile"
+fi
+
 if [ -f "$HOME/.bashrc" ]; then
   . "$HOME/.bashrc"
 fi

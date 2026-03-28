@@ -2,8 +2,20 @@
 {{ include ".chezmoitemplates/env.sh.tmpl" }}
 
 # --- PERSONAL DATA (Notes) ---
+{{- if eq .chezmoi.os "linux" }}
 echo "📓 Syncing knowledge base..."
 NOTES_DIR="$NK_DIR/notes"
 if [ ! -d "$NOTES_DIR/.git" ]; then
     git clone "git@github.com:nkermani/notes.git" "$NOTES_DIR" || echo "  ⚠️  Notes clone failed. Check SSH keys."
 fi
+{{- end }}
+
+# --- BOOKOKRAT ---
+{{- if .chezmoi.os }}
+if command -v cargo >/dev/null 2>&1; then
+    echo "📚 Installing bookokrat..."
+    if ! command -v bookokrat >/dev/null 2>&1; then
+        cargo install bookokrat || echo "  ⚠️  bookokrat install failed"
+    fi
+fi
+{{- end }}

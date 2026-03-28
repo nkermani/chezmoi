@@ -1,3 +1,11 @@
+# HELIX EDITOR (macOS)
+if [[ "$OS_TYPE" == "macos" ]] || [[ "$(uname -s)" == "Darwin" ]]; then
+    if command -v hx >/dev/null 2>&1; then
+        alias h='hx'
+        alias hx='hx'
+    fi
+fi
+
 # 4. LOGIQUE VS CODE (WSL2)
 if [[ "$OS_TYPE" == "wsl2" ]]; then
     unalias code c 2>/dev/null
