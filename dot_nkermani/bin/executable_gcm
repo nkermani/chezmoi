@@ -1,32 +1,22 @@
 #!/bin/bash
-# gcm - Version GitHub Copilot CLI (Optimisée Vitesse)
+# gcm - Version Ollama (Locale, Gratuite & Ultra-Rapide)
 
-# 1. Récupération du diff (on reste sur 50 lignes pour la rapidité maximale)
+# 1. Récupérer le diff
 full_diff=$(git diff --cached 2>/dev/null | head -n 50)
 
 if [[ -z "$full_diff" ]]; then
-    echo "❌ Aucun changement indexé. Faites 'git add' d'abord."
+    echo "❌ Aucun changement indexé."
     exit 1
 fi
 
-echo "🚀 Génération via Copilot..."
-
-# 2. Utilisation de l'option -p (Prompt) pour éviter le mode interactif
-# On demande un message ultra-court pour gagner du temps de génération
-msg=$(copilot --prompt "Write a short conventional commit message (type(scope): description) for these changes: $full_diff. Output ONLY the message, no quotes." 2>/dev/null | tr -d '"')
+# 2. Appel local à Ollama (Llama 3.2 1B)
+# On demande un message de commit direct sans fioritures
+msg=$(ollama run llama3.2:1b "Write a conventional commit message (type(scope): description) for: $full_diff. Output ONLY the message, no quotes, no period." 2>/dev/null | tr -d '"')
 
 if [[ -n "$msg" ]]; then
-    echo -e "\n📝 Message : $msg"
+    echo -e "\n📝 Message (Ollama) : $msg"
     git commit -m "$msg"
 else
-    # Si Copilot échoue, on tente une version encore plus courte
-    echo "⚠️  Second essai (version courte)..."
-    msg=$(copilot -p "Summarize in 1 sentence for git commit: $full_diff" 2>/dev/null)
-    
-    if [[ -n "$msg" ]]; then
-        git commit -m "$msg"
-    else
-        echo "❌ Échec de la génération."
-        exit 1
-    fi
+    echo "❌ Erreur : Vérifiez que Ollama est bien lancé (ollama serve)."
+    exit 1
 fi
