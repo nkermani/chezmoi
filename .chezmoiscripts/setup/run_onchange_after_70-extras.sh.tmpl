@@ -19,3 +19,28 @@ if command -v cargo >/dev/null 2>&1; then
     fi
 fi
 {{- end }}
+
+# --- OLLAMA ---
+{{- if eq .chezmoi.os "linux" }}
+echo "🤖 Setting up Ollama (Linux - sudoless)..."
+if ! command -v ollama >/dev/null 2>&1; then
+    export OLLAMA_INSTALL_PREFIX="$HOME/.local"
+    export PATH="$HOME/.local/bin:$PATH"
+    curl -fsSL https://ollama.ai/install.sh | sh || echo "  ⚠️  Ollama install failed"
+fi
+{{- end }}
+
+{{- if eq .chezmoi.os "darwin" }}
+echo "🤖 Setting up Ollama (macOS)..."
+if ! command -v ollama >/dev/null 2>&1; then
+    brew install ollama || echo "  ⚠️  Ollama install failed"
+fi
+{{- end }}
+
+# Ensure ollama is in PATH for both OS
+export PATH="$HOME/.local/bin:$PATH"
+
+if command -v ollama >/dev/null 2>&1; then
+    echo "📥 Pulling llama3.2:1b model..."
+    ollama list 2>/dev/null | grep -q "llama3.2:1b" || ollama pull llama3.2:1b || echo "  ⚠️  Model pull failed"
+fi
