@@ -1,29 +1,32 @@
 #!/bin/bash
-# gcm - Generate commit message with AI (Optimized for Speed)
+# gcm - Version GitHub Copilot CLI (Optimisée Vitesse)
 
-# Récupération légère du diff (max 100 lignes pour la vitesse)
-full_diff=$(git diff --cached 2>/dev/null | head -n 100)
+# 1. Récupération du diff (on reste sur 50 lignes pour la rapidité maximale)
+full_diff=$(git diff --cached 2>/dev/null | head -n 50)
 
 if [[ -z "$full_diff" ]]; then
-    echo "No changes to commit (did you 'git add'?)"
+    echo "❌ Aucun changement indexé. Faites 'git add' d'abord."
     exit 1
 fi
 
-# Prompt minimaliste = Réponse plus rapide
-prompt="Task: Git commit (Conventional Commits).
-Rules: type(scope): description (max 50 chars), imperative.
-Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.
-Output ONLY message.
-Diff:
-$full_diff"
+echo "🚀 Génération via Copilot..."
 
-# Appel OpenCode avec nettoyage des guillemets
-msg=$(opencode run --model=opencode/minimax-m2.5-free --variant=minimal "$prompt" 2>/dev/null | tr -d '"')
+# 2. Utilisation de l'option -p (Prompt) pour éviter le mode interactif
+# On demande un message ultra-court pour gagner du temps de génération
+msg=$(copilot --prompt "Write a short conventional commit message (type(scope): description) for these changes: $full_diff. Output ONLY the message, no quotes." 2>/dev/null | tr -d '"')
 
 if [[ -n "$msg" ]]; then
-    echo -e "\nCommit: $msg"
+    echo -e "\n📝 Message : $msg"
     git commit -m "$msg"
 else
-    echo "Error: AI failed to respond"
-    exit 1
+    # Si Copilot échoue, on tente une version encore plus courte
+    echo "⚠️  Second essai (version courte)..."
+    msg=$(copilot -p "Summarize in 1 sentence for git commit: $full_diff" 2>/dev/null)
+    
+    if [[ -n "$msg" ]]; then
+        git commit -m "$msg"
+    else
+        echo "❌ Échec de la génération."
+        exit 1
+    fi
 fi
