@@ -1,5 +1,10 @@
 theme = "gruvbox-material"
 
+[editor]
+gutters.line-numbers.min-width = 80
+text-width = 80
+soft-wrap = { enable = true, wrap-at-text-width = true }
+
 [editor.cursor-shape]
 insert = "bar"
 normal = "block"
@@ -12,3 +17,24 @@ hidden = false
 render = true
 character = "┊" # Some characters that work well: "▏", "┆", "┊", "⸽"
 skip-levels = 1
+
+[keys.normal]
+# CTRL+D : Sélectionner l'occurrence suivante (simule Ctrl+D de VS Code)
+"C-d" = ["move_char_right", "move_prev_word_start", "select_next_sibling", "search_selection", "make_search_word_bounded", "extend_search_next"]
+
+# CTRL+L : Sélectionner la ligne entière (comme 'x' dans Helix)
+"C-l" = "extend_line_below"
+
+# ALT+UP / ALT+DOWN : Déplacer la ligne ou la sélection
+"A-up" = "move_line_up"
+"A-down" = "move_line_down"
+
+# 'G' pour Gouttière (exemple)
+"C-g" = ":set gutters.line-numbers.min-width 80" 
+"C-h" = ":set gutters.line-numbers.min-width 3"
+
+[keys.select]
+# Permet de continuer à ajouter des occurrences en mode sélection
+"C-d" = ["search_selection", "make_search_word_bounded", "extend_search_next"]
+"A-up" = "move_line_up"
+"A-down" = "move_line_down"
