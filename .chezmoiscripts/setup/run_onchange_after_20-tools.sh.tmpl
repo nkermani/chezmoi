@@ -6,7 +6,7 @@ HAS_SUDO="{{ .has_sudo }}"
 echo "🛠️  Installing CLI utilities..."
 if [[ "$OS_TYPE" == "Darwin" ]]; then
     if command -v brew &>/dev/null; then
-        brew install fzf ripgrep fd bat lazygit
+        brew install fzf ripgrep fd bat lazygit tree
     fi
 else
     [ ! -f "$BIN_DIR/fzf" ] && {
@@ -15,7 +15,7 @@ else
     LINUX_ARCH="x86_64"
     [[ "$ARCH_TYPE" == "aarch64" ]] && LINUX_ARCH="aarch64"
 
-    for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat" "lazygit:lazygit:jesseduffield/lazygit"; do
+    for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat" "lazygit:lazygit:jesseduffield/lazygit" "tree:tree:staticfloat/tree"; do
         IFS=":" read -r name bin repo <<< "$tool"
         if [ ! -f "$BIN_DIR/$bin" ]; then
             echo "  📦 Fetching $name..."

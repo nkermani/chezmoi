@@ -13,3 +13,7 @@ fi
 if [ -z "$PS1" ]; then
   PS1='\u@\h:\w\$ '
 fi
+
+export NVM_DIR="$HOME/.nkermani/apps/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"

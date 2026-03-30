@@ -55,3 +55,14 @@ if command -v rustup &>/dev/null; then
     echo "  🦀 Adding rust-src component..."
     rustup component add rust-src 2>/dev/null || echo "  ⚠️ rust-src failed, continuing..."
 fi
+
+# Scooter (find & replace TUI)
+if ! command -v scooter &>/dev/null; then
+    echo "  📦 Installing Scooter (find & replace)..."
+    if command -v cargo &>/dev/null; then
+        cargo install scooter 2>/dev/null || echo "  ⚠️  scooter install failed"
+        ln -sf "$(which scooter)" "$BIN_DIR/scooter" 2>/dev/null || true
+    fi
+fi
+
+
