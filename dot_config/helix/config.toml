@@ -23,6 +23,10 @@ character = "┊" # Some characters that work well: "▏", "┆", "┊", "⸽"
 skip-levels = 1
 
 [keys.normal]
+"C-q" = [":quit", ':sh printf "\x1b[?1049l\x1b[?2004l" > /dev/tty']
+
+"Q" = [":write-all", ":quit", ':sh printf "\x1b[?1049l\x1b[?2004l" > /dev/tty']
+
 "C-d" = ["move_char_right", "move_prev_word_start", "select_next_sibling", "search_selection", "make_search_word_bounded", "extend_search_next"]
 
 "A-up" = "move_line_up"
@@ -37,13 +41,25 @@ skip-levels = 1
 
 "C-t" = ":sh kitty @ launch --location=vsplit --title=shell $SHELL"
 "C-e" = ":sh kitty @ launch --location=hsplit --title=yazi yazi"
+"C-g" = ":sh kitty @ launch --location=vsplit --title=lazygit lazygit"
 
 "C-y" = [
-    ":sh rm -f /tmp/helix-yazi-pick",
-    ":insert-output yazi '%{buffer_name}' --chooser-file /tmp/helix-yazi-pick",
-    ":sh printf \"\\x1b[?1049h\\x1b[?2004h\" > /dev/tty",
-    ":open %sh{cat /tmp/helix-yazi-pick}",
-    ":redraw",
+  ':sh rm -f /tmp/unique-file',
+  ':insert-output yazi "%{buffer_name}" --chooser-file=/tmp/unique-file',
+  ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ':open %sh{cat /tmp/unique-file}',
+  ':redraw',
+  ':set mouse false',
+  ':set mouse true',
+]
+
+C-g = [
+    ":write-all", 
+    ":new", 
+    ":insert-output lazygit", 
+    ":buffer-close!", 
+    ":redraw", 
+    ":reload-all"
 ]
 
 [keys.select]

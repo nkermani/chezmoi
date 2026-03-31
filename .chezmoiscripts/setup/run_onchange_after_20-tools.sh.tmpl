@@ -15,7 +15,7 @@ else
     LINUX_ARCH="x86_64"
     [[ "$ARCH_TYPE" == "aarch64" ]] && LINUX_ARCH="aarch64"
 
-    for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat" "lazygit:lazygit:jesseduffield/lazygit" "tree:tree:staticfloat/tree"; do
+    for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat" "lazygit:lazygit:jesseduffield/lazygit"; do
         IFS=":" read -r name bin repo <<< "$tool"
         if [ ! -f "$BIN_DIR/$bin" ]; then
             echo "  📦 Fetching $name..."
@@ -33,5 +33,15 @@ else
             fi
         fi
     done
+
+    # Install tree via package manager (staticfloat/tree no longer exists)
+    if [ ! -f "$BIN_DIR/tree" ] && ! command -v tree &>/dev/null; then
+        echo "  📦 Installing tree..."
+        if [[ "$HAS_SUDO" == "true" ]]; then
+            $SUDO apt-get update && $SUDO apt-get install -y tree
+        else
+            apt-get update && apt-get install -y tree
+        fi
+    fi
 fi
 

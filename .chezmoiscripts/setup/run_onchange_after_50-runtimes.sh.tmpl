@@ -60,7 +60,8 @@ fi
 if ! command -v scooter &>/dev/null; then
     echo "  📦 Installing Scooter (find & replace)..."
     if command -v cargo &>/dev/null; then
-        cargo install scooter 2>/dev/null || echo "  ⚠️  scooter install failed"
+        echo "    ↳ Compiling... (this may take a few minutes)"
+        cargo install scooter --locked 2>&1 || echo "  ⚠️  scooter install failed"
         ln -sf "$(which scooter)" "$BIN_DIR/scooter" 2>/dev/null || true
     fi
 fi
