@@ -5,6 +5,7 @@ text-width = 80
 soft-wrap = { enable = true, wrap-at-text-width = true }
 color-modes=true
 true-color = true
+end-of-line-diagnostics = "hint"
 
 [editor.auto-save]
 focus-lost=true
@@ -21,6 +22,11 @@ hidden = false
 render = true
 character = "┊" # Some characters that work well: "▏", "┆", "┊", "⸽"
 skip-levels = 1
+
+[editor.inline-diagnostics]
+cursor-line = "hint"
+other-lines = "disable"
+
 
 [keys.normal]
 "C-q" = [":quit", ':sh printf "\x1b[?1049l\x1b[?2004l" > /dev/tty']
@@ -39,10 +45,10 @@ skip-levels = 1
     ":reload-all"
 ]
 
-"C-t" = ":sh kitty @ launch --location=vsplit --title=shell $SHELL"
-"C-e" = ":sh kitty @ launch --location=hsplit --title=yazi yazi"
-"C-g" = ":sh kitty @ launch --location=vsplit --title=lazygit lazygit"
+# Terminal
+# "C-t" = ":sh kitty @ launch --location=vsplit --title=shell $SHELL"
 
+# Yazi
 "C-y" = [
   ':sh rm -f /tmp/unique-file',
   ':insert-output yazi "%{buffer_name}" --chooser-file=/tmp/unique-file',
@@ -53,7 +59,8 @@ skip-levels = 1
   ':set mouse true',
 ]
 
-C-g = [
+# Lazygit
+"C-g" = [
     ":write-all", 
     ":new", 
     ":insert-output lazygit", 
