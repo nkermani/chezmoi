@@ -10,6 +10,14 @@ if [ ! -d "$NOTES_DIR/.git" ]; then
 fi
 {{- end }}
 
+# --- Scooter ---
+if command -v cargo >/dev/null 2>&1; then
+    echo "📚 Installing scooter..."
+    if ! command -v scooter >/dev/null 2>&1; then
+        cargo install scooter || echo "  ⚠️  scooter install failed"
+    fi
+fi
+
 # --- BOOKOKRAT ---
 {{- if .chezmoi.os }}
 if command -v cargo >/dev/null 2>&1; then

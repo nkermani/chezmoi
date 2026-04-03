@@ -8,8 +8,8 @@ sort_by = "alphabetical"
 sort_sensitive = false
 sort_reverse = false
 sort_dir_first = true
-# Memorize last directory
-cwd = "~/.config/yazi/last-cwd"
+
+cwd = "~/.config/yazi/last-cwd" # Memorize last directory
 
 [theme]
 use = "cyberpunk_nk"

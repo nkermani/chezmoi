@@ -1,7 +1,5 @@
 #!/bin/bash
-# gcm - Version Ironclad (Vitesse vs Précision)
-
-# 1. Récupération du contexte
+# gcm
 diff_context=$(git diff --cached --stat ; git diff --cached | head -n 30)
 
 if [[ -z "$diff_context" ]]; then
@@ -11,19 +9,13 @@ fi
 
 echo "⚡ Génération..."
 
-# 2. Prompt ultra-agressif
-# On utilise un format de réponse forcée "Output: type: description"
 msg=$(ollama run llama3.2:1b "Context: $diff_context
 Task: Write a git commit.
 Allowed Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.
 Format: type: description
-Constraint: Start with the type. No intro text. Max 50 chars." 2>/dev/null | head -n 1 | tr -d '"`')
+Constraint: Start with the type. No intro text. Max 100 chars." 2>/dev/null | head -n 1 | tr -d '"`')
 
-# 3. LOGIQUE DE RÉPARATION (Si l'IA commence par "Added...", "Updated...", etc.)
-# On vérifie si la ligne commence par un de vos types + ":"
 if [[ ! "$msg" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert): ]]; then
-    
-    # Détection automatique simple du type si l'IA a oublié le préfixe
     if [[ "$msg" =~ ^(Add|Create|New|Implement) ]]; then TYPE="feat";
     elif [[ "$msg" =~ ^(Fix|Repair|Debug) ]]; then TYPE="fix";
     elif [[ "$msg" =~ ^(Doc|Read|Wiki) ]]; then TYPE="docs";
@@ -31,13 +23,10 @@ if [[ ! "$msg" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert
     elif [[ "$msg" =~ ^(Test) ]]; then TYPE="test";
     else TYPE="chore"; fi
     
-    # On reconstruit le message proprement
-    # On enlève les mots parasites comme "Added", "Updated" au début
     clean_desc=$(echo "$msg" | sed -E 's/^(Added|Updated|Fixed|Created|Implement|Improved|Changes|Modified) //I')
-    msg="$TYPE: ${clean_desc,,}" # En minuscule pour le style
+    msg="$TYPE: ${clean_desc,,}"
 fi
 
-# 4. Validation finale et Commit
 if [[ -n "$msg" ]]; then
     echo -e "\n📝 $msg"
     git commit -m "$msg"

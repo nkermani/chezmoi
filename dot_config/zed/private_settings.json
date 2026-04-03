@@ -1,0 +1,99 @@
+ {
+  "title_bar": {
+    "show_menus": false,
+    "show_onboarding_banner": false,
+    "show_user_picture": false,
+    "show_user_menu": false,
+    "show_sign_in": false
+  },
+  "edit_predictions": {
+    "enabled_in_text_threads": false,
+    "mode": "subtle"
+  },
+  "show_edit_predictions": false,
+  "calls": {
+    "mute_on_join": false
+  },
+  "disable_ai": true,
+  "tabs": {
+    "file_icons": true,
+    "git_status": true
+  },
+  "toolbar": {
+    "breadcrumbs": true,
+    "quick_actions": true
+  },
+  "minimap": {
+    "show": "always"
+  },
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 1000
+    }
+  },
+  "base_keymap": "VSCode",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "session": {
+    "trust_all_worktrees": true
+  },
+  "when_closing_with_no_tabs": "keep_window_open",
+  "buffer_font_weight": 600.0,
+  "buffer_font_size": 14.0,
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "icon_theme": "Material Icon Theme",
+  "theme": "Bearded Theme Aquarelle Lilac",
+  "terminal": {
+    "copy_on_select": true,
+    "shell": "system"
+  },
+  "auto_update": false,
+  "format_on_save": "off",
+  "enable_language_server": true,
+  "vim_mode": false,
+  "hover": {
+    "enabled": true
+  },
+  "git": {
+    "inline_blame": {
+      "enabled": false
+    }
+  },
+  "editor": {
+    "scroll_beyond_last_line": false,
+    "word_wrap": "off",
+    "buffer_font_size": 14,
+    "line_height": "1.5",
+    "character_width": 1.0
+  },
+  "ui": {
+    "font_family": "JetBrainsMono Nerd Font",
+    "font_size": 14,
+    "cursor": {
+      "blink": "on"
+    }
+  },
+  "languages": {
+    "Rust": {
+      "formatter": "language_server"
+    },
+    "TypeScript": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    },
+    "JavaScript": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    }
+  }
+}

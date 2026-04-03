@@ -1,5 +1,4 @@
-# 3.2 LAZYGIT ALIAS
-alias lg='lazygit'
+# ~/.bashrc.d/20-aliases.sh
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	alias code='open -a "Visual Studio Code"'
@@ -17,4 +16,9 @@ alias gd='git diff'
 alias gl='git pull'
 alias gp='git push'
 alias gst='git status'
+
+#script
 alias gcm='~/.nkermani/bin/gcm'
+
+# lazygit
+alias lg='lazygit'

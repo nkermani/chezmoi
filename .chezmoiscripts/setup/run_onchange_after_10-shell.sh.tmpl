@@ -11,7 +11,6 @@ if [[ "$OS_TYPE" == "Darwin" ]]; then
     else
         echo "  ⚠️  brew not found; skipping macOS shell install."
     fi
-
 elif [[ "$OS_TYPE" == "Linux" ]]; then
     mkdir -p "$APPS_DIR" "$BIN_DIR"
 
@@ -41,6 +40,5 @@ elif [[ "$OS_TYPE" == "Linux" ]]; then
         fi
         ln -sf "$target/bin/bash" "$BIN_DIR/bash"
     }
-
     install_bash_local
 fi

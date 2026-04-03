@@ -1,3 +1,5 @@
+# ~/.bashrc.d/30-functions.sh
+
 _get_viewer() {
 	command -v bat >/dev/null 2>&1 && echo "bat --color=always --style=numbers" ||
 		command -v batcat >/dev/null 2>&1 && echo "batcat --color=always --style=numbers" ||

@@ -1,53 +1,7 @@
 theme = "gruvbox-material"
 
-[editor]
-text-width = 80
-soft-wrap = { enable = true, wrap-at-text-width = true }
-color-modes=true
-true-color = true
-end-of-line-diagnostics = "hint"
-
-[editor.auto-save]
-focus-lost=true
-
-[editor.cursor-shape]
-insert = "bar"
-normal = "block"
-select = "underline"
-
-[editor.file-picker]
-hidden = false
-
-[editor.indent-guides]
-render = true
-character = "┊" # Some characters that work well: "▏", "┆", "┊", "⸽"
-skip-levels = 1
-
-[editor.inline-diagnostics]
-cursor-line = "hint"
-other-lines = "disable"
-
-
 [keys.normal]
-"C-q" = [":quit", ':sh printf "\x1b[?1049l\x1b[?2004l" > /dev/tty']
-
-"Q" = [":write-all", ":quit", ':sh printf "\x1b[?1049l\x1b[?2004l" > /dev/tty']
-
-"C-d" = ["move_char_right", "move_prev_word_start", "select_next_sibling", "search_selection", "make_search_word_bounded", "extend_search_next"]
-
-"A-up" = "move_line_up"
-"A-down" = "move_line_down"
-
-"C-f" = [
-    ":write-all",
-    ":insert-output scooter --no-stdin >/dev/tty",
-    ":redraw",
-    ":reload-all"
-]
-
-# Terminal
-# "C-t" = ":sh kitty @ launch --location=vsplit --title=shell $SHELL"
-
+# Shortcuts which calls external tools
 # Yazi
 "C-y" = [
   ':sh rm -f /tmp/unique-file',
@@ -57,6 +11,13 @@ other-lines = "disable"
   ':redraw',
   ':set mouse false',
   ':set mouse true',
+]
+# Scooter
+"C-f" = [
+    ":write-all",
+    ":insert-output scooter --no-stdin >/dev/tty",
+    ":redraw",
+    ":reload-all"
 ]
 
 # Lazygit
@@ -69,7 +30,33 @@ other-lines = "disable"
     ":reload-all"
 ]
 
-[keys.select]
-"C-d" = ["search_selection", "make_search_word_bounded", "extend_search_next"]
-"A-up" = "move_line_up"
-"A-down" = "move_line_down"
+[editor]
+text-width = 80
+soft-wrap = { enable = true, wrap-at-text-width = true }
+color-modes = true
+true-color = true
+end-of-line-diagnostics = "hint"
+mouse = true
+
+[editor.auto-save]
+focus-lost=true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.file-picker]
+hidden = false # Not showing .files in file picker
+
+[editor.indent-guides]
+render = true
+character = "┊" # Some characters that work well: "▏", "┆", "┊", "⸽"
+skip-levels = 1
+
+[editor.inline-diagnostics]
+cursor-line = "hint"
+other-lines = "disable"
+
+
+

@@ -8,6 +8,8 @@ HAS_SUDO="{{ .has_sudo }}"
 
 # --- EDITOR INSTALLATIONS ---
 echo "📝 Installing editors..."
+# VSCode
+# Zed
 # Helix Editor (hx)
 echo "Installing Helix editor..."
 if [ ! -f "$BIN_DIR/hx" ]; then
@@ -29,3 +31,5 @@ if [ ! -f "$BIN_DIR/hx" ]; then
     ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
     rm -f /tmp/helix.tar*
 fi
+
+# Fresh TUI Editor
