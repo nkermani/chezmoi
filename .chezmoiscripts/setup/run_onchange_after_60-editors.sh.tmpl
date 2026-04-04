@@ -7,29 +7,29 @@ HAS_SUDO="{{ .has_sudo }}"
 {{ include ".chezmoitemplates/env.sh.tmpl" }}
 
 # --- EDITOR INSTALLATIONS ---
-echo "📝 Installing editors..."
+# echo "📝 Installing editors..."
 # VSCode
 # Zed
 # Helix Editor (hx)
-echo "Installing Helix editor..."
-if [ ! -f "$BIN_DIR/hx" ]; then
-    echo "  🌀 Installing Helix editor..."
-    HELIX_DIR="$APPS_DIR/helix"
-    mkdir -p "$HELIX_DIR/runtime"
+# echo "Installing Helix editor..."
+# if [ ! -f "$BIN_DIR/hx" ]; then
+#     echo "  🌀 Installing Helix editor..."
+#     HELIX_DIR="$APPS_DIR/helix"
+#     mkdir -p "$HELIX_DIR/runtime"
 
-    HELIX_ARCH="x86_64"
-    [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && HELIX_ARCH="aarch64"
+#     HELIX_ARCH="x86_64"
+#     [[ "$ARCH_TYPE" == "aarch64" || "$ARCH_TYPE" == "arm64" ]] && HELIX_ARCH="aarch64"
 
-    HELIX_OS="linux"
-    if [[ "$OS_TYPE" == "Darwin" ]]; then
-        HELIX_OS="macos"
-    fi
+#     HELIX_OS="linux"
+#     if [[ "$OS_TYPE" == "Darwin" ]]; then
+#         HELIX_OS="macos"
+#     fi
 
-    curl -L -LSs "https://github.com/helix-editor/helix/releases/download/25.07.1/helix-25.07.1-${HELIX_ARCH}-${HELIX_OS}.tar.xz" -o /tmp/helix.tar.xz
-    xz -d /tmp/helix.tar.xz
-    tar -xf /tmp/helix.tar -C "$HELIX_DIR" --strip-components=1
-    ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
-    rm -f /tmp/helix.tar*
-fi
+#     curl -L -LSs "https://github.com/helix-editor/helix/releases/download/25.07.1/helix-25.07.1-${HELIX_ARCH}-${HELIX_OS}.tar.xz" -o /tmp/helix.tar.xz
+#     xz -d /tmp/helix.tar.xz
+#     tar -xf /tmp/helix.tar -C "$HELIX_DIR" --strip-components=1
+#     ln -sf "$HELIX_DIR/hx" "$BIN_DIR/hx"
+#     rm -f /tmp/helix.tar*
+# fi
 
 # Fresh TUI Editor
