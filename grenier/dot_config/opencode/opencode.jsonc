@@ -2,7 +2,7 @@
   "$schema": "https://opencode.ai/config.json",
   "plugin": [
     "opencode-gemini-auth@latest",
-    "oh-my-opencode@latest"
+    "oh-my-openagent@latest"
   ],
   "default_agent": "Teacher",
   "provider": {
@@ -12,22 +12,22 @@
         "timeout": 600000
       }
     }
-  },
-  "mcp": {
-    "obsidian": {
-      "type": "local",
-      "command": [
-        "npx",
-        "@mauricio.wolff/mcp-obsidian@latest",
-        "/path/to/your/vault/"
-      ],
-      "enabled": true
-    },
-    "notion": {
-      "type": "remote",
-      "url": "https://mcp.notion.com/mcp",
-      "enabled": true
-    }
   }
+  // "mcp": {
+  //   "obsidian": {
+  //     "type": "local",
+  //     "command": [
+  //       "npx",
+  //       "@mauricio.wolff/mcp-obsidian@latest",
+  //       "/path/to/your/vault/"
+  //     ],
+  //     "enabled": true
+  //   },
+  //   "notion": {
+  //     "type": "remote",
+  //     "url": "https://mcp.notion.com/mcp",
+  //     "enabled": true
+  //   }
+  // }
 }
 
