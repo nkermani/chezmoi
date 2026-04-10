@@ -6,6 +6,7 @@
     "files.autoSave": "afterDelay",
     "files.insertFinalNewline": true,
     "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 100,
     "files.saveConflictResolution": "overwriteFileOnDisk",
@@ -46,6 +47,7 @@
     //////////////////////////////////////////////////////////
     //                      Explorer
     "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
     //////////////////////////////////////////////////////////
     //                       Editor
     "breadcrumbs.enabled": true,
@@ -103,12 +105,14 @@
     //                        THEME
     "editor.fontFamily": "JetBrainsMono Nerd Font",
     "editor.fontSize": 14.5,
+    "editor.cursorWidth": 3,
     "editor.fontWeight": "500",
     "terminal.integrated.fontSize": 14,
     "workbench.iconTheme": "material-icon-theme",
     "editor.bracketPairColorization.enabled": false,
     "workbench.colorTheme": "Gruvbox Material Flat Dark",
     // OVERRIDE
+    "markdown.preview.breaks": true,
     "workbench.colorCustomizations": {
         "[Gruvbox Material Flat Dark]": {
             // --- Fond de l'éditeur (Ta base) ---
@@ -150,35 +154,20 @@
 
             // --- Terminal
             "terminal.background": "#2a2827",
+            // --- SYNTAXE DANS LA PREVIEW MARKDOWN ---
+            // Pour le texte entre `backticks` (inline code)
+            "textPreformat.foreground": "#d8a657", // Jaune (comme tes types)
+            "textPreformat.background": "#3c3836", // Fond discret
+
+            // Pour les blocs ``` code ```
+            "textCodeBlock.background": "#2a2827", // Fond sombre type Sidebar
+            // Liens et citations
+            "textLink.foreground": "#89b482",
+            "textBlockQuote.background": "#2a2827",
+            "textBlockQuote.border": "#ea6962"
         }
     },
-    "editor.semanticTokenColorCustomizations": {
-        "[Gruvbox Material Flat Dark]": {
-            "enabled": true,
-            "rules": {
-                "selfKeyword": "#d3869b",
-                "selfParameter": "#d3869b",
-                "variable.language": "#d3869b",
-                "variable.readonly.defaultLibrary": "#d3869b",
-                //
-                "punctuation.bracket": "#d4be98",
-                "*.bracket": "#d4be98",
-                "bracket": "#d4be98",     // FG_TEXT
-                "variable": "#d4be98",    // FG_TEXT
-                "parameter": "#d4be98",   // FG_TEXT
-                "punctuation": "#928374", // GREY_TECH
-                "operator.punctuation": "#928374",
-                "operator": "#e78a4e",    // OP_ORANGE
-                "keyword": "#ea6962",     // KEY_RED
-                "function": "#a9b665",    // FUNC_GREEN
-                "macro": "#a9b665",       // FUNC_GREEN
-                "type": "#d8a657",        // TYPE_YELLOW
-                "class": "#d8a657",       // TYPE_YELLOW
-                "string": "#89b482",      // STR_AQUA
-                "number": "#d3869b"       // NUM_PURPLE
-            }
-        }
-    },
+
     "editor.tokenColorCustomizations": {
         "[Gruvbox Material Flat Dark]": {
             "textMateRules": [
@@ -322,9 +311,96 @@
                         "fontStyle": ""
                     }
                 },
+                {
+                    "name": "Markdown Syntax Highlighting Match",
+                    "scope": [
+                        "markup.inline.raw",
+                        "markup.fenced_code.block",
+                        "variable.language.fenced.markdown"
+                    ],
+                    "settings": {
+                        "foreground": "#d4be98"
+                    }
+                },
             ]
+        },
+    },
+    "editor.semanticTokenColorCustomizations": {
+        "[Gruvbox Material Flat Dark]": {
+            "enabled": true,
+            "rules": {
+                "selfKeyword": "#d3869b",
+                "selfParameter": "#d3869b",
+                "variable.language": "#d3869b",
+                "variable.readonly.defaultLibrary": "#d3869b",
+                //
+                "punctuation.bracket": "#d4be98",
+                "*.bracket": "#d4be98",
+                "bracket": "#d4be98",     // FG_TEXT
+                "variable": "#d4be98",    // FG_TEXT
+                "parameter": "#d4be98",   // FG_TEXT
+                "punctuation": "#928374", // GREY_TECH
+                "operator.punctuation": "#928374",
+                "operator": "#e78a4e",    // OP_ORANGE
+                "keyword": "#ea6962",     // KEY_RED
+                "function": "#a9b665",    // FUNC_GREEN
+                "macro": "#a9b665",       // FUNC_GREEN
+                "type": "#d8a657",        // TYPE_YELLOW
+                "class": "#d8a657",       // TYPE_YELLOW
+                "string": "#89b482",      // STR_AQUA
+                "number": "#d3869b",       // NUM_PURPLE
+                // --- Palette Markdown Preview ---
+                "markdown.preview.background": "#32302f",      // Fond principal
+                "markdown.preview.foreground": "#d4be98",      // Texte (FG_TEXT)
+
+                // Titres (Headers) - On utilise le Jaune/Orange pour le relief
+                "notificationLink.foreground": "#d8a657",
+                "textLink.foreground": "#89b482",              // Liens en Aqua (Strings)
+                "textLink.activeForeground": "#a9b665",
+
+                // Blocs de code (Code Spans & Blocks)
+                "textCodeBlock.background": "#2a2827",         // Un ton plus sombre pour le relief
+                "textPreformat.foreground": "#d8a657",         // Inline code en Jaune (Types)
+                "textPreformat.background": "#3c3836",
+
+                // Citations (Blockquotes)
+                "textBlockQuote.background": "#2a2827",
+                "textBlockQuote.border": "#ea6962",            // Bordure en Rouge (Keywords)
+
+                // Séparateurs (HR)
+                "textSeparator.foreground": "#928374"          // Gris technique
+            }
         }
     },
+
+    // giof.insertfilenameascomment
+    "insertFilename.usePath": true,
+    "insertFilename.fileExtensions": [
+        ".js", ".ts", ".py", ".cpp",
+        ".rs", ".c", ".h", ".sh", ".md", ".yaml", ".yml", ".go"
+    ],
+    "insertFilename.commentStyleMap": {
+        ".rs": "//",
+        ".c": "//",
+        ".h": "//",
+        ".sh": "#",
+        ".md": "",
+        ".yaml": "#",
+        ".yml": "#",
+        ".go": "//",
+        ".py": "#"
+    },
+
+    "indentRainbow.colors": [
+        "rgba(168, 153, 132, 0.04)", // Sand / Cream (Neutre)
+        "rgba(142, 192, 124, 0.04)", // Aqua délavé
+        "rgba(211, 174, 126, 0.04)", // Terra Cotta clair
+        "rgba(131, 165, 152, 0.04)", // Bleu ardoise doux
+        "rgba(189, 174, 147, 0.04)", // Gris chaud
+        "rgba(214, 147, 131, 0.04)"  // Rose poussiéreux
+    ],
+    "indentRainbow.errorColor": "rgba(234, 105, 98, 0.2)",
+    "zenMode.showTabs": "none",
     // "terminal.integrated.commandsToSkipShell": [
     //     "kilo-code.new.agentManagerOpen",
     //     "kilo-code.new.agentManager.showTerminal"
@@ -391,6 +467,7 @@
     // ms-vscode.cpptools // C/C++
 
     // "Misc."
+    // giof.insertfilenameascomment // Insert Filename as Comment on top
     // pomdtr.excalidraw-editor // Excalidraw diagrams in VSCode
     // usernamehw.errorlens // ErrorLens - shows errors inline with code
     // MS-CEINTL.vscode-language-pack-ko // Korean language pack
