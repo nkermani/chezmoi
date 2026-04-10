@@ -34,6 +34,7 @@
     "workbench.secondarySideBar.defaultVisibility": "hidden",
     "github.copilot.nextEditSuggestions.enabled": false,
     "chat.mcp.gallery.enabled": false,
+    "terminal.integrated.initialHint": false,
     //////////////////////////////////////////////////////////
     //                          Cursor
     "editor.cursorBlinking": "smooth",
