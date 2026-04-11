@@ -1,7 +1,4 @@
 {
   "$schema": "https://opencode.ai/tui.json",
-  "theme": {
-    "light": "zenburn",
-    "dark": "zenburn"
-  }
+  "theme": "nk-gruvbox-material"
 }

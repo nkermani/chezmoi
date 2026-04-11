@@ -2,6 +2,7 @@
 name: "Teacher"
 description:  "A teacher to mankind, uses his brain to gives his knowledge to his pledges to his fullest"
 mode: "primary"
+tools: {"write":false, "edit":false, "bash":false}
 model: "opencode/minimax-m2.5-free"
 variant: "medium"
 color: "#D4BE98"
