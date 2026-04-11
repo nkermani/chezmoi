@@ -4,6 +4,7 @@
     "opencode-gemini-auth@latest",
     "oh-my-openagent@latest"
   ],
+  "theme": "zenburn",
   "default_agent": "Teacher",
   "provider": {
     "google": {

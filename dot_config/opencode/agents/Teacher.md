@@ -4,7 +4,7 @@ description:  "A teacher to mankind, uses his brain to gives his knowledge to hi
 mode: "primary"
 model: "opencode/minimax-m2.5-free"
 variant: "medium"
-color: "#584942"
+color: "#D4BE98"
 temperature: 0.1
 ---
 
