@@ -1,45 +1,14 @@
 {
-  "$schema": "https://opencode.ai/config.json",
-  "plugin": [
-    // "opencode-gemini-auth@latest"
-    // "oh-my-openagent@latest" // disabled
-  ],
-  "mode": {
-    "plan": {
-      "model": "opencode/minimax-m2.5-free",
-      "tools": {
-        "write": false,
-        "edit": false,
-        "bash": false
-      }
-    }
-  },
-  "theme": "gruvbox-custom",
-  "default_agent": "plan",
-  "provider": {
-    "google": {
-      "options": {
-        "projectId": "opencode-42",
-        "timeout": 600000
-      }
-    }
-  }
-  // "mcp": {
-  // 
-  //   "obsidian": {
-  //     "type": "local",
-  //     "command": [
-  //       "npx",
-  //       "@mauricio.wolff/mcp-obsidian@latest",
-  //       "/path/to/your/vault/"
-  //     ],
-  //     "enabled": true
-  //   },
-  //   "notion": {
-  //     "type": "remote",
-  //     "url": "https://mcp.notion.com/mcp",
-  //     "enabled": true
-  //   }
-  // }
+    "$schema": "https://opencode.ai/config.json",
+    "mode": {
+        "plan": {
+            "model": "opencode/big-pickle",
+            "tools": {
+                "write": false,
+                "edit": false,
+                "bash": false
+            }
+        }
+    },
+    "default_agent": "plan"
 }
-
