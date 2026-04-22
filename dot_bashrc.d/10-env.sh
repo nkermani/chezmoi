@@ -8,6 +8,17 @@ else
     OS_TYPE="linux"
 fi
 
+if [[ "$OS_TYPE" == "wsl2" ]]; then
+    unalias code c 2>/dev/null
+    export VSCODE_EXE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
+
+    vscode() {
+        ( "$VSCODE_EXE" --remote wsl+Ubuntu-22.04 "${@:-.}" &> /dev/null & )
+    }
+    alias c='vscode'
+    alias code='vscode'
+fi
+
 # EDITOR / VISUAL / GIT_EDITOR
 if command -v code >/dev/null 2>&1; then
     _preferred_editor=code
