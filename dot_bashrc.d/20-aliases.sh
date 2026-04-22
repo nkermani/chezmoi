@@ -1,7 +1,18 @@
-# ~/.bashrc.d/20-aliases.sh
+# dot_bashrc.d/20-aliases.sh
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	alias code='open -a "Visual Studio Code"'
+fi
+
+if [[ "$OS_TYPE" == "wsl2" ]]; then
+    unalias code c 2>/dev/null
+    export VSCODE_EXE="/mnt/c/Users/kerma/AppData/Local/Programs/Microsoft VS Code/Code.exe"
+
+    vscode() {
+        ( "$VSCODE_EXE" --remote wsl+Ubuntu-22.04 "${@:-.}" &> /dev/null & )
+    }
+    alias c='vscode'
+    alias code='vscode'
 fi
 
 # Git aliases

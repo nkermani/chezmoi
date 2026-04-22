@@ -5,6 +5,8 @@ export NK_APPS="$NK_DIR/apps"
 export NK_BIN="$NK_DIR/bin"
 export PATH="$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH"
 
+export PATH="/home/nkermani/.bun/bin:$PATH"
+
 if [ -x "$NK_BIN/bash" ]; then
     export SHELL="$NK_BIN/bash"
 else
