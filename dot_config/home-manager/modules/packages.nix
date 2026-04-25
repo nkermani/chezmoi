@@ -21,7 +21,7 @@
     pkgs.eza
     pkgs.yazi
     pkgs.btop
-    pkgs.fish
+    # pkgs.fish
     pkgs.bash
     pkgs.nerd-fonts.jb-mono
   ];
