@@ -1,34 +1,51 @@
-# My Dotfiles
+# Chezmoi Dotfiles
 
-Personal configuration managed with [chezmoi](https://www.chezmoi.io/).
+My personal dotfiles managed with [chezmoi](https://www.chezmoi.io/).
 
-## Install
+## Initial Setup
 
-```bash
-sh -c "$(curl -sfL https://get.chezmoi.io)" -b ~/.local/bin
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
-source ~/.zshrc
-```
-
-## Setup
-
-Initialize with my dotfiles repo:
+On a new machine, run these commands to set up chezmoi with this repo:
 
 ```bash
-chezmoi init https://github.com/nkermani/chezmoi
-```
+# Install chezmoi
+sh -c "$(curl -fsSL https://get.chezmoi.io)"
 
-Apply the config:
+# Initialize chezmoi with this repo
+chezmoi init https://github.com/nkermani/chezmoi.git
 
-```bash
+# Apply the dotfiles
 chezmoi apply
+
+# Or for interactive mode
+chezmoi apply -i
 ```
 
-## Usage
+## Template Variables
 
-```bash
-chezmoi edit ~/.zshrc    # Edit source file
-chezmoi apply           # Apply changes
-chezmoi diff            # Show pending changes
-chezmoi status          # Show state
+### `is_42`
+
+Boolean that indicates whether the machine is a 42 school computer.
+
+- Set to `true` for 42 school computers (intra-*.42.fr machines)
+- Set to `false` for personal/macOS machines
+
+This variable is used to conditionally include/exclude:
+- `.nkermani/bin/42` - Focus mode scripts
+- `.local/share/applications/42-*.desktop` - Desktop entry files
+
+### `has_sudo`
+
+Boolean that indicates whether the user has sudo access.
+
+- Set to `true` if you can run `sudo` commands
+- Set to `false` otherwise (like on 42 school machines)
+
+## Configuration
+
+Template variables are configured in `~/.config/chezmoi/chezmoi.toml`:
+
+```toml
+[data]
+  is_42 = true
+  has_sudo = false
 ```
