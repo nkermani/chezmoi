@@ -1,47 +1,4 @@
 #!/bin/bash
-IS_42="{{ .is_42 }}"
-HAS_SUDO="{{ .has_sudo }}"
 {{ include ".chezmoitemplates/env.sh.tmpl" }}
 
-echo "🛠️  Installing CLI utilities..."
-if [[ "$OS_TYPE" == "Darwin" ]]; then
-    if command -v brew &>/dev/null; then
-        brew install fzf ripgrep fd bat lazygit tree
-    fi
-else
-    [ ! -f "$BIN_DIR/fzf" ] && {
-        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --bin && cp ~/.fzf/bin/fzf "$BIN_DIR/" && rm -rf ~/.fzf
-    }
-    LINUX_ARCH="x86_64"
-    [[ "$ARCH_TYPE" == "aarch64" ]] && LINUX_ARCH="aarch64"
-
-    for tool in "ripgrep:rg:BurntSushi/ripgrep" "fd:fd:sharkdp/fd" "bat:bat:sharkdp/bat" "lazygit:lazygit:jesseduffield/lazygit"; do
-        IFS=":" read -r name bin repo <<< "$tool"
-        if [ ! -f "$BIN_DIR/$bin" ]; then
-            echo "  📦 Fetching $name..."
-            VER=$(curl -sI "https://github.com/$repo/releases/latest" | grep -i "location:" | awk -F "/" '{print $NF}' | tr -d '\r')
-            
-            if [[ "$name" == "lazygit" ]]; then
-                # LazyGit has a slightly different naming convention
-                LG_ARCH="x86_64"
-                [[ "$ARCH_TYPE" == "aarch64" ]] && LG_ARCH="arm64"
-                curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}_${VER#v}_Linux_${LG_ARCH}.tar.gz" | tar -xzC /tmp
-                cp /tmp/lazygit "$BIN_DIR/"
-            else
-                curl -LSs "https://github.com/$repo/releases/download/${VER}/${name}-${VER}-${LINUX_ARCH}-unknown-linux-musl.tar.gz" | tar -xzC /tmp
-                find /tmp/${name}-${VER}-${LINUX_ARCH}-unknown-linux-musl -name "$bin" -type f -exec cp {} "$BIN_DIR/" \;
-            fi
-        fi
-    done
-
-    # Install tree via package manager (staticfloat/tree no longer exists)
-    if [ ! -f "$BIN_DIR/tree" ] && ! command -v tree &>/dev/null; then
-        echo "  📦 Installing tree..."
-        if [[ "$HAS_SUDO" == "true" ]]; then
-            $SUDO apt-get update && $SUDO apt-get install -y tree
-        else
-            apt-get update && apt-get install -y tree
-        fi
-    fi
-fi
-
+echo "🛠️  Tools are now managed by nix - skipping CLI installation..."

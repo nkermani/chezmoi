@@ -1,44 +1,4 @@
 #!/bin/bash
-# {{ include ".chezmoitemplates/env.sh.tmpl" }}
+{{ include ".chezmoitemplates/env.sh.tmpl" }}
 
-# Bash
-echo "🐚 Installing shells: bash"
-if [[ "$OS_TYPE" == "Darwin" ]]; then
-    if command -v brew &>/dev/null; then
-        brew install bash  || true
-        ln -sf "$(brew --prefix)/bin/bash" "$BIN_DIR/bash"
-        # ln -sf "$(brew --prefix)/bin/fish" "$BIN_DIR/fish"
-    else
-        echo "  ⚠️  brew not found; skipping macOS shell install."
-    fi
-elif [[ "$OS_TYPE" == "Linux" ]]; then
-    mkdir -p "$APPS_DIR" "$BIN_DIR"
-
-    install_bash_local() {
-        if command -v bash &>/dev/null; then
-            local current="$(bash --version | head -n1)"
-            echo "  ℹ️  Existing bash: $current"
-        fi
-        local version
-        version=$(curl -fsSL https://ftp.gnu.org/gnu/bash/ | grep -oP 'bash-\K[0-9.]+(?=\.tar\.gz)' | sort -V | tail -n1)
-        [ -z "$version" ] && { echo "  ⚠️  Unable to detect latest bash version"; return 1; }
-        local target="$APPS_DIR/bash-$version"
-        if [ -x "$target/bin/bash" ]; then
-            echo "  ✅ bash $version already installed"
-        else
-            echo "  📦 Installing bash $version"
-            mkdir -p "/tmp/bash-build"
-            pushd "/tmp/bash-build" >/dev/null
-            curl -L -o bash.tar.gz "https://ftp.gnu.org/gnu/bash/bash-$version.tar.gz"
-            tar xzf bash.tar.gz
-            cd "bash-$version" || return 1
-            ./configure --prefix="$target" --without-bash-malloc
-            make -j$(nproc || echo 2)
-            make install
-            popd >/dev/null
-            rm -rf "/tmp/bash-build"
-        fi
-        ln -sf "$target/bin/bash" "$BIN_DIR/bash"
-    }
-    install_bash_local
-fi
+echo "🐚 Shells are now managed by nix - skipping shell installation..."

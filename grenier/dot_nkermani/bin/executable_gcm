@@ -1,54 +1,36 @@
 #!/bin/bash
-# gcm - Generate commit message with AI (Conventional Commits)
+# gcm
+diff_context=$(git diff --cached --stat ; git diff --cached | head -n 30)
 
-diff=$(git diff --cached --stat 2>/dev/null)
-if [[ -z "$diff" ]]; then
-    diff=$(git diff --stat 2>/dev/null)
-fi
-
-if [[ -z "$diff" ]]; then
-    echo "No changes to commit"
+if [[ -z "$diff_context" ]]; then
+    echo "❌ Aucun changement indexé."
     exit 1
 fi
 
-full_diff=$(git diff --cached 2>/dev/null)
-if [[ -z "$full_diff" ]]; then
-    full_diff=$(git diff 2>/dev/null)
+echo "⚡ Génération..."
+
+msg=$(ollama run llama3.2:1b "Context: $diff_context
+Task: Write a git commit.
+Allowed Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.
+Format: type: description
+Constraint: Start with the type. No intro text. Max 100 chars." 2>/dev/null | head -n 1 | tr -d '"`')
+
+if [[ ! "$msg" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert): ]]; then
+    if [[ "$msg" =~ ^(Add|Create|New|Implement) ]]; then TYPE="feat";
+    elif [[ "$msg" =~ ^(Fix|Repair|Debug) ]]; then TYPE="fix";
+    elif [[ "$msg" =~ ^(Doc|Read|Wiki) ]]; then TYPE="docs";
+    elif [[ "$msg" =~ ^(Clean|Update|Refactor) ]]; then TYPE="refactor";
+    elif [[ "$msg" =~ ^(Test) ]]; then TYPE="test";
+    else TYPE="chore"; fi
+    
+    clean_desc=$(echo "$msg" | sed -E 's/^(Added|Updated|Fixed|Created|Implement|Improved|Changes|Modified) //I')
+    msg="$TYPE: ${clean_desc,,}"
 fi
 
-prompt="Generate a professional git commit message using Conventional Commits format.
-
-RULES:
-- Start with a type prefix: feat:, fix:, docs:, style:, refactor:, perf:, test:, build:, ci:, chore:, revert:
-- Optional scope in parentheses: feat(auth):, fix(api):
-- Title max 50 chars, imperative mood (add, fix, update, remove, not added, fixed)
-- No period at end of title
-- Optional body after blank line for complex changes
-
-TYPES:
-- feat: new feature
-- fix: bug fix
-- docs: documentation only
-- style: formatting, no code change
-- refactor: code restructure, no feature/fix
-- perf: performance improvement
-- test: adding/fixing tests
-- build: build system, dependencies
-- ci: CI/CD changes
-- chore: maintenance, no prod code change
-- revert: revert previous commit
-
-Output ONLY the commit message, nothing else.
-
-Changes:
-$full_diff"
-
-msg=$(opencode run --agent=oracle "$prompt" 2>/dev/null | tail -n +2)
-
 if [[ -n "$msg" ]]; then
-    echo "$msg"
+    echo -e "\n📝 $msg"
     git commit -m "$msg"
 else
-    echo "Failed to generate commit message"
+    echo "❌ Erreur critique Ollama."
     exit 1
 fi

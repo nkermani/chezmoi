@@ -1,32 +1,4 @@
 #!/bin/bash
 {{ include ".chezmoitemplates/env.sh.tmpl" }}
 
-NERD_FONTS_VERSION="v3.4.0"
-FONT_DIR="$HOME/.local/share/fonts"
-
-install_nerd_font() {
-    local font_name=$1
-    local font_url=$2
-    
-    if [ ! -d "$FONT_DIR/$font_name" ] && ! fc-list | grep -qi "$font_name"; then
-        echo "🔡 Installing $font_name Nerd Font..."
-        mkdir -p "$FONT_DIR/$font_name"
-        curl -L -o /tmp/${font_name}.zip "$font_url"
-        unzip -o /tmp/${font_name}.zip -d "$FONT_DIR/$font_name" && rm /tmp/${font_name}.zip
-        fc-cache -f
-    else
-        echo "✓ $font_name already installed"
-    fi
-}
-
-if [[ "$OS_TYPE" == "Darwin" ]]; then
-    if command -v brew &>/dev/null; then
-        brew install --cask font-jetbrains-mono-nerd-font
-    else
-        echo "✓ font-jetbrains-mono-nerd-font already installed"
-    fi
-elif [[ "$OS_TYPE" == "Linux" ]]; then
-    echo "🔡 Checking Fonts..."
-    install_nerd_font "JetBrainsMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_FONTS_VERSION}/JetBrainsMono.zip"
-    echo "✅ Fonts installed!"
-fi
+echo "🔡 Fonts are now managed by nix - skipping font installation..."

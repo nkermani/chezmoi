@@ -38,11 +38,11 @@ placement_strategy center
 {{- if eq .chezmoi.os "darwin" }}
 shell "/opt/homebrew/bin/bash"
 {{- else }}
-shell "/home/nkermani/nix-user-chroot"
+shell "/home/nkermani/.nkermani/bin/bash"
 {{- end }}
 
-# Gruvbox Material Dark
-include themes/GruvboxMaterialDark.conf
+# Cyberpunk NK
+include themes/CyberpunkNK.conf
 
 #cursor_shape           beam
 #cursor_beam_thickness  1.5
@@ -97,9 +97,14 @@ map cmd+9 goto_tab 9
 # map ctrl+shift+x layout_action maximize horizontal
 # map ctrl+shift+z layout_action maximize vertical
 
+# 3-pane workspace: yazi | helix + shell
+map cmd+shift+w launch --type=os-window --hold --session ~/.config/kitty/workspace.conf
+map alt+shift+w launch --type=os-window --hold --session ~/.config/kitty/workspace.conf
+
 # END_KITTY_THEME
+
 # automatically load the saved session (tab layout, commands, etc.)
 # session.conf contains `new_tab` and launch directives which kitty
 # will process when included here.
+startup_session /home/nkermani/.config/kitty/session.conf
 
-startup_session ~/.config/home-manager/kitty/session.conf

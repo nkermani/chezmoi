@@ -4,39 +4,43 @@ HAS_SUDO="{{ .has_sudo }}"
 {{ include ".chezmoitemplates/env.sh.tmpl" }}
 
 echo "🐱 Configuring Terminals..."
-# Kitty
+
 if [[ "$OS_TYPE" == "Darwin" ]]; then
-    # Add Homebrew bin to PATH if it exists (for macOS) - needed for finding kitty
     if [[ -d "/opt/homebrew/bin" ]]; then
         export PATH="/opt/homebrew/bin:$PATH"
     elif [[ -d "/usr/local/bin" ]]; then
         export PATH="/usr/local/bin:$PATH"
     fi
-    
+
     if [[ ! -d "/Applications/kitty.app" ]]; then
         echo "  📦 Installing Kitty via Homebrew..."
         brew install --cask kitty
+    else
+        echo "  ✅ Kitty already installed on macOS"
     fi
 else
-    # Linux installation
     if ! command -v kitty &>/dev/null; then
         echo "  📦 Installing Kitty (official installer)..."
         curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
-        
-        # Create symbolic links
+
+        mkdir -p "$BIN_DIR"
         ln -sf "$HOME/.local/kitty.app/bin/kitty" "$BIN_DIR/kitty"
         ln -sf "$HOME/.local/kitty.app/bin/kitten" "$BIN_DIR/kitten"
-        
-        # Desktop integration
+
         echo "  🎨 Setting up Kitty desktop integration..."
         APP_DIR="$HOME/.local/share/applications"
         mkdir -p "$APP_DIR"
-        
+
         cp "$HOME/.local/kitty.app/share/applications/kitty.desktop" "$APP_DIR/"
         cp "$HOME/.local/kitty.app/share/applications/kitty-open.desktop" "$APP_DIR/"
-        
-        # Update paths in desktop files
+
         sed -i "s|Icon=kitty|Icon=$HOME/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" "$APP_DIR"/kitty*.desktop
         sed -i "s|Exec=kitty|Exec=$HOME/.local/kitty.app/bin/kitty|g" "$APP_DIR"/kitty*.desktop
+
+        echo "  ✅ Kitty installed via official installer"
+    else
+        echo "  ✅ Kitty already available"
     fi
 fi
+
+echo "🐱 Kitty config files managed by chezmoi (dot_config/kitty/)"
