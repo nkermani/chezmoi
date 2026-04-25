@@ -38,7 +38,7 @@ placement_strategy center
 {{- if eq .chezmoi.os "darwin" }}
 shell "/opt/homebrew/bin/bash"
 {{- else }}
-shell "/home/nkermani/nix-user-chroot"
+shell "/home/nkermani/.nix-profile/bin/bash"
 {{- end }}
 
 # Gruvbox Material Dark
