@@ -13,10 +13,7 @@ if [ -f "$HOME/.bashrc" ]; then
   . "$HOME/.bashrc"
 fi
 
-# Nix (Linux 42 no-sudo, use nix-user-chroot)
-if [ "$UNAME_S" = "Linux" ] && [ ! -S /run/current-system/sw/bin/nix-daemon ]; then
-  NIX_STORE="{{ .chezmoi.homeDir }}/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6"
-  if [ -f "$NIX_STORE/etc/profile.d/nix-daemon.sh" ]; then
-    . "$NIX_STORE/etc/profile.d/nix-daemon.sh"
-  fi
+# Nix (Linux 42 no-sudo - use nix-user-chroot for nix commands)
+if [ "$UNAME_S" = "Linux" ] && [ -x "$HOME/nix-user-chroot" ]; then
+  export nix_chroot="$HOME/nix-user-chroot $HOME/.nix"
 fi

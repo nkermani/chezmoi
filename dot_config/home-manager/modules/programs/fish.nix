@@ -3,7 +3,7 @@
     enable = true;
     shellInit = ''
       # Hide welcome message
-      set fish_greeting
+      set fish_greeting ""
 
       # NK Environment Variables
       set -gx NK_DIR "$HOME/.nkermani"

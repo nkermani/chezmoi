@@ -35,14 +35,16 @@ background_opacity     1.0
 dynamic_background_opacity yes
 placement_strategy center
 
-{{- if eq .chezmoi.os "darwin" }}
+{{- if eq .chezmoi.os "linux" }}
+shell /usr/bin/fish
+{{- else if eq .chezmoi.os "darwin" }}
 shell "/Users/nkermani/.nix-profile/bin/fish"
 {{- else }}
 shell /usr/bin/fish
 {{- end }}
 
-# Gruvbox Material Dark
-include themes/GruvboxMaterialDark.conf
+# Cyberpunk NK
+include themes/CyberpunkNK.conf
 
 #cursor_shape           beam
 #cursor_beam_thickness  1.5
