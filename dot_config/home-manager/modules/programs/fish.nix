@@ -2,6 +2,9 @@
   programs.fish = {
     enable = true;
     shellInit = ''
+      # Hide welcome message
+      set fish_greeting
+
       # Nix path (must be first)
       set -gx PATH /nix/var/nix/profiles/default/bin $PATH
 
