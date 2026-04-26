@@ -38,7 +38,7 @@ placement_strategy center
 {{- if eq .chezmoi.os "darwin" }}
 shell "/Users/nkermani/.nix-profile/bin/fish"
 {{- else }}
-shell "/home/nkermani/.nix-profile/bin/fish"
+shell /usr/bin/fish
 {{- end }}
 
 # Gruvbox Material Dark
@@ -99,5 +99,5 @@ map cmd+9 goto_tab 9
 # will process when included here.
 
 {{- if eq .chezmoi.os "linux" }}
-startup_session ~/.config/home-manager/kitty/session.conf
+startup_session ~/.config/kitty/session.conf
 {{- end }}

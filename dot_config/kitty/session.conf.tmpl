@@ -1,0 +1,5 @@
+{{- if eq .chezmoi.os "linux" }}
+launch {{ .chezmoi.homeDir }}/nix-user-chroot {{ .chezmoi.homeDir }}/.nix bash -c 'source {{ .chezmoi.homeDir }}/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6/etc/profile.d/nix-daemon.sh; exec /usr/bin/fish'
+{{- else }}
+launch /usr/bin/fish
+{{- end }}

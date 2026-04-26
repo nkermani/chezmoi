@@ -5,20 +5,27 @@
       # Hide welcome message
       set fish_greeting
 
-      # Nix path (must be first)
-      set -gx PATH $HOME/.nix-profile/bin $PATH
-
       # NK Environment Variables
       set -gx NK_DIR "$HOME/.nkermani"
       set -gx NK_APPS "$NK_DIR/apps"
       set -gx NK_BIN "$NK_DIR/bin"
 
+      # Nix (Linux 42 no-sudo setup)
+      if test (uname -s) = "Linux"
+        and test ! -S /run/current-system/sw/bin/nix-daemon
+        and test -x "$HOME/nix-user-chroot"
+          set -gx nix_chroot "$HOME/nix-user-chroot $HOME/.nix"
+          set -gx PATH $HOME/.local/bin $PATH
+      else if test -d "$HOME/.nix-profile/bin"
+          set -gx PATH $HOME/.nix-profile/bin $PATH
+      end
+
       # NK Custom Config PATH
-      if test "$(uname -s)" = "Darwin"
-        set -gx PATH $HOME/.nix-profile/bin $NK_BIN $HOME/.local/bin $HOME/.cargo/bin $PATH
+      if test (uname -s) = "Darwin"
+        set -gx PATH $NK_BIN $HOME/.local/bin $HOME/.cargo/bin $PATH
         set -gx PATH $PATH /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin /usr/local/bin /opt/homebrew/bin
       else
-        set -gx PATH $HOME/.nix-profile/bin $NK_BIN $HOME/.local/bin $HOME/.cargo/bin $PATH
+        set -gx PATH $NK_BIN $HOME/.local/bin $HOME/.cargo/bin $PATH
       end
 
       # EDITOR

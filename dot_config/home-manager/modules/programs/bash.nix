@@ -10,6 +10,11 @@
       export NK_BIN="$NK_DIR/bin"
       export PATH="$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH"
 
+      # Nix (Linux 42 no-sudo)
+      if [ "$(uname -s)" = "Linux" ] && [ ! -S /run/current-system/sw/bin/nix-daemon ]; then
+        export PATH="$HOME/.local/bin:$PATH"
+      fi
+
       if [ "$(uname -s)" = "Darwin" ]; then
         export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin"
       fi

@@ -1,7 +1,8 @@
 # ~/.bash_profile (login shell) - source ~/.profile and ~/.bashrc if available
 
-# Detect WSL
+# Detect OS
 export UNAME_S="$(uname -s)"
+export UNAME_M="$(uname -m)"
 export DONT_PROMPT_WSL_INSTALL=1
 
 if [ -f "$HOME/.profile" ]; then
@@ -12,7 +13,10 @@ if [ -f "$HOME/.bashrc" ]; then
   . "$HOME/.bashrc"
 fi
 
-# Nix
-if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
-    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+# Nix (Linux 42 no-sudo, use nix-user-chroot)
+if [ "$UNAME_S" = "Linux" ] && [ ! -S /run/current-system/sw/bin/nix-daemon ]; then
+  NIX_STORE="{{ .chezmoi.homeDir }}/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6"
+  if [ -f "$NIX_STORE/etc/profile.d/nix-daemon.sh" ]; then
+    . "$NIX_STORE/etc/profile.d/nix-daemon.sh"
+  fi
 fi
