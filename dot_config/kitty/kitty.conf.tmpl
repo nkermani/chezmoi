@@ -66,7 +66,7 @@ copy_on_select yes
 allow_remote_control yes
 listen_on unix:/tmp/kitty
 
-{{- if eq .chezsmoi.os "linux" }}
+{{- if eq .chezmoi.os "linux" }}
 # Linux 42 - nix-user-chroot
 map ctrl+shift+enter new_window_with_cwd /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source {{ .chezmoi.homeDir }}/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6/etc/profile.d/nix-daemon.sh; exec /home/nkermani/.nix-profile/bin/fish'
 
