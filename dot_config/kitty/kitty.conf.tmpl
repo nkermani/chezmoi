@@ -67,7 +67,8 @@ allow_remote_control yes
 listen_on unix:/tmp/kitty
 
 {{- if eq .chezmoi.os "linux" }}
-map ctrl+shift+enter launch {{ .chezmoi.homeDir }}/nix-user-chroot {{ .chezmoi.homeDir }}/.nix bash -c 'source {{ .chezmoi.homeDir }}/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6/etc/profile.d/nix-daemon.sh; exec /usr/bin/fish'
+map ctrl+shift+enter new_window_with_cwd /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source /home/nkermani/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6/etc/profile.d/nix-daemon.sh; exec /usr/bin/fish'
+map ctrl+shift+n new_os_window /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source /home/nkermani/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6/etc/profile.d/nix-daemon.sh; exec /usr/bin/fish'
 {{- else }}
 map ctrl+shift+enter new_window_with_cwd
 {{- end }}

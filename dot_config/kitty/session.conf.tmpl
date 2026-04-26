@@ -1,5 +1,5 @@
 {{- if eq .chezmoi.os "linux" }}
-launch {{ .chezmoi.homeDir }}/nix-user-chroot {{ .chezmoi.homeDir }}/.nix bash -c 'source {{ .chezmoi.homeDir }}/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6/etc/profile.d/nix-daemon.sh; export FISH_PROMPT=1; exec {{ .chezmoi.homeDir }}/.nix/store/y69fjzz5cr3np2kd2x9bnss3rqv56k23-fish-4.6.0/bin/fish'
+launch {{ .chezmoi.homeDir }}/nix-user-chroot {{ .chezmoi.homeDir }}/.nix bash -c 'source {{ .chezmoi.homeDir }}/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6/etc/profile.d/nix-daemon.sh; exec /usr/bin/fish'
 {{- else }}
 launch /usr/bin/fish
 {{- end }}
