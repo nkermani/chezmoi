@@ -24,7 +24,6 @@ rm -rf "$output"
 echo "Extracting to $output..."
 mkdir "$output" && tar -xf "$archive" -C "$output" --strip-components 1 --checkpoint=.100
 echo " Finished !"
-
-ln -sf ~/.nkermani/apps/vscode/bin/code ~/.nkermani/bin/code
+# No longer creating symlink - use Windows VSCode via code.exe or PATH
 
 

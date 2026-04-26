@@ -1,4 +1,5 @@
 # dot_bashrc.d/10-env.sh
+export DONT_PROMPT_WSL_INSTALL=1
 
 if [[ "$UNAME_S" == "Darwin" ]]; then
     OS_TYPE="macos"

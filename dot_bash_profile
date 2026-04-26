@@ -1,4 +1,9 @@
 # ~/.bash_profile (login shell) - source ~/.profile and ~/.bashrc if available
+
+# Detect WSL
+export UNAME_S="$(uname -s)"
+export DONT_PROMPT_WSL_INSTALL=1
+
 if [ -f "$HOME/.profile" ]; then
   . "$HOME/.profile"
 fi

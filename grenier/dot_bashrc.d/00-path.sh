@@ -7,11 +7,7 @@ export PATH="$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH
 
 export PATH="/home/nkermani/.bun/bin:$PATH"
 
-if [ -x "$NK_BIN/bash" ]; then
-	export SHELL="$NK_BIN/bash"
-else
-	export SHELL="$(command -v bash 2>/dev/null || echo /bin/bash)"
-fi
+export SHELL="$(command -v fish 2>/dev/null || command -v bash 2>/dev/null || echo /bin/bash)"
 
 if [ "$(uname -s)" = "Darwin" ]; then
 	export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin"
