@@ -6,7 +6,7 @@
       set fish_greeting
 
       # Nix path (must be first)
-      set -gx PATH /nix/var/nix/profiles/default/bin $PATH
+      set -gx PATH $HOME/.nix-profile/bin $PATH
 
       # NK Environment Variables
       set -gx NK_DIR "$HOME/.nkermani"
