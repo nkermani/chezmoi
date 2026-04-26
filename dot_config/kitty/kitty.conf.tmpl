@@ -36,9 +36,9 @@ dynamic_background_opacity yes
 placement_strategy center
 
 {{- if eq .chezmoi.os "darwin" }}
-shell "/opt/homebrew/bin/bash"
+shell "/Users/nkermani/.nix-profile/bin/fish"
 {{- else }}
-shell "/home/nkermani/.nix-profile/bin/bash"
+shell "/home/nkermani/.nix-profile/bin/fish"
 {{- end }}
 
 # Gruvbox Material Dark
@@ -69,10 +69,6 @@ map ctrl+shift+q no_op
 map ctrl+shift+left no_op
 map ctrl+shift+right no_op
 
-# editor nvim
-# map ctrl+shift+o kitten hints --type=regex --regex=(File[[:space:]]+[^,]+,[[:space:]]+line[[:space:]]+[0-9]+|[/.][^[:space:]:]+:[0-9]+:[0-9]+|[/.][^[:space:]:]+:[0-9]+) --program ~/.config/kitty/open_in_nvim.sh
-# map ctrl+shift+g kitten hints --type=linenum --linenum-action=tab nvim +{line} {path}
-
 # Tab management
 map alt+1 goto_tab 1
 map alt+2 goto_tab 2
@@ -102,4 +98,6 @@ map cmd+9 goto_tab 9
 # session.conf contains `new_tab` and launch directives which kitty
 # will process when included here.
 
+{{- if eq .chezmoi.os "linux" }}
 startup_session ~/.config/home-manager/kitty/session.conf
+{{- end }}

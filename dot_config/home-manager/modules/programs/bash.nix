@@ -1,13 +1,13 @@
 {
   # programs.fish.enable = true;
-  programs.bash.enable = true;
+  # programs.bash.enable = true;
 
   programs.bash = {
-    enable = true;
-    profileAdditional = ''
+    # enable = true;
+    profileExtra = ''
       if [ -f "$HOME/.profile" ]; then . "$HOME/.profile"; fi
     '';
-    bashrcExtraContent = ''
+    initExtra = ''
       # NK Custom Config
       export NK_DIR="$HOME/.nkermani"
       export NK_APPS="$NK_DIR/apps"
@@ -15,7 +15,7 @@
       export PATH="$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH"
 
       if [ "$(uname -s)" = "Darwin" ]; then
-        export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
+        export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin"
       fi
 
       # EDITOR

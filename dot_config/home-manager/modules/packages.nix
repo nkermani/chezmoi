@@ -21,8 +21,9 @@
     pkgs.eza
     pkgs.yazi
     pkgs.btop
-    # pkgs.fish
+    pkgs.opencode
+
     pkgs.bash
-    pkgs.nerd-fonts.jb-mono
+    pkgs.nerd-fonts.jetbrains-mono
   ];
 }

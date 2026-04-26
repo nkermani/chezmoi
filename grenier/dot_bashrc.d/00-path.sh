@@ -8,16 +8,16 @@ export PATH="$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH
 export PATH="/home/nkermani/.bun/bin:$PATH"
 
 if [ -x "$NK_BIN/bash" ]; then
-    export SHELL="$NK_BIN/bash"
+	export SHELL="$NK_BIN/bash"
 else
-    export SHELL="$(command -v bash 2>/dev/null || echo /bin/bash)"
+	export SHELL="$(command -v bash 2>/dev/null || echo /bin/bash)"
 fi
 
 if [ "$(uname -s)" = "Darwin" ]; then
-    export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
+	export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin"
 else
-    # TEMP for 42 (Ghidra)
-    export PATH="$HOME/.OpenJDK21U-jdk_x64_linux_hotspot_21.0.10_7 OpenJDK21U-jdk_x64_linux_hotspot_21.0.10_7/jdk-21.0.10+7/bin:$PATH"
+	# TEMP for 42 (Ghidra)
+	export PATH="$HOME/.OpenJDK21U-jdk_x64_linux_hotspot_21.0.10_7 OpenJDK21U-jdk_x64_linux_hotspot_21.0.10_7/jdk-21.0.10+7/bin:$PATH"
 fi
 
 export PATH

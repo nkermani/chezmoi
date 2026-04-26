@@ -4,7 +4,7 @@
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = builtins.getEnv "USER";
-  home.homeDirectory = "/home/" + config.home.username;
+  home.homeDirectory = builtins.getEnv "HOME";
 
   # Environment variables
   home.sessionVariables = {
@@ -22,8 +22,14 @@
   # release notes.
   home.stateVersion = "25.11"; # Please read the comment before changing.
 
-  #programs.bash.enable = true;
-  programs.fish.enable = true;
+  programs.bash.enable = true;
+  programs.bash.bashrcExtra = ''
+    export NK_DIR="$HOME/.nkermani"
+    export NK_APPS="$NK_DIR/apps"
+    export NK_BIN="$NK_DIR/bin"
+    export PATH="$HOME/.nix-profile/bin:$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH"
+  '';
+
   # The home.packages option allows you to install Nix packages into your
   # environment.
   nixpkgs.config.allowUnfree = true;

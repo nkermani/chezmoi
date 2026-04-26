@@ -108,7 +108,7 @@ if [[ "$OS_TYPE" == "linux" ]]; then
 fi
 
 if [[ "$UNAME_S" == "Darwin" ]]; then
-    export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
+    export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin"
     export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
 fi
 typeset -U path

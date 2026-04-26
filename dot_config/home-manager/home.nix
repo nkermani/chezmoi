@@ -6,6 +6,7 @@
     ./modules/packages.nix
     ./modules/shell-aliases.nix
     ./modules/programs/bash.nix
+    ./modules/programs/fish.nix
     ./modules/programs/git.nix
     ./modules/programs/yazi.nix
     ./modules/programs/btop.nix
