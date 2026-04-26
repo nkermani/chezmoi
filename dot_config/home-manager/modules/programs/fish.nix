@@ -2,6 +2,9 @@
   programs.fish = {
     enable = true;
     shellInit = ''
+      # Nix path (must be first)
+      set -gx PATH /nix/var/nix/profiles/default/bin $PATH
+
       # NK Environment Variables
       set -gx NK_DIR "$HOME/.nkermani"
       set -gx NK_APPS "$NK_DIR/apps"

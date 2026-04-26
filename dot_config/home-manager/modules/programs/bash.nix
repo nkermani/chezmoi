@@ -1,9 +1,5 @@
 {
-  # programs.fish.enable = true;
-  # programs.bash.enable = true;
-
   programs.bash = {
-    # enable = true;
     profileExtra = ''
       if [ -f "$HOME/.profile" ]; then . "$HOME/.profile"; fi
     '';
