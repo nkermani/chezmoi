@@ -8,6 +8,7 @@
     ./modules/programs/bash.nix
     ./modules/programs/bat.nix
     ./modules/programs/btop.nix
+    ./modules/programs/code.nix
     ./modules/programs/eza.nix
     ./modules/programs/fish.nix
     ./modules/programs/git.nix
