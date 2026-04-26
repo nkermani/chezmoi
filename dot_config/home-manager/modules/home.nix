@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   home.username = "nkermani";
-  home.homeDirectory = "/home/nkermani";
+  home.homeDirectory = lib.mkDefault (builtins.getEnv "HOME");
   home.stateVersion = "24.11";
 
   xdg.configFile = {
@@ -10,8 +10,8 @@
       <?xml version="1.0" encoding="utf-8"?>
       <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
       <fontconfig>
-        <dir prefix="cwd">/home/nkermani/.nix-profile/share/fonts</dir>
-        <dir prefix="cwd">/home/nkermani/.local/share/fonts</dir>
+        <dir prefix="cwd">{{ .chezmoi.homeDir }}/.nix-profile/share/fonts</dir>
+        <dir prefix="cwd">{{ .chezmoi.homeDir }}/.local/share/fonts</dir>
       </fontconfig>
     '';
     "fish/config.fish".text = ''
