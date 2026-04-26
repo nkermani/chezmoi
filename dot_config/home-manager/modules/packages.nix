@@ -5,6 +5,8 @@
 
   home.packages = [
     # Runtimes
+    pkgs.python3
+    pkgs.python3Packages.pip
     pkgs.nodejs_22
     pkgs.rustc
     pkgs.cargo
