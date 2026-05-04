@@ -18,6 +18,11 @@
     glog = "git log --oneline --graph --decorate";
     gcl = "git clone";
 
+    # ls="eza --icons=auto";
+    # ll="eza -l --icons=auto";
+    # la="eza -la --icons=auto";
+    # lt="eza --tree --icons=auto";
+
     # Utilities
     lg = "lazygit";
     y = "yazi";

@@ -26,6 +26,8 @@
     pkgs.opencode
 
     pkgs.bash
+    pkgs.zsh
+    pkgs.fish
     pkgs.nerd-fonts.jetbrains-mono
   ];
 }

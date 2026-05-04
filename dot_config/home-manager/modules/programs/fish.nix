@@ -10,16 +10,6 @@
       set -gx NK_APPS "$NK_DIR/apps"
       set -gx NK_BIN "$NK_DIR/bin"
 
-      # Nix (Linux 42 no-sudo setup)
-      if test (uname -s) = "Linux"
-        and test ! -S /run/current-system/sw/bin/nix-daemon
-        and test -x "$HOME/nix-user-chroot"
-          set -gx nix_chroot "$HOME/nix-user-chroot $HOME/.nix"
-          set -gx PATH $HOME/.local/bin $PATH
-      else if test -d "$HOME/.nix-profile/bin"
-          set -gx PATH $HOME/.nix-profile/bin $PATH
-      end
-
       # NK Custom Config PATH
       if test (uname -s) = "Darwin"
         set -gx PATH $NK_BIN $HOME/.local/bin $HOME/.cargo/bin $PATH

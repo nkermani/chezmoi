@@ -30,6 +30,6 @@
   home.sessionVariables = {
     PATH = "$HOME/.local/bin:$PATH";
     STUDENT_USERNAME = "nkermani";
-    STUDENT_EMAIL = "nima.kermani@example.com";
+    STUDENT_EMAIL = "nkermani@student.42lyon.fr";
   };
 }

@@ -1,9 +1,14 @@
 {
   programs.bash = {
-    profileExtra = ''
-      if [ -f "$HOME/.profile" ]; then . "$HOME/.profile"; fi
-    '';
-    initExtra = ''
+    enable = false;
+  };
+
+  programs.fzf = {
+    enable = true;
+    enableBashIntegration = true;
+  };
+
+  home.file.".bashrc.d/nk-config.sh".text = ''
       # NK Custom Config
       export NK_DIR="$HOME/.nkermani"
       export NK_APPS="$NK_DIR/apps"
@@ -20,10 +25,36 @@
       fi
 
       # EDITOR
+      export EDITOR="code"
+      export VISUAL="code"
 
+       # Git aliases
+       alias g='git'
+       alias ga='git add'
+       alias gaa='git add --all'
+       alias gc='git commit -v'
+       alias gcmsg='git commit -m'
+       alias gco='git checkout'
+       alias gcb='git checkout -b'
+       alias gd='git diff'
+       alias gl='git pull'
+       alias gp='git push'
+       alias gst='git status'
+       alias glog='git log --oneline --graph --decorate'
+       alias gcl='git clone'
 
-      # Git aliases
+        # Utilities
+        alias lg='lazygit'
+        alias y='yazi'
+        alias cat='bat'
+        alias ls='eza --icons=auto'
+        alias ll='eza -l --icons=auto'
+        alias la='eza -la --icons=auto'
+        alias lt='eza --tree --icons=auto'
 
+        # AI Tooling
+       alias specsmd='npx specsmd@latest'
+      
 
       # Directory navigation functions
       f() {
@@ -54,5 +85,4 @@
         [[ -n "$file" ]] && hx "$file"
       }
     '';
-  };
 }
