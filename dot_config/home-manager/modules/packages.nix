@@ -5,29 +5,29 @@
 
   home.packages = [
     # Runtimes
-    pkgs.python3
-    pkgs.python3Packages.pip
-    pkgs.nodejs_22
-    pkgs.rustc
-    pkgs.cargo
-    pkgs.bun
-    pkgs.devenv
+    pkgs.devenv # Manages all projects runtime requirements via devenv.nix
+    # pkgs.python3
+    # pkgs.python3Packages.pip
+    # pkgs.nodejs_22
+    # pkgs.rustc
+    # pkgs.cargo
+    # pkgs.bun
 
     # CLI Tools
-    pkgs.fzf
-    pkgs.ripgrep
-    pkgs.fd
-    pkgs.bat
-    pkgs.lazygit
-    pkgs.tree
-    pkgs.eza
-    pkgs.yazi
-    pkgs.btop
-    pkgs.opencode
+    pkgs.fzf # fzf
+    pkgs.ripgrep # rg
+    pkgs.fd # fd
+    pkgs.bat # bat > cat
+    pkgs.lazygit # lg
+    pkgs.tree # tree
+    pkgs.eza # eza > ls
+    pkgs.yazi # yazi
+    pkgs.btop # btop > htop > top
+    pkgs.opencode # opensource ai
 
-    pkgs.bash
-    pkgs.zsh
-    pkgs.fish
-    pkgs.nerd-fonts.jetbrains-mono
+    pkgs.bash # bash
+    pkgs.zsh # zsh
+    pkgs.fish # fish
+    pkgs.nerd-fonts.jetbrains-mono # font
   ];
 }

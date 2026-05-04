@@ -20,6 +20,11 @@
 
       # EDITOR
 
+      set -gx EDITOR "code"
+      set -gx VISUAL "code"
+
+      # devenv hook fish | source # Need devenv version to be 2.1
+
       # Directory navigation functions
       function f
         set -l dir

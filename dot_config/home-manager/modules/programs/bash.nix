@@ -28,33 +28,35 @@
       export EDITOR="code"
       export VISUAL="code"
 
-       # Git aliases
-       alias g='git'
-       alias ga='git add'
-       alias gaa='git add --all'
-       alias gc='git commit -v'
-       alias gcmsg='git commit -m'
-       alias gco='git checkout'
-       alias gcb='git checkout -b'
-       alias gd='git diff'
-       alias gl='git pull'
-       alias gp='git push'
-       alias gst='git status'
-       alias glog='git log --oneline --graph --decorate'
-       alias gcl='git clone'
+      # Git aliases
+      alias g='git'
+      alias ga='git add'
+      alias gaa='git add --all'
+      alias gc='git commit -v'
+      alias gcmsg='git commit -m'
+      alias gco='git checkout'
+      alias gcb='git checkout -b'
+      alias gd='git diff'
+      alias gl='git pull'
+      alias gp='git push'
+      alias gst='git status'
+      alias glog='git log --oneline --graph --decorate'
+      alias gcl='git clone'
 
-        # Utilities
-        alias lg='lazygit'
-        alias y='yazi'
-        alias cat='bat'
-        alias ls='eza --icons=auto'
-        alias ll='eza -l --icons=auto'
-        alias la='eza -la --icons=auto'
-        alias lt='eza --tree --icons=auto'
+      # Utilities
+      alias lg='lazygit'
+      alias y='yazi'
+      alias cat='bat'
+      alias ls='eza --icons=auto'
+      alias ll='eza -l --icons=auto'
+      alias la='eza -la --icons=auto'
+      alias lt='eza --tree --icons=auto'
 
-        # AI Tooling
-       alias specsmd='npx specsmd@latest'
-      
+      # eval "$(devenv hook bash)" # Need devenv version to be 2.1
+
+      # AI Tooling
+      alias specsmd='npx specsmd@latest'
+
 
       # Directory navigation functions
       f() {
