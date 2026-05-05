@@ -9,32 +9,39 @@
   };
 
   home.file.".bashrc.d/nk-config.sh".text = ''
-      # Source Nix profile (macOS or WSL2)
-      _os="$(uname -s)"
-      if [ "$_os" = "Darwin" ]; then
-        if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
-          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-        fi
-      elif [ "$_os" = "Linux" ] && uname -r | grep -qi microsoft; then
-        if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
-          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-        fi
-      fi
-
       # NK Custom Config
       export NK_DIR="$HOME/.nkermani"
       export NK_APPS="$NK_DIR/apps"
       export NK_BIN="$NK_DIR/bin"
-      export PATH="$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH"
 
-      # Nix (Linux 42 no-sudo)
-      if [ "$(uname -s)" = "Linux" ] && [ ! -S /run/current-system/sw/bin/nix-daemon ]; then
+      # Nix Profile (macOS)
+      {{- if eq .chezmoi.os "darwin" }}
+      if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+      fi
+      {{- end }}
+
+      # Nix Profile (WSL2 - home PC)
+      {{- if and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease) }}
+      if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+      fi
+      {{- end }}
+
+      # PATH Configuration
+      {{- if eq .chezmoi.os "darwin" }}
+      export PATH="$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH"
+      export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin"
+      {{- else if and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease) }}
+      # WSL2 (home PC) - Nix daemon available
+      export PATH="$HOME/.nix-profile/bin:$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH"
+      {{- else if eq .chezmoi.os "linux" }}
+      # Linux (42 setup) - no-sudo nix-user-chroot
+      export PATH="$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH"
+      if [ -x "$HOME/nix-user-chroot" ]; then
         export PATH="$HOME/.local/bin:$PATH"
       fi
-
-      if [ "$(uname -s)" = "Darwin" ]; then
-        export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin"
-      fi
+      {{- end }}
 
       # EDITOR
       export EDITOR="code"
