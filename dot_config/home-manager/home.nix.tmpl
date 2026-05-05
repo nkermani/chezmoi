@@ -8,7 +8,7 @@
     ./modules/programs/bash.nix
     ./modules/programs/bat.nix
     ./modules/programs/btop.nix
-    {{- if and (eq .chezmoi.os "linux") (not (contains "microsoft" .chezmoi.kernel.osrelease)) }}
+    {{- if eq .chezmoi.os "linux" }}
     ./modules/programs/code.nix
     {{- end }}
     ./modules/programs/eza.nix
