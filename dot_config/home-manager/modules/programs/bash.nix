@@ -9,6 +9,18 @@
   };
 
   home.file.".bashrc.d/nk-config.sh".text = ''
+      # Source Nix profile (macOS or WSL2)
+      _os="$(uname -s)"
+      if [ "$_os" = "Darwin" ]; then
+        if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+        fi
+      elif [ "$_os" = "Linux" ] && uname -r | grep -qi microsoft; then
+        if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+        fi
+      fi
+
       # NK Custom Config
       export NK_DIR="$HOME/.nkermani"
       export NK_APPS="$NK_DIR/apps"

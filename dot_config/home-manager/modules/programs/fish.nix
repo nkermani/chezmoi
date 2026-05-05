@@ -2,6 +2,19 @@
   programs.fish = {
     enable = true;
     shellInit = ''
+      # Source Nix profile (macOS or WSL2)
+      if test (uname -s) = "Darwin"
+        if test -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+          source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+        end
+      else if test (uname -s) = "Linux"
+        if uname -r | grep -q -i microsoft
+          if test -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+            source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+          end
+        end
+      end
+
       # Hide welcome message
       set fish_greeting ""
 
