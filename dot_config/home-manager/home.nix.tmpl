@@ -8,7 +8,7 @@
     ./modules/programs/bash.nix
     ./modules/programs/bat.nix
     ./modules/programs/btop.nix
-    {{- if eq .chezmoi.os "linux" }}
+    {{- if and (eq .chezmoi.os "linux") (not (contains "microsoft" .chezmoi.kernel.osrelease)) }}
     ./modules/programs/code.nix
     {{- end }}
     ./modules/programs/eza.nix
@@ -23,29 +23,29 @@
   programs.home-manager.enable = true;
 
   # Nix Garbage Collection - Linux (systemd)
-  {{- if eq .chezmoi.os "linux" }}
-  systemd.user.services.nix-gc = {
-    Unit = {
-      Description = "Nix Garbage Collection";
-      After = [ "network.target" ];
+  # Disabled: no user systemd session available (e.g., 42 School)
+  {{- if and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease) }}
+    systemd.user.services.nix-gc = {
+      Unit = {
+        Description = "Nix Garbage Collection";
+        After = [ "network.target" ];
+      };
+      Service = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.nix}/bin/nix-collect-garbage --delete-older-than 30d && ${pkgs.nix}/bin/nix-store --optimise";
+        Nice = 10;
+        IOSchedulingClass = "idle";
+      };
     };
-    Service = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.nix}/bin/nix-collect-garbage --delete-older-than 30d && ${pkgs.nix}/bin/nix-store --optimise";
-      Nice = 10;
-      IOSchedulingClass = "idle";
+    systemd.user.timers.nix-gc = {
+      Unit = { Description = "Weekly Nix Garbage Collection"; };
+      Timer = {
+        OnCalendar = "weekly";
+        Persistent = true;
+        RandomizedDelaySec = "1h";
+      };
+      Install = { WantedBy = [ "timers.target" ]; };
     };
-  };
-
-  systemd.user.timers.nix-gc = {
-    Unit = { Description = "Weekly Nix Garbage Collection"; };
-    Timer = {
-      OnCalendar = "weekly";
-      Persistent = true;
-      RandomizedDelaySec = "1h";
-    };
-    Install = { WantedBy = [ "timers.target" ]; };
-  };
   {{- end }}
 
   # Nix Garbage Collection - macOS (launchd)

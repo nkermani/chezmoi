@@ -24,6 +24,7 @@
     # lt="eza --tree --icons=auto";
 
     # Utilities
+    md = "mkdir -p";
     lg = "lazygit";
     y = "yazi";
     cat = "bat";
