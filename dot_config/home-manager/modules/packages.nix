@@ -6,12 +6,12 @@
   home.packages = [
     # Runtimes
     pkgs.devenv # Manages all projects runtime requirements via devenv.nix
-    # pkgs.python3
-    # pkgs.python3Packages.pip
-    # pkgs.nodejs_22
-    # pkgs.rustc
-    # pkgs.cargo
-    # pkgs.bun
+    pkgs.python3
+    pkgs.python3Packages.pip
+    pkgs.nodejs_22
+    pkgs.rustc
+    pkgs.cargo
+    pkgs.bun
 
     # CLI Tools
     pkgs.fzf # fzf
