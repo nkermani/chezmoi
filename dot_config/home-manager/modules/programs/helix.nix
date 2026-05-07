@@ -26,8 +26,8 @@
           };
         };
         lsp = {
-          display-messages = true;
-          display-inlay-hints = true;
+          display-messages = false;
+          display-inlay-hints = false;
         };
       };
       keys = {
