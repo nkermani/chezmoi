@@ -1,5 +1,5 @@
 {{- if eq .chezmoi.os "linux" }}
-launch {{ .chezmoi.homeDir }}/nix-user-chroot {{ .chezmoi.homeDir }}/.nix bash -c 'source {{ .chezmoi.homeDir }}/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6/etc/profile.d/nix-daemon.sh; exec /home/nkermani/.nix-profile/bin/fish'
+launch {{ .chezmoi.homeDir }}/nix-user-chroot {{ .chezmoi.homeDir }}/.nix bash -c 'source /etc/profile.d/nix-daemon.sh 2>/dev/null || source ~/.nix-profile/etc/profile.d/nix-daemon.sh 2>/dev/null || true; exec fish'
 {{- else }}
 launch /usr/bin/fish
 {{- end }}
