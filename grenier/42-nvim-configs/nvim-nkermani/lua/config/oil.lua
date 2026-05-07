@@ -30,14 +30,14 @@ if git_ok then
             },
         },
         highlights = {
-            OilGitAdded = { fg = "#51f66f", bold = true },
-            OilGitModified = { fg = "#eedb85", bold = true },
-            OilGitRenamed = { fg = "#00f0ff", bold = true },
-            OilGitUntracked = { fg = "#cacaca", bold = true },
+            OilGitAdded = { link = "diffAdded" },
+            OilGitModified = { link = "diffChanged" },
+            OilGitRenamed = { link = "diffLine" },
+            OilGitUntracked = { link = "Comment" },
             OilGitIgnored = { fg = "#777777" },
-            OilGitDeleted = { fg = "#f3505c", bold = true },
-            OilGitConflict = { fg = "#f3505c", bold = true },
-            OilGitCopied = { fg = "#51f66f", bold = true },
+            OilGitDeleted = { link = "diffRemoved" },
+            OilGitConflict = { link = "diffRemoved" },
+            OilGitCopied = { link = "diffAdded" },
         }
     })
 end

@@ -1,0 +1,87 @@
+{ lib, ... }:
+{
+  programs.nushell = {
+    enable = true;
+    shellAliases = {
+      g = "git";
+      ga = "git add";
+      gaa = "git add --all";
+      gc = "git commit -v";
+      gcmsg = "git commit -m";
+      gco = "git checkout";
+      gcb = "git checkout -b";
+      gd = "git diff";
+      gl = "git pull";
+      gp = "git push";
+      gst = "git status";
+      glog = "git log --oneline --graph --decorate";
+      gcl = "git clone";
+
+      n = "nvim";
+      v = "vim";
+      c = "code";
+      h = "hx";
+      ai = "opencode";
+
+      md = lib.mkForce "mkdir";
+      lg = "lazygit";
+      y = "yazi";
+      cat = "bat";
+      ls = "eza --icons=auto";
+      ll = "eza -l --icons=auto";
+      la = "eza -la --icons=auto";
+      lt = "eza --tree --icons=auto";
+      specsmd = "npx specsmd@latest";
+    };
+    extraEnv = ''
+      # NK Custom Config
+      $env.NK_DIR = "$env.HOME/.nkermani"
+      $env.NK_APPS = "$env.NK_DIR/apps"
+      $env.NK_BIN = "$env.NK_DIR/bin"
+      $env.EDITOR = "nvim"
+      $env.VISUAL = "nvim"
+
+      # PATH Configuration
+      {{- if eq .chezmoi.os "darwin" }}
+      $env.PATH = ($env.PATH | prepend [$"($env.HOME)/.cargo/bin", $"($env.HOME)/.opencode/bin", $"($env.HOME)/.local/bin", $env.NK_BIN])
+      $env.PATH = ($env.PATH | append ["/usr/local/bin", "/opt/homebrew/bin"])
+      {{- else if and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease) }}
+      $env.PATH = ($env.PATH | prepend [$"($env.HOME)/.cargo/bin", $"($env.HOME)/.opencode/bin", $"($env.HOME)/.local/bin", $env.NK_BIN])
+      {{- else if eq .chezmoi.os "linux" }}
+      $env.PATH = ($env.PATH | prepend [$"($env.HOME)/.cargo/bin", $"($env.HOME)/.opencode/bin", $"($env.HOME)/.local/bin", $env.NK_BIN])
+      {{- end }}
+
+      # devenv hook
+      # eval "$(devenv hook nu)" # Need devenv version to be 2.1
+    '';
+    extraConfig = ''
+      $env.config = ($env.config | merge { show_banner: false })
+
+      # Directory navigation
+      def f [--all(-a), --tree(-t)] {
+        let dir = if $all {
+          fd --type d --hidden --exclude .git --exclude .cache | fzf --prompt="Go to (All): "
+        } else if $tree {
+          fd --type d --hidden --exclude .git --exclude .cache . | fzf --prompt="Go to (Tree): " --height=40% --layout=reverse-list
+        } else {
+          fd --type d --exclude .git --exclude .cache | fzf --prompt="Go to: "
+        }
+        if ($dir | is-not-empty) { cd $dir }
+      }
+
+      def fr [--all(-a)] {
+        let dir = if $all {
+          fd --type d --hidden . ~ | fzf --prompt="Go to Home (All): "
+        } else {
+          fd --type d --exclude .git --exclude .cache . ~ | fzf --prompt="Go to Home: "
+        }
+        if ($dir | is-not-empty) { cd $dir }
+      }
+
+      def fe [] {
+        let file = fd --type f --hidden --exclude .git --exclude .cache . | fzf --prompt="Open: "
+        if ($file | is-not-empty) { hx $file }
+      }
+    '';
+  };
+}

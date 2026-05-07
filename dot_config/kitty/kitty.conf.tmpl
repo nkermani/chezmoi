@@ -68,9 +68,9 @@ listen_on unix:/tmp/kitty
 
 {{- if eq .chezmoi.os "linux" }}
 # Linux 42 - nix-user-chroot
-map ctrl+shift+enter new_window_with_cwd /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source {{ .chezmoi.homeDir }}/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6/etc/profile.d/nix-daemon.sh; exec fish'
-map ctrl+shift+t new_tab_with_cwd /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source {{ .chezmoi.homeDir }}/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6/etc/profile.d/nix-daemon.sh; exec fish'
-map ctrl+shift+n new_os_window /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source {{ .chezmoi.homeDir }}/.nix/store/3km45gzvnpin7xddlm9gpj5fac4wvjvn-nix-2.34.6/etc/profile.d/nix-daemon.sh; exec fish'
+map ctrl+shift+enter new_window_with_cwd /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source /etc/profile.d/nix-daemon.sh 2>/dev/null || source ~/.nix-profile/etc/profile.d/nix-daemon.sh 2>/dev/null || true; exec fish'
+map ctrl+shift+t new_tab_with_cwd /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source /etc/profile.d/nix-daemon.sh 2>/dev/null || source ~/.nix-profile/etc/profile.d/nix-daemon.sh 2>/dev/null || true; exec fish'
+map ctrl+shift+n new_os_window /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source /etc/profile.d/nix-daemon.sh 2>/dev/null || source ~/.nix-profile/etc/profile.d/nix-daemon.sh 2>/dev/null || true; exec fish'
 
 {{- else if eq .chezmoi.os "darwin" }}
 # macOS

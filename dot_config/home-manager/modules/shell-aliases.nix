@@ -22,6 +22,13 @@
     # ll="eza -l --icons=auto";
     # la="eza -la --icons=auto";
     # lt="eza --tree --icons=auto";
+    
+    # editors
+    n = "nvim";
+    v = "vim";
+    c = "code";
+    h = "hx";
+    ai = "opencode";
 
     # Utilities
     md = "mkdir -p";

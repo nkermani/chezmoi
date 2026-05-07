@@ -1,7 +1,12 @@
 { config, pkgs, ... }:
 
+let
+  nvf = import (builtins.fetchTarball "https://github.com/notashelf/nvf/archive/main.tar.gz");
+in
+
 {
   imports = [
+    nvf.homeManagerModules.default
     ./modules/home.nix
     ./modules/packages.nix
     ./modules/shell-aliases.nix
@@ -14,9 +19,13 @@
     ./modules/programs/eza.nix
     ./modules/programs/fish.nix
     ./modules/programs/zsh.nix
+    ./modules/programs/nushell.nix
     ./modules/programs/git.nix
     ./modules/programs/lazygit.nix
     ./modules/programs/yazi.nix
+    ./modules/programs/nvim
+    ./modules/programs/vim.nix
+    ./modules/programs/helix.nix
   ];
 
   # Let Home Manager install and manage itself.

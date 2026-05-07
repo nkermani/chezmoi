@@ -1,9 +1,6 @@
--- lua/config/noice.lua
--- folke/noice.nvim -> Highly experimental plugin that completely replaces the UI for messages, cmdline and the popupmenu
 require("noice").setup({
     lsp = {
         override = { ["vim.lsp.util.convert_input_to_markdown_lines"] = true },
-        -- Désactive le message "LSP Progress" qui spamme lors de la sauvegarde
         progress = { enabled = false },
     },
     presets = { bottom_search = true, command_palette = true, long_message_to_split = true },
@@ -23,7 +20,7 @@ require("noice").setup({
             },
             filter_options = {},
             win_options = {
-                winhighlight = "NormalFloat:NormalFloat,FloatBorder:NoiceCmdlinePopupBorder",
+                winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
             },
         },
         popup = {
@@ -31,11 +28,10 @@ require("noice").setup({
                 style = "rounded",
             },
             win_options = {
-                winhighlight = "NormalFloat:NormalFloat,FloatBorder:SnacksPickerTitle",
+                winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
             },
         },
     },
-    -- Filtrer les messages de notification spammy
     routes = {
         {
             filter = {

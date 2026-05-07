@@ -1,4 +1,3 @@
--- lua/config/bufferline.lua
 local status_ok, bufferline = pcall(require, "bufferline")
 if not status_ok then
     return
@@ -34,46 +33,13 @@ bufferline.setup({
             },
         },
         hover = {
-            enabled = false, -- Désactivé pour améliorer la réactivité des clics
-        },
-    },
-    highlights = {
-        buffer_selected = {
-            fg = '#ffffff',
-            bold = true,
-            italic = false,
-        },
-        indicator_selected = {
-            fg = '#00f0ff',
-        },
-        modified_selected = {
-            fg = '#51f66f',
-        },
-        modified = {
-            fg = '#51f66f',
-        },
-        modified_visible = {
-            fg = '#51f66f',
+            enabled = false,
         },
     },
 })
 
--- local trans_ok, transparent = pcall(require, "transparent")
--- if trans_ok then
---     transparent.clear_prefix('BufferLine')
---
---     vim.g.transparent_groups = vim.list_extend(
---         vim.g.transparent_groups or {},
---         vim.tbl_map(function(v)
---             return v.hl_group
---         end, vim.tbl_values(require('bufferline.config').highlights))
---     )
--- -- end
--- --
+vim.api.nvim_set_hl(0, "TabLineFill", { bg = "none" })
 
-vim.api.nvim_set_hl(0, "TabLineFill", { bg = '#1a1a1a' })
-
--- KEYMAPS
 local keymap = vim.keymap.set
 keymap("n", "<S-h>", ":BufferLineCyclePrev<CR>", { desc = "Previous Buffer" })
 keymap("n", "<S-l>", ":BufferLineCycleNext<CR>", { desc = "Next Buffer" })

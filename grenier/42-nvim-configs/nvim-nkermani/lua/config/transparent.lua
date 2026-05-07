@@ -146,10 +146,10 @@ transparent.setup({
 })
 
 -- Force le nettoyage des préfixes pour Lualine (assure une transparence totale)
-transparent.clear_prefix('lualine')
+-- transparent.clear_prefix('lualine')
 
 -- BufferLine n'est plus transparent, donc on commente ça
 -- transparent.clear_prefix('BufferLine')
 
-transparent.toggle(true)
+-- transparent.toggle(true)
 

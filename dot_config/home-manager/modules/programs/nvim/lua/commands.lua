@@ -1,0 +1,23 @@
+-- ====== VIMSCRIPT COMMANDS ======
+
+-- vim.cmd([[
+--   function! SmartClose()
+--     let bufs = filter(range(1, bufnr('$')), 'bufexists(v:val) && buflisted(v:val)')
+--     if len(bufs) > 1
+--       bd!
+--     else
+--       qa
+--     endif
+--   endfunction
+--   function! SmartWriteClose()
+--     let bufs = filter(range(1, bufnr('$')), 'bufexists(v:val) && buflisted(v:val)')
+--     w
+--     if len(bufs) > 1
+--       bd!
+--     else
+--       qa
+--     endif
+--   endfunction
+--   cnoreabbrev <expr> q (getcmdtype() == ':' && getcmdline() == 'q') ? 'call SmartClose()' : 'q'
+--   cnoreabbrev <expr> wq (getcmdtype() == ':' && getcmdline() == 'wq') ? 'call SmartWriteClose()' : 'wq'
+-- ]])

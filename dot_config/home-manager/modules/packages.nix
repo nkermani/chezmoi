@@ -23,11 +23,14 @@
     pkgs.eza # eza > ls
     pkgs.yazi # yazi
     pkgs.btop # btop > htop > top
+    pkgs.duckdb # cli for data file previews
     pkgs.opencode # opensource ai
+    pkgs.scooter # interactive find and replace TUI
 
     pkgs.bash # bash
     pkgs.zsh # zsh
     pkgs.fish # fish
+    pkgs.nushell # nu
     pkgs.nerd-fonts.jetbrains-mono # font
   ];
 }
