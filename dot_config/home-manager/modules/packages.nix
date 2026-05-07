@@ -24,7 +24,10 @@
     pkgs.yazi # yazi
     pkgs.btop # btop > htop > top
     pkgs.opencode # opensource ai
+    pkgs.scooter # scooter (find and replace TUI)
 
+    pkgs.helix # helix editor (for fast edit)
+  
     pkgs.bash # bash
     pkgs.zsh # zsh
     pkgs.fish # fish
