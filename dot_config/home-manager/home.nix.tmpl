@@ -5,18 +5,19 @@
     ./modules/home.nix
     ./modules/packages.nix
     ./modules/shell-aliases.nix
-    ./modules/programs/bash.nix
     ./modules/programs/bat.nix
+    ./modules/programs/bash.nix
     ./modules/programs/btop.nix
     {{- if and (eq .chezmoi.os "linux") (not (contains "microsoft" .chezmoi.kernel.osrelease)) }}
     ./modules/programs/code.nix
     {{- end }}
     ./modules/programs/eza.nix
     ./modules/programs/fish.nix
-    ./modules/programs/zsh.nix
     ./modules/programs/git.nix
+    ./modules/programs/helix.nix
     ./modules/programs/lazygit.nix
     ./modules/programs/yazi.nix
+    ./modules/programs/zsh.nix
   ];
 
   # Let Home Manager install and manage itself.

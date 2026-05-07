@@ -1,6 +1,0 @@
-# ~/.zshrc - NKERMANI - Hybrid Config 2026
-# Ce fichier source tous les modules dans .zshrc.d/
-# Source all zshrc modules
-for f in "$HOME/.local/share/chezmoi/dot_zshrc.d/"*.zsh; do
-    source "$f"
-done

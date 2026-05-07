@@ -1,6 +1,0 @@
-[manager]
-prepend_keymap = [
-	{ on = [ "l" ], run = "enter", desc = "Enter directory" },
-	{ on = [ "h" ], run = "back", desc = "Go back" },
-	{ on = [ "o" ], run = "shell hx", desc = "Open in Helix" },
-]
