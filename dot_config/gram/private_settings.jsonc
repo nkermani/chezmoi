@@ -7,7 +7,17 @@
 // custom settings, run `gram: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "project_panel": {
+    "scrollbar": {
+      "show": "never"
+    },
+    "indent_size": 16.0,
+    "folder_icons": true,
+    "file_icons": true,
+    "entry_spacing": "standard"
+  },
   "terminal": {
+    "font_size": 14.0,
     "shell": {
       "program": "fish"
     }

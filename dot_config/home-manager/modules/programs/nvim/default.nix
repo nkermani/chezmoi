@@ -3,4 +3,5 @@
 {
   programs.nvf = {
     enable = true;
+  };
 }
