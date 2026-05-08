@@ -22,8 +22,9 @@
     # ll="eza -l --icons=auto";
     # la="eza -la --icons=auto";
     # lt="eza --tree --icons=auto";
-    
+
     # editors
+    gr = "gram";
     n = "nvim";
     v = "vim";
     c = "code";

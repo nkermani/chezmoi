@@ -53,8 +53,8 @@
       {{- end }}
 
       # EDITOR
-      export EDITOR="nvim"
-      export VISUAL="nvim"
+      export EDITOR="gram"
+      export VISUAL="gram"
 
       # Aliases
       alias g='git'
@@ -71,6 +71,8 @@
       alias glog='git log --oneline --graph --decorate'
       alias gcl='git clone'
 
+      # Editors
+      alias gr='gram'
       alias n='nvim'
       alias v='vim'
       alias c='code'
@@ -118,7 +120,7 @@
       fe() {
         local file
         file=$(fd --type f --hidden --exclude .git --exclude .cache . | fzf --prompt="Open: ")
-        [[ -n "$file" ]] && hx "$file"
+        [[ -n "$file" ]] && gram "$file"
       }
     '';
 }

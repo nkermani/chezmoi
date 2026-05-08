@@ -5,7 +5,7 @@
       set nocompatible
       set number
       set relativenumber
-      set tabstop=2
+      set tabstop=4
       set shiftwidth=2
       set expandtab
       set smartindent
@@ -20,7 +20,6 @@
       set nobackup
       set undodir=~/.vim/undodir
       set undofile
-      set updatetime=50
       set signcolumn=yes
       set termguicolors
       syntax on

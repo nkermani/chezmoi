@@ -1,0 +1,72 @@
+// Gram settings
+//
+// For information on how to configure Gram, see the Gram
+// documentation: gram://docs/configuring-gram
+//
+// To see all of Gram's default settings without changing your
+// custom settings, run `gram: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "terminal": {
+    "shell": {
+      "program": "fish"
+    }
+  },
+  "colorize_brackets": false,
+  "inlay_hints": {
+    "show_background": true
+  },
+  "show_completions_on_input": true,
+  "show_whitespaces": "boundary",
+  "use_autoclose": true,
+  "format_on_save": "off",
+  "indent_guides": {
+    "background_coloring": "disabled",
+    "coloring": "fixed",
+    "active_line_width": 3,
+    "line_width": 2,
+    "enabled": true
+  },
+  "toolbar": {
+    "code_actions": true
+  },
+  "minimap": {
+    "max_width_columns": 80,
+    "display_in": "active_editor",
+    "show": "always"
+  },
+  "scrollbar": {
+    "show": "always"
+  },
+  "inline_code_actions": false,
+  "gutter": {
+    "min_line_number_digits": 0,
+    "folds": false,
+    "breakpoints": false,
+    "runnables": false,
+    "line_numbers": true
+  },
+  "drag_and_drop_selection": {
+    "delay": 200
+  },
+  "hover_popover_delay": 200,
+  "scroll_beyond_last_line": "off",
+  "which_key": {
+    "enabled": true
+  },
+  "text_rendering_mode": "platform_default",
+  "ui_font_weight": 100.0,
+  "ui_font_family": ".GramSans",
+  "buffer_line_height": "standard",
+  "buffer_font_weight": 400.0,
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Gram (Default)",
+    "dark": "Gram (Default)"
+  },
+  "base_keymap": "VSCode",
+  "ui_font_size": 13.0,
+  "buffer_font_size": 15,
+  "theme": "Everforest Dark Hard",
+}

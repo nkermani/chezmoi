@@ -20,6 +20,7 @@
       n = "nvim";
       v = "vim";
       c = "code";
+      gr = "gram";
       h = "hx";
       ai = "opencode";
 
@@ -38,8 +39,8 @@
       $env.NK_DIR = "$env.HOME/.nkermani"
       $env.NK_APPS = "$env.NK_DIR/apps"
       $env.NK_BIN = "$env.NK_DIR/bin"
-      $env.EDITOR = "nvim"
-      $env.VISUAL = "nvim"
+      $env.EDITOR = "gram"
+      $env.VISUAL = "gram"
 
       # PATH Configuration
       {{- if eq .chezmoi.os "darwin" }}
@@ -80,7 +81,7 @@
 
       def fe [] {
         let file = fd --type f --hidden --exclude .git --exclude .cache . | fzf --prompt="Open: "
-        if ($file | is-not-empty) { hx $file }
+        if ($file | is-not-empty) { gram $file }
       }
     '';
   };

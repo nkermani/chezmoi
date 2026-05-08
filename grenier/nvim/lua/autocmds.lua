@@ -95,4 +95,3 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("x", "[", wrap_selection("[", "]"), { buffer = true, nowait = true, desc = "Wrap with []" })
   end,
 })
-
