@@ -32,6 +32,11 @@
       fi
       {{- end }}
 
+      # Suppress VS Code WSL install prompt (WSL2 only)
+      {{- if and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease) }}
+      export DONT_PROMPT_WSL_INSTALL="1"
+      {{- end }}
+
       # PATH Configuration
       {{- if eq .chezmoi.os "darwin" }}
       export PATH="$NK_BIN:$HOME/.local/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$PATH"
