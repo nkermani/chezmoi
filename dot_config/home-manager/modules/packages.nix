@@ -13,6 +13,9 @@
     pkgs.cargo
     pkgs.bun
 
+    # LSP Servers
+    
+    
     # CLI Tools
     pkgs.fzf # fzf
     pkgs.ripgrep # rg
@@ -26,7 +29,8 @@
     pkgs.duckdb # cli for data file previews
     pkgs.scooter # interactive find and replace TUI
     pkgs.tabiew # interactive csv/db viewer
-
+    
+    pkgs.fresh-editor # TUI editor
     pkgs.opencode # opensource ai
 
     pkgs.bash # bash
