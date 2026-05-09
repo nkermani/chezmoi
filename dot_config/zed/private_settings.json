@@ -7,6 +7,7 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "base_keymap": "VSCode",
   "cli_default_open_behavior": "new_window",
   "search": {
     "button": true
@@ -68,7 +69,7 @@
     "show_pinned_tabs_in_separate_row": false,
     "show_nav_history_buttons": false,
     "show_tab_bar_buttons": false,
-    "show": false
+    "show": true
   },
   "title_bar": {
     "show_user_picture": false,
@@ -144,7 +145,7 @@
     "enabled": true
   },
   "helix_mode": false,
-  "vim_mode": true,
+  "vim_mode": false,
   "ui_font_weight": 600.0,
   "ui_font_family": ".ZedSans",
   "buffer_line_height": "standard",
@@ -160,7 +161,11 @@
   "buffer_font_size": 26.0,
   "theme": {
     "mode": "dark",
-    "light": "Everforest Light Soft (material)",
-    "dark": "Everforest Dark Medium (material)",
+    "light": "Seoul256 Dark",
+    "dark": "Everforest Dark Soft",
+  },
+  "theme_overrides": {
+      "Seoul256 Dark": {
+      },
   },
 }

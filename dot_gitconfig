@@ -1,5 +1,5 @@
 [core]
-	editor = smart-editor
+	editor = nvim
 [user]
 	name = nkermani
 	email = kermani.nathan@gmail.com

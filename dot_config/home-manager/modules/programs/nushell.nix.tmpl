@@ -17,7 +17,7 @@
       glog = "git log --oneline --graph --decorate";
       gcl = "git clone";
 
-      n = "nvim";
+      n = "nvim --listen /tmp/nvimsocket";
       v = "vim";
       c = "code";
       gr = "gram";
@@ -41,8 +41,8 @@
       $env.NK_DIR = "$env.HOME/.nkermani"
       $env.NK_APPS = "$env.NK_DIR/apps"
       $env.NK_BIN = "$env.NK_DIR/bin"
-      $env.EDITOR = "gram"
-      $env.VISUAL = "gram"
+      $env.EDITOR = "nvim"
+      $env.VISUAL = "nvim"
 
       # PATH Configuration
       {{- if eq .chezmoi.os "darwin" }}

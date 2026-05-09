@@ -1,0 +1,38 @@
+{ pkgs, ... }:
+
+{
+  programs.broot = {
+    enable = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+    enableFishIntegration = true;
+    enableNushellIntegration = true;
+
+    settings = {
+      verbs = [
+        {
+          invocation = "edit";
+          shortcut = "e";
+          key = "enter";
+          apply_to = "text_file";
+          execution = "nvr +{line} {file}";
+          leave_broot = false;
+        }
+      ];
+    };
+  };
+
+{{ if eq .chezmoi.os "linux" -}}
+  xdg.mimeApps.enable = true;
+  xdg.mimeApps.defaultApplications = {
+    "text/plain" = "nvr-open.desktop";
+  };
+
+  xdg.desktopEntries."nvr-open" = {
+    name = "Neovim (nvr-open)";
+    exec = "nvr-open %f";
+    mimeType = [ "text/plain" ];
+    type = "Application";
+  };
+{{ end -}}
+}

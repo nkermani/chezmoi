@@ -55,10 +55,10 @@ mkdir -p ${HOME}/.config
 
 git clone $REPO_URL "${HOME}/.config/home-manager"
 
-# Install Gram editor (Zed fork, no AI/telemetry)
-echo "Installing Gram editor via Homebrew..."
-if command -v brew &>/dev/null; then
-	brew install --cask gram
-else
-	echo "Homebrew not found, skipping Gram installation"
-fi
+# # Install Gram editor (Zed fork, no AI/telemetry)
+# echo "Installing Gram editor via Homebrew..."
+# if command -v brew &>/dev/null; then
+# 	brew install --cask gram
+# else
+# 	echo "Homebrew not found, skipping Gram installation"
+# fi

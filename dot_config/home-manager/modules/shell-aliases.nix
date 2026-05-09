@@ -24,8 +24,9 @@
     # lt="eza --tree --icons=auto";
 
     # editors
-    gr = "gram";
-    n = "nvim";
+    # gr = "gram";
+    # f = "fresh";
+    n = "nvim --listen /tmp/nvimsocket";
     v = "vim";
     c = "code";
     h = "hx";
