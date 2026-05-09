@@ -24,8 +24,9 @@
     pkgs.yazi # yazi
     pkgs.btop # btop > htop > top
     pkgs.duckdb # cli for data file previews
-    pkgs.opencode # opensource ai
     pkgs.scooter # interactive find and replace TUI
+
+    pkgs.opencode # opensource ai
 
     pkgs.bash # bash
     pkgs.zsh # zsh

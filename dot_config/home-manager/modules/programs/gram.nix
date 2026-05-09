@@ -1,9 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
+  version = "1.2.1";
   gramPkg = pkgs.stdenv.mkDerivation {
     pname = "gram";
-    version = "1.2.1";
+    inherit version;
 
     src = pkgs.fetchurl {
       url = "https://codeberg.org/GramEditor/gram/releases/download/${version}/gram-linux-x86_64-${version}.tar.gz";
@@ -13,8 +14,10 @@ let
     sourceRoot = "gram.app";
 
     installPhase = ''
-      mkdir -p $out/bin $out/share
+      mkdir -p $out/bin $out/lib $out/libexec $out/share
       cp bin/gram $out/bin/
+      cp -r lib/* $out/lib/
+      cp -r libexec/* $out/libexec/
       cp -r share/* $out/share/
     '';
 
