@@ -7,6 +7,10 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "cli_default_open_behavior": "new_window",
+  "search": {
+    "button": true
+  },
   "proxy": "",
   "disable_ai": true,
   "calls": {
@@ -25,6 +29,7 @@
     "disable_git": false
   },
   "terminal": {
+    "button": true,
     "copy_on_select": true,
     "font_weight": 600.0,
     "font_size": 20.0,
@@ -63,7 +68,7 @@
     "show_pinned_tabs_in_separate_row": false,
     "show_nav_history_buttons": false,
     "show_tab_bar_buttons": false,
-    "show": true
+    "show": false
   },
   "title_bar": {
     "show_user_picture": false,
@@ -81,6 +86,7 @@
     "button": true
   },
   "status_bar": {
+    "cursor_position_button": true,
     "show_active_file": true,
     "active_language_button": true
   },
@@ -146,7 +152,7 @@
   "buffer_font_family": "JetBrainsMono Nerd Font",
   "when_closing_with_no_tabs": "platform_default",
   "icon_theme": {
-    "mode": "light",
+    "mode": "dark",
     "light": "Material Icon Theme",
     "dark": "Zed (Default)"
   },
@@ -155,6 +161,6 @@
   "theme": {
     "mode": "dark",
     "light": "Everforest Light Soft (material)",
-    "dark": "Everforest Dark Soft",
+    "dark": "Everforest Dark Medium (material)",
   },
 }

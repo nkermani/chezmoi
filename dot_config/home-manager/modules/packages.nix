@@ -25,6 +25,7 @@
     pkgs.btop # btop > htop > top
     pkgs.duckdb # cli for data file previews
     pkgs.scooter # interactive find and replace TUI
+    pkgs.tabiew # interactive csv/db viewer
 
     pkgs.opencode # opensource ai
 
