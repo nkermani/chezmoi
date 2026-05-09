@@ -27,7 +27,7 @@
   "terminal": {
     "copy_on_select": true,
     "font_weight": 600.0,
-    "font_size": 14.0,
+    "font_size": 20.0,
     "shell": {
       "program": "fish"
     }
@@ -150,8 +150,8 @@
     "light": "Material Icon Theme",
     "dark": "Zed (Default)"
   },
-  "ui_font_size": 16.0,
-  "buffer_font_size": 15,
+  "ui_font_size": 24.0,
+  "buffer_font_size": 26.0,
   "theme": {
     "mode": "dark",
     "light": "Everforest Light Soft (material)",
