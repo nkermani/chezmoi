@@ -8,72 +8,61 @@
         viAlias = false;
         vimAlias = false;
 
-        lsp = {
-          enable = true;
-          formatOnSave = true;
-          mappings = {
-            goToDefinition = "gd";
-          };
-        };
+        # LSP / language support handled by LazyVim distro
+        # (installed via lazyvim-nix module)
 
-        maps = {
-          normal = {
-            "<C-]>" = {
-              action = "<cmd>lua vim.lsp.buf.definition()<CR>";
-              desc = "LSP go to definition";
-              silent = true;
-            };
-          };
+        lsp = {
+          enable = false;
         };
 
         languages = {
-          clang = { enable = true; };      # C/C++
-          csharp = { enable = true; };     # C#
-          python = { enable = true; };     # Python
-          rust = { enable = true; };       # Rust
-          typescript = { enable = true; }; # TypeScript/JavaScript
-          go = { enable = true; };         # Go
-          nix = { enable = true; };        # Nix
-          zig = { enable = true; };        # Zig
-          php = { enable = true; };        # PHP
+          clang = { enable = false; };
+          csharp = { enable = false; };
+          python = { enable = false; };
+          rust = { enable = false; };
+          typescript = { enable = false; };
+          go = { enable = false; };
+          nix = { enable = false; };
+          zig = { enable = false; };
+          php = { enable = false; };
         };
 
         mini = {
-          basics = { enable = true; };    # sensible defaults
-          ai = { enable = true; };         # improved text objects
-          align = { enable = true; };      # text alignment
-          animate = { enable = true; };    # smooth animations
-          bracketed = { enable = true; };  # bracket navigation
-          bufremove = { enable = true; };  # close buffers without wrecking layout
-          clue = { enable = true; };       # keymap hints
-          comment = { enable = true; };    # comment with gc
-          completion = { enable = true; }; # autocompletion
-          cursorword = { enable = true; }; # underline word under cursor
-          diff = { enable = true; };       # git diff signs
-          files = { enable = true; };      # file explorer
-          fuzzy = { enable = true; };      # fuzzy matching
-          git = { enable = true; };        # git integration
-          hipatterns = { enable = true; }; # highlight patterns
-          icons = { enable = true; };      # filetype icons
-          indentscope = { enable = true; }; # indent guides
-          jump = { enable = true; };       # jump motions
-          jump2d = { enable = true; };     # 2D cursor jumping
-          misc = { enable = true; };       # miscellaneous utilities
-          move = { enable = true; };       # move lines/selection
-          notify = { enable = true; };     # notification system
-          operators = { enable = true; };  # text operators
-          pairs = { enable = true; };      # auto-pair brackets
-          pick = { enable = true; };       # fuzzy picker
-          sessions = { enable = true; };   # session management
-          snippets = { enable = true; };   # code snippets
-          splitjoin = { enable = true; };  # split/join expressions
-          starter = { enable = false; };   # start screen (disabled - content nil error)
-          statusline = { enable = true; }; # status line
-          surround = { enable = true; };   # surround text objects
-          tabline = { enable = true; };    # tabline
-          test = { enable = true; };       # test integration
-          trailspace = { enable = true; }; # trailing whitespace
-          visits = { enable = true; };     # track recent locations
+          basics = { enable = false; };
+          ai = { enable = false; };
+          align = { enable = false; };
+          animate = { enable = false; };
+          bracketed = { enable = false; };
+          bufremove = { enable = false; };
+          clue = { enable = false; };
+          comment = { enable = false; };
+          completion = { enable = false; };
+          cursorword = { enable = false; };
+          diff = { enable = false; };
+          files = { enable = false; };
+          fuzzy = { enable = false; };
+          git = { enable = false; };
+          hipatterns = { enable = false; };
+          icons = { enable = false; };
+          indentscope = { enable = false; };
+          jump = { enable = false; };
+          jump2d = { enable = false; };
+          misc = { enable = false; };
+          move = { enable = false; };
+          notify = { enable = false; };
+          operators = { enable = false; };
+          pairs = { enable = false; };
+          pick = { enable = false; };
+          sessions = { enable = false; };
+          snippets = { enable = false; };
+          splitjoin = { enable = false; };
+          starter = { enable = false; };
+          statusline = { enable = false; };
+          surround = { enable = false; };
+          tabline = { enable = false; };
+          test = { enable = false; };
+          trailspace = { enable = false; };
+          visits = { enable = false; };
         };
       };
     };

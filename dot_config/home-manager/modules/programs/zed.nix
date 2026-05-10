@@ -33,4 +33,8 @@ let
 in
 {
   home.packages = [ zedPkg ];
+  home.shellAliases = {
+    z = "zeditor";
+    zed = "zeditor";
+  };
 }

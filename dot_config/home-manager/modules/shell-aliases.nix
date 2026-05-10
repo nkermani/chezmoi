@@ -30,8 +30,6 @@
     v = "vim";
     c = "code";
     h = "hx";
-    z = "zeditor";
-    zed = "zeditor";
     ai = "opencode";
 
     # Utilities

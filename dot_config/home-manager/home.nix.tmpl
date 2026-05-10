@@ -2,11 +2,13 @@
 
 let
   nvf = import (builtins.fetchTarball "https://github.com/notashelf/nvf/archive/main.tar.gz");
+  lazyvim_nix_src = builtins.fetchTarball "https://github.com/pfassina/lazyvim-nix/archive/main.tar.gz";
 in
 
 {
   imports = [
     nvf.homeManagerModules.default
+    "${lazyvim_nix_src}/nix/module.nix"
     ./modules/home.nix
     ./modules/packages.nix
     ./modules/shell-aliases.nix
@@ -18,6 +20,9 @@ in
     ./modules/programs/zed.nix
     ./modules/programs/gram.nix
     {{- end }}
+    {{- if and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease) }}
+    ./modules/programs/zed-wsl.nix
+    {{- end }}
     ./modules/programs/eza.nix
     ./modules/programs/fish.nix
     ./modules/programs/zsh.nix
@@ -26,6 +31,7 @@ in
     ./modules/programs/lazygit.nix
     ./modules/programs/yazi.nix
     ./modules/programs/nvim
+    ./modules/programs/lazyvim
     ./modules/programs/vim.nix
     ./modules/programs/gram.nix
     ./modules/programs/helix.nix
