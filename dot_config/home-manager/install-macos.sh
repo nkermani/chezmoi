@@ -48,17 +48,5 @@ ${NIX_BIN}/nix-shell '<home-manager>' -A install
 # Remove base home-manager configuration
 rm -rf ${HOME}/.config/home-manager
 
-# Clone this repo
-REPO_URL=https://github.com/Caesarovich/42-nix-home-manager
-
-mkdir -p ${HOME}/.config
-
-git clone $REPO_URL "${HOME}/.config/home-manager"
-
-# # Install Gram editor (Zed fork, no AI/telemetry)
-# echo "Installing Gram editor via Homebrew..."
-# if command -v brew &>/dev/null; then
-# 	brew install --cask gram
-# else
-# 	echo "Homebrew not found, skipping Gram installation"
-# fi
+# Apply chezmoi to put my own home-manager config
+chezmoi apply && home-manager switch

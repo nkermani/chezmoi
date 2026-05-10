@@ -1,0 +1,39 @@
+{
+  programs.fish = {
+    enable = true;
+    shellInit =
+      ''
+        # Hide welcome message
+        set fish_greeting ""
+
+        # EDITOR
+        set -gx EDITOR "hx"
+        set -gx VISUAL "hx"
+      ''
+      {{- if or (eq .chezmoi.os "darwin") (and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease)) }}
+      + ''
+          if test -f ~/.nix-profile/etc/profile.d/nix.fish
+            source ~/.nix-profile/etc/profile.d/nix.fish
+          else if test -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+            source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+          end
+        ''
+      {{- end }}
+      + ''
+          set -gx PATH $NK_BIN $HOME/.local/bin $HOME/.cargo/bin $PATH
+        ''
+      {{- if eq .chezmoi.os "darwin" }}
+      + ''
+          set -gx PATH $PATH /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin /usr/local/bin /opt/homebrew/bin
+        ''
+      {{- end }}
+      {{- if eq .chezmoi.os "linux" }}
+      + ''
+          if test -x "$HOME/nix-user-chroot"
+            set -gx PATH $HOME/.local/bin $PATH
+          end
+        ''
+      {{- end }}
+      ;
+  };
+}

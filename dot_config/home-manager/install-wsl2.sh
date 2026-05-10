@@ -20,3 +20,9 @@ echo "Enabling home-manager for the current user"
 ${NIX_BIN}/nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
 ${NIX_BIN}/nix-channel --update
 ${NIX_BIN}/nix-shell '<home-manager>' -A install
+
+# Remove base home-manager configuration
+rm -rf ${HOME}/.config/home-manager
+
+# Apply chezmoi to put my own home-manager config
+chezmoi apply && home-manager switch

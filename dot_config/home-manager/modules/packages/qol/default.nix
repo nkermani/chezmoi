@@ -1,0 +1,18 @@
+{
+  imports = [
+    ./bat.nix
+    ./broot.nix
+    ./btop.nix
+    ./devenv.nix
+    ./duckdb.nix
+    ./eza.nix
+    ./fd.nix
+    ./fzf.nix
+    ./lazygit.nix
+    ./ripgrep.nix
+    ./scooter.nix
+    ./tabiew.nix
+    ./tree.nix
+    ./yazi.nix
+  ];
+}

@@ -1,24 +1,4 @@
 .ropeproject
 *.db
 .DS_Store
-
-# Si ce n'est PAS une machine 42, on ignore ces dossiers/fichiers
-{{ if not .is_42 }}
-.nkermani/bin/42
-.local/share/applications/42-*.desktop
-{{ end }}
-
-# Kitty/Kitten wrappers are for Linux only
-{{ if eq .chezmoi.os "darwin" }}
-.nkermani/bin/kitty
-.nkermani/bin/kitten
-{{ end }}
-
 .chezmoitemplates
-
-.dot_emacs.d/.local
-.dot_emacs.d/.git
-.dot_doom.d
-
-.chezmoiscripts/perf/
-grenier/
