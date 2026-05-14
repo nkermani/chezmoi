@@ -1,14 +1,14 @@
 {
   imports = [
-    ./allow-unfree.nix
-    ./qol
-    ./lsp
-    ./runtimes
-    ./shells
-    ./fonts
+    ./bat.nix
+    ./broot.nix
+    ./btop.nix
     {{- if not (or (eq .chezmoi.os "darwin") (and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease)))}}
       ./code.nix
     {{- end }}
-    ./opencode.nix
+    ./eza.nix
+    ./git.nix
+    ./helix.nix
+    ./shells
   ];
 }

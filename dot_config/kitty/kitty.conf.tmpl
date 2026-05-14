@@ -22,7 +22,7 @@ map ctrl+shift+v paste_from_clipboard
 {{- if eq .chezmoi.os "linux" }}
     shell fish
 {{- else if eq .chezmoi.os "darwin" }}
-    shell fish
+    shell {{ .chezmoi.homeDir }}/.nix-profile/bin/fish
 {{- else }}
     shell /usr/bin/fish
 {{- end }}
