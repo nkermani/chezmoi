@@ -7,6 +7,6 @@
     ./eza.nix
     ./git.nix
     ./helix.nix
-    ./shells/fish.nix
+    ./shells
   ];
 }

@@ -2,7 +2,7 @@
   imports = [
     ./basedpyright.nix
     ./clang-tools.nix
-    ./csharp-ls.nix
+    # ./csharp-ls.nix
     ./gopls.nix
     ./nixd.nix
     ./nodejs.nix
