@@ -1,6 +1,7 @@
 {
   programs.fish = {
     enable = true;
+
     shellInit =
       ''
         # Hide welcome message
@@ -9,6 +10,23 @@
         # EDITOR
         set -gx EDITOR "hx"
         set -gx VISUAL "hx"
+
+        function fish_prompt
+            set -l last_status $status
+            set -l fish     (set_color green)
+            set -l normal   (set_color normal)
+
+            # First line: path and git info
+            echo -n (set_color blue)(prompt_pwd)(set_color normal)
+            if git rev-parse --git-dir > /dev/null 2>&1
+                set -l branch (git branch --show-current 2>/dev/null; or git rev-parse --short HEAD)
+                echo -n (set_color yellow)" ["$branch"]"(set_color normal)
+            end
+            echo
+
+            # Second line: prompt character
+            echo -n $fish"> "$normal
+        end
       ''
       {{- if or (eq .chezmoi.os "darwin") (and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease)) }}
       + ''
