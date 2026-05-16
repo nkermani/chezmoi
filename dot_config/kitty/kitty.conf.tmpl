@@ -9,7 +9,8 @@ copy_on_select yes
 clear_all_shortcuts yes
 map ctrl+shift+c copy_to_clipboard
 map ctrl+shift+v paste_from_clipboard
-
+map cmd+c copy_to_clipboard
+map cmd+v paste_from_clipboard
 
 {{- if eq .chezmoi.os "darwin" }}
     # macOS - no decorations hiding (GPU issue)
