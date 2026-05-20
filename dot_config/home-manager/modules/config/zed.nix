@@ -1,19 +1,16 @@
 { config, pkgs, lib, ... }:
 
 let
-  latestRelease = builtins.fromJSON (builtins.readFile (builtins.fetchurl {
-    url = "https://api.github.com/repos/zed-industries/zed/releases/latest";
-  }));
-  zedVersion = latestRelease.tag_name;
+  version = "1.3.5";
   arch = if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then "aarch64" else "x86_64";
 
   zedPackage = pkgs.stdenv.mkDerivation {
     pname = "zed-editor";
-    version = builtins.substring 1 255 zedVersion;
+    inherit version;
 
-    src = builtins.fetchurl {
-      url = "https://github.com/zed-industries/zed/releases/download/${zedVersion}/zed-linux-${arch}.tar.gz";
-      name = "zed-${zedVersion}-linux-${arch}.tar.gz";
+    src = pkgs.fetchurl {
+      url = "https://github.com/zed-industries/zed/releases/download/v${version}/zed-linux-${arch}.tar.gz";
+      hash = "sha256-l4anY9AwG3Q/XxVXHcyWMwOMp8SpovFj9Ihpbubkz6Y=";
     };
 
     sourceRoot = "zed.app";
