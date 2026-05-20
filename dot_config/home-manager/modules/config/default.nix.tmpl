@@ -6,6 +6,7 @@
     ./btop.nix
     {{- if not (or (eq .chezmoi.os "darwin") (and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease)))}}
       ./code.nix
+      ./neovide.nix
     {{- end }}
     ./eza.nix
     {{- if not (eq .chezmoi.os "darwin")}}
