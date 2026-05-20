@@ -1,5 +1,6 @@
 {
   imports = [
+    ./shells
     ./bat.nix
     ./broot.nix
     ./btop.nix
@@ -7,8 +8,11 @@
       ./code.nix
     {{- end }}
     ./eza.nix
+    {{- if not (eq .chezmoi.os "darwin")}}
+      ./opencode.nix
+    {{- end }}
     ./git.nix
     ./helix.nix
-    ./shells
+    ./uv.nix
   ];
 }
