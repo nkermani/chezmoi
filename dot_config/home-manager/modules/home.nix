@@ -15,7 +15,7 @@
   '';
 
   home.sessionVariables = {
-    PATH = "$HOME/.local/bin:$PATH";
+    PATH = "$HOME/bin:$HOME/.local/bin:$PATH";
     STUDENT_USERNAME = "nkermani";
     STUDENT_EMAIL = "nkermani@student.42lyon.fr";
   };
