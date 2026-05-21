@@ -173,9 +173,9 @@
   //////////////////////////////////////////////////////////
   //                       minimap
   //////////////////////////////////////////////////////////
-  "minimap": {
-    "show": "always"
-  },
+  // "minimap": {
+  //   "show": "always"
+  // },
   "inline_code_actions": false,
   "relative_line_numbers": "disabled",
   "gutter": {
@@ -218,6 +218,14 @@
         "panel.background": "#191919",
       },
       "Seoul256 Dark":{
+        "background.appearance": "opaque",
+        "background": "#505050f7",
+        "editor.background": "#50505040",
+        "editor.gutter.background": "#505050ec",
+        "status_bar.background": "#505050ec",
+        "title_bar.background": "#505050f7",
+        "tab.inactive_background": "#505050ec",
+
       },
       "Catppuccin Frappé (Blur) [Heavy]":{
         "players": [
@@ -227,8 +235,9 @@
         ],
         "background.appearance": "opaque",
         "background": "#303446f5",
-        "status_bar.background": "#303446ac",
-        "title_bar.background": "#303446ac",
+        "status_bar.background": "#303446f7",
+        "title_bar.background": "#303446f7",
+        "tab.inactive_background": "#303446ec",
       },
    },
    //////////////////////////////////////////////////////////
