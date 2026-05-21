@@ -14,7 +14,8 @@
   "format_on_save": "off",
   "show_wrap_guides": true,
   "soft_wrap":"bounded",
-  "wrap_guides": [80],
+  "wrap_guides": [125],
+  "preferred_line_length": 120,
   //////////////////////////////////////////////////////////
   //                       search
   //////////////////////////////////////////////////////////
@@ -179,7 +180,7 @@
   "inline_code_actions": false,
   "relative_line_numbers": "disabled",
   "gutter": {
-    "folds": false,
+    "folds": true,
     "bookmarks": false,
     "breakpoints": false,
     "runnables": false,
@@ -207,9 +208,21 @@
   "theme": {
     "mode": "dark",
     "light": "Catppuccin Frappé (Blur) [Heavy]",
-    "dark": "Catppuccin Frappé (Blur) [Heavy]",
+    "dark": "Everforest Dark Soft (blur)",
   },
   "theme_overrides": {
+      "Everforest Dark Soft (blur)":{
+        "players": [
+          {
+            "cursor": "#aadbc1dd"
+          }
+        ],
+        "background.appearance": "opaque",
+        "background": "#303446f7",
+        "status_bar.background": "#303446f7",
+        "title_bar.background": "#303446f7",
+        "tab.inactive_background": "#303446f7",
+      },
       "Cursor Dark":{
         "editor.background": "#252525",
         "editor.gutter.background": "#181818",
@@ -234,10 +247,21 @@
           }
         ],
         "background.appearance": "opaque",
-        "background": "#303446f5",
+        "background": "#303446f7",
         "status_bar.background": "#303446f7",
         "title_bar.background": "#303446f7",
-        "tab.inactive_background": "#303446ec",
+        "tab.inactive_background": "#303446f7",
+        // "background": "#303446f7",
+        // "status_bar.background": "#303446f7",
+        // "title_bar.background": "#303446f7",
+        // "search.match_background": "303446f7",
+        // "panel.overlay_background": "303446f7",
+        // "tab.active_background": "303446f7",
+        // "title_bar.inactive_background": "303446f7",
+        // "search.active_match_background": "303446f7",
+        // "panel.background": "303446f7",
+        // "terminal.background": "303446f7",
+        // "editor.active_line.background": "303446f7",
       },
    },
    //////////////////////////////////////////////////////////
