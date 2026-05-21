@@ -206,8 +206,8 @@
   },
   "theme": {
     "mode": "dark",
-    "light": "Everforest Dark Soft",
-    "dark": "Seoul256 Dark",
+    "light": "Catppuccin Frappé (Blur) [Heavy]",
+    "dark": "Catppuccin Frappé (Blur) [Heavy]",
   },
   "theme_overrides": {
       "Cursor Dark":{
@@ -218,7 +218,18 @@
         "panel.background": "#191919",
       },
       "Seoul256 Dark":{
-      }
+      },
+      "Catppuccin Frappé (Blur) [Heavy]":{
+        "players": [
+          {
+            "cursor": "#aadbc1dd"
+          }
+        ],
+        "background.appearance": "opaque",
+        "background": "#303446f5",
+        "status_bar.background": "#303446ac",
+        "title_bar.background": "#303446ac",
+      },
    },
    //////////////////////////////////////////////////////////
    //                         Resolution
