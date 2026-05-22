@@ -6,10 +6,8 @@
   home.stateVersion = "24.11";
 
   programs = {
-
     {{- if not (or (eq .chezmoi.os "darwin") (and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease)))}}
       vscode.enable = false;
-      helix.enable = false;
       lazyvim.enable = false;
       neovide.enable = false;
       "zed-editor".enable = false;
@@ -29,6 +27,7 @@
 
     uv.enable = true;
 
+    helix.enable = true;
     "fresh-editor".enable = true;
   };
 
