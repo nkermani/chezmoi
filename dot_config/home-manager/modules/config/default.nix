@@ -1,0 +1,7 @@
+{
+  imports = [
+    ./qol
+    ./editors
+    ./shells
+  ];
+}

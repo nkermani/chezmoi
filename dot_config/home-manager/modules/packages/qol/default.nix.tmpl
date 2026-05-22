@@ -14,5 +14,8 @@
     ./tabiew.nix
     ./tree.nix
     ./yazi.nix
+    {{- if not (eq .chezmoi.os "darwin")}}
+      ./opencode.nix
+    {{- end }}
   ];
 }

@@ -8,10 +8,9 @@ let
 in
 {
   programs.vscode = {
-    enable = true;
     package = pkgs.vscode.overrideAttrs (old: {
       version = vscodeVersion;
-
+      
       src = builtins.fetchurl {
         url = "https://update.code.visualstudio.com/${vscodeVersion}/linux-x64/stable";
         name = "VSCode_${vscodeVersion}_linux-x64.tar.gz";

@@ -1,0 +1,4 @@
+{
+  programs.fresh-editor = {
+  };
+}

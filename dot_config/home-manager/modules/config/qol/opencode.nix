@@ -38,5 +38,7 @@ let
   };
 in
 {
-  home.packages = [ opencodePackage ];
+  programs.opencode = {
+    package = opencodePackage;
+  };
 }

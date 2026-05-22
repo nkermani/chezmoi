@@ -1,8 +1,6 @@
 {
   programs.helix = {
-    enable = true;
     settings = {
-      theme = "everforest";
       editor = {
         line-number = "relative";
         cursor-shape = {
@@ -28,12 +26,6 @@
         lsp = {
           display-messages = false;
           display-inlay-hints = false;
-        };
-      };
-      keys = {
-        normal = {
-          "C-s" = ":w";
-          "C-q" = ":q";
         };
       };
     };

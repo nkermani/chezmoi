@@ -1,110 +1,73 @@
 # kitty.conf
 
-draw_minimal_borders yes
-tab_bar_style fade
 copy_on_select yes
+draw_minimal_borders yes
+background_opacity 0.5
 
-background_opacity 0.8
-
-
-# Shortcuts
 clear_all_shortcuts yes
-map ctrl+shift+c copy_to_clipboard
-map ctrl+shift+v paste_from_clipboard
-map cmd+c copy_to_clipboard
-map cmd+v paste_from_clipboard
-
-# Font size
-map ctrl+plus increase_font_size
-map ctrl+shift+equal increase_font_size
-map ctrl+minus decrease_font_size
-map ctrl+kp_add increase_font_size
-map ctrl+kp_subtract decrease_font_size
-map ctrl+0 reset_font_size
-map ctrl+kp_0 reset_font_size
 
 {{- if eq .chezmoi.os "darwin" }}
-    font_family JetBrainsMonoNL Nerd Font Mono
-    font_size 11.0
-    map cmd+plus increase_font_size
-    map cmd+shift+equal increase_font_size
-    map cmd+minus decrease_font_size
-    map cmd+kp_add increase_font_size
-    map cmd+kp_subtract decrease_font_size
-    map cmd+0 reset_font_size
-    map cmd+kp_0 reset_font_size
-{{- end }}
+        font_family JetBrainsMonoNL Nerd Font Mono
+        font_size 11.0
 
-{{- if eq .chezmoi.os "darwin" }}
-    # macOS - no decorations hiding (GPU issue)
-    hide_window_decorations titlebar-only
+        # macOS - no decorations hiding (GPU issue)
+           hide_window_decorations titlebar-only
+
+        map cmd+c copy_to_clipboard
+        map cmd+v paste_from_clipboard
+
+    # Font size
+	    map ctrl+plus increase_font_size
+	    map ctrl+shift+equal increase_font_size
+	    map ctrl+minus decrease_font_size
+	    map ctrl+kp_add increase_font_size
+	    map ctrl+kp_subtract decrease_font_size
+	    map ctrl+0 reset_font_size
+	    map ctrl+kp_0 reset_font_size
+
+	    map cmd+1 goto_tab 1
+    	map cmd+2 goto_tab 2
+    	map cmd+3 goto_tab 3
+    	map cmd+4 goto_tab 4
+    	map cmd+5 goto_tab 5
+    	map cmd+6 goto_tab 6
+    	map cmd+7 goto_tab 7
+    	map cmd+8 goto_tab 8
+    	map cmd+9 goto_tab 9
+
+        shell {{ .chezmoi.homeDir }}/.nix-profile/bin/fish
+
+        # macOS
+            map ctrl+shift+enter new_window_with_cwd
+            map ctrl+shift+t new_tab_with_cwd
+            map ctrl+shift+n new_os_window
 {{- else }}
-    font_family JetBrainsMono Nerd Font Mono
-    font_size 8.0
-    # Linux - full decorations hiding
-    hide_window_decorations yes
+        map ctrl+shift+c copy_to_clipboard
+        map ctrl+shift+v paste_from_clipboard
+        map ctrl+shift+v paste_from_clipboard
+                
+        map alt+1 goto_tab 1
+        map alt+2 goto_tab 2
+        map alt+3 goto_tab 3
+        map alt+4 goto_tab 4
+        map alt+5 goto_tab 5
+        map alt+6 goto_tab 6
+        map alt+7 goto_tab 7
+        map alt+8 goto_tab 8
+        map alt+9 goto_tab 9
+
+        font_family JetBrainsMono Nerd Font Mono
+        font_size 8.0
+
+        # Linux - full decorations hiding
+            hide_window_decorations yes
+
+        shell fish
+
+        # Linux 42 - nix-user-chroot
+            map ctrl+shift+enter new_window_with_cwd /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source /etc/profile.d/nix-daemon.sh 2>/dev/null || source ~/.nix-profile/etc/profile.d/nix-daemon.sh 2>/dev/null || true; exec fish'
+            map ctrl+shift+t new_tab_with_cwd /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source /etc/profile.d/nix-daemon.sh 2>/dev/null || source ~/.nix-profile/etc/profile.d/nix-daemon.sh 2>/dev/null || true; exec fish'
+            map ctrl+shift+n new_os_window /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source /etc/profile.d/nix-daemon.sh 2>/dev/null || source ~/.nix-profile/etc/profile.d/nix-daemon.sh 2>/dev/null || true; exec fish'
+
+        startup_session ~/.config/kitty/session.conf
 {{- end }}
-
-{{- if eq .chezmoi.os "linux" }}
-    shell fish
-{{- else if eq .chezmoi.os "darwin" }}
-    shell {{ .chezmoi.homeDir }}/.nix-profile/bin/fish
-{{- else }}
-    shell /usr/bin/fish
-{{- end }}
-
-{{- if eq .chezmoi.os "linux" }}
-    # Linux 42 - nix-user-chroot
-    map ctrl+shift+enter new_window_with_cwd /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source /etc/profile.d/nix-daemon.sh 2>/dev/null || source ~/.nix-profile/etc/profile.d/nix-daemon.sh 2>/dev/null || true; exec fish'
-    map ctrl+shift+t new_tab_with_cwd /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source /etc/profile.d/nix-daemon.sh 2>/dev/null || source ~/.nix-profile/etc/profile.d/nix-daemon.sh 2>/dev/null || true; exec fish'
-    map ctrl+shift+n new_os_window /home/nkermani/nix-user-chroot /home/nkermani/.nix bash -c 'source /etc/profile.d/nix-daemon.sh 2>/dev/null || source ~/.nix-profile/etc/profile.d/nix-daemon.sh 2>/dev/null || true; exec fish'
-{{- else if eq .chezmoi.os "darwin" }}
-    # macOS
-    map ctrl+shift+enter new_window_with_cwd
-    map ctrl+shift+t new_tab_with_cwd
-    map ctrl+shift+n new_os_window
-{{- else }}
-    # WSL2
-    map ctrl+shift+enter new_window_with_cwd
-    map ctrl+shift+t new_tab_with_cwd
-    map ctrl+shift+n new_os_window
-{{- end }}
-
-
-# Tab management
-map alt+1 goto_tab 1
-map alt+2 goto_tab 2
-map alt+3 goto_tab 3
-map alt+4 goto_tab 4
-map alt+5 goto_tab 5
-map alt+6 goto_tab 6
-map alt+7 goto_tab 7
-map alt+8 goto_tab 8
-map alt+9 goto_tab 9
-
-{{- if eq .chezmoi.os "darwin" }}
-    map cmd+1 goto_tab 1
-    map cmd+2 goto_tab 2
-    map cmd+3 goto_tab 3
-    map cmd+4 goto_tab 4
-    map cmd+5 goto_tab 5
-    map cmd+6 goto_tab 6
-    map cmd+7 goto_tab 7
-    map cmd+8 goto_tab 8
-    map cmd+9 goto_tab 9
-{{- end }}
-
-
-
-# themes
-# seoulbones_dark
-# Cyberpunk
-include nk-cyberpunk.conf
-include open-actions.conf
-
-{{- if eq .chezmoi.os "linux" }}
-    startup_session ~/.config/kitty/session.conf
-{{- end }}
-
-# Everforest Dark Soft
-include current-theme.conf

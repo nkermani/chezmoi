@@ -1,0 +1,12 @@
+{
+  imports = [
+    ./bat.nix
+    ./broot.nix
+    ./btop.nix
+    ./eza.nix
+    ./git.nix
+    {{- if not (eq .chezmoi.os "darwin")}}
+      ./opencode.nix
+    {{- end }}
+  ];
+}

@@ -40,7 +40,6 @@ let
 in
 {
   programs.zed-editor = {
-    enable = true;
     package = zedPackage;
   };
 }

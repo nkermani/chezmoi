@@ -1,0 +1,12 @@
+{
+  imports = [
+    ./fresh.nix
+    {{- if not (or (eq .chezmoi.os "darwin") (and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease)))}}
+      ./code.nix
+      ./helix.nix
+      ./lazyvim.nix
+      ./neovide.nix
+      ./zed.nix
+    {{- end }}
+  ];
+}
