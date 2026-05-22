@@ -6,19 +6,29 @@
   home.stateVersion = "24.11";
 
   programs = {
+
+    {{- if not (or (eq .chezmoi.os "darwin") (and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease)))}}
+      vscode.enable = false;
+      helix.enable = false;
+      lazyvim.enable = false;
+      neovide.enable = false;
+      "zed-editor".enable = false;
+    {{- end }}
+
     bat.enable = true;
     broot.enable = true;
     btop.enable = true;
     eza.enable = true;
     fish.enable = true;
-    vscode.enable = false;
     git.enable = true;
-    helix.enable = false;
-    lazyvim.enable = false;
-    neovide.enable = false;
-    opencode.enable = false;
+    lazygit.enable = false;
+
+    {{- if not (eq .chezmoi.os "darwin")}}
+      opencode.enable = false;
+    {{- end }}
+
     uv.enable = true;
-    "zed-editor".enable = false;
+
     "fresh-editor".enable = true;
   };
 
