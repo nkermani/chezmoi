@@ -1,5 +1,3 @@
-# dot_config/home-manager/install-macos.sh
-
 NIX_BIN="/nix/var/nix/profiles/default/bin"
 
 if [ -f "${NIX_BIN}/nix-channel" ]; then
@@ -12,15 +10,10 @@ fi
 
 export PATH="${NIX_BIN}:${PATH}"
 
-# Enable Nix daemon for single-user mode
-echo "Enabling Nix daemon..."
-sudo launchctl load /Library/LaunchDaemons/org.nixos.nix-daemon.plist 2>/dev/null || true
-
-# Wait for daemon to start
-sleep 2
-
-# Setup bash PATH
-echo "Setting up PATH for bash"
+echo "Enabling Nix daemon..." 
+sudo launchctl load /Library/LaunchDaemons/org.nixos.nix-daemon.plist 2>/dev/null || true # Enable Nix daemon for single-user mode
+sleep 2 # Wait for daemon to start
+echo "Setting up PATH for bash" # Setup bash PATH
 
 if ! grep -q 'nix.sh' "${HOME}/.bash_profile"; then
 	echo "Adding nix.sh to .bash_profile"
@@ -34,19 +27,15 @@ else
 	echo "nix.sh is already in .bash_profile, skipping"
 fi
 
-# Source nix.sh for current session
 if [ -f "/nix/var/nix/profiles/default/etc/profile.d/nix.sh" ]; then
-	. "/nix/var/nix/profiles/default/etc/profile.d/nix.sh"
+	. "/nix/var/nix/profiles/default/etc/profile.d/nix.sh" # Source nix.sh for current session
 fi
 
-# Enabling home-manager
 echo "Enabling home-manager for the current user"
 ${NIX_BIN}/nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
+${NIX_BIN}/nix-channel --add https://nixos.org/channels/nixos-unstable unstable
 ${NIX_BIN}/nix-channel --update
 ${NIX_BIN}/nix-shell '<home-manager>' -A install
 
-# Remove base home-manager configuration
-rm -rf ${HOME}/.config/home-manager
-
-# Apply chezmoi to put my own home-manager config
-chezmoi apply && home-manager switch
+rm -rf ${HOME}/.config/home-manager # Remove base home-manager configuration
+chezmoi apply && home-manager switch # Apply chezmoi to put my own home-manager config

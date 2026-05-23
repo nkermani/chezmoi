@@ -5,11 +5,11 @@
     signing.format = null;
     settings = {
       core = {
-        editor = "hx";
+        editor = "zed";
       };
       user = {
         name = config.home.sessionVariables.STUDENT_USERNAME;
-        email = config.home.sessionVariables.STUDENT_EMAIL;
+        email = config.home.sessionVariables.NKERMANI_EMAIL;
       };
       init = {
         defaultBranch = "main";

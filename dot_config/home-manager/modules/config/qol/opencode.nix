@@ -1,5 +1,6 @@
 { config, pkgs, lib, ... }:
 
+## Custom install package bad practice, bad way as it is onesided install can't uninstall by simply disabling it.
 let
   systemMap = {
     "x86_64-linux" = "opencode-linux-x64";

@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 
+## Custom install package bad practice, bad way as it is onesided install can't uninstall by simply disabling it.
 let
   latestRelease = builtins.fromJSON (builtins.readFile (builtins.fetchurl {
     url = "https://api.github.com/repos/microsoft/vscode/releases/latest";

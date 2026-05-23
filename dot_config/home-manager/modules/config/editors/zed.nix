@@ -1,16 +1,20 @@
 { config, pkgs, lib, ... }:
 
+## Custom install package bad practice, bad way as it is onesided install can't uninstall by simply disabling it.
 let
-  version = "1.3.5";
+  latestRelease = builtins.fromJSON (builtins.readFile (builtins.fetchurl {
+    url = "https://api.github.com/repos/zed-industries/zed/releases/latest";
+  }));
+  version = latestRelease.tag_name;
   arch = if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then "aarch64" else "x86_64";
 
   zedPackage = pkgs.stdenv.mkDerivation {
     pname = "zed-editor";
     inherit version;
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/zed-industries/zed/releases/download/v${version}/zed-linux-${arch}.tar.gz";
-      hash = "sha256-l4anY9AwG3Q/XxVXHcyWMwOMp8SpovFj9Ihpbubkz6Y=";
+    src = builtins.fetchurl {
+      url = "https://github.com/zed-industries/zed/releases/download/${version}/zed-linux-${arch}.tar.gz";
+      name = "zed-linux-${arch}.tar.gz";
     };
 
     sourceRoot = "zed.app";

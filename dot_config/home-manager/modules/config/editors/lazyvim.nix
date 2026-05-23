@@ -1,5 +1,6 @@
 { config, lib, ... }:
 
+## Custom install package bad practice
 let
   cfg = config.programs.lazyvim;
 in {
@@ -8,7 +9,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # Remove old NvChad config files that would interfere with LazyVim
+    # Remove old nvim config files that would interfere with LazyVim
     home.activation.removeOldNvimConfig = lib.mkAfter ''
       if [ -d "$HOME/.config/nvim/lua/configs" ]; then
         rm -f "$HOME/.config/nvim/lua/configs/conform.lua"

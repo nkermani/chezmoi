@@ -6,29 +6,32 @@
   home.stateVersion = "24.11";
 
   programs = {
+
+    # EDITORS
+    helix.enable = true;
+    "fresh-editor".enable = true;
+
     {{- if not (or (eq .chezmoi.os "darwin") (and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease)))}}
-      "zed-editor".enable = true; # 1st GUI Editor
-      vscode.enable = false; # Staying on default @42
-      lazyvim.enable = false; # No need there's fresh
-      neovide.enable = false; # No need there's fresh
+      "zed-editor".enable = true;
+      vscode.enable = true;         
+      lazyvim.enable = true;
     {{- end }}
 
+    #QoL
     bat.enable = true;
     broot.enable = true;
     btop.enable = true;
     eza.enable = true;
     fish.enable = true;
     git.enable = true;
-    lazygit.enable = false;
+    lazygit.enable = true;
 
     {{- if not (eq .chezmoi.os "darwin")}}
-      opencode.enable = false; # Need to be reviewed in detail
+      opencode.enable = true; # Need to be reviewed in detail
     {{- end }}
 
     uv.enable = true;
 
-    helix.enable = false;
-    "fresh-editor".enable = true; # 1st TUI Editor
   };
 
   xdg.configFile."fontconfig/fonts.conf".text = ''
@@ -44,5 +47,6 @@
     PATH = "$HOME/bin:$HOME/.local/bin:$PATH";
     STUDENT_USERNAME = "nkermani";
     STUDENT_EMAIL = "nkermani@student.42lyon.fr";
+    NKERMANI_EMAIL = "kermani.nathan@gmail.com";
   };
 }

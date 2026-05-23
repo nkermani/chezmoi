@@ -1,5 +1,3 @@
-# dot_config/home-manager/install-wsl2.sh
-
 NIX_PROFILE="${HOME}/.nix-profile"
 NIX_BIN="${NIX_PROFILE}/bin"
 
@@ -13,16 +11,11 @@ else
 fi
 
 export PATH="${NIX_BIN}:${PATH}"
-
-# Enable home-manager
 echo "Enabling home-manager for the current user"
-
 ${NIX_BIN}/nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
+${NIX_BIN}/nix-channel --add https://nixos.org/channels/nixos-unstable unstable
 ${NIX_BIN}/nix-channel --update
 ${NIX_BIN}/nix-shell '<home-manager>' -A install
 
-# Remove base home-manager configuration
-rm -rf ${HOME}/.config/home-manager
-
-# Apply chezmoi to put my own home-manager config
-chezmoi apply && home-manager switch
+rm -rf ${HOME}/.config/home-manager # Remove base home-manager configuration
+chezmoi apply && home-manager switch # Apply chezmoi to put my own home-manager config
