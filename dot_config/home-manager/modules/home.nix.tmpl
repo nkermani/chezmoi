@@ -7,10 +7,10 @@
 
   programs = {
     {{- if not (or (eq .chezmoi.os "darwin") (and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease)))}}
-      vscode.enable = false;
-      lazyvim.enable = false;
-      neovide.enable = false;
-      "zed-editor".enable = false;
+      "zed-editor".enable = true; # 1st GUI Editor
+      vscode.enable = false; # Staying on default @42
+      lazyvim.enable = false; # No need there's fresh
+      neovide.enable = false; # No need there's fresh
     {{- end }}
 
     bat.enable = true;
@@ -22,13 +22,13 @@
     lazygit.enable = false;
 
     {{- if not (eq .chezmoi.os "darwin")}}
-      opencode.enable = false;
+      opencode.enable = false; # Need to be reviewed in detail
     {{- end }}
 
     uv.enable = true;
 
-    helix.enable = true;
-    "fresh-editor".enable = true;
+    helix.enable = false;
+    "fresh-editor".enable = true; # 1st TUI Editor
   };
 
   xdg.configFile."fontconfig/fonts.conf".text = ''
