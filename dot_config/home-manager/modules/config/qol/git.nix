@@ -5,7 +5,7 @@
     signing.format = null;
     settings = {
       core = {
-        editor = "zed";
+        editor = "code";
       };
       user = {
         name = config.home.sessionVariables.STUDENT_USERNAME;
