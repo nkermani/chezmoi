@@ -1,5 +1,7 @@
 # kitty.conf - nkermani
 
+include cyberpunk.conf
+
 copy_on_select yes
 draw_minimal_borders yes
 
@@ -22,8 +24,6 @@ draw_minimal_borders yes
         map cmd+c copy_to_clipboard
         map cmd+v paste_from_clipboard
 
-
-
         map cmd+1 goto_tab
         map cmd+2 goto_tab
         map cmd+3 goto_tab
@@ -43,8 +43,9 @@ draw_minimal_borders yes
 {{- else }} # Linux
         hide_window_decorations yes
 
+        background_opacity 0.8
         font_family JetBrainsMonoNL Nerd Font Mono
-        font_size 8.0
+        font_size 7.5
 
         map ctrl+shift+c copy_to_clipboard
         map ctrl+shift+v paste_from_clipboard
