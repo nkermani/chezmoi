@@ -50,8 +50,8 @@
           if test -x "$HOME/nix-user-chroot"
             set -gx PATH $HOME/.local/bin $PATH
           end
-          set -gx LD_LIBRARY_PATH (nix eval nixpkgs#gcc.cc.lib.outPath --raw 2>/dev/null)/lib $LD_LIBRARY_PATH
-          set -gx LD_LIBRARY_PATH (nix eval nixpkgs#zlib.outPath --raw 2>/dev/null)/lib $LD_LIBRARY_PATH
+          set -gx LD_LIBRARY_PATH (nix build nixpkgs#gcc.cc.lib --no-link --print-out-paths 2>/dev/null)/lib $LD_LIBRARY_PATH
+          set -gx LD_LIBRARY_PATH (nix build nixpkgs#zlib --no-link --print-out-paths 2>/dev/null)/lib $LD_LIBRARY_PATH
         ''
       {{- end }}
       ;
